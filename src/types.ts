@@ -71,4 +71,8 @@ export interface ChartPro {
   getSymbol(): SymbolInfo
   setPeriod(period: Period): void
   getPeriod(): Period
+  getMainIndicators(): {}
+  setMainIndicators(indicators: string[]): void
+  getSubIndicators(): {}
+  setSubIndicators(indicators: string[]): void
 }

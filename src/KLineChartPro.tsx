@@ -79,6 +79,20 @@ export default class KLineChartPro implements ChartPro {
 
   private _chartApi: Nullable<ChartPro> = null
 
+  getMainIndicators(): {} {
+    return this._chartApi!.getMainIndicators()
+
+  }
+  setMainIndicators(indicators: string[]): void {
+    return this._chartApi!.setMainIndicators(indicators)
+
+  }
+  getSubIndicators(): {} {
+    return this._chartApi!.getSubIndicators()
+  }
+  setSubIndicators(indicators: string[]): void {
+    return this._chartApi!.setSubIndicators(indicators)
+  }
 
   setTheme (theme: string): void {
     this._container?.setAttribute('data-theme', theme)
