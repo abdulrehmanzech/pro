@@ -1,4 +1,4 @@
-import { DeepPartial, KLineData, OverlayCreate, Styles } from 'klinecharts';
+import { CandleType, DeepPartial, KLineData, LineType, OverlayCreate, Styles, YAxisType } from 'klinecharts';
 
 export interface SymbolInfo {
 	ticker: string;
@@ -23,6 +23,27 @@ export interface Datafeed {
 	getHistoryKLineData(symbol: SymbolInfo, period: Period, from: number, to: number): Promise<KLineData[]>;
 	subscribe(symbol: SymbolInfo, period: Period, callback: DatafeedSubscribeCallback): void;
 	unsubscribe(symbol: SymbolInfo, period: Period): void;
+}
+export interface ChartSettings {
+	candleType?: CandleType;
+	candleBarStyle?: LineType;
+	showLastPrice?: boolean;
+	showHighestPrice?: boolean;
+	showLowestPrice?: boolean;
+	showIndicatorLastValue?: boolean;
+	priceAxisType?: YAxisType;
+	reverseCoordinate?: boolean;
+	showGrids?: boolean;
+	crosshair?: {
+		show?: boolean;
+		horizontal?: boolean;
+		vertical?: boolean;
+	};
+	watermark?: {
+		show?: boolean;
+		text?: string;
+	};
+	timestamp?: number;
 }
 export interface ChartProOptions {
 	container: string | HTMLElement;
@@ -94,6 +115,9 @@ export interface ChartPro {
 	}): void;
 	dispose?(): void;
 	resize?(): void;
+	getSettings(): ChartSettings;
+	setSettings(settings: Partial<ChartSettings>): void;
+	resetSettings(): void;
 }
 export declare class DefaultDatafeed implements Datafeed {
 	constructor(apiKey: string);
@@ -143,6 +167,9 @@ export declare class KLineChartPro implements ChartPro {
 	getSymbol(): SymbolInfo;
 	setPeriod(period: Period): void;
 	getPeriod(): Period;
+	getSettings(): ChartSettings;
+	setSettings(settings: Partial<ChartSettings>): void;
+	resetSettings(): void;
 }
 declare function load(key: string, ls: any): void;
 

@@ -12,103 +12,150 @@
  * limitations under the License.
  */
 
-import { KLineData, Styles, DeepPartial } from 'klinecharts'
+import { KLineData, Styles, DeepPartial } from "klinecharts";
 
 export interface SymbolInfo {
-  ticker: string
-  name?: string
-  shortName?: string
-  exchange?: string
-  market?: string
-  pricePrecision?: number
-  volumePrecision?: number
-  priceCurrency?: string
-  type?: string
-  logo?: string
+  ticker: string;
+  name?: string;
+  shortName?: string;
+  exchange?: string;
+  market?: string;
+  pricePrecision?: number;
+  volumePrecision?: number;
+  priceCurrency?: string;
+  type?: string;
+  logo?: string;
 }
 
 export interface Period {
-  multiplier: number
-  timespan: string
-  text: string
+  multiplier: number;
+  timespan: string;
+  text: string;
 }
 
-export type DatafeedSubscribeCallback = (data: KLineData) => void
+export type DatafeedSubscribeCallback = (data: KLineData) => void;
 
 export interface Datafeed {
-  searchSymbols (search?: string): Promise<SymbolInfo[]>
-  getHistoryKLineData (symbol: SymbolInfo, period: Period, from: number, to: number): Promise<KLineData[]>
-  subscribe (symbol: SymbolInfo, period: Period, callback: DatafeedSubscribeCallback): void
-  unsubscribe (symbol: SymbolInfo, period: Period): void
+  searchSymbols(search?: string): Promise<SymbolInfo[]>;
+  getHistoryKLineData(
+    symbol: SymbolInfo,
+    period: Period,
+    from: number,
+    to: number
+  ): Promise<KLineData[]>;
+  subscribe(
+    symbol: SymbolInfo,
+    period: Period,
+    callback: DatafeedSubscribeCallback
+  ): void;
+  unsubscribe(symbol: SymbolInfo, period: Period): void;
 }
+
+export interface ChartSettings {
+  // Candle settings
+  candleType?: CandleType
+  candleBarStyle?: LineType
+  showLastPrice?: boolean
+  showHighestPrice?: boolean
+  showLowestPrice?: boolean
+  
+  // Indicator settings
+  showIndicatorLastValue?: boolean
+  
+  // Axis settings
+  priceAxisType?: YAxisType
+  reverseCoordinate?: boolean 
+  
+  // Grid settings
+  showGrids?: boolean
+  
+  // Additional settings
+  crosshair?: {
+    show?: boolean
+    horizontal?: boolean
+    vertical?: boolean
+  }
+  
+  watermark?: {
+    show?: boolean
+    text?: string
+  }
+  
+  timestamp?: number
+}
+
 
 export interface ChartProOptions {
-  container: string | HTMLElement
-  styles?: DeepPartial<Styles>
-  watermark?: string | Node
-  theme?: string
-  locale?: string
-  drawingBarVisible?: boolean
-  symbol: SymbolInfo
-  period: Period
-  periods?: Period[]
-  timezone?: string
-  mainIndicators?: string[]
-  subIndicators?: string[]
-  datafeed: Datafeed
+  container: string | HTMLElement;
+  styles?: DeepPartial<Styles>;
+  watermark?: string | Node;
+  theme?: string;
+  locale?: string;
+  drawingBarVisible?: boolean;
+  symbol: SymbolInfo;
+  period: Period;
+  periods?: Period[];
+  timezone?: string;
+  mainIndicators?: string[];
+  subIndicators?: string[];
+  datafeed: Datafeed;
 }
-import type { OverlayCreate } from 'klinecharts'
+import type { CandleType, LineType, OverlayCreate, YAxisType } from "klinecharts";
 
 // Use OverlayCreate directly or create a compatible type
-export type OverlayOptions = OverlayCreate
+export type OverlayOptions = OverlayCreate;
 
 export interface OverlayInfo {
-  id: string
-  name?: string
-  type: string
-  points: Array<{ price: number; timestamp: number }>
-  options: Record<string, any>
+  id: string;
+  name?: string;
+  type: string;
+  points: Array<{ price: number; timestamp: number }>;
+  options: Record<string, any>;
 }
 
 export interface OverlayInfo {
-  id: string
-  name?: string
-  type: string
-  points: Array<{ price: number; timestamp: number }>
-  options: Record<string, any>
+  id: string;
+  name?: string;
+  type: string;
+  points: Array<{ price: number; timestamp: number }>;
+  options: Record<string, any>;
 }
-
 
 export interface ChartPro {
-  setTheme(theme: string): void
-  getTheme(): string
-  setStyles(styles: DeepPartial<Styles>): void
-  getStyles(): Styles
-  setLocale(locale: string): void
-  getLocale(): string
-  setTimezone(timezone: string): void
-  getTimezone(): string
-  setSymbol(symbol: SymbolInfo): void
-  getSymbol(): SymbolInfo
-  setPeriod(period: Period): void
-  getPeriod(): Period
-  getMainIndicators(): {}
-  setMainIndicators(indicators: string[]): void
-  getSubIndicators(): {}
-  setSubIndicators(indicators: string[]): void
-  overrideIndicator(config: { name: string, calcParams?: number[], visible?: boolean }, paneId: string): void 
- 
- 
-  createOverlay(overlay: OverlayCreate): string | null
-  removeOverlay(options: { groupId?: string; id?: string }): void
-  removeAllOverlay(): void
-  getAllOverlay(): OverlayInfo[]
-  getOverlay(id: string): OverlayInfo | null
-  overrideOverlay(options: { [key: string]: any }): void
-  
+  setTheme(theme: string): void;
+  getTheme(): string;
+  setStyles(styles: DeepPartial<Styles>): void;
+  getStyles(): Styles;
+  setLocale(locale: string): void;
+  getLocale(): string;
+  setTimezone(timezone: string): void;
+  getTimezone(): string;
+  setSymbol(symbol: SymbolInfo): void;
+  getSymbol(): SymbolInfo;
+  setPeriod(period: Period): void;
+  getPeriod(): Period;
+  getMainIndicators(): {};
+  setMainIndicators(indicators: string[]): void;
+  getSubIndicators(): {};
+  setSubIndicators(indicators: string[]): void;
+  overrideIndicator(
+    config: { name: string; calcParams?: number[]; visible?: boolean },
+    paneId: string
+  ): void;
+
+  createOverlay(overlay: OverlayCreate): string | null;
+  removeOverlay(options: { groupId?: string; id?: string }): void;
+  removeAllOverlay(): void;
+  getAllOverlay(): OverlayInfo[];
+  getOverlay(id: string): OverlayInfo | null;
+  overrideOverlay(options: { [key: string]: any }): void;
+
   // Add utility methods
-  dispose?(): void
-  resize?(): void
-
-
+  dispose?(): void;
+  resize?(): void;
+  
+  // Settings methods
+  getSettings(): ChartSettings
+  setSettings(settings: Partial<ChartSettings>): void
+  resetSettings(): void
 }

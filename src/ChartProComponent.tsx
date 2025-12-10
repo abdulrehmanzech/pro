@@ -37,6 +37,10 @@ import {
   DomPosition,
   FormatDateType,
   OverlayCreate,
+  DeepPartial,
+  LineType,
+  CandleType,
+  YAxisType,
 } from "klinecharts";
 
 import lodashSet from "lodash/set";
@@ -64,6 +68,7 @@ import {
   ChartPro,
   OverlayOptions,
   OverlayInfo,
+  ChartSettings,
 } from "./types";
 
 export interface ChartProComponentProps
@@ -238,6 +243,201 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
         widget.resize();
       } else {
         console.warn("resize method not available on widget");
+      }
+    },
+
+    getSettings: (): ChartSettings => {
+      if (!widget) return {};
+
+      const styles = widget.getStyles();
+
+      // Get the bar style - need to check what's actually in the bar object
+      const barStyle = styles.candle?.bar as any;
+
+      return {
+        // Candle settings
+        candleType: styles.candle?.type,
+        candleBarStyle: barStyle?.style as LineType | undefined, // bar.style might be LineType
+        showLastPrice: styles.candle?.priceMark?.last?.show,
+        showHighestPrice: styles.candle?.priceMark?.high?.show,
+        showLowestPrice: styles.candle?.priceMark?.low?.show,
+
+        // Indicator settings
+        showIndicatorLastValue: styles.indicator?.lastValueMark?.show,
+
+        // Axis settings - yAxis.reverse is boolean according to YAxisStyle interface
+        priceAxisType: styles.yAxis?.type,
+        reverseCoordinate: styles.yAxis?.reverse,
+
+        // Grid settings
+        showGrids: styles.grid?.show,
+
+        timestamp: Date.now(),
+      };
+    },
+
+    // Update setSettings method:
+    setSettings: (settings: Partial<ChartSettings>): void => {
+      if (!widget) return;
+
+      const styleUpdates: DeepPartial<Styles> = {};
+
+      // Apply candle settings
+      if (settings.candleType !== undefined) {
+        styleUpdates.candle = {
+          ...styleUpdates.candle,
+          type: settings.candleType,
+        };
+      }
+
+      // Apply bar style - careful with the type
+      if (settings.candleBarStyle !== undefined) {
+        // The bar object is ChangeColor type, but we need to add style property
+        const currentBar = styleUpdates.candle?.bar || {};
+        styleUpdates.candle = {
+          ...styleUpdates.candle,
+          bar: {
+            ...currentBar,
+            style: settings.candleBarStyle,
+          } as any, // Use any since ChangeColor doesn't have style
+        };
+      }
+
+      // Apply price mark settings
+      if (settings.showLastPrice !== undefined) {
+        styleUpdates.candle = {
+          ...styleUpdates.candle,
+          priceMark: {
+            ...styleUpdates.candle?.priceMark,
+            last: {
+              ...styleUpdates.candle?.priceMark?.last,
+              show: settings.showLastPrice,
+            },
+          },
+        };
+      }
+
+      if (settings.showHighestPrice !== undefined) {
+        styleUpdates.candle = {
+          ...styleUpdates.candle,
+          priceMark: {
+            ...styleUpdates.candle?.priceMark,
+            high: {
+              ...styleUpdates.candle?.priceMark?.high,
+              show: settings.showHighestPrice,
+            },
+          },
+        };
+      }
+
+      if (settings.showLowestPrice !== undefined) {
+        styleUpdates.candle = {
+          ...styleUpdates.candle,
+          priceMark: {
+            ...styleUpdates.candle?.priceMark,
+            low: {
+              ...styleUpdates.candle?.priceMark?.low,
+              show: settings.showLowestPrice,
+            },
+          },
+        };
+      }
+
+      // Apply indicator settings
+      if (settings.showIndicatorLastValue !== undefined) {
+        styleUpdates.indicator = {
+          ...styleUpdates.indicator,
+          lastValueMark: {
+            ...styleUpdates.indicator?.lastValueMark,
+            show: settings.showIndicatorLastValue,
+          },
+        };
+      }
+
+      // Apply axis settings
+      if (settings.priceAxisType !== undefined) {
+        styleUpdates.yAxis = {
+          ...styleUpdates.yAxis,
+          type: settings.priceAxisType,
+        };
+      }
+
+      if (settings.reverseCoordinate !== undefined) {
+        styleUpdates.yAxis = {
+          ...styleUpdates.yAxis,
+          reverse: settings.reverseCoordinate,
+        };
+      }
+
+      // Apply grid settings
+      if (settings.showGrids !== undefined) {
+        styleUpdates.grid = {
+          ...styleUpdates.grid,
+          show: settings.showGrids,
+        };
+      }
+
+      // Apply the style updates
+      widget.setStyles(styleUpdates);
+    },
+
+    resetSettings: (): void => {
+      if (!widget) return;
+
+      // Get default styles from the widget itself or use a fallback
+      const currentStyles = widget.getStyles();
+
+      // Create a default reset configuration
+      const resetStyles: DeepPartial<Styles> = {
+        candle: {
+          type: CandleType.CandleSolid, // Default to solid candles
+          priceMark: {
+            last: { show: true },
+            high: { show: true },
+            low: { show: true },
+          },
+        },
+        indicator: {
+          lastValueMark: { show: true },
+        },
+        yAxis: {
+          type: YAxisType.Normal,
+          reverse: false,
+        },
+        grid: {
+          show: true,
+          horizontal: { show: true, color: "#1e293b", size: 0.5 },
+          vertical: { show: true, color: "#1e293b", size: 0.5 },
+        },
+      };
+
+      // Or if you have widgetDefaultStyles and want to use it, check it first:
+      const defaultStyles = widgetDefaultStyles();
+      if (defaultStyles) {
+        // Use the saved default styles
+        const resetFromDefault: DeepPartial<Styles> = {
+          candle: {
+            type: defaultStyles.candle?.type,
+            bar: defaultStyles.candle?.bar,
+            priceMark: defaultStyles.candle?.priceMark,
+          },
+          indicator: {
+            lastValueMark: defaultStyles.indicator?.lastValueMark,
+          },
+          yAxis: {
+            type: defaultStyles.yAxis?.type,
+            reverse: defaultStyles.yAxis?.reverse,
+          },
+          grid: {
+            show: defaultStyles.grid?.show,
+          },
+        };
+
+        // Apply styles from saved defaults
+        widget.setStyles(resetFromDefault);
+      } else {
+        // Apply hardcoded defaults
+        widget.setStyles(resetStyles);
       }
     },
   });

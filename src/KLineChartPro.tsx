@@ -30,6 +30,7 @@ import {
   ChartPro,
   ChartProOptions,
   OverlayInfo,
+  ChartSettings,
 } from "./types";
 
 const Logo = (
@@ -203,4 +204,18 @@ export default class KLineChartPro implements ChartPro {
   getPeriod(): Period {
     return this._chartApi!.getPeriod();
   }
+
+
+    getSettings(): ChartSettings {
+    return this._chartApi!.getSettings()
+  }
+  
+  setSettings(settings: Partial<ChartSettings>): void {
+    this._chartApi!.setSettings(settings)
+  }
+  
+  resetSettings(): void {
+    this._chartApi!.resetSettings()
+  }
+
 }
