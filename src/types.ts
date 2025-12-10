@@ -75,4 +75,5 @@ export interface ChartPro {
   setMainIndicators(indicators: string[]): void
   getSubIndicators(): {}
   setSubIndicators(indicators: string[]): void
+  overrideIndicator(config: { name: string, calcParams?: number[], visible?: boolean }, paneId: string): void 
 }

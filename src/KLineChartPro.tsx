@@ -83,6 +83,17 @@ export default class KLineChartPro implements ChartPro {
     return this._chartApi!.getMainIndicators()
 
   }
+
+  overrideIndicator(config: { name: string, calcParams?: number[], visible?: boolean }, paneId: string): void {
+    // Access the internal chart API
+    const chartApi = this._chartApi as any;
+    if (chartApi && typeof chartApi.overrideIndicator === 'function') {
+      chartApi.overrideIndicator(config, paneId);
+    } else {
+      console.warn('overrideIndicator method not available on chart API');
+    }
+  }
+
   setMainIndicators(indicators: string[]): void {
     return this._chartApi!.setMainIndicators(indicators)
 

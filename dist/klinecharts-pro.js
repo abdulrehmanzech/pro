@@ -3409,7 +3409,10 @@ const lu = (e) => {
     getMainIndicators: () => M(),
     getSubIndicators: () => S(),
     setMainIndicators: Z,
-    setSubIndicators: x
+    setSubIndicators: x,
+    overrideIndicator: (h, f) => {
+      n == null || n.overrideIndicator(h, f);
+    }
   });
   const c1 = () => {
     n == null || n.resize();
@@ -3979,6 +3982,10 @@ class yu {
   }
   getMainIndicators() {
     return this._chartApi.getMainIndicators();
+  }
+  overrideIndicator(t, n) {
+    const r = this._chartApi;
+    r && typeof r.overrideIndicator == "function" ? r.overrideIndicator(t, n) : console.warn("overrideIndicator method not available on chart API");
   }
   setMainIndicators(t) {
     return this._chartApi.setMainIndicators(t);

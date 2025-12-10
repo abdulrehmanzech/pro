@@ -118,6 +118,10 @@ const ChartProComponent: Component<ChartProComponentProps> = props => {
     getSubIndicators: () => subIndicators(),
     setMainIndicators,
     setSubIndicators,
+    overrideIndicator: (config: { name: string, calcParams?: number[], visible?: boolean }, paneId: string) => { 
+    widget?.overrideIndicator(config, paneId)
+  }
+
 
   })
 

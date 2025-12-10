@@ -56,6 +56,11 @@ export interface ChartPro {
 	setMainIndicators(indicators: string[]): void;
 	getSubIndicators(): {};
 	setSubIndicators(indicators: string[]): void;
+	overrideIndicator(config: {
+		name: string;
+		calcParams?: number[];
+		visible?: boolean;
+	}, paneId: string): void;
 }
 export declare class DefaultDatafeed implements Datafeed {
 	constructor(apiKey: string);
@@ -72,6 +77,11 @@ export declare class KLineChartPro implements ChartPro {
 	private _container;
 	private _chartApi;
 	getMainIndicators(): {};
+	overrideIndicator(config: {
+		name: string;
+		calcParams?: number[];
+		visible?: boolean;
+	}, paneId: string): void;
 	setMainIndicators(indicators: string[]): void;
 	getSubIndicators(): {};
 	setSubIndicators(indicators: string[]): void;
