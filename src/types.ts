@@ -57,6 +57,27 @@ export interface ChartProOptions {
   subIndicators?: string[]
   datafeed: Datafeed
 }
+import type { OverlayCreate } from 'klinecharts'
+
+// Use OverlayCreate directly or create a compatible type
+export type OverlayOptions = OverlayCreate
+
+export interface OverlayInfo {
+  id: string
+  name?: string
+  type: string
+  points: Array<{ price: number; timestamp: number }>
+  options: Record<string, any>
+}
+
+export interface OverlayInfo {
+  id: string
+  name?: string
+  type: string
+  points: Array<{ price: number; timestamp: number }>
+  options: Record<string, any>
+}
+
 
 export interface ChartPro {
   setTheme(theme: string): void
@@ -76,4 +97,18 @@ export interface ChartPro {
   getSubIndicators(): {}
   setSubIndicators(indicators: string[]): void
   overrideIndicator(config: { name: string, calcParams?: number[], visible?: boolean }, paneId: string): void 
+ 
+ 
+  createOverlay(overlay: OverlayCreate): string | null
+  removeOverlay(options: { groupId?: string; id?: string }): void
+  removeAllOverlay(): void
+  getAllOverlay(): OverlayInfo[]
+  getOverlay(id: string): OverlayInfo | null
+  overrideOverlay(options: { [key: string]: any }): void
+  
+  // Add utility methods
+  dispose?(): void
+  resize?(): void
+
+
 }

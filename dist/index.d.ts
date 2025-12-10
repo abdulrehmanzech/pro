@@ -1,4 +1,4 @@
-import { DeepPartial, KLineData, Styles } from 'klinecharts';
+import { DeepPartial, KLineData, OverlayCreate, Styles } from 'klinecharts';
 
 export interface SymbolInfo {
 	ticker: string;
@@ -39,6 +39,26 @@ export interface ChartProOptions {
 	subIndicators?: string[];
 	datafeed: Datafeed;
 }
+export interface OverlayInfo {
+	id: string;
+	name?: string;
+	type: string;
+	points: Array<{
+		price: number;
+		timestamp: number;
+	}>;
+	options: Record<string, any>;
+}
+export interface OverlayInfo {
+	id: string;
+	name?: string;
+	type: string;
+	points: Array<{
+		price: number;
+		timestamp: number;
+	}>;
+	options: Record<string, any>;
+}
 export interface ChartPro {
 	setTheme(theme: string): void;
 	getTheme(): string;
@@ -61,6 +81,19 @@ export interface ChartPro {
 		calcParams?: number[];
 		visible?: boolean;
 	}, paneId: string): void;
+	createOverlay(overlay: OverlayCreate): string | null;
+	removeOverlay(options: {
+		groupId?: string;
+		id?: string;
+	}): void;
+	removeAllOverlay(): void;
+	getAllOverlay(): OverlayInfo[];
+	getOverlay(id: string): OverlayInfo | null;
+	overrideOverlay(options: {
+		[key: string]: any;
+	}): void;
+	dispose?(): void;
+	resize?(): void;
 }
 export declare class DefaultDatafeed implements Datafeed {
 	constructor(apiKey: string);
@@ -76,6 +109,19 @@ export declare class KLineChartPro implements ChartPro {
 	constructor(options: ChartProOptions);
 	private _container;
 	private _chartApi;
+	createOverlay(overlay: OverlayCreate): string | null;
+	removeOverlay(options: {
+		groupId?: string;
+		id?: string;
+	}): void;
+	removeAllOverlay(): void;
+	getAllOverlay(): OverlayInfo[];
+	getOverlay(id: string): OverlayInfo | null;
+	overrideOverlay(options: {
+		[key: string]: any;
+	}): void;
+	dispose(): void;
+	resize(): void;
 	getMainIndicators(): {};
 	overrideIndicator(config: {
 		name: string;
