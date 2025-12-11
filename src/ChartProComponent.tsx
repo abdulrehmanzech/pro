@@ -1071,6 +1071,102 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
 
   let isProcessingRightClick = false;
   
+  
+    const removeDrawingOnRightClick = (e: MouseEvent) => {
+    if (isProcessingRightClick) return;
+    
+    e.preventDefault(); // Prevent default browser context menu
+    isProcessingRightClick = true;
+    
+    console.log('🖱️ Right-click detected');
+    
+    try {
+      // Get the overlay element under mouse
+      const elements = document.elementsFromPoint(e.clientX, e.clientY);
+      
+      let overlayFound = false;
+      
+      // Check each element if it's a drawing
+      for (const element of elements) {
+        const htmlElement = element as HTMLElement;
+        
+        // Try to find overlay ID in different ways
+        let overlayId: string | null = null;
+        
+        // Method 1: Check for data attributes
+        overlayId = htmlElement.getAttribute('data-overlay-id');
+        
+        // Method 2: Check parent for overlay ID
+        if (!overlayId) {
+          const parentWithId = htmlElement.closest('[data-overlay-id]');
+          overlayId = parentWithId?.getAttribute('data-overlay-id') || null;
+        }
+        
+        // Method 3: Check for specific drawing classes (adjust based on klinecharts)
+        if (!overlayId && (
+          htmlElement.classList.contains('k-line') ||
+          htmlElement.classList.contains('overlay') ||
+          htmlElement.classList.contains('drawing')
+        )) {
+          // Try to find the closest parent with data-id
+          const parent = htmlElement.closest('[data-id]');
+          overlayId = parent?.getAttribute('data-id') || null;
+        }
+        
+        if (overlayId) {
+          console.log(`🎯 Found drawing to remove: ${overlayId}`);
+          overlayFound = true;
+          
+          // 1. Remove from chart
+          widget?.removeOverlay?.({ id: overlayId });
+          
+          // 2. Remove from tracker
+          overlayTracker.delete(overlayId);
+          
+          // 3. Cleanup monitoring
+          const state = drawingStates.get(overlayId);
+          if (state) {
+            if (state.checkInterval) clearInterval(state.checkInterval);
+            if (state.mouseUpHandler) {
+              document.removeEventListener("mouseup", state.mouseUpHandler);
+              document.removeEventListener("touchend", state.mouseUpHandler);
+            }
+            drawingStates.delete(overlayId);
+          }
+          
+          // 4. Update local storage
+          const currentSymbol = symbol();
+          if (currentSymbol?.ticker) {
+            const allDrawings = Array.from(overlayTracker.values());
+            drawingStorage.saveDrawings(currentSymbol.ticker, allDrawings);
+            console.log(`🗑️ Drawing removed. Storage updated. ${allDrawings.length} drawings remain`);
+          }
+          
+          break; // Stop after removing one drawing
+        }
+      }
+      
+      if (!overlayFound) {
+        console.log('ℹ️ No drawing found under cursor');
+      }
+      
+    } catch (error) {
+      console.error('❌ Error removing drawing:', error);
+    }
+    
+    setTimeout(() => {
+      isProcessingRightClick = false;
+    }, 100);
+  };
+
+  if (widgetRef) {
+    widgetRef.addEventListener('contextmenu', removeDrawingOnRightClick);
+    console.log('✅ Right-click removal listener added');
+  }
+
+
+
+
   // Function to refresh local storage
   const refreshLocalStorageForCurrentDrawings = () => {
     const currentSymbol = symbol();
@@ -1130,28 +1226,27 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
   });
   
   // === MONKEY PATCH removeOverlay ===
+    // === MONKEY PATCH removeOverlay for consistency ===
   const originalRemoveOverlay = widget?.removeOverlay;
   if (widget && originalRemoveOverlay) {
     widget.removeOverlay = function (...args) {
-      const result = originalRemoveOverlay.apply(this, args);
-
-      // Extract overlay ID
       const arg = args[0];
       let overlayId: string | undefined;
-
+      
       if (typeof arg === "string") {
         overlayId = arg;
       } else if (arg && typeof arg === "object" && arg.id) {
         overlayId = arg.id;
       }
-
+      
+      const result = originalRemoveOverlay.apply(this, args);
+      
       if (overlayId) {
-        console.log(`🗑️ Overlay removed: ${overlayId}`);
+        console.log(`🗑️ Drawing removed via API: ${overlayId}`);
         
-        // Update our tracker
+        // Cleanup tracking
         overlayTracker.delete(overlayId);
         
-        // Cleanup monitoring
         const state = drawingStates.get(overlayId);
         if (state) {
           if (state.checkInterval) clearInterval(state.checkInterval);
@@ -1162,10 +1257,14 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
           drawingStates.delete(overlayId);
         }
         
-        // Auto-refresh local storage
-        refreshLocalStorageForCurrentDrawings();
+        // Update storage
+        const currentSymbol = symbol();
+        if (currentSymbol?.ticker) {
+          const allDrawings = Array.from(overlayTracker.values());
+          drawingStorage.saveDrawings(currentSymbol.ticker, allDrawings);
+        }
       }
-
+      
       return result;
     };
   }
@@ -1264,28 +1363,60 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     });
 
     // === MONKEY PATCH createOverlay ===
-    const originalCreateOverlay = widget?.createOverlay;
-    if (widget && originalCreateOverlay) {
-      widget.createOverlay = function (...args) {
-        const overlayConfig = args[0] as OverlayCreate;
-        const result = originalCreateOverlay.apply(this, args);
-
-        if (result) {
-          console.log(`🆕 ${overlayConfig.name} created with ID: ${result}`);
-
-          // Start monitoring this overlay for completion
-          monitorOverlayCompletion(result, overlayConfig.name || "unknown");
-
-          // Also update tracking immediately
-          updateOverlayTracking(result);
-          syncDrawingsToStorage();
-
-        }
-
-        return result;
-      };
-    }
-
+  const originalCreateOverlay = widget?.createOverlay;
+  if (widget && originalCreateOverlay) {
+    widget.createOverlay = function (...args) {
+      const overlayConfig = args[0] as OverlayCreate;
+      const result = originalCreateOverlay.apply(this, args);
+      
+      if (result) {
+        console.log(`🆕 Drawing created: ${overlayConfig.name} (ID: ${result})`);
+        
+        // Start monitoring
+        monitorOverlayCompletion(result, overlayConfig.name || "unknown");
+        updateOverlayTracking(result);
+        
+        // Add data attribute to drawing elements after a short delay
+        setTimeout(() => {
+          try {
+            if (!widgetRef) return;
+            
+            // Find all SVG elements (where drawings usually are)
+            const svgElements = widgetRef.querySelectorAll('svg *');
+            svgElements.forEach(element => {
+              // Check if this element belongs to our overlay
+              const elementId = element.getAttribute('data-id');
+              if (elementId === result) {
+                element.setAttribute('data-overlay-id', result);
+              }
+            });
+            
+            // Also check canvas or other drawing containers
+            const drawingContainers = widgetRef.querySelectorAll('[data-id]');
+            drawingContainers.forEach(container => {
+              const containerId = container.getAttribute('data-id');
+              if (containerId === result) {
+                container.setAttribute('data-overlay-id', result);
+              }
+            });
+          } catch (error) {
+            console.error('Error setting overlay ID:', error);
+          }
+        }, 200);
+        
+        // Save to storage
+        setTimeout(() => {
+          const currentSymbol = symbol();
+          if (currentSymbol?.ticker) {
+            const allDrawings = Array.from(overlayTracker.values());
+            drawingStorage.saveDrawings(currentSymbol.ticker, allDrawings);
+          }
+        }, 300);
+      }
+      
+      return result;
+    };
+  }
     // === MONKEY PATCH removeOverlay ===
  // === MONKEY PATCH removeOverlay ===
 // const originalRemoveOverlay = widget?.removeOverlay;
