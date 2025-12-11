@@ -168,16 +168,92 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     saveDrawings: (ticker: string, drawings: OverlayInfo[]) => {
       try {
         const key = `kline_drawings_${ticker}`;
-        localStorage.setItem(
-          key,
-          JSON.stringify({
-            drawings,
-            timestamp: Date.now(),
-          })
-        );
+
+        // Function to create a serializable copy
+        const createSerializableCopy = (
+          obj: any,
+          visited = new WeakSet()
+        ): any => {
+          if (obj === null || obj === undefined) return obj;
+          if (visited.has(obj)) return "[Circular]";
+
+          // Handle primitives
+          if (typeof obj !== "object") return obj;
+
+          visited.add(obj);
+
+          // Handle arrays
+          if (Array.isArray(obj)) {
+            return obj.map((item) => createSerializableCopy(item, visited));
+          }
+
+          // Handle objects
+          const copy: any = {};
+          for (const key in obj) {
+            // Skip problematic keys
+            if (
+              key === "__proto__" ||
+              key === "constructor" ||
+              key === "prototype"
+            ) {
+              continue;
+            }
+
+            try {
+              const value = obj[key];
+
+              // Skip functions
+              if (typeof value === "function") continue;
+
+              // Recursively copy
+              copy[key] = createSerializableCopy(value, visited);
+            } catch (e:any) {
+              copy[key] = `[Error: ${e.message}]`;
+            }
+          }
+
+          return copy;
+        };
+
+        // Prepare drawings with deep serialization
+        const drawingsForStorage = drawings.map((drawing) => {
+          const drawingCopy: any = { ...drawing };
+
+          // Deep copy extendData
+          if (drawingCopy.extendData) {
+            drawingCopy.extendData = createSerializableCopy(
+              drawingCopy.extendData
+            );
+          }
+
+          // Deep copy styles
+          if (drawingCopy.styles) {
+            drawingCopy.styles = createSerializableCopy(drawingCopy.styles);
+          }
+
+          return drawingCopy as OverlayInfo;
+        });
+
+        const storageData = {
+          drawings: drawingsForStorage,
+          timestamp: Date.now(),
+        };
+
+        localStorage.setItem(key, JSON.stringify(storageData, null, 2));
         console.log(
           `💾 Library: Saved ${drawings.length} drawings for ${ticker}`
         );
+
+        // Log what was saved for debugging
+        drawingsForStorage.forEach((drawing, index) => {
+          console.log(`📝 Drawing ${index + 1}:`, {
+            type: drawing.type,
+            extendDataKeys: drawing.extendData
+              ? Object.keys(drawing.extendData)
+              : [],
+            hasPoints: !!drawing.points?.length,
+          });
+        });
       } catch (error) {
         console.error("Library: Error saving drawings:", error);
       }
@@ -194,6 +270,20 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
               parsed.drawings?.length || 0
             } drawings for ${ticker}`
           );
+
+          // Log each loaded drawing
+          if (parsed.drawings) {
+            parsed.drawings.forEach((drawing: OverlayInfo, index: number) => {
+              console.log(`📥 Drawing ${index + 1}:`, {
+                type: drawing.type,
+                extendDataKeys: drawing.extendData
+                  ? Object.keys(drawing.extendData)
+                  : [],
+                points: drawing.points?.length || 0,
+              });
+            });
+          }
+
           return parsed.drawings || [];
         }
       } catch (error) {
@@ -816,50 +906,185 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
 
     // ADD THIS: Track overlay creation
     // Monkey patch the createOverlay method to track overlays
-const originalCreateOverlay = widget?.createOverlay;
-if (widget && originalCreateOverlay) {
-  widget.createOverlay = function(...args) {
-    const overlayConfig = args[0] as OverlayCreate;
-    const result = originalCreateOverlay.apply(this, args);
-    
-    if (result) {
-      // Try to get the created overlay immediately to capture all data
-      setTimeout(() => {
-        try {
-          const overlay = widget?.getOverlayById?.(result);
-          if (overlay) {
-            // IMPORTANT: Capture extendData from the original config
-            const overlayInfo: OverlayInfo = {
-              id: result,
-              type: overlay.name || overlayConfig.name || 'unknown',
-              points: (overlay.points || []).map((point: Partial<Point>) => {
-                console.log(  'Extracting point from library :', point);
-                return({
-                timestamp: point.timestamp || 0,
-                value: point.value || 0,
-                dataIndex: point.dataIndex || 0
-              })}),
-              // Capture extendData from the config if not available on overlay
-              extendData: overlay.extendData || overlayConfig.extendData,
-              styles: overlay.styles || overlayConfig.styles,
-              name: overlay.name || overlayConfig.name,
-              visible: overlay.visible ?? true,
-              lock: overlay.lock ?? false,
-              mode: overlay.mode || overlayConfig.mode || OverlayMode.Normal
-            };
-            overlayTracker.set(result, overlayInfo);
-            console.log('📝 Tracked overlay creation:', overlayInfo);
-          }
-        } catch (error) {
-          console.error('Error tracking overlay:', error);
-        }
-      }, 100);
-    }
-    
-    return result;
-  };
-  }
+    // In your ChartProComponent.tsx, update the createOverlay patching:
 
+    // ADD THIS: Track overlay creation
+    // Monkey patch the createOverlay method to track overlays
+    // In your ChartProComponent.tsx, replace the createOverlay patching with this:
+
+    // Monkey patch the createOverlay method to track overlays
+    const originalCreateOverlay = widget?.createOverlay;
+    if (widget && originalCreateOverlay) {
+      widget.createOverlay = function (...args) {
+        const overlayConfig = args[0] as OverlayCreate;
+        const result = originalCreateOverlay.apply(this, args);
+
+        if (result) {
+          // Create a function to deeply extract ALL overlay properties
+          const extractAllOverlayProperties = (overlayObj: any): any => {
+            if (!overlayObj) return {};
+
+            const extracted: any = {};
+
+            // Function to recursively extract properties
+            const extractRecursive = (
+              source: any,
+              target: any,
+              depth = 0,
+              maxDepth = 5
+            ) => {
+              if (depth >= maxDepth) return; // Prevent infinite recursion
+
+              for (const key in source) {
+                // Skip internal or circular references
+                if (
+                  key === "__proto__" ||
+                  key === "constructor" ||
+                  key === "prototype"
+                ) {
+                  continue;
+                }
+
+                try {
+                  const value = source[key];
+
+                  // Handle different types of values
+                  if (value === null || value === undefined) {
+                    target[key] = value;
+                  } else if (typeof value === "function") {
+                    // Skip functions
+                    continue;
+                  } else if (typeof value === "object") {
+                    // Handle arrays
+                    if (Array.isArray(value)) {
+                      target[key] = value.map((item) => {
+                        if (item && typeof item === "object") {
+                          const objCopy: any = {};
+                          extractRecursive(item, objCopy, depth + 1, maxDepth);
+                          return objCopy;
+                        }
+                        return item;
+                      });
+                    }
+                    // Handle regular objects
+                    else {
+                      target[key] = {};
+                      extractRecursive(value, target[key], depth + 1, maxDepth);
+                    }
+                  }
+                  // Handle primitive values
+                  else {
+                    target[key] = value;
+                  }
+                } catch (e) {
+                  // If we can't extract a property, skip it
+                  console.warn(`Could not extract property ${key}:`, e);
+                }
+              }
+            };
+
+            extractRecursive(overlayObj, extracted);
+            return extracted;
+          };
+
+          // Set up multiple attempts to capture overlay data
+          const captureOverlayData = (attempt = 0, maxAttempts = 10) => {
+            setTimeout(
+              () => {
+                try {
+                  const overlay = widget?.getOverlayById?.(result);
+                  if (overlay) {
+                    console.log(
+                      `🔍 Attempt ${attempt + 1} to capture overlay ${result}:`,
+                      {
+                        name: overlay.name,
+                        availableKeys: Object.keys(overlay),
+                      }
+                    );
+
+                    // Deeply extract ALL properties from the overlay
+                    const allProperties = extractAllOverlayProperties(overlay);
+
+                    console.log("📊 Deeply extracted properties:", {
+                      extendData: allProperties.extendData,
+                      options: allProperties.options,
+                      points: allProperties.points,
+                      // Log all top-level keys
+                      allKeys: Object.keys(allProperties).filter(
+                        (k) => !["points", "styles"].includes(k)
+                      ),
+                    });
+
+                    // Create the overlay info with ALL captured data
+                    const overlayInfo: OverlayInfo = {
+                      id: result,
+                      type: overlay.name || overlayConfig.name || "unknown",
+                      name: overlay.name || overlayConfig.name,
+                      // Extract points safely
+                      points: (
+                        overlay.points ||
+                        overlayConfig.points ||
+                        []
+                      ).map((point: Partial<Point>) => ({
+                        timestamp: point.timestamp || 0,
+                        value: point.value || 0,
+                        dataIndex: point.dataIndex || 0,
+                      })),
+                      // Store ALL properties in extendData for complete restoration
+                      extendData: allProperties,
+                      styles: overlay.styles || overlayConfig.styles,
+                      visible: overlay.visible ?? true,
+                      lock: overlay.lock ?? false,
+                      mode:
+                        overlay.mode ||
+                        overlayConfig.mode ||
+                        OverlayMode.Normal,
+                    };
+
+                    overlayTracker.set(result, overlayInfo);
+                    console.log("💾 Fully tracked overlay:", {
+                      id: overlayInfo.id,
+                      type: overlayInfo.type,
+                      hasExtendData: !!overlayInfo.extendData,
+                      extendDataKeys: overlayInfo.extendData
+                        ? Object.keys(overlayInfo.extendData)
+                        : [],
+                    });
+
+                    // If we haven't captured extendData yet, try again
+                    if (
+                      !overlayInfo.extendData ||
+                      Object.keys(overlayInfo.extendData).length === 0
+                    ) {
+                      if (attempt < maxAttempts - 1) {
+                        captureOverlayData(attempt + 1, maxAttempts);
+                      }
+                    }
+                  } else if (attempt < maxAttempts - 1) {
+                    // Overlay not ready yet, try again
+                    captureOverlayData(attempt + 1, maxAttempts);
+                  }
+                } catch (error) {
+                  console.error(
+                    `Error capturing overlay on attempt ${attempt + 1}:`,
+                    error
+                  );
+                  if (attempt < maxAttempts - 1) {
+                    captureOverlayData(attempt + 1, maxAttempts);
+                  }
+                }
+              },
+              attempt === 0 ? 100 : 500
+            ); // Longer delay for subsequent attempts
+          };
+
+          // Start capturing data
+          captureOverlayData();
+        }
+
+        return result;
+      };
+    }
 
     // Also patch removeOverlay
     const originalRemoveOverlay = widget?.removeOverlay;
