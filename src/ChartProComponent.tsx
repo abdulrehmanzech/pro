@@ -164,56 +164,236 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       calcParams: [] as Array<any>,
     });
   let overlayTracker = new Map<string, OverlayInfo>();
+  
+  // Track drawing states for each overlay
+  let drawingStates = new Map<string, {
+    monitoring: boolean;
+    complete: boolean;
+    lastPointCount: number;
+    checkInterval?: NodeJS.Timeout;
+    mouseUpHandler?: () => void;
+  }>();
+
+  // Helper function to get required points for each overlay type
+  const getRequiredPoints = (type: string): number => {
+    const requiredPoints: Record<string, number> = {
+      'line': 2,
+      'segment': 2,
+      'arrow': 2,
+      'rect': 2,
+      'triangle': 3,
+      'polygon': 3,
+      'circle': 2,
+      'ellipse': 2,
+      'arc': 3,
+      'fibonacciLine': 2,
+      'fibonacciArc': 3,
+      'fibonacciFan': 3,
+      'fibonacciZone': 2,
+      'fibonacciSpiral': 2,
+      'xabcd': 4,
+      'abcd': 4,
+      'gartley': 5,
+      'bat': 5,
+      'butterfly': 5,
+      'shark': 5,
+      'cypher': 5,
+      'text': 1,
+      'priceLine': 1,
+      'priceChannelLine': 3,
+    };
+    
+    return requiredPoints[type] || 1;
+  };
+
+  // Function to create a serializable copy of any object
+  const createSerializableCopy = (
+    obj: any,
+    visited = new WeakSet()
+  ): any => {
+    if (obj === null || obj === undefined) return obj;
+    if (visited.has(obj)) return "[Circular]";
+
+    // Handle primitives
+    if (typeof obj !== "object") return obj;
+
+    visited.add(obj);
+
+    // Handle arrays
+    if (Array.isArray(obj)) {
+      return obj.map((item) => createSerializableCopy(item, visited));
+    }
+
+    // Handle objects
+    const copy: any = {};
+    for (const key in obj) {
+      // Skip problematic keys
+      if (
+        key === "__proto__" ||
+        key === "constructor" ||
+        key === "prototype"
+      ) {
+        continue;
+      }
+
+      try {
+        const value = obj[key];
+
+        // Skip functions
+        if (typeof value === "function") continue;
+
+        // Recursively copy
+        copy[key] = createSerializableCopy(value, visited);
+      } catch (e: any) {
+        copy[key] = `[Error: ${e.message}]`;
+      }
+    }
+
+    return copy;
+  };
+
+  // Function to extract overlay data safely
+  const extractOverlayData = (overlay: any): OverlayInfo | null => {
+    if (!overlay) return null;
+
+    try {
+      return {
+        id: overlay.id || '',
+        type: overlay.name || '',
+        name: overlay.name || '',
+        points: (overlay.points || []).map((point: Partial<Point>) => ({
+          timestamp: point.timestamp || 0,
+          value: point.value || 0,
+          dataIndex: point.dataIndex || 0,
+        })),
+        extendData: createSerializableCopy(overlay.extendData || {}),
+        styles: createSerializableCopy(overlay.styles || {}),
+        visible: overlay.visible ?? true,
+        lock: overlay.lock ?? false,
+        mode: overlay.mode || OverlayMode.Normal,
+      };
+    } catch (error) {
+      console.error("Error extracting overlay data:", error);
+      return null;
+    }
+  };
+
+  // Function to update overlay tracking
+const updateOverlayTracking = (overlayId: string): void => {
+  try {
+    const overlay = widget?.getOverlayById?.(overlayId);
+    if (!overlay) return;
+
+    const extracted = extractOverlayData(overlay);
+    if (extracted) {
+      const previous = overlayTracker.get(overlayId);
+      const previousPoints = previous?.points?.length || 0;
+      const currentPoints = extracted.points?.length || 0;
+      
+      overlayTracker.set(overlayId, extracted);
+      
+      if (currentPoints > previousPoints) {
+        console.log(`📌 ${extracted.type} ${overlayId}: ${previousPoints} → ${currentPoints} points`);
+      }
+      
+      // Check if drawing is complete
+      const requiredPoints = getRequiredPoints(extracted.type);
+      
+      if (currentPoints >= requiredPoints) {
+        const state = drawingStates.get(overlayId);
+        if (state && !state.complete) {
+          state.complete = true;
+          console.log(`✅ ${extracted.type} ${overlayId} is complete (${currentPoints}/${requiredPoints} points)!`);
+          
+          // Stop monitoring if complete
+          if (state.checkInterval) {
+            clearInterval(state.checkInterval);
+            state.checkInterval = undefined;
+          }
+        }
+      }
+    }
+  } catch (error) {
+    console.error(`Error updating overlay tracking for ${overlayId}:`, error);
+  }
+};
+
+  // Function to monitor overlay completion
+  const monitorOverlayCompletion = (overlayId: string, type: string): void => {
+    if (drawingStates.has(overlayId)) return;
+
+    const state = {
+      monitoring: true,
+      complete: false,
+      lastPointCount: 0,
+    };
+    
+    drawingStates.set(overlayId, state);
+    
+    console.log(`🔍 Started monitoring ${type} ${overlayId}`);
+    
+    // Update tracking immediately
+    updateOverlayTracking(overlayId);
+    
+    // Set up interval to check for updates
+    // state.checkInterval = setInterval(() => {
+    //   updateOverlayTracking(overlayId);
+      
+    //   // Check if we should stop monitoring
+    //   const currentState = drawingStates.get(overlayId);
+    //   if (currentState?.complete) {
+    //     if (currentState.checkInterval) {
+    //       clearInterval(currentState.checkInterval);
+    //       currentState.checkInterval = undefined;
+    //     }
+    //   }
+    // }, 500); // Check every 500ms
+    
+    // Also listen for mouse up events
+    const handleMouseUp = () => {
+      updateOverlayTracking(overlayId);
+    };
+    
+    document.addEventListener('mouseup', handleMouseUp);
+    document.addEventListener('touchend', handleMouseUp);
+    
+    // state.mouseUpHandler = handleMouseUp;
+    
+    // Stop monitoring after 30 seconds
+    setTimeout(() => {
+      const finalState = drawingStates.get(overlayId);
+      if (finalState && !finalState.complete) {
+        console.log(`⏰ Stopped monitoring ${overlayId} after 30 seconds`);
+        
+        if (finalState.checkInterval) {
+          clearInterval(finalState.checkInterval);
+        }
+        
+        if (finalState.mouseUpHandler) {
+          document.removeEventListener('mouseup', finalState.mouseUpHandler);
+          document.removeEventListener('touchend', finalState.mouseUpHandler);
+        }
+        
+        // Final update
+        updateOverlayTracking(overlayId);
+        
+        const overlayInfo = overlayTracker.get(overlayId);
+        if (overlayInfo) {
+          const requiredPoints = getRequiredPoints(overlayInfo.type);
+          const currentPoints = overlayInfo.points?.length || 0;
+          
+          if (currentPoints < requiredPoints) {
+            console.warn(`⚠️ ${overlayInfo.type} ${overlayId} has only ${currentPoints} point(s), should have ${requiredPoints}`);
+          }
+        }
+      }
+    }, 30000);
+  };
+
   let drawingStorage = {
     saveDrawings: (ticker: string, drawings: OverlayInfo[]) => {
       try {
         const key = `kline_drawings_${ticker}`;
-
-        // Function to create a serializable copy
-        const createSerializableCopy = (
-          obj: any,
-          visited = new WeakSet()
-        ): any => {
-          if (obj === null || obj === undefined) return obj;
-          if (visited.has(obj)) return "[Circular]";
-
-          // Handle primitives
-          if (typeof obj !== "object") return obj;
-
-          visited.add(obj);
-
-          // Handle arrays
-          if (Array.isArray(obj)) {
-            return obj.map((item) => createSerializableCopy(item, visited));
-          }
-
-          // Handle objects
-          const copy: any = {};
-          for (const key in obj) {
-            // Skip problematic keys
-            if (
-              key === "__proto__" ||
-              key === "constructor" ||
-              key === "prototype"
-            ) {
-              continue;
-            }
-
-            try {
-              const value = obj[key];
-
-              // Skip functions
-              if (typeof value === "function") continue;
-
-              // Recursively copy
-              copy[key] = createSerializableCopy(value, visited);
-            } catch (e:any) {
-              copy[key] = `[Error: ${e.message}]`;
-            }
-          }
-
-          return copy;
-        };
 
         // Prepare drawings with deep serialization
         const drawingsForStorage = drawings.map((drawing) => {
@@ -221,14 +401,20 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
 
           // Deep copy extendData
           if (drawingCopy.extendData) {
-            drawingCopy.extendData = createSerializableCopy(
-              drawingCopy.extendData
-            );
+            drawingCopy.extendData = createSerializableCopy(drawingCopy.extendData);
           }
 
           // Deep copy styles
           if (drawingCopy.styles) {
             drawingCopy.styles = createSerializableCopy(drawingCopy.styles);
+          }
+
+          // Log drawing info
+          const requiredPoints = getRequiredPoints(drawing.type);
+          const currentPoints = drawing.points?.length || 0;
+          
+          if (currentPoints < requiredPoints) {
+            console.warn(`⚠️ Saving ${drawing.type} with only ${currentPoints} point(s), needs ${requiredPoints}`);
           }
 
           return drawingCopy as OverlayInfo;
@@ -248,10 +434,9 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
         drawingsForStorage.forEach((drawing, index) => {
           console.log(`📝 Drawing ${index + 1}:`, {
             type: drawing.type,
-            extendDataKeys: drawing.extendData
-              ? Object.keys(drawing.extendData)
-              : [],
-            hasPoints: !!drawing.points?.length,
+            points: drawing.points?.length || 0,
+            hasExtendData: !!drawing.extendData,
+            hasStyles: !!drawing.styles,
           });
         });
       } catch (error) {
@@ -271,20 +456,27 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
             } drawings for ${ticker}`
           );
 
-          // Log each loaded drawing
+          // Validate loaded drawings
+          const validDrawings: OverlayInfo[] = [];
+          
           if (parsed.drawings) {
             parsed.drawings.forEach((drawing: OverlayInfo, index: number) => {
-              console.log(`📥 Drawing ${index + 1}:`, {
-                type: drawing.type,
-                extendDataKeys: drawing.extendData
-                  ? Object.keys(drawing.extendData)
-                  : [],
-                points: drawing.points?.length || 0,
-              });
+              const requiredPoints = getRequiredPoints(drawing.type);
+              const currentPoints = drawing.points?.length || 0;
+              
+              if (currentPoints >= requiredPoints) {
+                validDrawings.push(drawing);
+                console.log(`📥 Valid drawing ${index + 1}:`, {
+                  type: drawing.type,
+                  points: currentPoints,
+                });
+              } else {
+                console.warn(`📥 Skipping ${drawing.type}: Only ${currentPoints} point(s), need ${requiredPoints}`);
+              }
             });
           }
 
-          return parsed.drawings || [];
+          return validDrawings;
         }
       } catch (error) {
         console.error("Library: Error loading drawings:", error);
@@ -339,6 +531,19 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       widget?.removeOverlay?.(options);
       if (options.id) {
         overlayTracker.delete(options.id);
+        
+        // Cleanup monitoring state
+        const state = drawingStates.get(options.id);
+        if (state) {
+          if (state.checkInterval) {
+            clearInterval(state.checkInterval);
+          }
+          if (state.mouseUpHandler) {
+            document.removeEventListener('mouseup', state.mouseUpHandler);
+            document.removeEventListener('touchend', state.mouseUpHandler);
+          }
+          drawingStates.delete(options.id);
+        }
       }
     },
 
@@ -346,8 +551,22 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       // Remove all tracked overlays
       overlayTracker.forEach((_, id) => {
         widget?.removeOverlay?.({ id });
+        
+        // Cleanup monitoring state
+        const state = drawingStates.get(id);
+        if (state) {
+          if (state.checkInterval) {
+            clearInterval(state.checkInterval);
+          }
+          if (state.mouseUpHandler) {
+            document.removeEventListener('mouseup', state.mouseUpHandler);
+            document.removeEventListener('touchend', state.mouseUpHandler);
+          }
+        }
       });
+      
       overlayTracker.clear();
+      drawingStates.clear();
     },
 
     getAllOverlay: (): OverlayInfo[] => {
@@ -415,7 +634,6 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       };
     },
 
-    // Update setSettings method:
     setSettings: (settings: Partial<ChartSettings>): void => {
       if (!widget) return;
 
@@ -580,37 +798,66 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       }
     },
 
-    // === drawing
-
+    // === Drawing Methods ===
     saveDrawings: (ticker: string) => {
       const drawings = Array.from(overlayTracker.values());
+      
+      // Validate all drawings before saving
+      drawings.forEach((drawing, index) => {
+        const requiredPoints = getRequiredPoints(drawing.type);
+        const currentPoints = drawing.points?.length || 0;
+        
+        if (currentPoints < requiredPoints) {
+          console.warn(`⚠️ ${drawing.type} ${drawing.id} has only ${currentPoints} point(s), should have ${requiredPoints}`);
+        }
+      });
+      
       drawingStorage.saveDrawings(ticker, drawings);
     },
 
     loadDrawings: (ticker: string) => {
       const savedDrawings = drawingStorage.loadDrawings(ticker);
-      savedDrawings.forEach((drawing: OverlayInfo) => {
+      
+      console.log(`🔄 Restoring ${savedDrawings.length} drawings...`);
+      
+      savedDrawings.forEach((drawing: OverlayInfo, index: number) => {
         try {
+          console.log(`   ${index + 1}/${savedDrawings.length}: ${drawing.type} with ${drawing.points?.length || 0} points`);
+          
           const overlayConfig: OverlayCreate = {
             name: drawing.type,
-            points: drawing.points,
-            // Use extendData for custom options
+            points: drawing.points || [],
             extendData: drawing.extendData,
-            // Include other properties
             styles: drawing.styles,
             visible: drawing.visible ?? true,
             lock: drawing.lock ?? false,
             mode: drawing.mode ?? OverlayMode.Normal,
           };
 
-          widget?.createOverlay(overlayConfig);
+          const overlayId = widget?.createOverlay(overlayConfig);
+          
+          if (overlayId) {
+            console.log(`   ✅ Created ${overlayId}`);
+            
+            // Update tracker with the new ID
+            overlayTracker.set(overlayId, {
+              ...drawing,
+              id: overlayId,
+            });
+            
+            // Mark as complete since it's being loaded from storage
+            drawingStates.set(overlayId, {
+              monitoring: false,
+              complete: true,
+              lastPointCount: drawing.points?.length || 0,
+            });
+          }
         } catch (error) {
-          console.error(
-            `Library: Error applying drawing ${drawing.id}:`,
-            error
-          );
+          console.error(`   ❌ Error restoring ${drawing.type}:`, error);
         }
       });
+      
+      console.log(`✅ Finished restoring drawings`);
     },
 
     getDrawings: (ticker: string) => {
@@ -624,37 +871,21 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     // Auto-save on overlay events
     enableAutoSave: (ticker: string, enabled: boolean = true) => {
       if (enabled) {
-        // Use DOM mutation observer to detect overlay changes
-        const observer = new MutationObserver(() => {
-          setTimeout(() => {
-            const drawings = Array.from(overlayTracker.values());
-            if (drawings.length > 0) {
-              drawingStorage.saveDrawings(ticker, drawings);
-            }
-          }, 100);
-        });
-
-        // Start observing the chart widget for changes
-        if (widgetRef) {
-          observer.observe(widgetRef, {
-            childList: true,
-            subtree: true,
-            attributes: true,
-          });
-        }
-
-        // Also save periodically
+        console.log(`🔧 Auto-save enabled for ${ticker}`);
+        
+        // Save periodically
         const intervalId = setInterval(() => {
           const drawings = Array.from(overlayTracker.values());
           if (drawings.length > 0) {
+            console.log(`⏰ Auto-saving ${drawings.length} drawings...`);
             drawingStorage.saveDrawings(ticker, drawings);
           }
         }, 30000); // Save every 30 seconds
 
         // Return cleanup function
         return () => {
-          observer.disconnect();
           clearInterval(intervalId);
+          console.log(`🔧 Auto-save disabled for ${ticker}`);
         };
       }
     },
@@ -721,392 +952,266 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     }
     return [from, to];
   };
-  const trackDrawingBarEvents = () => {
-    // Listen for drawing bar clicks
-    const drawingBar = document.querySelector(".drawing-bar");
-    if (drawingBar) {
-      drawingBar.addEventListener("click", (e) => {
-        // When user clicks a drawing tool, it will create an overlay
-        // We can track it by listening for overlay creation
-        setTimeout(() => {
-          // Try to get the most recent overlay
-          if (widget) {
-            // This is a hack - you might need to find a better way
-            // to get newly created overlays
-            console.log("Drawing tool clicked, overlay might be created");
-          }
-        }, 500);
-      });
-    }
-  };
 
-  onMount(() => {
-    window.addEventListener("resize", documentResize);
-    widget = init(widgetRef!, {
-      customApi: {
-        formatDate: (
-          dateTimeFormat: Intl.DateTimeFormat,
-          timestamp,
-          format: string,
-          type: FormatDateType
-        ) => {
-          const p = period();
-          switch (p.timespan) {
-            case "minute": {
-              if (type === FormatDateType.XAxis) {
-                return utils.formatDate(dateTimeFormat, timestamp, "HH:mm");
-              }
-              return utils.formatDate(
-                dateTimeFormat,
-                timestamp,
-                "YYYY-MM-DD HH:mm"
-              );
-            }
-            case "hour": {
-              if (type === FormatDateType.XAxis) {
-                return utils.formatDate(
-                  dateTimeFormat,
-                  timestamp,
-                  "MM-DD HH:mm"
-                );
-              }
-              return utils.formatDate(
-                dateTimeFormat,
-                timestamp,
-                "YYYY-MM-DD HH:mm"
-              );
-            }
-            case "day":
-            case "week":
-              return utils.formatDate(dateTimeFormat, timestamp, "YYYY-MM-DD");
-            case "month": {
-              if (type === FormatDateType.XAxis) {
-                return utils.formatDate(dateTimeFormat, timestamp, "YYYY-MM");
-              }
-              return utils.formatDate(dateTimeFormat, timestamp, "YYYY-MM-DD");
-            }
-            case "year": {
-              if (type === FormatDateType.XAxis) {
-                return utils.formatDate(dateTimeFormat, timestamp, "YYYY");
-              }
-              return utils.formatDate(dateTimeFormat, timestamp, "YYYY-MM-DD");
-            }
-          }
-          return utils.formatDate(
-            dateTimeFormat,
-            timestamp,
-            "YYYY-MM-DD HH:mm"
-          );
-        },
-      },
-    });
+// ... (keep all the imports and other code the same until onMount)
 
-    if (widget) {
-      const watermarkContainer = widget.getDom("candle_pane", DomPosition.Main);
-      if (watermarkContainer) {
-        let watermark = document.createElement("div");
-        watermark.className = "klinecharts-pro-watermark";
-        if (utils.isString(props.watermark)) {
-          const str = (props.watermark as string).replace(/(^\s*)|(\s*$)/g, "");
-          watermark.innerHTML = str;
-        } else {
-          watermark.appendChild(props.watermark as Node);
-        }
-        watermarkContainer.appendChild(watermark);
-      }
-
-      const priceUnitContainer = widget.getDom(
-        "candle_pane",
-        DomPosition.YAxis
-      );
-      priceUnitDom = document.createElement("span");
-      priceUnitDom.className = "klinecharts-pro-price-unit";
-      priceUnitContainer?.appendChild(priceUnitDom);
-    }
-
-    mainIndicators().forEach((indicator) => {
-      createIndicator(widget, indicator, true, { id: "candle_pane" });
-    });
-    const subIndicatorMap = {};
-    props.subIndicators!.forEach((indicator) => {
-      const paneId = createIndicator(widget, indicator, true);
-      if (paneId) {
-        // @ts-expect-error
-        subIndicatorMap[indicator] = paneId;
-      }
-    });
-    setSubIndicators(subIndicatorMap);
-    widget?.loadMore((timestamp) => {
-      loading = true;
-      const get = async () => {
+onMount(() => {
+  window.addEventListener("resize", documentResize);
+  widget = init(widgetRef!, {
+    customApi: {
+      formatDate: (
+        dateTimeFormat: Intl.DateTimeFormat,
+        timestamp,
+        format: string,
+        type: FormatDateType
+      ) => {
         const p = period();
-        const [to] = adjustFromTo(p, timestamp!, 1);
-        const [from] = adjustFromTo(p, to, 500);
-        const kLineDataList = await props.datafeed.getHistoryKLineData(
-          symbol(),
-          p,
-          from,
-          to
-        );
-        widget?.applyMoreData(kLineDataList, kLineDataList.length > 0);
-        loading = false;
-      };
-      get();
-    });
-    widget?.subscribeAction(ActionType.OnTooltipIconClick, (data) => {
-      if (data.indicatorName) {
-        switch (data.iconId) {
-          case "visible": {
-            widget?.overrideIndicator(
-              { name: data.indicatorName, visible: true },
-              data.paneId
-            );
-            break;
-          }
-          case "invisible": {
-            widget?.overrideIndicator(
-              { name: data.indicatorName, visible: false },
-              data.paneId
-            );
-            break;
-          }
-          case "setting": {
-            const indicator = widget?.getIndicatorByPaneId(
-              data.paneId,
-              data.indicatorName
-            ) as Indicator;
-            setIndicatorSettingModalParams({
-              visible: true,
-              indicatorName: data.indicatorName,
-              paneId: data.paneId,
-              calcParams: indicator.calcParams,
-            });
-            break;
-          }
-          case "close": {
-            if (data.paneId === "candle_pane") {
-              const newMainIndicators = [...mainIndicators()];
-              widget?.removeIndicator("candle_pane", data.indicatorName);
-              newMainIndicators.splice(
-                newMainIndicators.indexOf(data.indicatorName),
-                1
-              );
-              setMainIndicators(newMainIndicators);
-            } else {
-              const newIndicators = { ...subIndicators() };
-              widget?.removeIndicator(data.paneId, data.indicatorName);
-              // @ts-expect-error
-              delete newIndicators[data.indicatorName];
-              setSubIndicators(newIndicators);
+        switch (p.timespan) {
+          case "minute": {
+            if (type === FormatDateType.XAxis) {
+              return utils.formatDate(dateTimeFormat, timestamp, "HH:mm");
             }
+            return utils.formatDate(
+              dateTimeFormat,
+              timestamp,
+              "YYYY-MM-DD HH:mm"
+            );
+          }
+          case "hour": {
+            if (type === FormatDateType.XAxis) {
+              return utils.formatDate(
+                dateTimeFormat,
+                timestamp,
+                "MM-DD HH:mm"
+              );
+            }
+            return utils.formatDate(
+              dateTimeFormat,
+              timestamp,
+              "YYYY-MM-DD HH:mm"
+            );
+          }
+          case "day":
+          case "week":
+            return utils.formatDate(dateTimeFormat, timestamp, "YYYY-MM-DD");
+          case "month": {
+            if (type === FormatDateType.XAxis) {
+              return utils.formatDate(dateTimeFormat, timestamp, "YYYY-MM");
+            }
+            return utils.formatDate(dateTimeFormat, timestamp, "YYYY-MM-DD");
+          }
+          case "year": {
+            if (type === FormatDateType.XAxis) {
+              return utils.formatDate(dateTimeFormat, timestamp, "YYYY");
+            }
+            return utils.formatDate(dateTimeFormat, timestamp, "YYYY-MM-DD");
+          }
+        }
+        return utils.formatDate(
+          dateTimeFormat,
+          timestamp,
+          "YYYY-MM-DD HH:mm"
+        );
+      },
+    },
+  });
+
+  if (widget) {
+    const watermarkContainer = widget.getDom("candle_pane", DomPosition.Main);
+    if (watermarkContainer) {
+      let watermark = document.createElement("div");
+      watermark.className = "klinecharts-pro-watermark";
+      if (utils.isString(props.watermark)) {
+        const str = (props.watermark as string).replace(/(^\s*)|(\s*$)/g, "");
+        watermark.innerHTML = str;
+      } else {
+        watermark.appendChild(props.watermark as Node);
+      }
+      watermarkContainer.appendChild(watermark);
+    }
+
+    const priceUnitContainer = widget.getDom(
+      "candle_pane",
+      DomPosition.YAxis
+    );
+    priceUnitDom = document.createElement("span");
+    priceUnitDom.className = "klinecharts-pro-price-unit";
+    priceUnitContainer?.appendChild(priceUnitDom);
+  }
+
+  mainIndicators().forEach((indicator) => {
+    createIndicator(widget, indicator, true, { id: "candle_pane" });
+  });
+  const subIndicatorMap = {};
+  props.subIndicators!.forEach((indicator) => {
+    const paneId = createIndicator(widget, indicator, true);
+    if (paneId) {
+      // @ts-expect-error
+      subIndicatorMap[indicator] = paneId;
+    }
+  });
+  setSubIndicators(subIndicatorMap);
+  widget?.loadMore((timestamp) => {
+    loading = true;
+    const get = async () => {
+      const p = period();
+      const [to] = adjustFromTo(p, timestamp!, 1);
+      const [from] = adjustFromTo(p, to, 500);
+      const kLineDataList = await props.datafeed.getHistoryKLineData(
+        symbol(),
+        p,
+        from,
+        to
+      );
+      widget?.applyMoreData(kLineDataList, kLineDataList.length > 0);
+      loading = false;
+    };
+    get();
+  });
+  widget?.subscribeAction(ActionType.OnTooltipIconClick, (data) => {
+    if (data.indicatorName) {
+      switch (data.iconId) {
+        case "visible": {
+          widget?.overrideIndicator(
+            { name: data.indicatorName, visible: true },
+            data.paneId
+          );
+          break;
+        }
+        case "invisible": {
+          widget?.overrideIndicator(
+            { name: data.indicatorName, visible: false },
+            data.paneId
+          );
+          break;
+        }
+        case "setting": {
+          const indicator = widget?.getIndicatorByPaneId(
+            data.paneId,
+            data.indicatorName
+          ) as Indicator;
+          setIndicatorSettingModalParams({
+            visible: true,
+            indicatorName: data.indicatorName,
+            paneId: data.paneId,
+            calcParams: indicator.calcParams,
+          });
+          break;
+        }
+        case "close": {
+          if (data.paneId === "candle_pane") {
+            const newMainIndicators = [...mainIndicators()];
+            widget?.removeIndicator("candle_pane", data.indicatorName);
+            newMainIndicators.splice(
+              newMainIndicators.indexOf(data.indicatorName),
+              1
+            );
+            setMainIndicators(newMainIndicators);
+          } else {
+            const newIndicators = { ...subIndicators() };
+            widget?.removeIndicator(data.paneId, data.indicatorName);
+            // @ts-expect-error
+            delete newIndicators[data.indicatorName];
+            setSubIndicators(newIndicators);
           }
         }
       }
-    });
-
-    // ADD THIS: Track overlay creation
-    // Monkey patch the createOverlay method to track overlays
-    // In your ChartProComponent.tsx, update the createOverlay patching:
-
-    // ADD THIS: Track overlay creation
-    // Monkey patch the createOverlay method to track overlays
-    // In your ChartProComponent.tsx, replace the createOverlay patching with this:
-
-    // Monkey patch the createOverlay method to track overlays
-    const originalCreateOverlay = widget?.createOverlay;
-    if (widget && originalCreateOverlay) {
-      widget.createOverlay = function (...args) {
-        const overlayConfig = args[0] as OverlayCreate;
-        const result = originalCreateOverlay.apply(this, args);
-
-        if (result) {
-          // Create a function to deeply extract ALL overlay properties
-          const extractAllOverlayProperties = (overlayObj: any): any => {
-            if (!overlayObj) return {};
-
-            const extracted: any = {};
-
-            // Function to recursively extract properties
-            const extractRecursive = (
-              source: any,
-              target: any,
-              depth = 0,
-              maxDepth = 5
-            ) => {
-              if (depth >= maxDepth) return; // Prevent infinite recursion
-
-              for (const key in source) {
-                // Skip internal or circular references
-                if (
-                  key === "__proto__" ||
-                  key === "constructor" ||
-                  key === "prototype"
-                ) {
-                  continue;
-                }
-
-                try {
-                  const value = source[key];
-
-                  // Handle different types of values
-                  if (value === null || value === undefined) {
-                    target[key] = value;
-                  } else if (typeof value === "function") {
-                    // Skip functions
-                    continue;
-                  } else if (typeof value === "object") {
-                    // Handle arrays
-                    if (Array.isArray(value)) {
-                      target[key] = value.map((item) => {
-                        if (item && typeof item === "object") {
-                          const objCopy: any = {};
-                          extractRecursive(item, objCopy, depth + 1, maxDepth);
-                          return objCopy;
-                        }
-                        return item;
-                      });
-                    }
-                    // Handle regular objects
-                    else {
-                      target[key] = {};
-                      extractRecursive(value, target[key], depth + 1, maxDepth);
-                    }
-                  }
-                  // Handle primitive values
-                  else {
-                    target[key] = value;
-                  }
-                } catch (e) {
-                  // If we can't extract a property, skip it
-                  console.warn(`Could not extract property ${key}:`, e);
-                }
-              }
-            };
-
-            extractRecursive(overlayObj, extracted);
-            return extracted;
-          };
-
-          // Set up multiple attempts to capture overlay data
-          const captureOverlayData = (attempt = 0, maxAttempts = 10) => {
-            setTimeout(
-              () => {
-                try {
-                  const overlay = widget?.getOverlayById?.(result);
-                  if (overlay) {
-                    console.log(
-                      `🔍 Attempt ${attempt + 1} to capture overlay ${result}:`,
-                      {
-                        name: overlay.name,
-                        availableKeys: Object.keys(overlay),
-                      }
-                    );
-
-                    // Deeply extract ALL properties from the overlay
-                    const allProperties = extractAllOverlayProperties(overlay);
-
-                    console.log("📊 Deeply extracted properties:", {
-                      extendData: allProperties.extendData,
-                      options: allProperties.options,
-                      points: allProperties.points,
-                      // Log all top-level keys
-                      allKeys: Object.keys(allProperties).filter(
-                        (k) => !["points", "styles"].includes(k)
-                      ),
-                    });
-
-                    // Create the overlay info with ALL captured data
-                    const overlayInfo: OverlayInfo = {
-                      id: result,
-                      type: overlay.name || overlayConfig.name || "unknown",
-                      name: overlay.name || overlayConfig.name,
-                      // Extract points safely
-                      points: (
-                        overlay.points ||
-                        overlayConfig.points ||
-                        []
-                      ).map((point: Partial<Point>) => ({
-                        timestamp: point.timestamp || 0,
-                        value: point.value || 0,
-                        dataIndex: point.dataIndex || 0,
-                      })),
-                      // Store ALL properties in extendData for complete restoration
-                      extendData: allProperties,
-                      styles: overlay.styles || overlayConfig.styles,
-                      visible: overlay.visible ?? true,
-                      lock: overlay.lock ?? false,
-                      mode:
-                        overlay.mode ||
-                        overlayConfig.mode ||
-                        OverlayMode.Normal,
-                    };
-
-                    overlayTracker.set(result, overlayInfo);
-                    console.log("💾 Fully tracked overlay:", {
-                      id: overlayInfo.id,
-                      type: overlayInfo.type,
-                      hasExtendData: !!overlayInfo.extendData,
-                      extendDataKeys: overlayInfo.extendData
-                        ? Object.keys(overlayInfo.extendData)
-                        : [],
-                    });
-
-                    // If we haven't captured extendData yet, try again
-                    if (
-                      !overlayInfo.extendData ||
-                      Object.keys(overlayInfo.extendData).length === 0
-                    ) {
-                      if (attempt < maxAttempts - 1) {
-                        captureOverlayData(attempt + 1, maxAttempts);
-                      }
-                    }
-                  } else if (attempt < maxAttempts - 1) {
-                    // Overlay not ready yet, try again
-                    captureOverlayData(attempt + 1, maxAttempts);
-                  }
-                } catch (error) {
-                  console.error(
-                    `Error capturing overlay on attempt ${attempt + 1}:`,
-                    error
-                  );
-                  if (attempt < maxAttempts - 1) {
-                    captureOverlayData(attempt + 1, maxAttempts);
-                  }
-                }
-              },
-              attempt === 0 ? 100 : 500
-            ); // Longer delay for subsequent attempts
-          };
-
-          // Start capturing data
-          captureOverlayData();
-        }
-
-        return result;
-      };
-    }
-
-    // Also patch removeOverlay
-    const originalRemoveOverlay = widget?.removeOverlay;
-    if (widget && originalRemoveOverlay) {
-      widget.removeOverlay = function (...args) {
-        const result = originalRemoveOverlay.apply(this, args);
-
-        // Try to extract ID from arguments
-        const arg = args[0];
-        if (typeof arg === "string") {
-          overlayTracker.delete(arg);
-        } else if (arg && typeof arg === "object" && arg.id) {
-          overlayTracker.delete(arg.id);
-        }
-
-        return result;
-      };
     }
   });
 
+  // === MONKEY PATCH createOverlay ===
+  const originalCreateOverlay = widget?.createOverlay;
+  if (widget && originalCreateOverlay) {
+    widget.createOverlay = function (...args) {
+      const overlayConfig = args[0] as OverlayCreate;
+      const result = originalCreateOverlay.apply(this, args);
+
+      if (result) {
+        console.log(`🆕 ${overlayConfig.name} created with ID: ${result}`);
+        
+        // Start monitoring this overlay for completion
+        monitorOverlayCompletion(result, overlayConfig.name || 'unknown');
+        
+        // Also update tracking immediately
+        updateOverlayTracking(result);
+      }
+
+      return result;
+    };
+  }
+
+  // === MONKEY PATCH removeOverlay ===
+  const originalRemoveOverlay = widget?.removeOverlay;
+  if (widget && originalRemoveOverlay) {
+    widget.removeOverlay = function (...args) {
+      const result = originalRemoveOverlay.apply(this, args);
+
+      // Try to extract ID from arguments
+      const arg = args[0];
+      if (typeof arg === "string") {
+        const overlayId = arg;
+        overlayTracker.delete(overlayId);
+        
+        // Cleanup monitoring state
+        const state = drawingStates.get(overlayId);
+        if (state) {
+          if (state.checkInterval) {
+            clearInterval(state.checkInterval);
+          }
+          if (state.mouseUpHandler) {
+            document.removeEventListener('mouseup', state.mouseUpHandler);
+            document.removeEventListener('touchend', state.mouseUpHandler);
+          }
+          drawingStates.delete(overlayId);
+        }
+        
+        console.log(`🗑️ Removed overlay ${overlayId}`);
+      } else if (arg && typeof arg === "object" && arg.id) {
+        const overlayId = arg.id;
+        overlayTracker.delete(overlayId);
+        
+        // Cleanup monitoring state
+        const state = drawingStates.get(overlayId);
+        if (state) {
+          if (state.checkInterval) {
+            clearInterval(state.checkInterval);
+          }
+          if (state.mouseUpHandler) {
+            document.removeEventListener('mouseup', state.mouseUpHandler);
+            document.removeEventListener('touchend', state.mouseUpHandler);
+          }
+          drawingStates.delete(overlayId);
+        }
+        
+        console.log(`🗑️ Removed overlay ${overlayId}`);
+      }
+
+      return result;
+    };
+  }
+
+  // We don't patch updateOverlay as it doesn't exist
+  // We rely on interval monitoring instead
+});
+
+// ... (keep the rest of the code the same)
   onCleanup(() => {
     window.removeEventListener("resize", documentResize);
+    
+    // Cleanup all monitoring intervals
+    drawingStates.forEach((state, overlayId) => {
+      if (state.checkInterval) {
+        clearInterval(state.checkInterval);
+      }
+      if (state.mouseUpHandler) {
+        document.removeEventListener('mouseup', state.mouseUpHandler);
+        document.removeEventListener('touchend', state.mouseUpHandler);
+      }
+    });
+    
+    drawingStates.clear();
+    overlayTracker.clear();
+    
     dispose(widgetRef!);
   });
 
