@@ -1063,6 +1063,126 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       priceUnitContainer?.appendChild(priceUnitDom);
     }
 
+
+
+
+
+
+
+  let isProcessingRightClick = false;
+  
+  // Function to refresh local storage
+  const refreshLocalStorageForCurrentDrawings = () => {
+    const currentSymbol = symbol();
+    if (!currentSymbol?.ticker) return;
+    
+    try {
+      const allDrawings = Array.from(overlayTracker.values());
+      console.log(`🔄 Refreshing local storage for ${currentSymbol.ticker}`);
+      console.log(`📊 Current drawings count: ${allDrawings.length}`);
+      
+      // Save current state to local storage
+      drawingStorage.saveDrawings(currentSymbol.ticker, allDrawings);
+      
+      // Also log what's being saved
+      console.log('💾 Saved drawings:', {
+        count: allDrawings.length,
+        types: allDrawings.map(d => d.type),
+        ids: allDrawings.map(d => d.id)
+      });
+    } catch (error) {
+      console.error('❌ Error refreshing local storage:', error);
+    }
+  };
+  
+  // Add right-click event listener to chart container
+  const handleRightClick = (e: MouseEvent) => {
+    if (isProcessingRightClick) return;
+    
+    isProcessingRightClick = true;
+    
+    // Prevent default browser context menu
+    e.preventDefault();
+    
+    console.log('🖱️ Right-click detected on chart');
+    
+    // Small delay to ensure any overlay removal is processed
+    setTimeout(() => {
+      refreshLocalStorageForCurrentDrawings();
+      isProcessingRightClick = false;
+    }, 100);
+  };
+  
+  // ✅ Use setTimeout to ensure widgetRef is available
+  setTimeout(() => {
+    if (widgetRef) {
+      widgetRef.addEventListener('contextmenu', handleRightClick);
+      console.log('✅ Right-click auto-refresh listener added');
+    }
+  }, 1000);
+  
+  // Also add listener to document for any right-click
+  document.addEventListener('contextmenu', (e) => {
+    // Check if right-click is inside the chart
+    if (widgetRef && widgetRef.contains(e.target as Node)) {
+      handleRightClick(e);
+    }
+  });
+  
+  // === MONKEY PATCH removeOverlay ===
+  const originalRemoveOverlay = widget?.removeOverlay;
+  if (widget && originalRemoveOverlay) {
+    widget.removeOverlay = function (...args) {
+      const result = originalRemoveOverlay.apply(this, args);
+
+      // Extract overlay ID
+      const arg = args[0];
+      let overlayId: string | undefined;
+
+      if (typeof arg === "string") {
+        overlayId = arg;
+      } else if (arg && typeof arg === "object" && arg.id) {
+        overlayId = arg.id;
+      }
+
+      if (overlayId) {
+        console.log(`🗑️ Overlay removed: ${overlayId}`);
+        
+        // Update our tracker
+        overlayTracker.delete(overlayId);
+        
+        // Cleanup monitoring
+        const state = drawingStates.get(overlayId);
+        if (state) {
+          if (state.checkInterval) clearInterval(state.checkInterval);
+          if (state.mouseUpHandler) {
+            document.removeEventListener("mouseup", state.mouseUpHandler);
+            document.removeEventListener("touchend", state.mouseUpHandler);
+          }
+          drawingStates.delete(overlayId);
+        }
+        
+        // Auto-refresh local storage
+        refreshLocalStorageForCurrentDrawings();
+      }
+
+      return result;
+    };
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     mainIndicators().forEach((indicator) => {
       createIndicator(widget, indicator, true, { id: "candle_pane" });
     });
@@ -1168,52 +1288,52 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
 
     // === MONKEY PATCH removeOverlay ===
  // === MONKEY PATCH removeOverlay ===
-const originalRemoveOverlay = widget?.removeOverlay;
-if (widget && originalRemoveOverlay) {
-  widget.removeOverlay = function (...args) {
-    const result = originalRemoveOverlay.apply(this, args);
+// const originalRemoveOverlay = widget?.removeOverlay;
+// if (widget && originalRemoveOverlay) {
+//   widget.removeOverlay = function (...args) {
+//     const result = originalRemoveOverlay.apply(this, args);
 
-    // Try to extract ID from arguments
-    const arg = args[0];
-    let overlayId: string | undefined;
+//     // Try to extract ID from arguments
+//     const arg = args[0];
+//     let overlayId: string | undefined;
 
-    if (typeof arg === "string") {
-      overlayId = arg;
-    } else if (arg && typeof arg === "object" && arg.id) {
-      overlayId = arg.id;
-    }
+//     if (typeof arg === "string") {
+//       overlayId = arg;
+//     } else if (arg && typeof arg === "object" && arg.id) {
+//       overlayId = arg.id;
+//     }
 
-    if (overlayId) {
-      // ✅ REMOVE FROM TRACKER
-      overlayTracker.delete(overlayId);
+//     if (overlayId) {
+//       // ✅ REMOVE FROM TRACKER
+//       overlayTracker.delete(overlayId);
 
-      // ✅ CLEANUP MONITORING STATE
-      const state = drawingStates.get(overlayId);
-      if (state) {
-        if (state.checkInterval) {
-          clearInterval(state.checkInterval);
-        }
-        if (state.mouseUpHandler) {
-          document.removeEventListener("mouseup", state.mouseUpHandler);
-          document.removeEventListener("touchend", state.mouseUpHandler);
-        }
-        drawingStates.delete(overlayId);
-      }
+//       // ✅ CLEANUP MONITORING STATE
+//       const state = drawingStates.get(overlayId);
+//       if (state) {
+//         if (state.checkInterval) {
+//           clearInterval(state.checkInterval);
+//         }
+//         if (state.mouseUpHandler) {
+//           document.removeEventListener("mouseup", state.mouseUpHandler);
+//           document.removeEventListener("touchend", state.mouseUpHandler);
+//         }
+//         drawingStates.delete(overlayId);
+//       }
 
-      console.log(`🗑️ Removed overlay ${overlayId}`);
+//       console.log(`🗑️ Removed overlay ${overlayId}`);
 
-      // ✅ **SYNC TO LOCAL STORAGE** <-- Correct position: Sirf jab overlayId mile
-      const currentSymbol = symbol();
-      if (currentSymbol?.ticker) {
-        const allDrawings = Array.from(overlayTracker.values());
-        drawingStorage.saveDrawings(currentSymbol.ticker, allDrawings);
-        console.log(`💾 Synced ${allDrawings.length} drawings to storage`);
-      }
-    }
+//       // ✅ **SYNC TO LOCAL STORAGE** <-- Correct position: Sirf jab overlayId mile
+//       const currentSymbol = symbol();
+//       if (currentSymbol?.ticker) {
+//         const allDrawings = Array.from(overlayTracker.values());
+//         drawingStorage.saveDrawings(currentSymbol.ticker, allDrawings);
+//         console.log(`💾 Synced ${allDrawings.length} drawings to storage`);
+//       }
+//     }
 
-    return result;
-  };
-}
+//     return result;
+//   };
+// }
 
     // We don't patch updateOverlay as it doesn't exist
     // We rely on interval monitoring instead
@@ -1544,7 +1664,8 @@ if (widget && originalRemoveOverlay) {
           }
         }}
       />
-      <div class="klinecharts-pro-content">
+      <div 
+      class="klinecharts-pro-content">
         <Show when={loadingVisible()}>
           <Loading />
         </Show>
@@ -1569,7 +1690,8 @@ if (widget && originalRemoveOverlay) {
           />
         </Show>
         <div
-          ref={widgetRef}
+          // ref={widgetRef}
+          ref={el => widgetRef = el as HTMLDivElement}  
           class="klinecharts-pro-widget"
           data-drawing-bar-visible={drawingBarVisible()}
         />
