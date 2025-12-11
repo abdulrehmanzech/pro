@@ -497,28 +497,31 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       drawingStorage.saveDrawings(ticker, drawings);
     },
 
-loadDrawings: (ticker: string) => {
-  const savedDrawings = drawingStorage.loadDrawings(ticker);
-  savedDrawings.forEach((drawing: OverlayInfo) => {
-    try {
-      const overlayConfig: OverlayCreate = {
-        name: drawing.type,
-        points: drawing.points,
-        // Use extendData for custom options
-        extendData: drawing.extendData,
-        // Include other properties
-        styles: drawing.styles,
-        visible: drawing.visible ?? true,
-        lock: drawing.lock ?? false,
-        mode: drawing.mode ?? OverlayMode.Normal
-      };
-      
-      widget?.createOverlay(overlayConfig);
-    } catch (error) {
-      console.error(`Library: Error applying drawing ${drawing.id}:`, error);
-    }
-  });
-},
+    loadDrawings: (ticker: string) => {
+      const savedDrawings = drawingStorage.loadDrawings(ticker);
+      savedDrawings.forEach((drawing: OverlayInfo) => {
+        try {
+          const overlayConfig: OverlayCreate = {
+            name: drawing.type,
+            points: drawing.points,
+            // Use extendData for custom options
+            extendData: drawing.extendData,
+            // Include other properties
+            styles: drawing.styles,
+            visible: drawing.visible ?? true,
+            lock: drawing.lock ?? false,
+            mode: drawing.mode ?? OverlayMode.Normal,
+          };
+
+          widget?.createOverlay(overlayConfig);
+        } catch (error) {
+          console.error(
+            `Library: Error applying drawing ${drawing.id}:`,
+            error
+          );
+        }
+      });
+    },
 
     getDrawings: (ticker: string) => {
       return drawingStorage.loadDrawings(ticker);
@@ -529,42 +532,42 @@ loadDrawings: (ticker: string) => {
     },
 
     // Auto-save on overlay events
-enableAutoSave: (ticker: string, enabled: boolean = true) => {
-  if (enabled) {
-    // Use DOM mutation observer to detect overlay changes
-    const observer = new MutationObserver(() => {
-      setTimeout(() => {
-        const drawings = Array.from(overlayTracker.values());
-        if (drawings.length > 0) {
-          drawingStorage.saveDrawings(ticker, drawings);
+    enableAutoSave: (ticker: string, enabled: boolean = true) => {
+      if (enabled) {
+        // Use DOM mutation observer to detect overlay changes
+        const observer = new MutationObserver(() => {
+          setTimeout(() => {
+            const drawings = Array.from(overlayTracker.values());
+            if (drawings.length > 0) {
+              drawingStorage.saveDrawings(ticker, drawings);
+            }
+          }, 100);
+        });
+
+        // Start observing the chart widget for changes
+        if (widgetRef) {
+          observer.observe(widgetRef, {
+            childList: true,
+            subtree: true,
+            attributes: true,
+          });
         }
-      }, 100);
-    });
 
-    // Start observing the chart widget for changes
-    if (widgetRef) {
-      observer.observe(widgetRef, {
-        childList: true,
-        subtree: true,
-        attributes: true
-      });
-    }
+        // Also save periodically
+        const intervalId = setInterval(() => {
+          const drawings = Array.from(overlayTracker.values());
+          if (drawings.length > 0) {
+            drawingStorage.saveDrawings(ticker, drawings);
+          }
+        }, 30000); // Save every 30 seconds
 
-    // Also save periodically
-    const intervalId = setInterval(() => {
-      const drawings = Array.from(overlayTracker.values());
-      if (drawings.length > 0) {
-        drawingStorage.saveDrawings(ticker, drawings);
+        // Return cleanup function
+        return () => {
+          observer.disconnect();
+          clearInterval(intervalId);
+        };
       }
-    }, 30000); // Save every 30 seconds
-
-    // Return cleanup function
-    return () => {
-      observer.disconnect();
-      clearInterval(intervalId);
-    };
-  }
-},
+    },
   });
 
   const documentResize = () => {
@@ -628,24 +631,24 @@ enableAutoSave: (ticker: string, enabled: boolean = true) => {
     }
     return [from, to];
   };
-const trackDrawingBarEvents = () => {
-  // Listen for drawing bar clicks
-  const drawingBar = document.querySelector('.drawing-bar');
-  if (drawingBar) {
-    drawingBar.addEventListener('click', (e) => {
-      // When user clicks a drawing tool, it will create an overlay
-      // We can track it by listening for overlay creation
-      setTimeout(() => {
-        // Try to get the most recent overlay
-        if (widget) {
-          // This is a hack - you might need to find a better way
-          // to get newly created overlays
-          console.log('Drawing tool clicked, overlay might be created');
-        }
-      }, 500);
-    });
-  }
-};
+  const trackDrawingBarEvents = () => {
+    // Listen for drawing bar clicks
+    const drawingBar = document.querySelector(".drawing-bar");
+    if (drawingBar) {
+      drawingBar.addEventListener("click", (e) => {
+        // When user clicks a drawing tool, it will create an overlay
+        // We can track it by listening for overlay creation
+        setTimeout(() => {
+          // Try to get the most recent overlay
+          if (widget) {
+            // This is a hack - you might need to find a better way
+            // to get newly created overlays
+            console.log("Drawing tool clicked, overlay might be created");
+          }
+        }, 500);
+      });
+    }
+  };
 
   onMount(() => {
     window.addEventListener("resize", documentResize);
@@ -708,18 +711,6 @@ const trackDrawingBarEvents = () => {
       },
     });
 
-
-
-
-
-
-
-
-
-
-
-
-    
     if (widget) {
       const watermarkContainer = widget.getDom("candle_pane", DomPosition.Main);
       if (watermarkContainer) {
@@ -823,71 +814,70 @@ const trackDrawingBarEvents = () => {
       }
     });
 
-
-
-      // ADD THIS: Track overlay creation
-  // Monkey patch the createOverlay method to track overlays
-  const originalCreateOverlay = widget?.createOverlay;
-  if (widget && originalCreateOverlay) {
-    widget.createOverlay = function(...args) {
-      const result = originalCreateOverlay.apply(this, args);
-      
-      if (result) {
-        // Try to get the created overlay
-        setTimeout(() => {
-          try {
-            const overlay = widget?.getOverlayById?.(result);
-            if (overlay) {
-              const overlayInfo: OverlayInfo = {
-                id: result,
-                type: overlay.name || 'unknown',
-                points: (overlay.points || []).map((point: Partial<Point>) => ({
-                  timestamp: point.timestamp || 0,
-                  value: point.value || 0,
-                  dataIndex: point.dataIndex || 0
-                })),
-                extendData: overlay.extendData,
-                styles: overlay.styles,
-                name: overlay.name,
-                visible: overlay.visible,
-                lock: overlay.lock,
-                mode: overlay.mode
-              };
-              overlayTracker.set(result, overlayInfo);
-              console.log('📝 Tracked overlay creation:', overlayInfo);
-            }
-          } catch (error) {
-            console.error('Error tracking overlay:', error);
+    // ADD THIS: Track overlay creation
+    // Monkey patch the createOverlay method to track overlays
+const originalCreateOverlay = widget?.createOverlay;
+if (widget && originalCreateOverlay) {
+  widget.createOverlay = function(...args) {
+    const overlayConfig = args[0] as OverlayCreate;
+    const result = originalCreateOverlay.apply(this, args);
+    
+    if (result) {
+      // Try to get the created overlay immediately to capture all data
+      setTimeout(() => {
+        try {
+          const overlay = widget?.getOverlayById?.(result);
+          if (overlay) {
+            // IMPORTANT: Capture extendData from the original config
+            const overlayInfo: OverlayInfo = {
+              id: result,
+              type: overlay.name || overlayConfig.name || 'unknown',
+              points: (overlay.points || []).map((point: Partial<Point>) => {
+                console.log(  'Extracting point from library :', point);
+                return({
+                timestamp: point.timestamp || 0,
+                value: point.value || 0,
+                dataIndex: point.dataIndex || 0
+              })}),
+              // Capture extendData from the config if not available on overlay
+              extendData: overlay.extendData || overlayConfig.extendData,
+              styles: overlay.styles || overlayConfig.styles,
+              name: overlay.name || overlayConfig.name,
+              visible: overlay.visible ?? true,
+              lock: overlay.lock ?? false,
+              mode: overlay.mode || overlayConfig.mode || OverlayMode.Normal
+            };
+            overlayTracker.set(result, overlayInfo);
+            console.log('📝 Tracked overlay creation:', overlayInfo);
           }
-        }, 100);
-      }
-      
-      return result;
-    };
-  }
-
-  // Also patch removeOverlay
-  const originalRemoveOverlay = widget?.removeOverlay;
-  if (widget && originalRemoveOverlay) {
-    widget.removeOverlay = function(...args) {
-      const result = originalRemoveOverlay.apply(this, args);
-      
-      // Try to extract ID from arguments
-      const arg = args[0];
-      if (typeof arg === 'string') {
-        overlayTracker.delete(arg);
-      } else if (arg && typeof arg === 'object' && arg.id) {
-        overlayTracker.delete(arg.id);
-      }
-      
-      return result;
-    };
+        } catch (error) {
+          console.error('Error tracking overlay:', error);
+        }
+      }, 100);
+    }
+    
+    return result;
+  };
   }
 
 
+    // Also patch removeOverlay
+    const originalRemoveOverlay = widget?.removeOverlay;
+    if (widget && originalRemoveOverlay) {
+      widget.removeOverlay = function (...args) {
+        const result = originalRemoveOverlay.apply(this, args);
 
+        // Try to extract ID from arguments
+        const arg = args[0];
+        if (typeof arg === "string") {
+          overlayTracker.delete(arg);
+        } else if (arg && typeof arg === "object" && arg.id) {
+          overlayTracker.delete(arg.id);
+        }
 
-
+        return result;
+      };
+    }
   });
 
   onCleanup(() => {
