@@ -1167,54 +1167,53 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     }
 
     // === MONKEY PATCH removeOverlay ===
-    const originalRemoveOverlay = widget?.removeOverlay;
-    if (widget && originalRemoveOverlay) {
-      widget.removeOverlay = function (...args) {
-        const result = originalRemoveOverlay.apply(this, args);
+ // === MONKEY PATCH removeOverlay ===
+const originalRemoveOverlay = widget?.removeOverlay;
+if (widget && originalRemoveOverlay) {
+  widget.removeOverlay = function (...args) {
+    const result = originalRemoveOverlay.apply(this, args);
 
-        // Try to extract ID from arguments
-        const arg = args[0];
-        if (typeof arg === "string") {
-          const overlayId = arg;
-          overlayTracker.delete(overlayId);
+    // Try to extract ID from arguments
+    const arg = args[0];
+    let overlayId: string | undefined;
 
-          // Cleanup monitoring state
-          const state = drawingStates.get(overlayId);
-          if (state) {
-            if (state.checkInterval) {
-              clearInterval(state.checkInterval);
-            }
-            if (state.mouseUpHandler) {
-              document.removeEventListener("mouseup", state.mouseUpHandler);
-              document.removeEventListener("touchend", state.mouseUpHandler);
-            }
-            drawingStates.delete(overlayId);
-          }
-
-          console.log(`🗑️ Removed overlay ${overlayId}`);
-        } else if (arg && typeof arg === "object" && arg.id) {
-          const overlayId = arg.id;
-          overlayTracker.delete(overlayId);
-
-          // Cleanup monitoring state
-          const state = drawingStates.get(overlayId);
-          if (state) {
-            if (state.checkInterval) {
-              clearInterval(state.checkInterval);
-            }
-            if (state.mouseUpHandler) {
-              document.removeEventListener("mouseup", state.mouseUpHandler);
-              document.removeEventListener("touchend", state.mouseUpHandler);
-            }
-            drawingStates.delete(overlayId);
-          }
-
-          console.log(`🗑️ Removed overlay ${overlayId}`);
-        }
-
-        return result;
-      };
+    if (typeof arg === "string") {
+      overlayId = arg;
+    } else if (arg && typeof arg === "object" && arg.id) {
+      overlayId = arg.id;
     }
+
+    if (overlayId) {
+      // ✅ REMOVE FROM TRACKER
+      overlayTracker.delete(overlayId);
+
+      // ✅ CLEANUP MONITORING STATE
+      const state = drawingStates.get(overlayId);
+      if (state) {
+        if (state.checkInterval) {
+          clearInterval(state.checkInterval);
+        }
+        if (state.mouseUpHandler) {
+          document.removeEventListener("mouseup", state.mouseUpHandler);
+          document.removeEventListener("touchend", state.mouseUpHandler);
+        }
+        drawingStates.delete(overlayId);
+      }
+
+      console.log(`🗑️ Removed overlay ${overlayId}`);
+
+      // ✅ **SYNC TO LOCAL STORAGE** <-- Correct position: Sirf jab overlayId mile
+      const currentSymbol = symbol();
+      if (currentSymbol?.ticker) {
+        const allDrawings = Array.from(overlayTracker.values());
+        drawingStorage.saveDrawings(currentSymbol.ticker, allDrawings);
+        console.log(`💾 Synced ${allDrawings.length} drawings to storage`);
+      }
+    }
+
+    return result;
+  };
+}
 
     // We don't patch updateOverlay as it doesn't exist
     // We rely on interval monitoring instead
