@@ -205,17 +205,35 @@ export default class KLineChartPro implements ChartPro {
     return this._chartApi!.getPeriod();
   }
 
-
-    getSettings(): ChartSettings {
-    return this._chartApi!.getSettings()
+  getSettings(): ChartSettings {
+    return this._chartApi!.getSettings();
   }
-  
+
   setSettings(settings: Partial<ChartSettings>): void {
-    this._chartApi!.setSettings(settings)
-  }
-  
-  resetSettings(): void {
-    this._chartApi!.resetSettings()
+    this._chartApi!.setSettings(settings);
   }
 
+  resetSettings(): void {
+    this._chartApi!.resetSettings();
+  }
+
+  saveDrawings(ticker: string): void {
+    this._chartApi?.saveDrawings?.(ticker);
+  }
+
+  loadDrawings(ticker: string): void {
+    this._chartApi?.loadDrawings?.(ticker);
+  }
+
+  getDrawings(ticker: string): OverlayInfo[] {
+    return this._chartApi?.getDrawings?.(ticker) || [];
+  }
+
+  clearDrawings(ticker: string): void {
+    this._chartApi?.clearDrawings?.(ticker);
+  }
+
+  enableAutoSave(ticker: string, enabled: boolean = true): void {
+    this._chartApi?.enableAutoSave?.(ticker, enabled);
+  }
 }

@@ -1,4 +1,4 @@
-import { CandleType, DeepPartial, KLineData, LineType, OverlayCreate, Styles, YAxisType } from 'klinecharts';
+import { CandleType, DeepPartial, KLineData, LineType, OverlayCreate, OverlayMode, OverlayStyle, Point, Styles, YAxisType } from 'klinecharts';
 
 export interface SymbolInfo {
 	ticker: string;
@@ -64,21 +64,12 @@ export interface OverlayInfo {
 	id: string;
 	name?: string;
 	type: string;
-	points: Array<{
-		price: number;
-		timestamp: number;
-	}>;
-	options: Record<string, any>;
-}
-export interface OverlayInfo {
-	id: string;
-	name?: string;
-	type: string;
-	points: Array<{
-		price: number;
-		timestamp: number;
-	}>;
-	options: Record<string, any>;
+	points: Partial<Point>[];
+	extendData?: any;
+	styles?: DeepPartial<OverlayStyle> | null | undefined;
+	visible?: boolean;
+	lock?: boolean;
+	mode?: OverlayMode;
 }
 export interface ChartPro {
 	setTheme(theme: string): void;
@@ -118,6 +109,11 @@ export interface ChartPro {
 	getSettings(): ChartSettings;
 	setSettings(settings: Partial<ChartSettings>): void;
 	resetSettings(): void;
+	saveDrawings?(ticker: string): void;
+	loadDrawings?(ticker: string): void;
+	getDrawings?(ticker: string): OverlayInfo[];
+	clearDrawings?(ticker: string): void;
+	enableAutoSave?(ticker: string, enabled?: boolean): void;
 }
 export declare class DefaultDatafeed implements Datafeed {
 	constructor(apiKey: string);
@@ -170,6 +166,11 @@ export declare class KLineChartPro implements ChartPro {
 	getSettings(): ChartSettings;
 	setSettings(settings: Partial<ChartSettings>): void;
 	resetSettings(): void;
+	saveDrawings(ticker: string): void;
+	loadDrawings(ticker: string): void;
+	getDrawings(ticker: string): OverlayInfo[];
+	clearDrawings(ticker: string): void;
+	enableAutoSave(ticker: string, enabled?: boolean): void;
 }
 declare function load(key: string, ls: any): void;
 

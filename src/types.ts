@@ -100,7 +100,7 @@ export interface ChartProOptions {
   subIndicators?: string[];
   datafeed: Datafeed;
 }
-import type { CandleType, LineType, OverlayCreate, YAxisType } from "klinecharts";
+import type { CandleType, LineType, OverlayCreate, OverlayMode, OverlayStyle, Point, YAxisType } from "klinecharts";
 
 // Use OverlayCreate directly or create a compatible type
 export type OverlayOptions = OverlayCreate;
@@ -109,17 +109,21 @@ export interface OverlayInfo {
   id: string;
   name?: string;
   type: string;
-  points: Array<{ price: number; timestamp: number }>;
-  options: Record<string, any>;
+  points: Partial<Point>[];
+  // Use 'extendData' instead of 'options' to match the library
+  extendData?: any;
+  styles?: DeepPartial<OverlayStyle> | null | undefined;
+  visible?: boolean;
+  lock?: boolean;
+  mode?: OverlayMode;
 }
-
-export interface OverlayInfo {
-  id: string;
-  name?: string;
-  type: string;
-  points: Array<{ price: number; timestamp: number }>;
-  options: Record<string, any>;
-}
+// export interface OverlayInfo {
+//   id: string;
+//   name?: string;
+//   type: string;
+//   points: Partial<Point>[];
+//   options: Record<string, any>;
+// }
 
 export interface ChartPro {
   setTheme(theme: string): void;
@@ -158,4 +162,13 @@ export interface ChartPro {
   getSettings(): ChartSettings
   setSettings(settings: Partial<ChartSettings>): void
   resetSettings(): void
+
+
+    // Drawing storage methods
+  saveDrawings?(ticker: string): void;
+  loadDrawings?(ticker: string): void;
+  getDrawings?(ticker: string): OverlayInfo[];
+  clearDrawings?(ticker: string): void;
+  enableAutoSave?(ticker: string, enabled?: boolean): void;
+
 }
