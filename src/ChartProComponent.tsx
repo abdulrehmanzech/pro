@@ -321,6 +321,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
 
     drawingStates.set(overlayId, state);
 
+
     // Update tracking immediately
     updateOverlayTracking(overlayId);
 
@@ -352,6 +353,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     setTimeout(() => {
       const finalState = drawingStates.get(overlayId);
       if (finalState && !finalState.complete) {
+
         if (finalState.checkInterval) {
           clearInterval(finalState.checkInterval);
         }
@@ -418,9 +420,10 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
           timestamp: Date.now(),
         };
 
-        localStorage.setItem(key, JSON.stringify(storageData, null, 2));
+        // localStorage.setItem(key, JSON.stringify(storageData, null, 2));
 
         // Log what was saved for debugging
+        
       } catch (error) {
         console.error("Library: Error saving drawings:", error);
       }
@@ -429,30 +432,32 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     loadDrawings: (ticker: string): OverlayInfo[] => {
       try {
         const key = `kline_drawings_${ticker}`;
-        const data = localStorage.getItem(key);
-        if (data) {
-          const parsed = JSON.parse(data);
+        // const data = localStorage.getItem(key);
+        // if (data) {
+        //   const parsed = JSON.parse(data);
+        
 
-          // Validate loaded drawings
-          const validDrawings: OverlayInfo[] = [];
+        //   // Validate loaded drawings
+        //   const validDrawings: OverlayInfo[] = [];
 
-          if (parsed.drawings) {
-            parsed.drawings.forEach((drawing: OverlayInfo, index: number) => {
-              const requiredPoints = getRequiredPoints(drawing.type);
-              const currentPoints = drawing.points?.length || 0;
+        //   if (parsed.drawings) {
+        //     parsed.drawings.forEach((drawing: OverlayInfo, index: number) => {
+        //       const requiredPoints = getRequiredPoints(drawing.type);
+        //       const currentPoints = drawing.points?.length || 0;
 
-              if (currentPoints >= requiredPoints) {
-                validDrawings.push(drawing);
-              } else {
-                console.warn(
-                  `📥 Skipping ${drawing.type}: Only ${currentPoints} point(s), need ${requiredPoints}`
-                );
-              }
-            });
-          }
+        //       if (currentPoints >= requiredPoints) {
+        //         validDrawings.push(drawing);
+              
+        //       } else {
+        //         console.warn(
+        //           `📥 Skipping ${drawing.type}: Only ${currentPoints} point(s), need ${requiredPoints}`
+        //         );
+        //       }
+        //     });
+        //   }
 
-          return validDrawings;
-        }
+        //   return validDrawings;
+        // }
       } catch (error) {
         console.error("Library: Error loading drawings:", error);
       }
@@ -462,7 +467,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     clearDrawings: (ticker: string) => {
       try {
         const key = `kline_drawings_${ticker}`;
-        localStorage.removeItem(key);
+        // localStorage.removeItem(key);
       } catch (error) {
         console.error("Library: Error clearing drawings:", error);
       }
@@ -804,8 +809,11 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     loadDrawings: (ticker: string) => {
       const savedDrawings = drawingStorage.loadDrawings(ticker);
 
+
       savedDrawings.forEach((drawing: OverlayInfo, index: number) => {
         try {
+         
+
           const overlayConfig: OverlayCreate = {
             name: drawing.type,
             points: drawing.points || [],
@@ -819,6 +827,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
           const overlayId = widget?.createOverlay(overlayConfig);
 
           if (overlayId) {
+
             // Update tracker with the new ID
             overlayTracker.set(overlayId, {
               ...drawing,
@@ -836,6 +845,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
           console.error(`   ❌ Error restoring ${drawing.type}:`, error);
         }
       });
+
     },
 
     getDrawings: (ticker: string) => {
@@ -849,18 +859,20 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     // Auto-save on overlay events
     enableAutoSave: (ticker: string, enabled: boolean = true) => {
       if (enabled) {
-        // Save periodically
-        const intervalId = setInterval(() => {
-          const drawings = Array.from(overlayTracker.values());
-          if (drawings.length > 0) {
-            drawingStorage.saveDrawings(ticker, drawings);
-          }
-        }, 30000); // Save every 30 seconds
 
-        // Return cleanup function
-        return () => {
-          clearInterval(intervalId);
-        };
+        // Save periodically
+        // const intervalId = setInterval(() => {
+        //   const drawings = Array.from(overlayTracker.values());
+        //   if (drawings.length > 0) {
+        //     drawingStorage.saveDrawings(ticker, drawings);
+        //   }
+        // }, 30000); // Save every 30 seconds
+
+        // // Return cleanup function
+        // return () => {
+        //   clearInterval(intervalId);
+        //   console.log(`🔧 Auto-save disabled for ${ticker}`);
+        // };
       }
     },
   });
@@ -1013,92 +1025,110 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       priceUnitContainer?.appendChild(priceUnitDom);
     }
 
-    let isProcessingRightClick = false;
 
-    // Function to refresh local storage
-    const refreshLocalStorageForCurrentDrawings = () => {
-      const currentSymbol = symbol();
-      if (!currentSymbol?.ticker) return;
 
-      try {
-        const allDrawings = Array.from(overlayTracker.values());
 
-        // Save current state to local storage
-        drawingStorage.saveDrawings(currentSymbol.ticker, allDrawings);
-      } catch (error) {
-        console.error("❌ Error refreshing local storage:", error);
-      }
-    };
 
-    // Add right-click event listener to chart container
-    const handleRightClick = (e: MouseEvent) => {
-      if (isProcessingRightClick) return;
 
-      isProcessingRightClick = true;
 
-      // Prevent default browser context menu
-      e.preventDefault();
-
-      // Small delay to ensure any overlay removal is processed
-      setTimeout(() => {
-        refreshLocalStorageForCurrentDrawings();
-        isProcessingRightClick = false;
-      }, 100);
-    };
-
-    // ✅ Use setTimeout to ensure widgetRef is available
-    setTimeout(() => {
-      if (widgetRef) {
-        widgetRef.addEventListener("contextmenu", handleRightClick);
-      }
-    }, 1000);
-
-    // Also add listener to document for any right-click
-    document.addEventListener("contextmenu", (e) => {
-      // Check if right-click is inside the chart
-      if (widgetRef && widgetRef.contains(e.target as Node)) {
-        handleRightClick(e);
-      }
-    });
-
-    // === MONKEY PATCH removeOverlay ===
-    const originalRemoveOverlay = widget?.removeOverlay;
-    if (widget && originalRemoveOverlay) {
-      widget.removeOverlay = function (...args) {
-        const result = originalRemoveOverlay.apply(this, args);
-
-        // Extract overlay ID
-        const arg = args[0];
-        let overlayId: string | undefined;
-
-        if (typeof arg === "string") {
-          overlayId = arg;
-        } else if (arg && typeof arg === "object" && arg.id) {
-          overlayId = arg.id;
-        }
-
-        if (overlayId) {
-          // Update our tracker
-          overlayTracker.delete(overlayId);
-
-          // Cleanup monitoring
-          const state = drawingStates.get(overlayId);
-          if (state) {
-            if (state.checkInterval) clearInterval(state.checkInterval);
-            if (state.mouseUpHandler) {
-              document.removeEventListener("mouseup", state.mouseUpHandler);
-              document.removeEventListener("touchend", state.mouseUpHandler);
-            }
-            drawingStates.delete(overlayId);
-          }
-
-          // Auto-refresh local storage
-          refreshLocalStorageForCurrentDrawings();
-        }
-
-        return result;
-      };
+  let isProcessingRightClick = false;
+  
+  // Function to refresh local storage
+  const refreshLocalStorageForCurrentDrawings = () => {
+    const currentSymbol = symbol();
+    if (!currentSymbol?.ticker) return;
+    
+    try {
+      const allDrawings = Array.from(overlayTracker.values());
+      
+      // Save current state to local storage
+      drawingStorage.saveDrawings(currentSymbol.ticker, allDrawings);
+      
+    } catch (error) {
+      console.error('❌ Error refreshing local storage:', error);
     }
+  };
+  
+  // Add right-click event listener to chart container
+  const handleRightClick = (e: MouseEvent) => {
+    if (isProcessingRightClick) return;
+    
+    isProcessingRightClick = true;
+    
+    // Prevent default browser context menu
+    e.preventDefault();
+    
+    
+    // Small delay to ensure any overlay removal is processed
+  };
+  
+  // ✅ Use setTimeout to ensure widgetRef is available
+  setTimeout(() => {
+    if (widgetRef) {
+      widgetRef.addEventListener('contextmenu', handleRightClick);
+    }
+  }, 1000);
+  
+  // Also add listener to document for any right-click
+  document.addEventListener('contextmenu', (e) => {
+    // Check if right-click is inside the chart
+    if (widgetRef && widgetRef.contains(e.target as Node)) {
+      handleRightClick(e);
+    }
+  });
+  
+  // === MONKEY PATCH removeOverlay ===
+  const originalRemoveOverlay = widget?.removeOverlay;
+  if (widget && originalRemoveOverlay) {
+    widget.removeOverlay = function (...args) {
+      const result = originalRemoveOverlay.apply(this, args);
+
+      // Extract overlay ID
+      const arg = args[0];
+      let overlayId: string | undefined;
+
+      if (typeof arg === "string") {
+        overlayId = arg;
+      } else if (arg && typeof arg === "object" && arg.id) {
+        overlayId = arg.id;
+      }
+
+      if (overlayId) {
+        
+        // Update our tracker
+        overlayTracker.delete(overlayId);
+        
+        // Cleanup monitoring
+        const state = drawingStates.get(overlayId);
+        if (state) {
+          if (state.checkInterval) clearInterval(state.checkInterval);
+          if (state.mouseUpHandler) {
+            document.removeEventListener("mouseup", state.mouseUpHandler);
+            document.removeEventListener("touchend", state.mouseUpHandler);
+          }
+          drawingStates.delete(overlayId);
+        }
+        
+        // Auto-refresh local storage
+        refreshLocalStorageForCurrentDrawings();
+      }
+
+      return result;
+    };
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     mainIndicators().forEach((indicator) => {
       createIndicator(widget, indicator, true, { id: "candle_pane" });
@@ -1188,12 +1218,14 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
         const result = originalCreateOverlay.apply(this, args);
 
         if (result) {
+
           // Start monitoring this overlay for completion
           monitorOverlayCompletion(result, overlayConfig.name || "unknown");
 
           // Also update tracking immediately
           updateOverlayTracking(result);
           syncDrawingsToStorage();
+
         }
 
         return result;
@@ -1201,53 +1233,53 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     }
 
     // === MONKEY PATCH removeOverlay ===
-    // === MONKEY PATCH removeOverlay ===
-    // const originalRemoveOverlay = widget?.removeOverlay;
-    // if (widget && originalRemoveOverlay) {
-    //   widget.removeOverlay = function (...args) {
-    //     const result = originalRemoveOverlay.apply(this, args);
+ // === MONKEY PATCH removeOverlay ===
+// const originalRemoveOverlay = widget?.removeOverlay;
+// if (widget && originalRemoveOverlay) {
+//   widget.removeOverlay = function (...args) {
+//     const result = originalRemoveOverlay.apply(this, args);
 
-    //     // Try to extract ID from arguments
-    //     const arg = args[0];
-    //     let overlayId: string | undefined;
+//     // Try to extract ID from arguments
+//     const arg = args[0];
+//     let overlayId: string | undefined;
 
-    //     if (typeof arg === "string") {
-    //       overlayId = arg;
-    //     } else if (arg && typeof arg === "object" && arg.id) {
-    //       overlayId = arg.id;
-    //     }
+//     if (typeof arg === "string") {
+//       overlayId = arg;
+//     } else if (arg && typeof arg === "object" && arg.id) {
+//       overlayId = arg.id;
+//     }
 
-    //     if (overlayId) {
-    //       // ✅ REMOVE FROM TRACKER
-    //       overlayTracker.delete(overlayId);
+//     if (overlayId) {
+//       // ✅ REMOVE FROM TRACKER
+//       overlayTracker.delete(overlayId);
 
-    //       // ✅ CLEANUP MONITORING STATE
-    //       const state = drawingStates.get(overlayId);
-    //       if (state) {
-    //         if (state.checkInterval) {
-    //           clearInterval(state.checkInterval);
-    //         }
-    //         if (state.mouseUpHandler) {
-    //           document.removeEventListener("mouseup", state.mouseUpHandler);
-    //           document.removeEventListener("touchend", state.mouseUpHandler);
-    //         }
-    //         drawingStates.delete(overlayId);
-    //       }
+//       // ✅ CLEANUP MONITORING STATE
+//       const state = drawingStates.get(overlayId);
+//       if (state) {
+//         if (state.checkInterval) {
+//           clearInterval(state.checkInterval);
+//         }
+//         if (state.mouseUpHandler) {
+//           document.removeEventListener("mouseup", state.mouseUpHandler);
+//           document.removeEventListener("touchend", state.mouseUpHandler);
+//         }
+//         drawingStates.delete(overlayId);
+//       }
 
-    //       console.log(`🗑️ Removed overlay ${overlayId}`);
+//       console.log(`🗑️ Removed overlay ${overlayId}`);
 
-    //       // ✅ **SYNC TO LOCAL STORAGE** <-- Correct position: Sirf jab overlayId mile
-    //       const currentSymbol = symbol();
-    //       if (currentSymbol?.ticker) {
-    //         const allDrawings = Array.from(overlayTracker.values());
-    //         drawingStorage.saveDrawings(currentSymbol.ticker, allDrawings);
-    //         console.log(`💾 Synced ${allDrawings.length} drawings to storage`);
-    //       }
-    //     }
+//       // ✅ **SYNC TO LOCAL STORAGE** <-- Correct position: Sirf jab overlayId mile
+//       const currentSymbol = symbol();
+//       if (currentSymbol?.ticker) {
+//         const allDrawings = Array.from(overlayTracker.values());
+//         drawingStorage.saveDrawings(currentSymbol.ticker, allDrawings);
+//         console.log(`💾 Synced ${allDrawings.length} drawings to storage`);
+//       }
+//     }
 
-    //     return result;
-    //   };
-    // }
+//     return result;
+//   };
+// }
 
     // We don't patch updateOverlay as it doesn't exist
     // We rely on interval monitoring instead
@@ -1258,15 +1290,15 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     window.removeEventListener("resize", documentResize);
 
     // Cleanup all monitoring intervals
-    drawingStates.forEach((state, overlayId) => {
-      if (state.checkInterval) {
-        clearInterval(state.checkInterval);
-      }
-      if (state.mouseUpHandler) {
-        document.removeEventListener("mouseup", state.mouseUpHandler);
-        document.removeEventListener("touchend", state.mouseUpHandler);
-      }
-    });
+    // drawingStates.forEach((state, overlayId) => {
+    //   if (state.checkInterval) {
+    //     clearInterval(state.checkInterval);
+    //   }
+    //   if (state.mouseUpHandler) {
+    //     document.removeEventListener("mouseup", state.mouseUpHandler);
+    //     document.removeEventListener("touchend", state.mouseUpHandler);
+    //   }
+    // });
 
     drawingStates.clear();
     overlayTracker.clear();
@@ -1578,7 +1610,8 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
           }
         }}
       />
-      <div class="klinecharts-pro-content">
+      <div 
+      class="klinecharts-pro-content">
         <Show when={loadingVisible()}>
           <Loading />
         </Show>
@@ -1604,7 +1637,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
         </Show>
         <div
           // ref={widgetRef}
-          ref={(el) => (widgetRef = el as HTMLDivElement)}
+          ref={el => widgetRef = el as HTMLDivElement}  
           class="klinecharts-pro-widget"
           data-drawing-bar-visible={drawingBarVisible()}
         />
