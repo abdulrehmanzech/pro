@@ -151,7 +151,6 @@ export function translateTimezone (timezone: string, locale: string): string {
     
     // Pakistan
     case 'Asia/Karachi': return i18n('karachi', locale)
-    // case 'Asia/Lahore': return i18n('lahore', locale)
   }
   return timezone
 }
@@ -241,7 +240,6 @@ export function createTimezoneSelectOptions (locale: string): SelectDataSourceIt
     // Central Asia (UTC+4:30 to UTC+5)
     { key: 'Asia/Kabul', text: `(UTC+4:30) ${i18n('kabul', locale)}` },
     { key: 'Asia/Karachi', text: `(UTC+5:00) ${i18n('karachi', locale)}` },
-    // { key: 'Asia/Lahore', text: `(UTC+5:00) ${i18n('lahore', locale)}` },
     { key: 'Asia/Tashkent', text: `(UTC+5:00) ${i18n('tashkent', locale)}` },
     { key: 'Asia/Ashkhabad', text: `(UTC+5:00) ${i18n('ashkhabad', locale)}` },
     
