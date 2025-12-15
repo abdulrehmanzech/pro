@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-import { createSignal, Component, JSX } from 'solid-js'
+import { createSignal, Component, JSX, createMemo } from 'solid-js'
 
 export interface SelectDataSourceItem {
   key: string
@@ -26,30 +26,84 @@ export interface SelectProps {
   valueKey?: string
   dataSource?: SelectDataSourceItem[] | string[]
   onSelected?: (data: SelectDataSourceItem | string) => void
+  searchable?: boolean
+  searchPlaceholder?: string
 }
 
 const Select: Component<SelectProps> = props => {
   const [open, setOpen] = createSignal(false)
+  const [searchQuery, setSearchQuery] = createSignal('')
+  let inputRef: HTMLInputElement | undefined
+
+  const filteredDataSource = createMemo(() => {
+    if (!props.dataSource || !props.searchable) return props.dataSource
+    
+    const query = searchQuery().toLowerCase().trim()
+    if (!query) return props.dataSource
+
+    const isStringArray = typeof props.dataSource[0] === 'string'
+    
+    if (isStringArray) {
+      return (props.dataSource as string[]).filter((item: string) => 
+        item.toLowerCase().includes(query)
+      )
+    } else {
+      return (props.dataSource as SelectDataSourceItem[]).filter((item: SelectDataSourceItem) => {
+        const text = item.text?.toString().toLowerCase() || ''
+        const key = item.key?.toLowerCase() || ''
+        return text.includes(query) || key.includes(query)
+      })
+    }
+  })
+
+  const handleOpen = () => {
+    setOpen(true)
+    setSearchQuery('')
+    if (props.searchable) {
+      setTimeout(() => inputRef?.focus(), 10)
+    }
+  }
 
   return (
     <div
       style={props.style}
       class={`klinecharts-pro-select ${props.class ?? ''} ${open() ? 'klinecharts-pro-select-show' : ''}`}
       tabIndex="0"
-      onClick={_ => { setOpen(o => !o) }}
-      onBlur={_ => { setOpen(false) }}>
-      <div
-        class="selector-container">
+      onClick={_ => { if (!open()) handleOpen() }}
+      onBlur={_ => { setOpen(false); setSearchQuery('') }}>
+      <div class="selector-container">
         <span class="value">{props.value}</span>
         <i class="arrow"/>
       </div>
       {
         (props.dataSource && props.dataSource.length > 0) &&
-        <div
-          class="drop-down-container">
+        <div class="drop-down-container">
+          {
+            props.searchable &&
+            <div style={{ padding: '8px', 'border-bottom': '1px solid #333' }}>
+              <input
+                ref={inputRef}
+                type="text"
+                placeholder={props.searchPlaceholder || 'Search...'}
+                value={searchQuery()}
+                onInput={e => setSearchQuery(e.currentTarget.value)}
+                onClick={e => e.stopPropagation()}
+                style={{
+                  width: '100%',
+                  padding: '6px 10px',
+                  border: '1px solid #333',
+                  'border-radius': '4px',
+                  'background-color': '#1a1a1a',
+                  color: '#fff',
+                  'font-size': '13px',
+                  outline: 'none'
+                }}
+              />
+            </div>
+          }
           <ul>
             {
-              props.dataSource.map(data => {
+              filteredDataSource()?.map(data => {
                 const d = data as SelectDataSourceItem
                 // @ts-expect-error
                 const v = d[props.valueKey ?? 'text'] ?? data
@@ -61,6 +115,7 @@ const Select: Component<SelectProps> = props => {
                         props.onSelected?.(data)
                       }
                       setOpen(false)
+                      setSearchQuery('')
                     }}>
                     {v}
                   </li>

@@ -50,7 +50,9 @@ const TimezoneModal: Component<TimezoneModalProps> = props => {
         style={{ width: '100%', 'margin-top': '20px' }}
         value={innerTimezone().text}
         onSelected={(tz) => { setInnerTimezone(tz as SelectDataSourceItem) }}
-        dataSource={timezoneOptions()}/>
+        dataSource={timezoneOptions()}
+        searchable={true}
+        searchPlaceholder={i18n('search_timezone', props.locale) || 'Search timezone...'}/>
     </Modal>
   )
 }
