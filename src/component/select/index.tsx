@@ -34,6 +34,7 @@ const Select: Component<SelectProps> = props => {
   const [open, setOpen] = createSignal(false)
   const [searchQuery, setSearchQuery] = createSignal('')
   let inputRef: HTMLInputElement | undefined
+  let containerRef: HTMLDivElement | undefined
 
   const filteredDataSource = createMemo(() => {
     if (!props.dataSource || !props.searchable) return props.dataSource
@@ -64,20 +65,33 @@ const Select: Component<SelectProps> = props => {
     }
   }
 
+  const handleBlur = (e: FocusEvent) => {
+    // Check if the new focus target is inside the dropdown
+    const relatedTarget = e.relatedTarget as Node
+    if (containerRef && relatedTarget && containerRef.contains(relatedTarget)) {
+      return
+    }
+    setOpen(false)
+    setSearchQuery('')
+  }
+
   return (
     <div
+      ref={containerRef}
       style={props.style}
       class={`klinecharts-pro-select ${props.class ?? ''} ${open() ? 'klinecharts-pro-select-show' : ''}`}
       tabIndex="0"
       onClick={_ => { if (!open()) handleOpen() }}
-      onBlur={_ => { setOpen(false); setSearchQuery('') }}>
+      onBlur={handleBlur}>
       <div class="selector-container">
         <span class="value">{props.value}</span>
         <i class="arrow"/>
       </div>
       {
         (props.dataSource && props.dataSource.length > 0) &&
-        <div class="drop-down-container">
+        <div 
+          class="drop-down-container"
+          onMouseDown={e => e.preventDefault()}> {/* Yeh line important hai! */}
           {
             props.searchable &&
             <div style={{ padding: '8px', 'border-bottom': '1px solid #333' }}>
