@@ -3366,7 +3366,7 @@ const gu = /* @__PURE__ */ m('<div class="klinecharts-pro-setting-modal-content"
     width: 690,
     btnParentStyle: {
       display: "flex",
-      "justify-content": "space-between"
+      "justify-content": "center"
     },
     minButtonWidth: 200,
     get isMobile() {
