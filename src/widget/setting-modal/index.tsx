@@ -52,7 +52,7 @@ const SettingModal: Component<SettingModalProps> = props => {
   return (
     <Modal
       title={i18n('setting', props.locale)}
-      width={560}
+      width={690}
       buttons={[
         {
           children: i18n('restore_default', props.locale),

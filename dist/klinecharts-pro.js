@@ -3252,7 +3252,7 @@ const hu = (e) => {
         },
         searchable: !0,
         get searchPlaceholder() {
-          return i("Search timezone", e.locale) || "Search timezone...";
+          return i("Search Timezone", e.locale) || "Search timezone...";
         }
       });
     }
@@ -3332,7 +3332,7 @@ const gu = /* @__PURE__ */ p('<div class="klinecharts-pro-setting-modal-content"
     get title() {
       return i("setting", e.locale);
     },
-    width: 560,
+    width: 690,
     get buttons() {
       return [{
         children: i("restore_default", e.locale),
