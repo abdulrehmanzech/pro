@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-import { Component, createEffect, For, createSignal } from 'solid-js'
+import { Component, createEffect, For, createSignal, onMount, onCleanup } from 'solid-js'
 import { Styles, utils, DeepPartial } from 'klinecharts'
 
 import lodashSet from 'lodash/set'
@@ -34,6 +34,21 @@ export interface SettingModalProps {
 const SettingModal: Component<SettingModalProps> = props => {
   const [styles, setStyles] = createSignal(props.currentStyles)
   const [options, setOptions] = createSignal(getOptions(props.locale))
+  const [isMobile, setIsMobile] = createSignal(false)
+
+  // Check if device is mobile
+  const checkMobile = () => {
+    setIsMobile(window.innerWidth <= 768)
+  }
+
+  onMount(() => {
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+  })
+
+  onCleanup(() => {
+    window.removeEventListener('resize', checkMobile)
+  })
 
   createEffect(() => {
     setOptions(getOptions(props.locale))
@@ -53,6 +68,13 @@ const SettingModal: Component<SettingModalProps> = props => {
     <Modal
       title={i18n('setting', props.locale)}
       width={690}
+        btnParentStyle={{
+          "display": "flex",
+          "justify-content": "center",
+  }}
+
+      minButtonWidth={200}
+      isMobile={isMobile()}
       buttons={[
         {
           children: i18n('restore_default', props.locale),
@@ -64,7 +86,8 @@ const SettingModal: Component<SettingModalProps> = props => {
       ]}
       onClose={props.onClose}>
       <div
-        class="klinecharts-pro-setting-modal-content">
+        class="klinecharts-pro-setting-modal-content"
+        classList={{ 'mobile-layout': isMobile() }}>
         <For each={options()}>
           {
             option => {
@@ -74,7 +97,7 @@ const SettingModal: Component<SettingModalProps> = props => {
                 case 'select': {
                   component = (
                     <Select
-                      style={{ width: '120px' }}
+                      style={{ width: isMobile() ? '100%' : '120px', 'min-width': isMobile() ? 'auto' : '120px' }}
                       value={i18n(value as string, props.locale)}
                       dataSource={option.dataSource}
                       onSelected={(data) => {
@@ -98,10 +121,10 @@ const SettingModal: Component<SettingModalProps> = props => {
                 }
               }
               return (
-                <>
-                  <span>{option.text}</span>
-                  {component}
-                </>
+                <div class="setting-item" classList={{ 'mobile-item': isMobile() }}>
+                  <span class="setting-label">{option.text}</span>
+                  <div class="setting-control">{component}</div>
+                </div>
               )
             }
           }
