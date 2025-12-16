@@ -59,11 +59,12 @@ const Select: Component<SelectProps> = (props) => {
     }
   });
 
-  const handleOpen = () => {
-    setOpen(true);
+  const handleToggle = () => {
+    const willBeOpen = !open();
+    setOpen(willBeOpen);
     setSearchQuery("");
-    if (props.searchable) {
-      setTimeout(() => inputRef?.focus(), 10);
+    if (willBeOpen && props.searchable) {
+      setTimeout(() => inputRef?.focus(), 50);
     }
   };
 
@@ -84,13 +85,10 @@ const Select: Component<SelectProps> = (props) => {
       class={`klinecharts-pro-select ${props.class ?? ""} ${
         open() ? "klinecharts-pro-select-show" : ""
       }`}
-      tabIndex="0"
+      tabIndex={0}
       onClick={(e) => {
         e.stopPropagation();
-        setOpen((prev) => !prev);
-        if (!open() && props.searchable) {
-          setTimeout(() => inputRef?.focus(), 10);
-        }
+        handleToggle();
       }}
       onBlur={handleBlur}
     >
@@ -103,8 +101,6 @@ const Select: Component<SelectProps> = (props) => {
           class="drop-down-container"
           onMouseDown={(e) => e.preventDefault()}
         >
-          {" "}
-          {/* Yeh line important hai! */}
           {props.searchable && (
             <div style={{ padding: "8px", "border-bottom": "1px solid #333" }}>
               <input
