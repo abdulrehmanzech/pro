@@ -115,7 +115,7 @@ const Select: Component<SelectProps> = (props) => {
                   padding: "6px 10px",
                   border: "1px solid var(--klinecharts-pro-border-color)",
                   "border-radius": "4px",
-                  "background-color": "#1a1a1a",
+                  "background-color": "var(--klinecharts-pro-popover-background-color)",
                   color: "#fff",
                   "font-size": "13px",
                   outline: "none",

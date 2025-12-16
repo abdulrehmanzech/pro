@@ -2217,7 +2217,7 @@ const oa = /* @__PURE__ */ p('<div tabindex="0"><div class="selector-container">
             const E = la.cloneNode(!0), w = E.firstChild;
             E.style.setProperty("padding", "8px"), E.style.setProperty("border-bottom", "1px solid #333"), w.$$click = (A) => A.stopPropagation(), w.$$input = (A) => a(A.currentTarget.value);
             const P = s;
-            return typeof P == "function" ? R1(P, w) : s = w, w.style.setProperty("width", "100%"), w.style.setProperty("padding", "6px 10px"), w.style.setProperty("border", "1px solid var(--klinecharts-pro-border-color)"), w.style.setProperty("border-radius", "4px"), w.style.setProperty("background-color", "#1a1a1a"), w.style.setProperty("color", "#fff"), w.style.setProperty("font-size", "13px"), w.style.setProperty("outline", "none"), V(() => r1(w, "placeholder", e.searchPlaceholder || "Search...")), V(() => w.value = r()), E;
+            return typeof P == "function" ? R1(P, w) : s = w, w.style.setProperty("width", "100%"), w.style.setProperty("padding", "6px 10px"), w.style.setProperty("border", "1px solid var(--klinecharts-pro-border-color)"), w.style.setProperty("border-radius", "4px"), w.style.setProperty("background-color", "var(--klinecharts-pro-popover-background-color)"), w.style.setProperty("color", "#fff"), w.style.setProperty("font-size", "13px"), w.style.setProperty("outline", "none"), V(() => r1(w, "placeholder", e.searchPlaceholder || "Search...")), V(() => w.value = r()), E;
           })();
         })(), N), _(N, () => {
           var I;
@@ -3252,7 +3252,7 @@ const hu = (e) => {
         },
         searchable: !0,
         get searchPlaceholder() {
-          return i("search_timezone", e.locale) || "Search timezone...";
+          return i("Search timezone", e.locale) || "Search timezone...";
         }
       });
     }
