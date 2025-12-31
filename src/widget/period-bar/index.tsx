@@ -133,24 +133,21 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
           class="item tools"
           onClick={() => {
             if (!fullScreen()) {
-              const el = ref?.parentElement;
+              const el: any = ref?.parentElement;
               if (el) {
-                // @ts-expect-error
                 const enterFullScreen =
-                  el.requestFullscreen ??
-                  el.webkitRequestFullscreen ??
-                  el.mozRequestFullScreen ??
-                  el.msRequestFullscreen;
+                  el?.requestFullscreen ??
+                  el?.webkitRequestFullscreen ??
+                  el?.mozRequestFullScreen ??
+                  el?.msRequestFullscreen;
                 enterFullScreen.call(el);
                 // setFullScreen(true)
               }
             } else {
-              // @ts-expect-error
-              const exitFullscreen =
-                document.exitFullscreen ??
-                document.msExitFullscreen ??
-                document.mozCancelFullScreen ??
-                document.webkitExitFullscreen;
+              const exitFullscreen = (document.exitFullscreen ||
+                (document as any).msExitFullscreen ||
+                (document as any).mozCancelFullScreen ||
+                (document as any).webkitExitFullscreen) as any;
               exitFullscreen.call(document);
               // setFullScreen(false)
             }
