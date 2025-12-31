@@ -200,7 +200,11 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
 
   /** Emit indicator change event to callback */
   const emitIndicatorEvent = (name: string, paneId: string, type: 'main' | 'sub', action: 'add' | 'remove' | 'change') => {
-    if (!props.onIndicatorChange) return;
+    console.log(`[Library Debug] emitIndicatorEvent: action=${action}, name=${name}, paneId=${paneId}`);
+    if (!props.onIndicatorChange) {
+      console.warn('[Library Debug] props.onIndicatorChange is undefined');
+      return;
+    }
     
     // Small delay for 'add' and 'change' to ensure indicator is fully initialized/updated
     if (action === 'add' || action === 'change') {
@@ -1622,7 +1626,9 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
             });
           }}
           onConfirm={(params) => {
+            console.log('[Library Debug] onConfirm called with params:', params);
             const modalParams = indicatorSettingModalParams();
+            console.log('[Library Debug] modalParams:', modalParams);
             widget?.overrideIndicator(
               { name: modalParams.indicatorName, calcParams: params },
               modalParams.paneId
