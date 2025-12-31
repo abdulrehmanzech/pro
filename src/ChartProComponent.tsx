@@ -120,6 +120,7 @@ function createIndicator(
 }
 
 const ChartProComponent: Component<ChartProComponentProps> = (props) => {
+  console.log('[Library Debug] ChartProComponent initialized (v0.1.6-debug-1)');
   let widgetRef: HTMLDivElement | undefined = undefined;
   let widget: Nullable<Chart> = null;
 
