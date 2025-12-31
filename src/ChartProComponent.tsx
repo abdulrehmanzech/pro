@@ -70,10 +70,13 @@ import {
   OverlayOptions,
   OverlayInfo,
   ChartSettings,
+  IndicatorInfo,
+  IndicatorEventCallback,
 } from "./types";
 
 export interface ChartProComponentProps
-  extends Required<Omit<ChartProOptions, "container">> {
+  extends Required<Omit<ChartProOptions, "container" | "onIndicatorChange">> {
+  onIndicatorChange?: IndicatorEventCallback;
   ref: (chart: ChartPro) => void;
 }
 
@@ -176,6 +179,51 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       mouseUpHandler?: () => void;
     }
   >();
+
+  // ========== Indicator Event Helpers ==========
+  
+  /** Get complete indicator information for event emission */
+  const getIndicatorInfo = (name: string, paneId: string, type: 'main' | 'sub'): IndicatorInfo => {
+    const indicator = widget?.getIndicatorByPaneId(paneId, name) as any;
+    return {
+      name,
+      shortName: indicator?.shortName || name,
+      paneId,
+      type,
+      calcParams: indicator?.calcParams || [],
+      precision: indicator?.precision ?? 4,
+      visible: indicator?.visible ?? true,
+      styles: indicator?.styles,
+      figures: indicator?.figures,
+    };
+  };
+
+  /** Emit indicator change event to callback */
+  const emitIndicatorEvent = (name: string, paneId: string, type: 'main' | 'sub', action: 'add' | 'remove') => {
+    if (!props.onIndicatorChange) return;
+    
+    // Small delay for 'add' to ensure indicator is fully initialized
+    if (action === 'add') {
+      setTimeout(() => {
+        const indicator = getIndicatorInfo(name, paneId, type);
+        props.onIndicatorChange!({ action, indicator });
+      }, 50);
+    } else {
+      // For 'remove', emit immediately with cached/basic info
+      const indicator: IndicatorInfo = {
+        name,
+        shortName: name,
+        paneId,
+        type,
+        calcParams: [],
+        precision: 4,
+        visible: false,
+        styles: undefined,
+        figures: undefined,
+      };
+      props.onIndicatorChange({ action, indicator });
+    }
+  };
 
   // Helper function to get required points for each overlay type
   const getRequiredPoints = (type: string): number => {
@@ -1198,12 +1246,14 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
                 1
               );
               setMainIndicators(newMainIndicators);
+              emitIndicatorEvent(data.indicatorName, "candle_pane", "main", "remove");
             } else {
               const newIndicators = { ...subIndicators() };
               widget?.removeIndicator(data.paneId, data.indicatorName);
               // @ts-expect-error
               delete newIndicators[data.indicatorName];
               setSubIndicators(newIndicators);
+              emitIndicatorEvent(data.indicatorName, data.paneId, "sub", "remove");
             }
           }
         }
@@ -1483,9 +1533,11 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
             if (data.added) {
               createIndicator(widget, data.name, true, { id: "candle_pane" });
               newMainIndicators.push(data.name);
+              emitIndicatorEvent(data.name, "candle_pane", "main", "add");
             } else {
               widget?.removeIndicator("candle_pane", data.name);
               newMainIndicators.splice(newMainIndicators.indexOf(data.name), 1);
+              emitIndicatorEvent(data.name, "candle_pane", "main", "remove");
             }
             setMainIndicators(newMainIndicators);
           }}
@@ -1496,12 +1548,14 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
               if (paneId) {
                 // @ts-expect-error
                 newSubIndicators[data.name] = paneId;
+                emitIndicatorEvent(data.name, paneId, "sub", "add");
               }
             } else {
               if (data.paneId) {
                 widget?.removeIndicator(data.paneId, data.name);
                 // @ts-expect-error
                 delete newSubIndicators[data.name];
+                emitIndicatorEvent(data.name, data.paneId, "sub", "remove");
               }
             }
             setSubIndicators(newSubIndicators);

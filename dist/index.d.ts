@@ -45,6 +45,36 @@ export interface ChartSettings {
 	};
 	timestamp?: number;
 }
+/** Complete indicator information returned in events */
+export interface IndicatorInfo {
+	/** Indicator name (e.g., 'MACD', 'RSI', 'MA') */
+	name: string;
+	/** Short display name */
+	shortName: string;
+	/** Pane ID where indicator is displayed */
+	paneId: string;
+	/** Whether it's a main (overlay) or sub (separate pane) indicator */
+	type: "main" | "sub";
+	/** Calculation parameters (e.g., [12, 26, 9] for MACD) */
+	calcParams: any[];
+	/** Decimal precision for values */
+	precision: number;
+	/** Whether indicator is currently visible */
+	visible: boolean;
+	/** Custom styles applied to indicator */
+	styles?: any;
+	/** Figure configurations */
+	figures?: any[];
+}
+/** Event data emitted when indicator changes */
+export interface IndicatorEventData {
+	/** Type of action performed */
+	action: "add" | "remove";
+	/** Complete indicator information */
+	indicator: IndicatorInfo;
+}
+/** Callback type for indicator change events */
+export type IndicatorEventCallback = (data: IndicatorEventData) => void;
 export interface ChartProOptions {
 	container: string | HTMLElement;
 	styles?: DeepPartial<Styles>;
@@ -59,6 +89,8 @@ export interface ChartProOptions {
 	mainIndicators?: string[];
 	subIndicators?: string[];
 	datafeed: Datafeed;
+	/** Callback fired when an indicator is added or removed */
+	onIndicatorChange?: IndicatorEventCallback;
 }
 export interface OverlayInfo {
 	id: string;
