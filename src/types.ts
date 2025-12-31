@@ -111,7 +111,7 @@ export interface IndicatorInfo {
 /** Event data emitted when indicator changes */
 export interface IndicatorEventData {
   /** Type of action performed */
-  action: 'add' | 'remove';
+  action: 'add' | 'remove' | 'change';
   /** Complete indicator information */
   indicator: IndicatorInfo;
 }

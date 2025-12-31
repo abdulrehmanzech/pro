@@ -199,11 +199,11 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
   };
 
   /** Emit indicator change event to callback */
-  const emitIndicatorEvent = (name: string, paneId: string, type: 'main' | 'sub', action: 'add' | 'remove') => {
+  const emitIndicatorEvent = (name: string, paneId: string, type: 'main' | 'sub', action: 'add' | 'remove' | 'change') => {
     if (!props.onIndicatorChange) return;
     
-    // Small delay for 'add' to ensure indicator is fully initialized
-    if (action === 'add') {
+    // Small delay for 'add' and 'change' to ensure indicator is fully initialized/updated
+    if (action === 'add' || action === 'change') {
       setTimeout(() => {
         const indicator = getIndicatorInfo(name, paneId, type);
         props.onIndicatorChange!({ action, indicator });
@@ -1215,6 +1215,8 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
               { name: data.indicatorName, visible: true },
               data.paneId
             );
+            const type = data.paneId === "candle_pane" ? "main" : "sub";
+            emitIndicatorEvent(data.indicatorName, data.paneId, type, "change");
             break;
           }
           case "invisible": {
@@ -1222,6 +1224,8 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
               { name: data.indicatorName, visible: false },
               data.paneId
             );
+            const type = data.paneId === "candle_pane" ? "main" : "sub";
+            emitIndicatorEvent(data.indicatorName, data.paneId, type, "change");
             break;
           }
           case "setting": {
@@ -1623,6 +1627,8 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
               { name: modalParams.indicatorName, calcParams: params },
               modalParams.paneId
             );
+            const type = modalParams.paneId === "candle_pane" ? "main" : "sub";
+            emitIndicatorEvent(modalParams.indicatorName, modalParams.paneId, type, "change");
           }}
         />
       </Show>
