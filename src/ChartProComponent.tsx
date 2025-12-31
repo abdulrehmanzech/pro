@@ -120,7 +120,6 @@ function createIndicator(
 }
 
 const ChartProComponent: Component<ChartProComponentProps> = (props) => {
-  console.log('[Library Debug] ChartProComponent initialized (v0.1.6-debug-1)');
   let widgetRef: HTMLDivElement | undefined = undefined;
   let widget: Nullable<Chart> = null;
 
@@ -201,9 +200,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
 
   /** Emit indicator change event to callback */
   const emitIndicatorEvent = (name: string, paneId: string, type: 'main' | 'sub', action: 'add' | 'remove' | 'change') => {
-    console.log(`[Library Debug] emitIndicatorEvent: action=${action}, name=${name}, paneId=${paneId}`);
     if (!props.onIndicatorChange) {
-      console.warn('[Library Debug] props.onIndicatorChange is undefined');
       return;
     }
     
@@ -1627,9 +1624,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
             });
           }}
           onConfirm={(params) => {
-            console.log('[Library Debug] onConfirm called with params:', params);
             const modalParams = indicatorSettingModalParams();
-            console.log('[Library Debug] modalParams:', modalParams);
             widget?.overrideIndicator(
               { name: modalParams.indicatorName, calcParams: params },
               modalParams.paneId
