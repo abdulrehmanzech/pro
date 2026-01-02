@@ -3677,24 +3677,34 @@ const pu = /* @__PURE__ */ p('<div class="klinecharts-pro-setting-modal-content"
 o1(["click"]);
 const Iu = /* @__PURE__ */ p('<i class="icon-close klinecharts-pro-load-icon"></i>'), Pu = /* @__PURE__ */ p('<div class="klinecharts-pro-content"><div class="klinecharts-pro-widget"></div></div>');
 function ne(e, t, n, r) {
-  return t === "VOL" && (r = {
+  t === "VOL" && (r = {
     gap: {
       bottom: 2
     },
     ...r
-  }), (e == null ? void 0 : e.createIndicator({
+  });
+  const a = (e == null ? void 0 : e.createIndicator({
     name: t,
     // @ts-expect-error
     createTooltipDataSource: ({
-      indicator: a,
-      defaultStyles: s
+      indicator: s,
+      defaultStyles: l
     }) => {
-      const l = [];
-      return a.visible ? (l.push(s.tooltip.icons[1]), l.push(s.tooltip.icons[2]), l.push(s.tooltip.icons[3])) : (l.push(s.tooltip.icons[0]), l.push(s.tooltip.icons[2]), l.push(s.tooltip.icons[3])), {
-        icons: l
+      const o = [];
+      return s.visible ? (o.push(l.tooltip.icons[1]), o.push(l.tooltip.icons[2]), o.push(l.tooltip.icons[3])) : (o.push(l.tooltip.icons[0]), o.push(l.tooltip.icons[2]), o.push(l.tooltip.icons[3])), {
+        icons: o
       };
     }
   }, n, r)) ?? null;
+  if (a && t === "MA")
+    try {
+      e == null || e.overrideIndicator({
+        name: "MA",
+        calcParams: [7, 25, 99]
+      }, a);
+    } catch {
+    }
+  return a;
 }
 const Du = (e) => {
   let t, n = null, r, a = !1;
