@@ -94,7 +94,7 @@ function createIndicator(
   if (indicatorName === "VOL") {
     paneOptions = { gap: { bottom: 2 }, ...paneOptions };
   }
-  return (
+  const paneId =
     widget?.createIndicator(
       {
         name: indicatorName,
@@ -115,8 +115,18 @@ function createIndicator(
       },
       isStack,
       paneOptions
-    ) ?? null
-  );
+    ) ?? null;
+
+  // Set custom default MA periods when the indicator is created
+  if (paneId && indicatorName === 'MA') {
+    try {
+      widget?.overrideIndicator({ name: 'MA', calcParams: [7, 25, 99] }, paneId);
+    } catch (e) {
+      // ignore if override not supported
+    }
+  }
+
+  return paneId;
 }
 
 const ChartProComponent: Component<ChartProComponentProps> = (props) => {
