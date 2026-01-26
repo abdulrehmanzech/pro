@@ -35,3 +35,7 @@ yarn add @klinecharts/pro
 
 ## ©️ License
 KLineChart Pro is available under the Apache License V2.
+
+npm version patch
+
+git push origin main --tags
