@@ -31,6 +31,12 @@ const Modal: ParentComponent<ModalProps> = (props) => {
     <div
       class="klinecharts-pro-modal"
       classList={{ "mobile-modal": props.isMobile }}
+      onClick={(e) => {
+        // close when clicking on the backdrop (outside the inner dialog)
+        if (e.target === e.currentTarget) {
+          props.onClose && props.onClose();
+        }
+      }}
     >
       <div
         style={{
