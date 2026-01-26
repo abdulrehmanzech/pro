@@ -135,7 +135,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
 
   let priceUnitDom: HTMLElement;
 
-  let loading = false;
+  const [isLoading, setIsLoading] = createSignal(false);
 
   const [theme, setTheme] = createSignal(props.theme);
   const [styles, setStyles] = createSignal(props.styles);
@@ -1203,19 +1203,22 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     });
     setSubIndicators(subIndicatorMap);
     widget?.loadMore((timestamp) => {
-      loading = true;
+      setIsLoading(true);
       const get = async () => {
-        const p = period();
-        const [to] = adjustFromTo(p, timestamp!, 1);
-        const [from] = adjustFromTo(p, to, 500);
-        const kLineDataList = await props.datafeed.getHistoryKLineData(
-          symbol(),
-          p,
-          from,
-          to
-        );
-        widget?.applyMoreData(kLineDataList, kLineDataList.length > 0);
-        loading = false;
+        try {
+          const p = period();
+          const [to] = adjustFromTo(p, timestamp!, 1);
+          const [from] = adjustFromTo(p, to, 500);
+          const kLineDataList = await props.datafeed.getHistoryKLineData(
+            symbol(),
+            p,
+            from,
+            to
+          );
+          widget?.applyMoreData(kLineDataList, kLineDataList.length > 0);
+        } finally {
+          setIsLoading(false);
+        }
       };
       get();
     });
@@ -1387,15 +1390,24 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
   });
 
   createEffect((prev?: PrevSymbolPeriod) => {
-    if (!loading) {
-      if (prev) {
-        props.datafeed.unsubscribe(prev.symbol, prev.period);
-      }
-      const s = symbol();
-      const p = period();
-      loading = true;
-      setLoadingVisible(true);
-      const get = async () => {
+    const s = symbol();
+    const p = period();
+    
+    // Race condition protection
+    let isCurrent = true;
+    onCleanup(() => {
+      isCurrent = false;
+    });
+
+    if (prev) {
+      props.datafeed.unsubscribe(prev.symbol, prev.period);
+    }
+    
+    setIsLoading(true);
+    setLoadingVisible(true);
+    
+    const get = async () => {
+      try {
         const [from, to] = adjustFromTo(p, new Date().getTime(), 500);
         const kLineDataList = await props.datafeed.getHistoryKLineData(
           s,
@@ -1403,17 +1415,22 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
           from,
           to
         );
+        
+        if (!isCurrent) return;
+        
         widget?.applyNewData(kLineDataList, kLineDataList.length > 0);
         props.datafeed.subscribe(s, p, (data) => {
           widget?.updateData(data);
         });
-        loading = false;
-        setLoadingVisible(false);
-      };
-      get();
-      return { symbol: s, period: p };
-    }
-    return prev;
+      } finally {
+        if (isCurrent) {
+          setIsLoading(false);
+          setLoadingVisible(false);
+        }
+      }
+    };
+    get();
+    return { symbol: s, period: p };
   });
 
   createEffect(() => {
@@ -1421,6 +1438,14 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     widget?.setStyles(t);
     const color = t === "dark" ? "#929AA5" : "#76808F";
     widget?.setStyles({
+      candle: {
+        tooltip: {
+          rect: {
+            offsetLeft: 0,
+            paddingLeft: 0,
+          },
+        },
+      },
       indicator: {
         tooltip: {
           icons: [
