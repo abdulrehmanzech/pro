@@ -56,6 +56,7 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
     document.removeEventListener("msfullscreenchange", fullScreenChange);
   });
 
+  
   return (
     <div
       ref={(el) => {
