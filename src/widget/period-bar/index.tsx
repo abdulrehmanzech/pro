@@ -107,7 +107,7 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
             rx="4"
             ry="4"
             fill="none"
-            stroke="white"
+            stroke="currentColor"
             stroke-width="0.5"
           />
           <path d="M14.92,12.90 L11.27,9.35 C10.95,9.03,10.95,8.55,11.27,8.23 C11.59,7.90,12.06,7.90,12.38,8.23 L15.40,11.61 C15.71,11.93,15.71,12.42,15.40,12.74 C15.24,12.90,14.92,12.90,14.92,12.90 Z" />
