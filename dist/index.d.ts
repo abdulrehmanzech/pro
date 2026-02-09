@@ -91,6 +91,8 @@ export interface ChartProOptions {
 	datafeed: Datafeed;
 	/** Callback fired when an indicator is added or removed */
 	onIndicatorChange?: IndicatorEventCallback;
+	/** Callback fired when a period item is clicked on mobile */
+	onMobilePeriodClick?: (period: Period) => void;
 }
 export interface OverlayInfo {
 	id: string;
