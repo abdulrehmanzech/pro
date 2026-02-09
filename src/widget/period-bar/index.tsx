@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-import { Component, Show, createSignal, onMount, onCleanup } from "solid-js";
+import { Component, Show, createSignal, onMount, onCleanup, createMemo, createEffect } from "solid-js";
 
 import { SymbolInfo, Period } from "../../types";
 
@@ -31,11 +31,20 @@ export interface PeriodBarProps {
   onTimezoneClick: () => void;
   onSettingClick: () => void;
   onScreenshotClick: () => void;
+  onMobilePeriodClick?: (period: Period) => void;
 }
 
 const PeriodBar: Component<PeriodBarProps> = (props) => {
   let ref: Node;
 
+  const [isMobile, setIsMobile] = createSignal(window.innerWidth < 768);
+  const [secondary, setSecondary] = createSignal(
+    localStorage.getItem("klinechart_secondary_period") || "",
+  );
+
+  const handleResize = () => {
+    setIsMobile(window.innerWidth < 768);
+  };
   const [fullScreen, setFullScreen] = createSignal(false);
 
   const fullScreenChange = () => {
@@ -43,6 +52,7 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
   };
 
   onMount(() => {
+    window.addEventListener("resize", handleResize);
     document.addEventListener("fullscreenchange", fullScreenChange);
     document.addEventListener("mozfullscreenchange", fullScreenChange);
     document.addEventListener("webkitfullscreenchange", fullScreenChange);
@@ -50,10 +60,42 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
   });
 
   onCleanup(() => {
+    window.removeEventListener("resize", handleResize);
     document.removeEventListener("fullscreenchange", fullScreenChange);
     document.removeEventListener("mozfullscreenchange", fullScreenChange);
     document.removeEventListener("webkitfullscreenchange", fullScreenChange);
     document.removeEventListener("msfullscreenchange", fullScreenChange);
+  });
+
+  const visiblePeriods = createMemo(() => {
+    return props.periods
+      .filter((p) => {
+        if (!isMobile()) return true;
+        if (fullScreen()) return true;
+        const activeText = props.period.text;
+        const secondaryText = secondary();
+        if (p.text === activeText) return true;
+        if (secondaryText && p.text === secondaryText) return true;
+        if (!secondaryText || secondaryText === activeText) {
+          const fallback = props.periods.find((item) => item.text !== activeText);
+          return p.text === fallback?.text;
+        }
+        return false;
+      })
+      .slice(0, isMobile() && !fullScreen() ? 2 : props.periods.length);
+  });
+
+  // Keep track of previous period to use as secondary
+  let prevPeriodText = props.period.text;
+  createEffect(() => {
+    const currentText = props.period.text;
+    if (currentText !== prevPeriodText) {
+      if (isMobile()) {
+        setSecondary(prevPeriodText);
+        localStorage.setItem("klinechart_secondary_period", prevPeriodText);
+      }
+      prevPeriodText = currentText;
+    }
   });
 
   return (
@@ -82,28 +124,87 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
           </span>
         </div>
       </Show>
-      {props.periods.map((p) => (
+      {visiblePeriods().map((p: Period, idx: number) => {
+        const isSelected = p.text === props.period.text;
+        return (
+          <span
+            class={`item period ${isSelected ? "selected" : ""}`}
+            onClick={(e) => {
+              if (isMobile() && isSelected && !fullScreen()) {
+                if (props.onMobilePeriodClick) {
+                  props.onMobilePeriodClick(p);
+                } else {
+                  props.onMenuClick();
+                }
+                e.stopPropagation();
+              } else {
+                props.onPeriodChange(p);
+              }
+            }}
+          >
+            {p.text}
+          </span>
+        );
+      })}
+      <Show when={isMobile() && !fullScreen() && visiblePeriods().length > 1}>
         <span
-          class={`item period ${
-            p.text === props.period.text ? "selected" : ""
-          }`}
-          onClick={() => {
-            props.onPeriodChange(p);
+          class="down-arrow-icon mobile-separate-arrow"
+          style={{
+            "margin-left": "4px",
+            display: "inline-flex",
+            "align-items": "center",
+          }}
+          onClick={(e) => {
+            e.stopPropagation();
+            if (props.onMobilePeriodClick) {
+              props.onMobilePeriodClick(props.period);
+            } else {
+              props.onMenuClick();
+            }
           }}
         >
-          {p.text}
+          <svg
+            width="10"
+            height="10"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M6 9L12 15L18 9" />
+          </svg>
         </span>
-      ))}
+      </Show>
+
       <div class="item tools" onClick={props.onIndicatorClick}>
         {/* <svg viewBox="0 0 20 20">
           <path d="M15.873,20L3.65079,20C1.5873,20,0,18.3871,0,16.2903L0,3.70968C-3.78442e-7,1.6129,1.5873,0,3.65079,0L15.873,0C17.9365,0,19.5238,1.6129,19.5238,3.70968C19.5238,4.35484,19.2063,4.51613,18.5714,4.51613C17.9365,4.51613,17.619,4.19355,17.619,3.70968C17.619,2.74194,16.8254,1.93548,15.873,1.93548L3.65079,1.93548C2.69841,1.93548,1.90476,2.74194,1.90476,3.70968L1.90476,16.2903C1.90476,17.2581,2.69841,18.0645,3.65079,18.0645L15.873,18.0645C16.8254,18.0645,17.619,17.2581,17.619,16.2903C17.619,15.8065,18.0952,15.3226,18.5714,15.3226C19.0476,15.3226,19.5238,15.8065,19.5238,16.2903C19.5238,18.2258,17.9365,20,15.873,20ZM14.9206,12.9032C14.7619,12.9032,14.4444,12.9032,14.2857,12.7419L11.2698,9.35484C10.9524,9.03226,10.9524,8.54839,11.2698,8.22581C11.5873,7.90323,12.0635,7.90323,12.381,8.22581L15.3968,11.6129C15.7143,11.9355,15.7143,12.4194,15.3968,12.7419C15.3968,12.9032,15.2381,12.9032,14.9206,12.9032ZM11.4286,13.2258C11.2698,13.2258,11.1111,13.2258,10.9524,13.0645C10.6349,12.7419,10.6349,12.4194,10.9524,12.0968L15.0794,7.74193C15.3968,7.41935,15.7143,7.41935,16.0317,7.74193C16.3492,8.06452,16.3492,8.3871,16.0317,8.70968L11.9048,13.0645C11.746,13.2258,11.5873,13.2258,11.4286,13.2258ZM10.3175,3.70968C10.6349,3.70968,11.4286,3.87097,11.4286,4.67742C11.4286,5.32258,10.4762,5.16129,10.1587,5.16129C8.73016,5.16129,8.25397,5.96774,8.09524,6.6129L7.77778,8.54839L9.36508,8.54839C9.68254,8.54839,10,8.87097,10,9.19355C10,9.51613,9.68254,9.83871,9.36508,9.83871L7.61905,9.83871L6.50794,14.8387Q6.34921,16.2903,5.39683,16.2903Q4.44444,16.2903,4.92064,14.8387L6.03175,10L4.60317,10C4.28571,10,3.96825,9.67742,3.96825,9.35484C3.96825,8.70968,4.28571,8.54839,4.60317,8.54839L6.34921,8.54839L6.8254,6.45161C7.14286,3.70968,9.52381,3.54839,10.3175,3.70968ZM18.4127,6.6129C18.5714,6.12903,18.8889,5.96774,19.3651,5.96774C19.8413,6.12903,20,6.45161,20,6.93548L18.4127,13.3871C18.254,13.871,17.9365,14.0323,17.4603,14.0323C16.9841,13.871,16.8254,13.5484,16.8254,13.0645L18.4127,6.6129Z" />
         </svg> */}
-      <svg viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
-  <rect x="1" y="1" width="20" height="20" rx="4" ry="4" fill="none" stroke="currentColor" stroke-width="2"/>
-  <path d="m15.92 13.9-3.65-3.55a.773.773 0 0 1 0-1.12c.32-.33.79-.33 1.11 0l3.02 3.38c.31.32.31.81 0 1.13-.16.16-.48.16-.48.16Z" fill="currentColor" stroke="1"/>
-  <path d="m12.43 14.23-.48-.17q-.48-.48 0-.96l4.13-4.36c.31-.32.63-.32.95 0s.32.65 0 .97l-4.13 4.35c-.15.17-.31.17-.47.17Zm-1.11-9.52c.31 0 1.11.16 1.11.97 0 .64-.95.48-1.27.48-1.43 0-1.91.81-2.07 1.45l-.31 1.94h1.58c.32 0 .64.32.64.64 0 .33-.32.65-.64.65H8.62l-1.11 4.99c-.16 1.46-1.11 1.46-1.59 0L7.03 11H5.6c-.31 0-.63-.32-.63-.65 0-.64.32-.8.63-.8h1.75l.48-2.1c.31-2.74 2.69-2.9 3.49-2.74Z" fill="noncurrentColore" stroke="1"/>
-</svg>
-
+        <svg viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+          <rect
+            x="1"
+            y="1"
+            width="20"
+            height="20"
+            rx="4"
+            ry="4"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          />
+          <path
+            d="m15.92 13.9-3.65-3.55a.773.773 0 0 1 0-1.12c.32-.33.79-.33 1.11 0l3.02 3.38c.31.32.31.81 0 1.13-.16.16-.48.16-.48.16Z"
+            fill="currentColor"
+            stroke="1"
+          />
+          <path
+            d="m12.43 14.23-.48-.17q-.48-.48 0-.96l4.13-4.36c.31-.32.63-.32.95 0s.32.65 0 .97l-4.13 4.35c-.15.17-.31.17-.47.17Zm-1.11-9.52c.31 0 1.11.16 1.11.97 0 .64-.95.48-1.27.48-1.43 0-1.91.81-2.07 1.45l-.31 1.94h1.58c.32 0 .64.32.64.64 0 .33-.32.65-.64.65H8.62l-1.11 4.99c-.16 1.46-1.11 1.46-1.59 0L7.03 11H5.6c-.31 0-.63-.32-.63-.65 0-.64.32-.8.63-.8h1.75l.48-2.1c.31-2.74 2.69-2.9 3.49-2.74Z"
+            fill="noncurrentColore"
+            stroke="1"
+          />
+        </svg>
 
         <span>{i18n("indicator", props.locale)}</span>
       </div>

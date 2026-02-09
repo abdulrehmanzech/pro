@@ -75,8 +75,9 @@ import {
 } from "./types";
 
 export interface ChartProComponentProps
-  extends Required<Omit<ChartProOptions, "container" | "onIndicatorChange">> {
+  extends Required<Omit<ChartProOptions, "container" | "onIndicatorChange" | "onMobilePeriodClick">> {
   onIndicatorChange?: IndicatorEventCallback;
+  onMobilePeriodClick?: (period: Period) => void;
   ref: (chart: ChartPro) => void;
 }
 
@@ -1686,6 +1687,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
         onSymbolClick={() => {
           setSymbolSearchModalVisible(!symbolSearchModalVisible());
         }}
+        onMobilePeriodClick={props.onMobilePeriodClick}
         onPeriodChange={setPeriod}
         onIndicatorClick={() => {
           setIndicatorModalVisible((visible) => !visible);

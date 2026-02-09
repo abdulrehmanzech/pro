@@ -86,6 +86,7 @@ export default class KLineChartPro implements ChartPro {
           subIndicators={options.subIndicators ?? ["VOL"]}
           datafeed={options.datafeed}
           onIndicatorChange={options.onIndicatorChange}
+          onMobilePeriodClick={options.onMobilePeriodClick}
         />
       ),
       this._container

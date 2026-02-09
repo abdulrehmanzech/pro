@@ -136,6 +136,8 @@ export interface ChartProOptions {
   datafeed: Datafeed;
   /** Callback fired when an indicator is added or removed */
   onIndicatorChange?: IndicatorEventCallback;
+  /** Callback fired when a period item is clicked on mobile */
+  onMobilePeriodClick?: (period: Period) => void;
 }
 import type { CandleType, LineType, OverlayCreate, OverlayMode, OverlayStyle, Point, YAxisType } from "klinecharts";
 
