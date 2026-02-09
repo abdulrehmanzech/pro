@@ -2590,7 +2590,7 @@ const i = (e, t) => {
     window.removeEventListener("resize", l), document.removeEventListener("fullscreenchange", h), document.removeEventListener("mozfullscreenchange", h), document.removeEventListener("webkitfullscreenchange", h), document.removeEventListener("msfullscreenchange", h);
   });
   const u = Z(() => e.periods.filter((m) => {
-    if (!n())
+    if (!n() || o())
       return !0;
     const b = e.period.text, k = a();
     if (m.text === b || k && m.text === k)
@@ -2600,7 +2600,7 @@ const i = (e, t) => {
       return m.text === (S == null ? void 0 : S.text);
     }
     return !1;
-  }).slice(0, n() ? 2 : e.periods.length));
+  }).slice(0, n() && !o() ? 2 : e.periods.length));
   let p = e.period.text;
   return l1(() => {
     const m = e.period.text;
@@ -2630,12 +2630,12 @@ const i = (e, t) => {
       return (() => {
         const K = Oc.cloneNode(!0);
         return K.$$click = (R) => {
-          n() && I ? (e.onMobilePeriodClick ? e.onMobilePeriodClick(A) : e.onMenuClick(), R.stopPropagation()) : e.onPeriodChange(A);
+          n() && I && !o() ? (e.onMobilePeriodClick ? e.onMobilePeriodClick(A) : e.onMenuClick(), R.stopPropagation()) : e.onPeriodChange(A);
         }, L1(K, `item period ${I ? "selected" : ""}`), L(K, () => A.text), K;
       })();
     }), S), L(m, $(X, {
       get when() {
-        return Z(() => !!n())() && u().length > 1;
+        return Z(() => !!(n() && !o()))() && u().length > 1;
       },
       get children() {
         const A = Ec.cloneNode(!0);
