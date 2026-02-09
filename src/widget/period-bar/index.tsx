@@ -56,7 +56,7 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
   const [fullScreen, setFullScreen] = createSignal(false);
 
   const fullScreenChange = () => {
-    setFullScreen((full) => !full);
+    setFullScreen(!!document.fullscreenElement);
   };
 
   const [showLeftArrow, setShowLeftArrow] = createSignal(false);
@@ -331,7 +331,7 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
             class="item tools"
             onClick={() => {
               if (!fullScreen()) {
-                const el: any = ref?.parentElement;
+                const el: any = ref?.closest(".klinecharts-pro");
                 if (el) {
                   const enterFullScreen =
                     el?.requestFullscreen ??
