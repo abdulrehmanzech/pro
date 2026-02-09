@@ -689,20 +689,20 @@ const h1 = 1, ce = 2, G0 = {
   context: null,
   owner: null
 }, Ae = {};
-var G = null;
+var J = null;
 let b1 = null, z = null, t1 = null, f1 = null, Ue = 0;
 function ie(e, t) {
-  const n = z, r = G, a = e.length === 0, s = a ? G0 : {
+  const n = z, r = J, a = e.length === 0, s = a ? G0 : {
     owned: null,
     cleanups: null,
     context: null,
     owner: t === void 0 ? r : t
   }, l = a ? e : () => e(() => y1(() => me(s)));
-  G = s, z = null;
+  J = s, z = null;
   try {
     return p1(l, !0);
   } finally {
-    z = n, G = r;
+    z = n, J = r;
   }
 }
 function w(e, t) {
@@ -739,35 +739,35 @@ function l5(e, t, n) {
   let l = null, o = Ae, f = null, h = !1, u = "initialValue" in s, g = typeof r == "function" && R(r);
   const v = /* @__PURE__ */ new Set(), [b, k] = (s.storage || w)(s.initialValue), [T, B] = w(void 0), [N, E] = w(void 0, {
     equals: !1
-  }), [S, P] = w(u ? "ready" : "unresolved");
+  }), [S, D] = w(u ? "ready" : "unresolved");
   if (n1.context) {
     f = `${n1.context.id}${n1.context.count++}`;
-    let D;
-    s.ssrLoadFrom === "initial" ? o = s.initialValue : n1.load && (D = n1.load(f)) && (o = D[0]);
+    let P;
+    s.ssrLoadFrom === "initial" ? o = s.initialValue : n1.load && (P = n1.load(f)) && (o = P[0]);
   }
-  function O(D, j, H, c1) {
-    return l === D && (l = null, u = !0, (D === o || j === o) && s.onHydrated && queueMicrotask(() => s.onHydrated(c1, {
+  function O(P, j, H, c1) {
+    return l === P && (l = null, u = !0, (P === o || j === o) && s.onHydrated && queueMicrotask(() => s.onHydrated(c1, {
       value: j
     })), o = Ae, M(j, H)), j;
   }
-  function M(D, j) {
+  function M(P, j) {
     p1(() => {
-      j === void 0 && k(() => D), P(j !== void 0 ? "errored" : "ready"), B(j);
+      j === void 0 && k(() => P), D(j !== void 0 ? "errored" : "ready"), B(j);
       for (const H of v.keys())
         H.decrement();
       v.clear();
     }, !1);
   }
-  function X() {
-    const D = d5, j = b(), H = T();
+  function G() {
+    const P = d5, j = b(), H = T();
     if (H !== void 0 && !l)
       throw H;
-    return z && !z.user && D && o0(() => {
-      N(), l && (D.resolved || v.has(D) || (D.increment(), v.add(D)));
+    return z && !z.user && P && o0(() => {
+      N(), l && (P.resolved || v.has(P) || (P.increment(), v.add(P)));
     }), j;
   }
-  function q(D = !0) {
-    if (D !== !1 && h)
+  function X(P = !0) {
+    if (P !== !1 && h)
       return;
     h = !1;
     const j = g ? g() : r;
@@ -777,13 +777,13 @@ function l5(e, t, n) {
     }
     const H = o !== Ae ? o : y1(() => a(j, {
       value: b(),
-      refetching: D
+      refetching: P
     }));
     return typeof H != "object" || !(H && "then" in H) ? (O(l, H, void 0, j), H) : (l = H, h = !0, queueMicrotask(() => h = !1), p1(() => {
-      P(u ? "refreshing" : "pending"), E();
+      D(u ? "refreshing" : "pending"), E();
     }, !1), H.then((c1) => O(H, c1, void 0, j), (c1) => O(H, void 0, e9(c1), j)));
   }
-  return Object.defineProperties(X, {
+  return Object.defineProperties(G, {
     state: {
       get: () => S()
     },
@@ -792,22 +792,22 @@ function l5(e, t, n) {
     },
     loading: {
       get() {
-        const D = S();
-        return D === "pending" || D === "refreshing";
+        const P = S();
+        return P === "pending" || P === "refreshing";
       }
     },
     latest: {
       get() {
         if (!u)
-          return X();
-        const D = T();
-        if (D && !l)
-          throw D;
+          return G();
+        const P = T();
+        if (P && !l)
+          throw P;
         return b();
       }
     }
-  }), g ? o0(() => q(!1)) : q(!1), [X, {
-    refetch: q,
+  }), g ? o0(() => X(!1)) : X(!1), [G, {
+    refetch: X,
     mutate: k
   }];
 }
@@ -826,14 +826,14 @@ function Ke(e) {
   d1(() => y1(e));
 }
 function H1(e) {
-  return G === null || (G.cleanups === null ? G.cleanups = [e] : G.cleanups.push(e)), e;
+  return J === null || (J.cleanups === null ? J.cleanups = [e] : J.cleanups.push(e)), e;
 }
 function u5(e) {
-  const t = z, n = G;
+  const t = z, n = J;
   return Promise.resolve().then(() => {
-    z = t, G = n;
+    z = t, J = n;
     let r;
-    return p1(e, !1), z = G = null, r ? r.done : void 0;
+    return p1(e, !1), z = J = null, r ? r.done : void 0;
   });
 }
 let d5;
@@ -867,8 +867,8 @@ function T1(e) {
   if (!e.fn)
     return;
   me(e);
-  const t = G, n = z, r = Ue;
-  z = G = e, f5(e, e.value, r), z = n, G = t;
+  const t = J, n = z, r = Ue;
+  z = J = e, f5(e, e.value, r), z = n, J = t;
 }
 function f5(e, t, n) {
   let r;
@@ -889,11 +889,11 @@ function ge(e, t, n, r = h1, a) {
     sourceSlots: null,
     cleanups: null,
     value: t,
-    owner: G,
+    owner: J,
     context: null,
     pure: n
   };
-  return G === null || G !== G0 && (G.owned ? G.owned.push(s) : G.owned = [s]), s;
+  return J === null || J !== G0 && (J.owned ? J.owned.push(s) : J.owned = [s]), s;
 }
 function le(e) {
   const t = b1;
@@ -998,7 +998,7 @@ function g5(e, t, n = {}) {
   return H1(() => c0(s)), () => {
     let f = e() || [], h, u;
     return f[c5], y1(() => {
-      let v = f.length, b, k, T, B, N, E, S, P, O;
+      let v = f.length, b, k, T, B, N, E, S, D, O;
       if (v === 0)
         l !== 0 && (c0(s), s = [], r = [], a = [], l = 0, o && (o = [])), n.fallback && (r = [C5], a[0] = ie((M) => (s[0] = M, n.fallback())), l = 1);
       else if (l === 0) {
@@ -1008,9 +1008,9 @@ function g5(e, t, n = {}) {
       } else {
         for (T = new Array(v), B = new Array(v), o && (N = new Array(v)), E = 0, S = Math.min(l, v); E < S && r[E] === f[E]; E++)
           ;
-        for (S = l - 1, P = v - 1; S >= E && P >= E && r[S] === f[P]; S--, P--)
-          T[P] = a[S], B[P] = s[S], o && (N[P] = o[S]);
-        for (b = /* @__PURE__ */ new Map(), k = new Array(P + 1), u = P; u >= E; u--)
+        for (S = l - 1, D = v - 1; S >= E && D >= E && r[S] === f[D]; S--, D--)
+          T[D] = a[S], B[D] = s[S], o && (N[D] = o[S]);
+        for (b = /* @__PURE__ */ new Map(), k = new Array(D + 1), u = D; u >= E; u--)
           O = f[u], h = b.get(O), k[u] = h === void 0 ? -1 : h, b.set(O, u);
         for (h = E; h <= S; h++)
           O = r[h], u = b.get(O), u !== void 0 && u !== -1 ? (T[u] = a[h], B[u] = s[h], o && (N[u] = o[h]), u = k[u], b.set(O, u)) : s[h]();
@@ -1114,7 +1114,7 @@ function p5(e) {
   };
   return R(g5(() => e.each, e.children, t || void 0));
 }
-function J(e) {
+function W(e) {
   let t = !1;
   const n = e.keyed, r = R(() => e.when, void 0, {
     equals: (a, s) => t ? a === s : !a == !s
@@ -2127,14 +2127,14 @@ const X4 = /* @__PURE__ */ p('<svg viewBox="0 0 1024 1024" class="icon"><path d=
 l1(["click"]);
 const na = /* @__PURE__ */ p('<div class="klinecharts-pro-loading"><i class="circle1"></i><i class="circle2"></i><i class="circle3"></i></div>'), S9 = () => na.cloneNode(!0), ra = /* @__PURE__ */ p('<div class="klinecharts-pro-empty"><svg class="icon" viewBox="0 0 1024 1024"><path d="M855.6 427.2H168.5c-12.7 0-24.4 6.9-30.6 18L4.4 684.7C1.5 689.9 0 695.8 0 701.8v287.1c0 19.4 15.7 35.1 35.1 35.1H989c19.4 0 35.1-15.7 35.1-35.1V701.8c0-6-1.5-11.8-4.4-17.1L886.2 445.2c-6.2-11.1-17.9-18-30.6-18zM673.4 695.6c-16.5 0-30.8 11.5-34.3 27.7-12.7 58.5-64.8 102.3-127.2 102.3s-114.5-43.8-127.2-102.3c-3.5-16.1-17.8-27.7-34.3-27.7H119c-26.4 0-43.3-28-31.1-51.4l81.7-155.8c6.1-11.6 18-18.8 31.1-18.8h622.4c13 0 25 7.2 31.1 18.8l81.7 155.8c12.2 23.4-4.7 51.4-31.1 51.4H673.4zM819.9 209.5c-1-1.8-2.1-3.7-3.2-5.5-9.8-16.6-31.1-22.2-47.8-12.6L648.5 261c-17 9.8-22.7 31.6-12.6 48.4 0.9 1.4 1.7 2.9 2.5 4.4 9.5 17 31.2 22.8 48 13L807 257.3c16.7-9.7 22.4-31 12.9-47.8zM375.4 261.1L255 191.6c-16.7-9.6-38-4-47.8 12.6-1.1 1.8-2.1 3.6-3.2 5.5-9.5 16.8-3.8 38.1 12.9 47.8L337.3 327c16.9 9.7 38.6 4 48-13.1 0.8-1.5 1.7-2.9 2.5-4.4 10.2-16.8 4.5-38.6-12.4-48.4zM512 239.3h2.5c19.5 0.3 35.5-15.5 35.5-35.1v-139c0-19.3-15.6-34.9-34.8-35.1h-6.4C489.6 30.3 474 46 474 65.2v139c0 19.5 15.9 35.4 35.5 35.1h2.5z"></path></svg></div>'), aa = () => ra.cloneNode(!0), ia = /* @__PURE__ */ p("<ul></ul>"), sa = /* @__PURE__ */ p("<li></li>"), Ce = (e) => (() => {
   const t = ia.cloneNode(!0);
-  return L(t, $(J, {
+  return L(t, $(W, {
     get when() {
       return e.loading;
     },
     get children() {
       return $(S9, {});
     }
-  }), null), L(t, $(J, {
+  }), null), L(t, $(W, {
     get when() {
       var n;
       return !e.loading && !e.children && !((n = e.dataSource) != null && n.length);
@@ -2142,14 +2142,14 @@ const na = /* @__PURE__ */ p('<div class="klinecharts-pro-loading"><i class="cir
     get children() {
       return $(aa, {});
     }
-  }), null), L(t, $(J, {
+  }), null), L(t, $(W, {
     get when() {
       return e.children;
     },
     get children() {
       return e.children;
     }
-  }), null), L(t, $(J, {
+  }), null), L(t, $(W, {
     get when() {
       return !e.children;
     },
@@ -2243,19 +2243,19 @@ const la = /* @__PURE__ */ p('<div tabindex="0"><div class="selector-container">
           return () => N() && (() => {
             const E = da.cloneNode(!0), S = E.firstChild;
             E.style.setProperty("padding", "8px"), E.style.setProperty("border-bottom", "1px solid #333"), S.$$click = (O) => O.stopPropagation(), S.$$input = (O) => a(O.currentTarget.value);
-            const P = s;
-            return typeof P == "function" ? V1(P, S) : s = S, S.style.setProperty("width", "100%"), S.style.setProperty("padding", "6px 10px"), S.style.setProperty("border", "1px solid var(--klinecharts-pro-border-color)"), S.style.setProperty("border-radius", "4px"), S.style.setProperty("background-color", "var(--klinecharts-pro-popover-background-color)"), S.style.setProperty("color", "#fff"), S.style.setProperty("font-size", "13px"), S.style.setProperty("outline", "none"), Y(() => i1(S, "placeholder", e.searchPlaceholder || "Search...")), Y(() => S.value = r()), E;
+            const D = s;
+            return typeof D == "function" ? V1(D, S) : s = S, S.style.setProperty("width", "100%"), S.style.setProperty("padding", "6px 10px"), S.style.setProperty("border", "1px solid var(--klinecharts-pro-border-color)"), S.style.setProperty("border-radius", "4px"), S.style.setProperty("background-color", "var(--klinecharts-pro-popover-background-color)"), S.style.setProperty("color", "#fff"), S.style.setProperty("font-size", "13px"), S.style.setProperty("outline", "none"), Y(() => i1(S, "placeholder", e.searchPlaceholder || "Search...")), Y(() => S.value = r()), E;
           })();
         })(), B), L(B, () => {
           var N;
           return (N = o()) == null ? void 0 : N.map((E) => {
-            const P = E[e.valueKey ?? "text"] ?? E;
+            const D = E[e.valueKey ?? "text"] ?? E;
             return (() => {
               const O = fa.cloneNode(!0);
               return O.$$click = (M) => {
-                var X;
-                M.stopPropagation(), e.value !== P && ((X = e.onSelected) == null || X.call(e, E)), n(!1), a("");
-              }, L(O, P), O;
+                var G;
+                M.stopPropagation(), e.value !== D && ((G = e.onSelected) == null || G.call(e, E)), n(!1), a("");
+              }, L(O, D), O;
             })();
           });
         }), T;
@@ -2281,7 +2281,7 @@ const ya = /* @__PURE__ */ p('<span class="prefix"></span>'), ha = /* @__PURE__ 
     const s = Ca.cloneNode(!0), l = s.firstChild;
     return s.$$click = () => {
       n == null || n.focus();
-    }, L(s, $(J, {
+    }, L(s, $(W, {
       get when() {
         return t.prefix;
       },
@@ -2304,7 +2304,7 @@ const ya = /* @__PURE__ */ p('<span class="prefix"></span>'), ha = /* @__PURE__ 
       a("focus");
     }), V1((o) => {
       n = o;
-    }, l), L(s, $(J, {
+    }, l), L(s, $(W, {
       get when() {
         return t.suffix;
       },
@@ -2602,42 +2602,46 @@ const i = (e, t) => {
     return !1;
   }).slice(0, n() ? 2 : e.periods.length);
   return (() => {
-    const g = Bc.cloneNode(!0), v = g.firstChild, b = v.firstChild, k = v.nextSibling, T = k.firstChild, B = T.nextSibling, N = k.nextSibling, E = N.firstChild, S = E.nextSibling, P = S.nextSibling, O = P.nextSibling;
+    const g = Bc.cloneNode(!0), v = g.firstChild, b = v.firstChild, k = v.nextSibling, T = k.firstChild, B = T.nextSibling, N = k.nextSibling, E = N.firstChild, S = E.nextSibling, D = S.nextSibling, O = D.nextSibling;
     return V1((M) => {
       t = M;
-    }, g), m1(b, "click", e.onMenuClick, !0), L(g, $(J, {
+    }, g), m1(b, "click", e.onMenuClick, !0), L(g, $(W, {
       get when() {
         return e.symbol;
       },
       get children() {
-        const M = Nc.cloneNode(!0), X = M.firstChild;
-        return m1(M, "click", e.onSymbolClick, !0), L(M, $(J, {
+        const M = Nc.cloneNode(!0), G = M.firstChild;
+        return m1(M, "click", e.onSymbolClick, !0), L(M, $(W, {
           get when() {
             return e.symbol.logo;
           },
           get children() {
-            const q = Dc.cloneNode(!0);
-            return Y(() => i1(q, "src", e.symbol.logo)), q;
+            const X = Dc.cloneNode(!0);
+            return Y(() => i1(X, "src", e.symbol.logo)), X;
           }
-        }), X), L(X, () => e.symbol.shortName ?? e.symbol.name ?? e.symbol.ticker), M;
+        }), G), L(G, () => e.symbol.shortName ?? e.symbol.name ?? e.symbol.ticker), M;
       }
-    }), k), L(g, () => u.map((M, X) => {
-      const q = M.text === e.period.text;
+    }), k), L(g, () => u.map((M, G) => {
+      const X = M.text === e.period.text;
       return (() => {
-        const D = Oc.cloneNode(!0);
-        return D.$$click = (j) => {
-          n() && q ? (e.onMobilePeriodClick ? e.onMobilePeriodClick(M) : e.onMenuClick(), j.stopPropagation()) : (n() && (s(e.period.text), localStorage.setItem("klinechart_secondary_period", e.period.text)), e.onPeriodChange(M));
-        }, L1(D, `item period ${q ? "selected" : ""}`), L(D, () => M.text), D;
+        const P = Oc.cloneNode(!0);
+        return P.$$click = (j) => {
+          n() && X ? (e.onMobilePeriodClick || e.onMenuClick(), j.stopPropagation()) : (n() && (s(e.period.text), localStorage.setItem("klinechart_secondary_period", e.period.text)), e.onPeriodChange(M));
+        }, L1(P, `item period ${X ? "selected" : ""}`), L(P, () => M.text), P;
       })();
-    }), k), L(g, $(J, {
+    }), k), L(g, $(W, {
       get when() {
         return n() && u.length > 1;
       },
       get children() {
         const M = Ec.cloneNode(!0);
-        return M.style.setProperty("margin-left", "4px"), M.style.setProperty("display", "inline-flex"), M.style.setProperty("align-items", "center"), M;
+        return M.$$click = (G) => {
+          G.stopPropagation();
+          const X = u.find((P) => P.text === e.period.text);
+          X && e.onMobilePeriodClick ? e.onMobilePeriodClick(X) : e.onMenuClick();
+        }, M.style.setProperty("margin-left", "4px"), M.style.setProperty("display", "inline-flex"), M.style.setProperty("align-items", "center"), M;
       }
-    }), k), m1(k, "click", e.onIndicatorClick, !0), L(B, () => i("indicator", e.locale)), N.style.setProperty("display", "flex"), N.style.setProperty("gap", "4px"), N.style.setProperty("margin-left", "auto"), N.style.setProperty("align-items", "center"), m1(E, "click", e.onTimezoneClick, !0), m1(S, "click", e.onSettingClick, !0), m1(P, "click", e.onScreenshotClick, !0), O.$$click = () => {
+    }), k), m1(k, "click", e.onIndicatorClick, !0), L(B, () => i("indicator", e.locale)), N.style.setProperty("display", "flex"), N.style.setProperty("gap", "4px"), N.style.setProperty("margin-left", "auto"), N.style.setProperty("align-items", "center"), m1(E, "click", e.onTimezoneClick, !0), m1(S, "click", e.onSettingClick, !0), m1(D, "click", e.onScreenshotClick, !0), O.$$click = () => {
       if (o())
         (document.exitFullscreen || document.msExitFullscreen || document.mozCancelFullScreen || document.webkitExitFullscreen).call(document);
       else {
@@ -2753,7 +2757,7 @@ function yu(e) {
   ];
 }
 const o1 = (e) => ou[e.name](e.class), hu = /* @__PURE__ */ p('<div class="klinecharts-pro-drawing-bar"><span class="split-line"></span><div class="item" tabindex="0"><span style="width:32px;height:32px"></span><div class="icon-arrow"><svg viewBox="0 0 4 6"><path d="M1.07298,0.159458C0.827521,-0.0531526,0.429553,-0.0531526,0.184094,0.159458C-0.0613648,0.372068,-0.0613648,0.716778,0.184094,0.929388L2.61275,3.03303L0.260362,5.07061C0.0149035,5.28322,0.0149035,5.62793,0.260362,5.84054C0.505822,6.05315,0.903789,6.05315,1.14925,5.84054L3.81591,3.53075C4.01812,3.3556,4.05374,3.0908,3.92279,2.88406C3.93219,2.73496,3.87113,2.58315,3.73964,2.46925L1.07298,0.159458Z" stroke="none" stroke-opacity="0"></path></svg></div></div><div class="item"><span style="width:32px;height:32px"></span></div><div class="item"><span style="width:32px;height:32px"></span></div><span class="split-line"></span><div class="item"><span style="width:32px;height:32px"></span></div></div>'), Cu = /* @__PURE__ */ p('<div class="item" tabindex="0"><span style="width:32px;height:32px"></span><div class="icon-arrow"><svg viewBox="0 0 4 6"><path d="M1.07298,0.159458C0.827521,-0.0531526,0.429553,-0.0531526,0.184094,0.159458C-0.0613648,0.372068,-0.0613648,0.716778,0.184094,0.929388L2.61275,3.03303L0.260362,5.07061C0.0149035,5.28322,0.0149035,5.62793,0.260362,5.84054C0.505822,6.05315,0.903789,6.05315,1.14925,5.84054L3.81591,3.53075C4.01812,3.3556,4.05374,3.0908,3.92279,2.88406C3.93219,2.73496,3.87113,2.58315,3.73964,2.46925L1.07298,0.159458Z" stroke="none" stroke-opacity="0"></path></svg></div></div>'), j0 = /* @__PURE__ */ p('<li><span style="padding-left:8px"></span></li>'), Z0 = "drawing_tools", gu = (e) => {
-  const [t, n] = w("horizontalStraightLine"), [r, a] = w("priceChannelLine"), [s, l] = w("circle"), [o, f] = w("fibonacciLine"), [h, u] = w("xabcd"), [g, v] = w("weak_magnet"), [b, k] = w("normal"), [T, B] = w(!1), [N, E] = w(!0), [S, P] = w(""), O = R(() => [{
+  const [t, n] = w("horizontalStraightLine"), [r, a] = w("priceChannelLine"), [s, l] = w("circle"), [o, f] = w("fibonacciLine"), [h, u] = w("xabcd"), [g, v] = w("weak_magnet"), [b, k] = w("normal"), [T, B] = w(!1), [N, E] = w(!0), [S, D] = w(""), O = R(() => [{
     key: "singleLine",
     icon: t(),
     list: cu(e.locale),
@@ -2780,11 +2784,11 @@ const o1 = (e) => ou[e.name](e.class), hu = /* @__PURE__ */ p('<div class="kline
     setter: u
   }]), M = R(() => yu(e.locale));
   return (() => {
-    const X = hu.cloneNode(!0), q = X.firstChild, D = q.nextSibling, j = D.firstChild, H = j.nextSibling, c1 = H.firstChild, X1 = D.nextSibling, F1 = X1.firstChild, j1 = X1.nextSibling, v1 = j1.firstChild, xe = j1.nextSibling, J1 = xe.nextSibling, Z1 = J1.firstChild;
-    return L(X, () => O().map((K) => (() => {
-      const W = Cu.cloneNode(!0), s1 = W.firstChild, C1 = s1.nextSibling, e1 = C1.firstChild;
-      return W.addEventListener("blur", () => {
-        P("");
+    const G = hu.cloneNode(!0), X = G.firstChild, P = X.nextSibling, j = P.firstChild, H = j.nextSibling, c1 = H.firstChild, X1 = P.nextSibling, F1 = X1.firstChild, j1 = X1.nextSibling, v1 = j1.firstChild, xe = j1.nextSibling, J1 = xe.nextSibling, Z1 = J1.firstChild;
+    return L(G, () => O().map((K) => (() => {
+      const q = Cu.cloneNode(!0), s1 = q.firstChild, C1 = s1.nextSibling, e1 = C1.firstChild;
+      return q.addEventListener("blur", () => {
+        D("");
       }), s1.$$click = () => {
         e.onDrawingItemClick({
           groupId: Z0,
@@ -2798,8 +2802,8 @@ const o1 = (e) => ou[e.name](e.class), hu = /* @__PURE__ */ p('<div class="kline
           return K.icon;
         }
       })), C1.$$click = () => {
-        K.key === S() ? P("") : P(K.key);
-      }, L(W, (() => {
+        K.key === S() ? D("") : D(K.key);
+      }, L(q, (() => {
         const r1 = R(() => K.key === S());
         return () => r1() && $(Ce, {
           class: "list",
@@ -2811,7 +2815,7 @@ const o1 = (e) => ou[e.name](e.class), hu = /* @__PURE__ */ p('<div class="kline
                   name: A1.key,
                   lock: T(),
                   mode: b()
-                }), P("");
+                }), D("");
               }, L(a1, $(o1, {
                 get name() {
                   return A1.key;
@@ -2820,25 +2824,25 @@ const o1 = (e) => ou[e.name](e.class), hu = /* @__PURE__ */ p('<div class="kline
             })());
           }
         });
-      })(), null), Y(() => i1(e1, "class", K.key === S() ? "rotate" : "")), W;
-    })()), q), D.addEventListener("blur", () => {
-      P("");
+      })(), null), Y(() => i1(e1, "class", K.key === S() ? "rotate" : "")), q;
+    })()), X), P.addEventListener("blur", () => {
+      D("");
     }), j.$$click = () => {
       let K = g();
       b() !== "normal" && (K = "normal"), k(K), e.onModeChange(K);
     }, L(j, (() => {
       const K = R(() => g() === "weak_magnet");
       return () => K() ? (() => {
-        const W = R(() => b() === "weak_magnet");
-        return () => W() ? $(o1, {
+        const q = R(() => b() === "weak_magnet");
+        return () => q() ? $(o1, {
           name: "weak_magnet",
           class: "selected"
         }) : $(o1, {
           name: "weak_magnet"
         });
       })() : (() => {
-        const W = R(() => b() === "strong_magnet");
-        return () => W() ? $(o1, {
+        const q = R(() => b() === "strong_magnet");
+        return () => q() ? $(o1, {
           name: "strong_magnet",
           class: "selected"
         }) : $(o1, {
@@ -2846,21 +2850,21 @@ const o1 = (e) => ou[e.name](e.class), hu = /* @__PURE__ */ p('<div class="kline
         });
       })();
     })()), H.$$click = () => {
-      S() === "mode" ? P("") : P("mode");
-    }, L(D, (() => {
+      S() === "mode" ? D("") : D("mode");
+    }, L(P, (() => {
       const K = R(() => S() === "mode");
       return () => K() && $(Ce, {
         class: "list",
         get children() {
-          return M().map((W) => (() => {
+          return M().map((q) => (() => {
             const s1 = j0.cloneNode(!0), C1 = s1.firstChild;
             return s1.$$click = () => {
-              v(W.key), k(W.key), e.onModeChange(W.key), P("");
+              v(q.key), k(q.key), e.onModeChange(q.key), D("");
             }, L(s1, $(o1, {
               get name() {
-                return W.key;
+                return q.key;
               }
-            }), C1), L(C1, () => W.text), s1;
+            }), C1), L(C1, () => q.text), s1;
           })());
         }
       });
@@ -2888,7 +2892,7 @@ const o1 = (e) => ou[e.name](e.class), hu = /* @__PURE__ */ p('<div class="kline
       e.onRemoveClick(Z0);
     }, L(Z1, $(o1, {
       name: "remove"
-    })), Y(() => i1(c1, "class", S() === "mode" ? "rotate" : "")), X;
+    })), Y(() => i1(c1, "class", S() === "mode" ? "rotate" : "")), G;
   })();
 };
 l1(["click"]);
@@ -3688,7 +3692,7 @@ const _u = /* @__PURE__ */ p('<div class="klinecharts-pro-setting-modal-content"
           const s = Iu.cloneNode(!0), l = s.firstChild, o = l.firstChild;
           return s.$$click = () => {
             e.onSymbolSelected(a), e.onClose();
-          }, L(l, $(J, {
+          }, L(l, $(W, {
             get when() {
               return a.logo;
             },
@@ -3736,10 +3740,10 @@ function ae(e, t, n, r) {
 }
 const Eu = (e) => {
   let t, n = null, r;
-  const [a, s] = w(!1), [l, o] = w(e.theme), [f, h] = w(e.styles), [u, g] = w(e.locale), [v, b] = w(e.symbol), [k, T] = w(e.period), [B, N] = w(!1), [E, S] = w([...e.mainIndicators]), [P, O] = w({}), [M, X] = w(!1), [q, D] = w({
+  const [a, s] = w(!1), [l, o] = w(e.theme), [f, h] = w(e.styles), [u, g] = w(e.locale), [v, b] = w(e.symbol), [k, T] = w(e.period), [B, N] = w(!1), [E, S] = w([...e.mainIndicators]), [D, O] = w({}), [M, G] = w(!1), [X, P] = w({
     key: e.timezone,
     text: R0(e.timezone, e.locale)
-  }), [j, H] = w(!1), [c1, X1] = w(), [F1, j1] = w(""), [v1, xe] = w(e.drawingBarVisible), [J1, Z1] = w(!1), [K, W] = w(!1), [s1, C1] = w({
+  }), [j, H] = w(!1), [c1, X1] = w(), [F1, j1] = w(""), [v1, xe] = w(e.drawingBarVisible), [J1, Z1] = w(!1), [K, q] = w(!1), [s1, C1] = w({
     visible: !1,
     indicatorName: "",
     paneId: "",
@@ -3948,18 +3952,18 @@ const Eu = (e) => {
     setLocale: g,
     getLocale: () => u(),
     setTimezone: (c) => {
-      D({
+      P({
         key: c,
         text: R0(e.timezone, u())
       });
     },
-    getTimezone: () => q().key,
+    getTimezone: () => X().key,
     setSymbol: b,
     getSymbol: () => v(),
     setPeriod: T,
     getPeriod: () => k(),
     getMainIndicators: () => E(),
-    getSubIndicators: () => P(),
+    getSubIndicators: () => D(),
     setMainIndicators: S,
     setSubIndicators: O,
     overrideIndicator: (c, d) => {
@@ -4351,7 +4355,7 @@ const Eu = (e) => {
               n == null || n.removeIndicator("candle_pane", y.indicatorName), _.splice(_.indexOf(y.indicatorName), 1), S(_), a1(y.indicatorName, "candle_pane", "main", "remove");
             } else {
               const _ = {
-                ...P()
+                ...D()
               };
               n == null || n.removeIndicator(y.paneId, y.indicatorName), delete _[y.indicatorName], O(_), a1(y.indicatorName, y.paneId, "sub", "remove");
             }
@@ -4372,7 +4376,7 @@ const Eu = (e) => {
     let m = !0;
     return H1(() => {
       m = !1;
-    }), c && e.datafeed.unsubscribe(c.symbol, c.period), s(!0), W(!0), (async () => {
+    }), c && e.datafeed.unsubscribe(c.symbol, c.period), s(!0), q(!0), (async () => {
       try {
         const [I, y] = ke(C, (/* @__PURE__ */ new Date()).getTime(), 500), _ = await e.datafeed.getHistoryKLineData(d, C, I, y);
         if (!m)
@@ -4381,7 +4385,7 @@ const Eu = (e) => {
           n == null || n.updateData(A);
         });
       } finally {
-        m && (s(!1), W(!1));
+        m && (s(!1), q(!1));
       }
     })(), {
       symbol: d,
@@ -4481,10 +4485,10 @@ const Eu = (e) => {
   }), d1(() => {
     n == null || n.setLocale(u());
   }), d1(() => {
-    n == null || n.setTimezone(q().key);
+    n == null || n.setTimezone(X().key);
   }), d1(() => {
     f() && (n == null || n.setStyles(f()), X1(H4(n.getStyles())));
-  }), [Du.cloneNode(!0), $(J, {
+  }), [Du.cloneNode(!0), $(W, {
     get when() {
       return J1();
     },
@@ -4504,7 +4508,7 @@ const Eu = (e) => {
         }
       });
     }
-  }), $(J, {
+  }), $(W, {
     get when() {
       return B();
     },
@@ -4517,7 +4521,7 @@ const Eu = (e) => {
           return E();
         },
         get subIndicators() {
-          return P();
+          return D();
         },
         onClose: () => {
           N(!1);
@@ -4530,7 +4534,7 @@ const Eu = (e) => {
         },
         onSubIndicatorChange: (c) => {
           const d = {
-            ...P()
+            ...D()
           };
           if (c.added) {
             const C = ae(n, c.name);
@@ -4541,7 +4545,7 @@ const Eu = (e) => {
         }
       });
     }
-  }), $(J, {
+  }), $(W, {
     get when() {
       return M();
     },
@@ -4551,15 +4555,15 @@ const Eu = (e) => {
           return e.locale;
         },
         get timezone() {
-          return q();
+          return X();
         },
         onClose: () => {
-          X(!1);
+          G(!1);
         },
-        onConfirm: D
+        onConfirm: P
       });
     }
-  }), $(J, {
+  }), $(W, {
     get when() {
       return j();
     },
@@ -4586,7 +4590,7 @@ const Eu = (e) => {
         }
       });
     }
-  }), $(J, {
+  }), $(W, {
     get when() {
       return F1().length > 0;
     },
@@ -4603,7 +4607,7 @@ const Eu = (e) => {
         }
       });
     }
-  }), $(J, {
+  }), $(W, {
     get when() {
       return s1().visible;
     },
@@ -4667,7 +4671,7 @@ const Eu = (e) => {
       N((c) => !c);
     },
     onTimezoneClick: () => {
-      X((c) => !c);
+      G((c) => !c);
     },
     onSettingClick: () => {
       H((c) => !c);
@@ -4680,14 +4684,14 @@ const Eu = (e) => {
     }
   }), (() => {
     const c = Nu.cloneNode(!0), d = c.firstChild;
-    return L(c, $(J, {
+    return L(c, $(W, {
       get when() {
         return K();
       },
       get children() {
         return $(S9, {});
       }
-    }), d), L(c, $(J, {
+    }), d), L(c, $(W, {
       get when() {
         return v1();
       },
