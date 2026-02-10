@@ -138,6 +138,8 @@ export interface ChartProOptions {
   onIndicatorChange?: IndicatorEventCallback;
   /** Callback fired when a period item is clicked on mobile */
   onMobilePeriodClick?: (period: Period) => void;
+  /** Custom background color for screenshots */
+  screenshotBackgroundColor?: string;
 }
 import type { CandleType, LineType, OverlayCreate, OverlayMode, OverlayStyle, Point, YAxisType } from "klinecharts";
 

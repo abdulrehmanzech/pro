@@ -75,9 +75,10 @@ import {
 } from "./types";
 
 export interface ChartProComponentProps
-  extends Required<Omit<ChartProOptions, "container" | "onIndicatorChange" | "onMobilePeriodClick">> {
+  extends Required<Omit<ChartProOptions, "container" | "onIndicatorChange" | "onMobilePeriodClick" | "screenshotBackgroundColor">> {
   onIndicatorChange?: IndicatorEventCallback;
   onMobilePeriodClick?: (period: Period) => void;
+  screenshotBackgroundColor?: string;
   ref: (chart: ChartPro) => void;
 }
 
@@ -1700,10 +1701,11 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
         }}
         onScreenshotClick={() => {
           if (widget) {
+            const ssBgColor = props.screenshotBackgroundColor || (props.theme === "dark" ? "#11131E" : "#ffffff");
             const url = widget.getConvertPictureUrl(
               true,
               "jpeg",
-              props.theme === "dark" ? "#151517" : "#ffffff"
+              ssBgColor
             );
             setScreenshotUrl(url);
           }

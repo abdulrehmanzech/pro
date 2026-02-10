@@ -87,6 +87,7 @@ export default class KLineChartPro implements ChartPro {
           datafeed={options.datafeed}
           onIndicatorChange={options.onIndicatorChange}
           onMobilePeriodClick={options.onMobilePeriodClick}
+          screenshotBackgroundColor={options.screenshotBackgroundColor}
         />
       ),
       this._container
