@@ -305,7 +305,7 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
             gap: "4px",
             "margin-left": "auto",
             "align-items": "center",
-            "padding-right": "var(--klinecharts-pro-period-bar-padding-right)",
+            "padding-right": fullScreen() ? "0px" : "var(--klinecharts-pro-period-bar-padding-right)",
           }}
         >
           <div class="item tools" onClick={props.onTimezoneClick}>
