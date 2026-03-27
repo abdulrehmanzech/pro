@@ -42,7 +42,7 @@ const Modal: ParentComponent<ModalProps> = (props) => {
         style={{
           width: props.isMobile ? "100%" : `${props.width ?? 400}px`,
           height: props.isMobile ? "100%" : "auto",
-          "max-height": props.isMobile ? "100vh" : "90vh",
+          "max-height": props.isMobile ? "auto" : "90vh",
         }}
         class="inner"
         classList={{ "mobile-inner": props.isMobile }}
