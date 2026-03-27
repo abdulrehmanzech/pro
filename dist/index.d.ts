@@ -93,6 +93,8 @@ export interface ChartProOptions {
 	onIndicatorChange?: IndicatorEventCallback;
 	/** Callback fired when a period item is clicked on mobile */
 	onMobilePeriodClick?: (period: Period) => void;
+	/** Callback fired when the "More" icon is clicked on mobile */
+	onMobileMoreClick?: () => void;
 	/** Custom background color for screenshots */
 	screenshotBackgroundColor?: string;
 }
@@ -150,6 +152,7 @@ export interface ChartPro {
 	getDrawings?(ticker: string): OverlayInfo[];
 	clearDrawings?(ticker: string): void;
 	enableAutoSave?(ticker: string, enabled?: boolean): void;
+	onMobileMoreClick?(): void;
 }
 export declare class DefaultDatafeed implements Datafeed {
 	constructor(apiKey: string);
