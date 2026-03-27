@@ -87,6 +87,7 @@ export default class KLineChartPro implements ChartPro {
           datafeed={options.datafeed}
           onIndicatorChange={options.onIndicatorChange}
           onMobilePeriodClick={options.onMobilePeriodClick}
+          onMobileMoreClick={options.onMobileMoreClick}
           screenshotBackgroundColor={options.screenshotBackgroundColor}
         />
       ),
@@ -238,5 +239,17 @@ export default class KLineChartPro implements ChartPro {
 
   enableAutoSave(ticker: string, enabled: boolean = true): void {
     this._chartApi?.enableAutoSave?.(ticker, enabled);
+  }
+
+  setIndicatorModalVisible(visible: boolean): void {
+    this._chartApi?.setIndicatorModalVisible?.(visible);
+  }
+
+  setTimezoneModalVisible(visible: boolean): void {
+    this._chartApi?.setTimezoneModalVisible?.(visible);
+  }
+
+  setSettingModalVisible(visible: boolean): void {
+    this._chartApi?.setSettingModalVisible?.(visible);
   }
 }

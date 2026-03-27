@@ -58,6 +58,7 @@ import {
   ScreenshotModal,
   IndicatorSettingModal,
   SymbolSearchModal,
+  MobileMoreModal,
 } from "./widget";
 
 import { translateTimezone } from "./widget/timezone-modal/data";
@@ -75,9 +76,10 @@ import {
 } from "./types";
 
 export interface ChartProComponentProps
-  extends Required<Omit<ChartProOptions, "container" | "onIndicatorChange" | "onMobilePeriodClick" | "screenshotBackgroundColor">> {
+  extends Required<Omit<ChartProOptions, "container" | "onIndicatorChange" | "onMobilePeriodClick" | "onMobileMoreClick" | "screenshotBackgroundColor">> {
   onIndicatorChange?: IndicatorEventCallback;
   onMobilePeriodClick?: (period: Period) => void;
+  onMobileMoreClick?: () => void;
   screenshotBackgroundColor?: string;
   ref: (chart: ChartPro) => void;
 }
@@ -170,6 +172,9 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     createSignal(false);
 
   const [loadingVisible, setLoadingVisible] = createSignal(false);
+
+  const [mobileMoreModalVisible, setMobileMoreModalVisible] =
+    createSignal(false);
 
   const [indicatorSettingModalParams, setIndicatorSettingModalParams] =
     createSignal({
@@ -639,6 +644,10 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
         console.warn("overrideOverlay method not available on widget");
       }
     },
+
+    setIndicatorModalVisible,
+    setTimezoneModalVisible,
+    setSettingModalVisible,
 
     dispose: (): void => {
       // Note: We already have a global dispose function from klinecharts
@@ -1671,6 +1680,23 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
           }}
         />
       </Show>
+      <Show when={mobileMoreModalVisible()}>
+        <MobileMoreModal
+          locale={props.locale}
+          onIndicatorClick={() => {
+            setIndicatorModalVisible(true);
+          }}
+          onTimezoneClick={() => {
+            setTimezoneModalVisible(true);
+          }}
+          onSettingClick={() => {
+            setSettingModalVisible(true);
+          }}
+          onClose={() => {
+            setMobileMoreModalVisible(false);
+          }}
+        />
+      </Show>
       <PeriodBar
         locale={props.locale}
         symbol={symbol()}
@@ -1689,6 +1715,13 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
           setSymbolSearchModalVisible(!symbolSearchModalVisible());
         }}
         onMobilePeriodClick={props.onMobilePeriodClick}
+        onMobileMoreClick={() => {
+          if (props.onMobileMoreClick) {
+            props.onMobileMoreClick();
+          } else {
+            setMobileMoreModalVisible(true);
+          }
+        }}
         onPeriodChange={setPeriod}
         onIndicatorClick={() => {
           setIndicatorModalVisible((visible) => !visible);

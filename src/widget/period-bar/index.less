@@ -100,10 +100,15 @@
   }
 
   @media (max-width: 767px) {
-    .mobile-separate-arrow {
+    .mobile-separate-arrow, .mobile-more-icon {
       display: inline-flex;
       align-items: center;
       margin-left: 4px;
+      padding: 0 4px;
+      color: var(--klinecharts-pro-text-color);
+      &:hover {
+        color: var(--klinecharts-pro-primary-color);
+      }
     }
   }
 }
