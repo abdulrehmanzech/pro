@@ -4887,7 +4887,7 @@ class td {
         return t.locale ?? "zh-CN";
       },
       get drawingBarVisible() {
-        return t.drawingBarVisible ?? !0;
+        return t.drawingBarVisible ?? !1;
       },
       get symbol() {
         return t.symbol;
