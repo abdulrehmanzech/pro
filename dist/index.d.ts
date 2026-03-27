@@ -153,6 +153,9 @@ export interface ChartPro {
 	clearDrawings?(ticker: string): void;
 	enableAutoSave?(ticker: string, enabled?: boolean): void;
 	onMobileMoreClick?(): void;
+	setIndicatorModalVisible(visible: boolean): void;
+	setTimezoneModalVisible(visible: boolean): void;
+	setSettingModalVisible(visible: boolean): void;
 }
 export declare class DefaultDatafeed implements Datafeed {
 	constructor(apiKey: string);
@@ -210,6 +213,9 @@ export declare class KLineChartPro implements ChartPro {
 	getDrawings(ticker: string): OverlayInfo[];
 	clearDrawings(ticker: string): void;
 	enableAutoSave(ticker: string, enabled?: boolean): void;
+	setIndicatorModalVisible(visible: boolean): void;
+	setTimezoneModalVisible(visible: boolean): void;
+	setSettingModalVisible(visible: boolean): void;
 }
 declare function load(key: string, ls: any): void;
 
