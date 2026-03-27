@@ -2196,7 +2196,7 @@ const aa = /* @__PURE__ */ p('<div class="klinecharts-pro-loading"><i class="cir
       }), o;
     })();
   })(), null), G((c) => {
-    const o = !!e.isMobile, C = e.isMobile ? "100%" : `${e.width ?? 400}px`, f = e.isMobile ? "100%" : "auto", u = e.isMobile ? "auto" : "90vh", v = !!e.isMobile, $ = !!e.isMobile, x = !!e.isMobile;
+    const o = !!e.isMobile, C = e.isMobile ? "100%" : `${e.width ?? 400}px`, f = (e.isMobile, "auto"), u = e.isMobile ? "auto" : "90vh", v = !!e.isMobile, $ = !!e.isMobile, x = !!e.isMobile;
     return o !== c._v$ && t.classList.toggle("mobile-modal", c._v$ = o), C !== c._v$2 && n.style.setProperty("width", c._v$2 = C), f !== c._v$3 && n.style.setProperty("height", c._v$3 = f), u !== c._v$4 && n.style.setProperty("max-height", c._v$4 = u), v !== c._v$5 && n.classList.toggle("mobile-inner", c._v$5 = v), $ !== c._v$6 && r.classList.toggle("mobile-title", c._v$6 = $), x !== c._v$7 && s.classList.toggle("mobile-content", c._v$7 = x), c;
   }, {
     _v$: void 0,
@@ -4887,7 +4887,7 @@ class td {
         return t.locale ?? "zh-CN";
       },
       get drawingBarVisible() {
-        return t.drawingBarVisible ?? !1;
+        return t.drawingBarVisible ?? (typeof window < "u" && window.innerWidth > 768);
       },
       get symbol() {
         return t.symbol;
