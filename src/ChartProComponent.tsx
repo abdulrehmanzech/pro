@@ -1560,6 +1560,82 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
   return (
     <>
       <i class="icon-close klinecharts-pro-load-icon" />
+      <PeriodBar
+        locale={props.locale}
+        symbol={symbol()}
+        spread={drawingBarVisible()}
+        period={period()}
+        periods={props.periods}
+        onMenuClick={async () => {
+          try {
+            await startTransition(() =>
+              setDrawingBarVisible(!drawingBarVisible())
+            );
+            widget?.resize();
+          } catch (e) {}
+        }}
+        onSymbolClick={() => {
+          setSymbolSearchModalVisible(!symbolSearchModalVisible());
+        }}
+        onMobilePeriodClick={props.onMobilePeriodClick}
+        onMobileMoreClick={() => {
+          if (props.onMobileMoreClick) {
+            props.onMobileMoreClick();
+          } else {
+            setMobileMoreModalVisible(true);
+          }
+        }}
+        onPeriodChange={setPeriod}
+        onIndicatorClick={() => {
+          setIndicatorModalVisible((visible) => !visible);
+        }}
+        onTimezoneClick={() => {
+          setTimezoneModalVisible((visible) => !visible);
+        }}
+        onSettingClick={() => {
+          setSettingModalVisible((visible) => !visible);
+        }}
+        onScreenshotClick={() => {
+          if (widget) {
+            const ssBgColor =
+              props.screenshotBackgroundColor ||
+              (props.theme === "dark" ? "#11131E" : "#ffffff");
+            const url = widget.getConvertPictureUrl(true, "jpeg", ssBgColor);
+            setScreenshotUrl(url);
+          }
+        }}
+      />
+      <div class="klinecharts-pro-content">
+        <Show when={loadingVisible()}>
+          <Loading />
+        </Show>
+        <Show when={drawingBarVisible()}>
+          <DrawingBar
+            locale={props.locale}
+            onDrawingItemClick={(overlay) => {
+              widget?.createOverlay(overlay);
+            }}
+            onModeChange={(mode) => {
+              widget?.overrideOverlay({ mode: mode as OverlayMode });
+            }}
+            onLockChange={(lock) => {
+              widget?.overrideOverlay({ lock });
+            }}
+            onVisibleChange={(visible) => {
+              widget?.overrideOverlay({ visible });
+            }}
+            onRemoveClick={(groupId) => {
+              widget?.removeOverlay({ groupId });
+            }}
+          />
+        </Show>
+        <div
+          ref={(el) => (widgetRef = el as HTMLDivElement)}
+          class="klinecharts-pro-widget"
+          data-drawing-bar-visible={drawingBarVisible()}
+        />
+      </div>
+
       <Show when={symbolSearchModalVisible()}>
         <SymbolSearchModal
           locale={props.locale}
@@ -1676,7 +1752,12 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
               modalParams.paneId
             );
             const type = modalParams.paneId === "candle_pane" ? "main" : "sub";
-            emitIndicatorEvent(modalParams.indicatorName, modalParams.paneId, type, "change");
+            emitIndicatorEvent(
+              modalParams.indicatorName,
+              modalParams.paneId,
+              type,
+              "change"
+            );
           }}
         />
       </Show>
@@ -1697,85 +1778,6 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
           }}
         />
       </Show>
-      <PeriodBar
-        locale={props.locale}
-        symbol={symbol()}
-        spread={drawingBarVisible()}
-        period={period()}
-        periods={props.periods}
-        onMenuClick={async () => {
-          try {
-            await startTransition(() =>
-              setDrawingBarVisible(!drawingBarVisible())
-            );
-            widget?.resize();
-          } catch (e) {}
-        }}
-        onSymbolClick={() => {
-          setSymbolSearchModalVisible(!symbolSearchModalVisible());
-        }}
-        onMobilePeriodClick={props.onMobilePeriodClick}
-        onMobileMoreClick={() => {
-          if (props.onMobileMoreClick) {
-            props.onMobileMoreClick();
-          } else {
-            setMobileMoreModalVisible(true);
-          }
-        }}
-        onPeriodChange={setPeriod}
-        onIndicatorClick={() => {
-          setIndicatorModalVisible((visible) => !visible);
-        }}
-        onTimezoneClick={() => {
-          setTimezoneModalVisible((visible) => !visible);
-        }}
-        onSettingClick={() => {
-          setSettingModalVisible((visible) => !visible);
-        }}
-        onScreenshotClick={() => {
-          if (widget) {
-            const ssBgColor = props.screenshotBackgroundColor || (props.theme === "dark" ? "#11131E" : "#ffffff");
-            const url = widget.getConvertPictureUrl(
-              true,
-              "jpeg",
-              ssBgColor
-            );
-            setScreenshotUrl(url);
-          }
-        }}
-      />
-      <div 
-      class="klinecharts-pro-content">
-        <Show when={loadingVisible()}>
-          <Loading />
-        </Show>
-        <Show when={drawingBarVisible()}>
-          <DrawingBar
-            locale={props.locale}
-            onDrawingItemClick={(overlay) => {
-              widget?.createOverlay(overlay);
-            }}
-            onModeChange={(mode) => {
-              widget?.overrideOverlay({ mode: mode as OverlayMode });
-            }}
-            onLockChange={(lock) => {
-              widget?.overrideOverlay({ lock });
-            }}
-            onVisibleChange={(visible) => {
-              widget?.overrideOverlay({ visible });
-            }}
-            onRemoveClick={(groupId) => {
-              widget?.removeOverlay({ groupId });
-            }}
-          />
-        </Show>
-        <div
-          // ref={widgetRef}
-          ref={el => widgetRef = el as HTMLDivElement}  
-          class="klinecharts-pro-widget"
-          data-drawing-bar-visible={drawingBarVisible()}
-        />
-      </div>
     </>
   );
 };
