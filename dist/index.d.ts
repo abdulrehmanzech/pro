@@ -75,6 +75,14 @@ export interface IndicatorEventData {
 }
 /** Callback type for indicator change events */
 export type IndicatorEventCallback = (data: IndicatorEventData) => void;
+export interface OrderToolsState {
+	openOrders: boolean;
+}
+export interface OrderToolsOptions {
+	visible?: boolean;
+	openOrders?: boolean;
+	onChange?: (state: OrderToolsState) => void;
+}
 export interface ChartProOptions {
 	container: string | HTMLElement;
 	styles?: DeepPartial<Styles>;
@@ -97,6 +105,8 @@ export interface ChartProOptions {
 	onMobileMoreClick?: () => void;
 	/** Custom background color for screenshots */
 	screenshotBackgroundColor?: string;
+	/** Native header order tools dropdown state */
+	orderTools?: OrderToolsOptions;
 }
 export interface ChartConvertFinder {
 	paneId?: string;
@@ -160,6 +170,8 @@ export interface ChartPro {
 	setIndicatorModalVisible(visible: boolean): void;
 	setTimezoneModalVisible(visible: boolean): void;
 	setSettingModalVisible(visible: boolean): void;
+	getOrderToolsState(): OrderToolsState;
+	setOrderToolsState(state: Partial<OrderToolsState>): void;
 	convertToPixel(points: Partial<Point> | Array<Partial<Point>>, finder: ChartConvertFinder): Partial<Coordinate> | Array<Partial<Coordinate>>;
 	convertFromPixel(coordinates: Array<Partial<Coordinate>>, finder: ChartConvertFinder): Partial<Point> | Array<Partial<Point>>;
 	getVisibleRange(): VisibleRange;
@@ -226,6 +238,10 @@ export declare class KLineChartPro implements ChartPro {
 	setIndicatorModalVisible(visible: boolean): void;
 	setTimezoneModalVisible(visible: boolean): void;
 	setSettingModalVisible(visible: boolean): void;
+	getOrderToolsState(): OrderToolsState;
+	setOrderToolsState(state: {
+		openOrders?: boolean;
+	}): void;
 	convertToPixel(points: Partial<Point> | Array<Partial<Point>>, finder: {
 		paneId?: string;
 		absolute?: boolean;
