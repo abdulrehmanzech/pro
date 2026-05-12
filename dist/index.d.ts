@@ -1,4 +1,4 @@
-import { CandleType, DeepPartial, KLineData, LineType, OverlayCreate, OverlayMode, OverlayStyle, Point, Styles, YAxisType } from 'klinecharts';
+import { ActionCallback, ActionType, CandleType, Coordinate, DeepPartial, KLineData, LineType, OverlayCreate, OverlayMode, OverlayStyle, Point, Styles, VisibleRange, YAxisType } from 'klinecharts';
 
 export interface SymbolInfo {
 	ticker: string;
@@ -98,6 +98,10 @@ export interface ChartProOptions {
 	/** Custom background color for screenshots */
 	screenshotBackgroundColor?: string;
 }
+export interface ChartConvertFinder {
+	paneId?: string;
+	absolute?: boolean;
+}
 export interface OverlayInfo {
 	id: string;
 	name?: string;
@@ -156,6 +160,12 @@ export interface ChartPro {
 	setIndicatorModalVisible(visible: boolean): void;
 	setTimezoneModalVisible(visible: boolean): void;
 	setSettingModalVisible(visible: boolean): void;
+	convertToPixel(points: Partial<Point> | Array<Partial<Point>>, finder: ChartConvertFinder): Partial<Coordinate> | Array<Partial<Coordinate>>;
+	convertFromPixel(coordinates: Array<Partial<Coordinate>>, finder: ChartConvertFinder): Partial<Point> | Array<Partial<Point>>;
+	getVisibleRange(): VisibleRange;
+	getDataList(): KLineData[];
+	subscribeAction(type: ActionType, callback: ActionCallback): void;
+	unsubscribeAction(type: ActionType, callback?: ActionCallback): void;
 }
 export declare class DefaultDatafeed implements Datafeed {
 	constructor(apiKey: string);
@@ -216,6 +226,18 @@ export declare class KLineChartPro implements ChartPro {
 	setIndicatorModalVisible(visible: boolean): void;
 	setTimezoneModalVisible(visible: boolean): void;
 	setSettingModalVisible(visible: boolean): void;
+	convertToPixel(points: Partial<Point> | Array<Partial<Point>>, finder: {
+		paneId?: string;
+		absolute?: boolean;
+	}): Partial<Coordinate> | Array<Partial<Coordinate>>;
+	convertFromPixel(coordinates: Array<Partial<Coordinate>>, finder: {
+		paneId?: string;
+		absolute?: boolean;
+	}): Partial<Point> | Array<Partial<Point>>;
+	getVisibleRange(): VisibleRange;
+	getDataList(): KLineData[];
+	subscribeAction(type: ActionType, callback: ActionCallback): void;
+	unsubscribeAction(type: ActionType, callback?: ActionCallback): void;
 }
 declare function load(key: string, ls: any): void;
 
