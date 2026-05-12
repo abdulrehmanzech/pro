@@ -174,6 +174,8 @@ export interface ChartPro {
 	setIndicatorModalVisible(visible: boolean): void;
 	setTimezoneModalVisible(visible: boolean): void;
 	setSettingModalVisible(visible: boolean): void;
+	getDataList?(): KLineData[];
+	getVisibleRange?(): any;
 }
 export declare class DefaultDatafeed implements Datafeed {
 	constructor(apiKey: string);
@@ -234,6 +236,8 @@ export declare class KLineChartPro implements ChartPro {
 	setIndicatorModalVisible(visible: boolean): void;
 	setTimezoneModalVisible(visible: boolean): void;
 	setSettingModalVisible(visible: boolean): void;
+	getDataList(): KLineData[];
+	getVisibleRange(): any;
 }
 declare function load(key: string, ls: any): void;
 

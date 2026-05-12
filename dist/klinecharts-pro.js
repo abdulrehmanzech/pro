@@ -607,7 +607,7 @@ const H9 = {
 }, u5 = {
   name: "orderLine",
   totalStep: 2,
-  needDefaultPointFigure: !1,
+  needDefaultPointFigure: !0,
   needDefaultXAxisFigure: !1,
   needDefaultYAxisFigure: !1,
   createPointFigures: ({ overlay: e, coordinates: t, bounding: n, precision: r }) => {
@@ -4360,6 +4360,14 @@ const Ju = (e) => {
     setIndicatorModalVisible: w,
     setTimezoneModalVisible: h,
     setSettingModalVisible: Q,
+    getDataList: () => {
+      var c;
+      return ((c = n == null ? void 0 : n.getDataList) == null ? void 0 : c.call(n)) ?? [];
+    },
+    getVisibleRange: () => {
+      var c;
+      return (c = n == null ? void 0 : n.getVisibleRange) == null ? void 0 : c.call(n);
+    },
     dispose: () => {
       t && l0(t);
     },
@@ -5355,6 +5363,14 @@ class id {
   setSettingModalVisible(t) {
     var n, r;
     (r = (n = this._chartApi) == null ? void 0 : n.setSettingModalVisible) == null || r.call(n, t);
+  }
+  getDataList() {
+    var t, n;
+    return ((n = (t = this._chartApi) == null ? void 0 : t.getDataList) == null ? void 0 : n.call(t)) || [];
+  }
+  getVisibleRange() {
+    var t, n;
+    return (n = (t = this._chartApi) == null ? void 0 : t.getVisibleRange) == null ? void 0 : n.call(t);
   }
 }
 d5.forEach((e) => {
