@@ -129,7 +129,6 @@ function createIndicator(
       // ignore if override not supported
     }
   }
-
   return paneId;
 }
 

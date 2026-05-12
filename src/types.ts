@@ -27,6 +27,7 @@ export interface SymbolInfo {
   logo?: string;
 }
 
+
 export interface Period {
   multiplier: number;
   timespan: string;

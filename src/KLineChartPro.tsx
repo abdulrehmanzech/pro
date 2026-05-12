@@ -41,6 +41,7 @@ const Logo = (
   </svg>
 );
 
+
 export default class KLineChartPro implements ChartPro {
   constructor(options: ChartProOptions) {
     if (utils.isString(options.container)) {
