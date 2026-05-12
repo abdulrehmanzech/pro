@@ -75,20 +75,6 @@ export interface IndicatorEventData {
 }
 /** Callback type for indicator change events */
 export type IndicatorEventCallback = (data: IndicatorEventData) => void;
-export interface OrderLineExtendData {
-	id: string;
-	price: number;
-	label?: string;
-	quantity?: string | number;
-	side?: "buy" | "sell";
-	draggable?: boolean;
-	[key: string]: any;
-}
-export interface OrderLineEventData {
-	id: string;
-	price: number;
-	extendData?: OrderLineExtendData;
-}
 export interface ChartProOptions {
 	container: string | HTMLElement;
 	styles?: DeepPartial<Styles>;
@@ -105,10 +91,6 @@ export interface ChartProOptions {
 	datafeed: Datafeed;
 	/** Callback fired when an indicator is added or removed */
 	onIndicatorChange?: IndicatorEventCallback;
-	/** Callback fired while an order line is being dragged */
-	onOrderDrag?: (order: OrderLineEventData) => void;
-	/** Callback fired when an order line drag completes */
-	onOrderDragEnd?: (order: OrderLineEventData) => void;
 	/** Callback fired when a period item is clicked on mobile */
 	onMobilePeriodClick?: (period: Period) => void;
 	/** Callback fired when the "More" icon is clicked on mobile */
@@ -174,8 +156,6 @@ export interface ChartPro {
 	setIndicatorModalVisible(visible: boolean): void;
 	setTimezoneModalVisible(visible: boolean): void;
 	setSettingModalVisible(visible: boolean): void;
-	getDataList?(): KLineData[];
-	getVisibleRange?(): any;
 }
 export declare class DefaultDatafeed implements Datafeed {
 	constructor(apiKey: string);
@@ -236,8 +216,6 @@ export declare class KLineChartPro implements ChartPro {
 	setIndicatorModalVisible(visible: boolean): void;
 	setTimezoneModalVisible(visible: boolean): void;
 	setSettingModalVisible(visible: boolean): void;
-	getDataList(): KLineData[];
-	getVisibleRange(): any;
 }
 declare function load(key: string, ls: any): void;
 
