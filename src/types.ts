@@ -257,6 +257,7 @@ export interface ChartPro {
   ): Partial<Point> | Array<Partial<Point>>;
   getVisibleRange(): VisibleRange;
   getDataList(): KLineData[];
+  getSize(paneId?: string, position?: string): { width: number; height: number } | null;
   subscribeAction(type: ActionType, callback: ActionCallback): void;
   unsubscribeAction(type: ActionType, callback?: ActionCallback): void;
 }

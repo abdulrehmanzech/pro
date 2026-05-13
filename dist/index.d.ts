@@ -180,6 +180,10 @@ export interface ChartPro {
 	convertFromPixel(coordinates: Array<Partial<Coordinate>>, finder: ChartConvertFinder): Partial<Point> | Array<Partial<Point>>;
 	getVisibleRange(): VisibleRange;
 	getDataList(): KLineData[];
+	getSize(paneId?: string, position?: string): {
+		width: number;
+		height: number;
+	} | null;
 	subscribeAction(type: ActionType, callback: ActionCallback): void;
 	unsubscribeAction(type: ActionType, callback?: ActionCallback): void;
 }
@@ -258,6 +262,10 @@ export declare class KLineChartPro implements ChartPro {
 	}): Partial<Point> | Array<Partial<Point>>;
 	getVisibleRange(): VisibleRange;
 	getDataList(): KLineData[];
+	getSize(paneId?: string, position?: any): {
+		width: number;
+		height: number;
+	} | null;
 	subscribeAction(type: ActionType, callback: ActionCallback): void;
 	unsubscribeAction(type: ActionType, callback?: ActionCallback): void;
 }

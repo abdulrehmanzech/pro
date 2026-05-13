@@ -292,6 +292,10 @@ export default class KLineChartPro implements ChartPro {
     return this._chartApi?.getDataList?.() ?? [];
   }
 
+  getSize(paneId?: string, position?: any) {
+    return this._chartApi?.getSize?.(paneId, position) ?? null;
+  }
+
   subscribeAction(type: ActionType, callback: ActionCallback): void {
     this._chartApi?.subscribeAction?.(type, callback);
   }
