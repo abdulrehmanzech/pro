@@ -565,12 +565,14 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     props.orderTools?.onChange?.(mergedState);
   };
 
+  let lastOrderToolsOpenOrdersProp = props.orderTools?.openOrders;
   createEffect(() => {
     const nextOpenOrders = props.orderTools?.openOrders;
     if (
       typeof nextOpenOrders === "boolean" &&
-      nextOpenOrders !== orderToolsState().openOrders
+      nextOpenOrders !== lastOrderToolsOpenOrdersProp
     ) {
+      lastOrderToolsOpenOrdersProp = nextOpenOrders;
       setOrderToolsState({ openOrders: nextOpenOrders });
     }
   });

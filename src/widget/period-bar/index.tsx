@@ -452,7 +452,23 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
                   padding: "0 10px",
                 }}
               >
-                <span style={{ "font-size": "12px", "font-weight": 500 }}>Orders</span>
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-label="Orders"
+                >
+                  <path d="M4 7h10" />
+                  <path d="M4 12h8" />
+                  <path d="M4 17h6" />
+                  <path d="M18 6v12" />
+                  <path d="M15 15l3 3 3-3" />
+                </svg>
                 <svg
                   width="10"
                   height="10"
@@ -493,28 +509,25 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
                       "z-index": 9999,
                     }}
                   >
-                    <label
+                    <div
                       style={{
                         display: "flex",
                         "align-items": "center",
-                        gap: "10px",
                         padding: "10px 12px",
                         cursor: "pointer",
-                        color: "var(--klinecharts-pro-primary-color)",
                         "border-radius": "8px",
                       }}
                     >
-                      <input
-                        type="checkbox"
+                      <Checkbox
                         checked={props.orderToolsState?.openOrders ?? true}
-                        onChange={(event) => {
+                        label={<span>Open Orders</span>}
+                        onChange={(checked) => {
                           props.onOrderToolsStateChange?.({
-                            openOrders: event.currentTarget.checked,
+                            openOrders: checked,
                           });
                         }}
                       />
-                      <span style={{ "font-size": "13px", "font-weight": 500 }}>Open Orders</span>
-                    </label>
+                    </div>
                   </div>
                 </Portal>
               </Show>
@@ -608,6 +621,7 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
 };
 
 export default PeriodBar;
+
 
 
 
