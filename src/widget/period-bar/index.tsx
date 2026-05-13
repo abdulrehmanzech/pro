@@ -21,6 +21,7 @@ import {
   createMemo,
   createEffect,
 } from "solid-js";
+import { Portal } from "solid-js/web";
 
 import { SymbolInfo, Period, OrderToolsState } from "../../types";
 
@@ -49,15 +50,20 @@ export interface PeriodBarProps {
 const PeriodBar: Component<PeriodBarProps> = (props) => {
   let ref: HTMLElement;
   let orderMenuRef: HTMLDivElement | undefined;
+  let orderMenuContentRef: HTMLDivElement | undefined;
 
   const [isMobile, setIsMobile] = createSignal(window.innerWidth < 768);
   const [secondary, setSecondary] = createSignal(
     localStorage.getItem("klinechart_secondary_period") || "",
   );
   const [orderMenuVisible, setOrderMenuVisible] = createSignal(false);
+  const [orderMenuPosition, setOrderMenuPosition] = createSignal({ top: 0, left: 0, minWidth: 220 });
 
   const handleResize = () => {
     setIsMobile(window.innerWidth < 768);
+    if (orderMenuVisible()) {
+      updateOrderMenuPosition();
+    }
   };
   const [fullScreen, setFullScreen] = createSignal(false);
 
@@ -68,8 +74,32 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
   const [showLeftArrow, setShowLeftArrow] = createSignal(false);
   const [showRightArrow, setShowRightArrow] = createSignal(false);
 
+  const updateOrderMenuPosition = () => {
+    if (!orderMenuRef) {
+      return;
+    }
+    const rect = orderMenuRef.getBoundingClientRect();
+    const minWidth = Math.max(220, Math.ceil(rect.width));
+    const viewportWidth = window.innerWidth;
+    const left = Math.min(
+      Math.max(8, rect.right - minWidth),
+      Math.max(8, viewportWidth - minWidth - 8),
+    );
+    setOrderMenuPosition({
+      top: Math.ceil(rect.bottom + 8),
+      left: Math.ceil(left),
+      minWidth,
+    });
+  };
+
   const toggleOrderMenu = () => {
-    setOrderMenuVisible((visible) => !visible);
+    setOrderMenuVisible((visible) => {
+      const nextVisible = !visible;
+      if (nextVisible) {
+        queueMicrotask(updateOrderMenuPosition);
+      }
+      return nextVisible;
+    });
   };
 
   const handleOrderMenuDocumentClick = (event: MouseEvent) => {
@@ -77,8 +107,18 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
       return;
     }
     const target = event.target as Node | null;
-    if (orderMenuRef && target && !orderMenuRef.contains(target)) {
-      setOrderMenuVisible(false);
+    if (!target) {
+      return;
+    }
+    if (orderMenuRef?.contains(target) || orderMenuContentRef?.contains(target)) {
+      return;
+    }
+    setOrderMenuVisible(false);
+  };
+
+  const handleOrderMenuViewportChange = () => {
+    if (orderMenuVisible()) {
+      updateOrderMenuPosition();
     }
   };
 
@@ -97,6 +137,7 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
     window.addEventListener("resize", handleResize);
     document.addEventListener("fullscreenchange", fullScreenChange);
     document.addEventListener("mousedown", handleOrderMenuDocumentClick);
+    window.addEventListener("scroll", handleOrderMenuViewportChange, true);
     document.addEventListener("mozfullscreenchange", fullScreenChange);
     document.addEventListener("webkitfullscreenchange", fullScreenChange);
     document.addEventListener("msfullscreenchange", fullScreenChange);
@@ -112,6 +153,7 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
     window.removeEventListener("resize", handleResize);
     document.removeEventListener("fullscreenchange", fullScreenChange);
     document.removeEventListener("mousedown", handleOrderMenuDocumentClick);
+    window.removeEventListener("scroll", handleOrderMenuViewportChange, true);
     document.removeEventListener("mozfullscreenchange", fullScreenChange);
     document.removeEventListener("webkitfullscreenchange", fullScreenChange);
     document.removeEventListener("msfullscreenchange", fullScreenChange);
@@ -168,6 +210,10 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
   createEffect(() => {
     if (isMobile() || !props.showOrderToolsMenu) {
       setOrderMenuVisible(false);
+      return;
+    }
+    if (orderMenuVisible()) {
+      queueMicrotask(updateOrderMenuPosition);
     }
   });
 
@@ -221,7 +267,7 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
         class="klinecharts-pro-period-bar"
         style={{
           width: "100%",
-          overflow: "auto",
+          overflow: isMobile() ? "auto" : "visible",
         }}
       >
         <div class="menu-container">
@@ -390,7 +436,6 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
                 orderMenuRef = el as HTMLDivElement;
               }}
               style={{
-                position: "relative",
                 display: "flex",
                 "align-items": "center",
               }}
@@ -416,51 +461,61 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
                   stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
+                  style={{
+                    transform: orderMenuVisible() ? "rotate(180deg)" : "rotate(0deg)",
+                    transition: "transform 0.2s ease",
+                  }}
                 >
                   <path d="M6 9L12 15L18 9" />
                 </svg>
               </div>
               <Show when={orderMenuVisible()}>
-                <div
-                  style={{
-                    position: "absolute",
-                    top: "calc(100% + 8px)",
-                    right: "0",
-                    width: "220px",
-                    padding: "8px",
-                    display: "flex",
-                    "flex-direction": "column",
-                    gap: "4px",
-                    "border-radius": "12px",
-                    border: "1px solid var(--klinecharts-pro-border-color)",
-                    background: "var(--klinecharts-pro-popover-background-color)",
-                    "box-shadow": "0 12px 32px rgba(0, 0, 0, 0.28)",
-                    "z-index": 30,
-                  }}
-                >
-                  <label
+                <Portal>
+                  <div
+                    ref={(el) => {
+                      orderMenuContentRef = el as HTMLDivElement;
+                    }}
+                    onMouseDown={(event) => event.stopPropagation()}
                     style={{
+                      position: "fixed",
+                      top: `${orderMenuPosition().top}px`,
+                      left: `${orderMenuPosition().left}px`,
+                      width: `${orderMenuPosition().minWidth}px`,
+                      padding: "8px",
                       display: "flex",
-                      "align-items": "center",
-                      gap: "10px",
-                      padding: "10px 12px",
-                      cursor: "pointer",
-                      color: "var(--klinecharts-pro-primary-color)",
-                      "border-radius": "8px",
+                      "flex-direction": "column",
+                      gap: "4px",
+                      "border-radius": "12px",
+                      border: "1px solid var(--klinecharts-pro-border-color)",
+                      background: "var(--klinecharts-pro-popover-background-color)",
+                      "box-shadow": "0 12px 32px rgba(0, 0, 0, 0.28)",
+                      "z-index": 9999,
                     }}
                   >
-                    <input
-                      type="checkbox"
-                      checked={props.orderToolsState?.openOrders ?? true}
-                      onChange={(event) => {
-                        props.onOrderToolsStateChange?.({
-                          openOrders: event.currentTarget.checked,
-                        });
+                    <label
+                      style={{
+                        display: "flex",
+                        "align-items": "center",
+                        gap: "10px",
+                        padding: "10px 12px",
+                        cursor: "pointer",
+                        color: "var(--klinecharts-pro-primary-color)",
+                        "border-radius": "8px",
                       }}
-                    />
-                    <span style={{ "font-size": "13px", "font-weight": 500 }}>Open Orders</span>
-                  </label>
-                </div>
+                    >
+                      <input
+                        type="checkbox"
+                        checked={props.orderToolsState?.openOrders ?? true}
+                        onChange={(event) => {
+                          props.onOrderToolsStateChange?.({
+                            openOrders: event.currentTarget.checked,
+                          });
+                        }}
+                      />
+                      <span style={{ "font-size": "13px", "font-weight": 500 }}>Open Orders</span>
+                    </label>
+                  </div>
+                </Portal>
               </Show>
             </div>
           </Show>
@@ -552,3 +607,9 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
 };
 
 export default PeriodBar;
+
+
+
+
+
+
