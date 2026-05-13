@@ -1860,3 +1860,4 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
 };
 
 export default ChartProComponent;
+

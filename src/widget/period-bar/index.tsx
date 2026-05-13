@@ -26,6 +26,7 @@ import { Portal } from "solid-js/web";
 import { SymbolInfo, Period, OrderToolsState } from "../../types";
 
 import i18n from "../../i18n";
+import { Checkbox } from "../../component";
 
 export interface PeriodBarProps {
   locale: string;
@@ -607,6 +608,8 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
 };
 
 export default PeriodBar;
+
+
 
 
 
