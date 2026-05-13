@@ -26,7 +26,6 @@ import { Portal } from "solid-js/web";
 import { SymbolInfo, Period, OrderToolsState } from "../../types";
 
 import i18n from "../../i18n";
-import { Checkbox } from "../../component";
 
 export interface PeriodBarProps {
   locale: string;
@@ -442,7 +441,7 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
               }}
             >
               <div
-                class="item tools"
+                class="item tools order-tools-trigger"
                 onClick={(event) => {
                   event.stopPropagation();
                   toggleOrderMenu();
@@ -492,42 +491,32 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
                     ref={(el) => {
                       orderMenuContentRef = el as HTMLDivElement;
                     }}
+                    class="klinecharts-pro-order-tools-popover"
                     onMouseDown={(event) => event.stopPropagation()}
                     style={{
                       position: "fixed",
                       top: `${orderMenuPosition().top}px`,
                       left: `${orderMenuPosition().left}px`,
                       width: `${orderMenuPosition().minWidth}px`,
-                      padding: "8px",
-                      display: "flex",
-                      "flex-direction": "column",
-                      gap: "4px",
-                      "border-radius": "12px",
-                      border: "1px solid var(--klinecharts-pro-border-color)",
-                      background: "var(--klinecharts-pro-popover-background-color)",
-                      "box-shadow": "0 12px 32px rgba(0, 0, 0, 0.28)",
                       "z-index": 9999,
                     }}
                   >
-                    <div
-                      style={{
-                        display: "flex",
-                        "align-items": "center",
-                        padding: "10px 12px",
-                        cursor: "pointer",
-                        "border-radius": "8px",
-                      }}
-                    >
-                      <Checkbox
-                        checked={props.orderToolsState?.openOrders ?? true}
-                        label={<span>Open Orders</span>}
-                        onChange={(checked) => {
-                          props.onOrderToolsStateChange?.({
-                            openOrders: checked,
-                          });
-                        }}
-                      />
-                    </div>
+                    <label class="klinecharts-pro-order-tools-item">
+                      <span class="klinecharts-pro-order-tools-checkbox-box">
+                        <input
+                          class="klinecharts-pro-order-tools-checkbox-input"
+                          type="checkbox"
+                          checked={props.orderToolsState?.openOrders ?? true}
+                          onChange={(event) => {
+                            props.onOrderToolsStateChange?.({
+                              openOrders: event.currentTarget.checked,
+                            });
+                          }}
+                        />
+                        <span class="klinecharts-pro-order-tools-checkbox-fill" />
+                      </span>
+                      <span class="klinecharts-pro-order-tools-label">Open Orders</span>
+                    </label>
                   </div>
                 </Portal>
               </Show>
@@ -621,6 +610,8 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
 };
 
 export default PeriodBar;
+
+
 
 
 
