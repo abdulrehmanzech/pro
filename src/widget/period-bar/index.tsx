@@ -516,6 +516,21 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
                         <span class="klinecharts-pro-order-tools-checkbox-fill" />
                       </span>
                       <span class="klinecharts-pro-order-tools-label">Open Orders</span>
+                    </label>                    <label class="klinecharts-pro-order-tools-item">
+                      <span class="klinecharts-pro-order-tools-checkbox-box">
+                        <input
+                          class="klinecharts-pro-order-tools-checkbox-input"
+                          type="checkbox"
+                          checked={props.orderToolsState?.positions ?? true}
+                          onChange={(event) => {
+                            props.onOrderToolsStateChange?.({
+                              positions: event.currentTarget.checked,
+                            });
+                          }}
+                        />
+                        <span class="klinecharts-pro-order-tools-checkbox-fill" />
+                      </span>
+                      <span class="klinecharts-pro-order-tools-label">Positions</span>
                     </label>
                   </div>
                 </Portal>

@@ -95,7 +95,7 @@ export default class KLineChartPro implements ChartPro {
           onMobilePeriodClick={options.onMobilePeriodClick}
           onMobileMoreClick={options.onMobileMoreClick}
           screenshotBackgroundColor={options.screenshotBackgroundColor}
-          orderTools={options.orderTools ?? { visible: false, openOrders: true }}
+          orderTools={options.orderTools ?? { visible: false, openOrders: true, positions: true }}
         />
       ),
       this._container
@@ -261,10 +261,10 @@ export default class KLineChartPro implements ChartPro {
   }
 
   getOrderToolsState() {
-    return this._chartApi?.getOrderToolsState?.() ?? { openOrders: true };
+    return this._chartApi?.getOrderToolsState?.() ?? { openOrders: true, positions: true };
   }
 
-  setOrderToolsState(state: { openOrders?: boolean }): void {
+  setOrderToolsState(state: { openOrders?: boolean; positions?: boolean }): void {
     this._chartApi?.setOrderToolsState?.(state);
   }
 

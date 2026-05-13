@@ -182,6 +182,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     createSignal(false);
   const [orderToolsState, setOrderToolsState] = createSignal<OrderToolsState>({
     openOrders: props.orderTools?.openOrders ?? true,
+    positions: props.orderTools?.positions ?? true,
   });
 
   const [indicatorSettingModalParams, setIndicatorSettingModalParams] =
@@ -566,14 +567,27 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
   };
 
   let lastOrderToolsOpenOrdersProp = props.orderTools?.openOrders;
+  let lastOrderToolsPositionsProp = props.orderTools?.positions;
   createEffect(() => {
     const nextOpenOrders = props.orderTools?.openOrders;
+    const nextPositions = props.orderTools?.positions;
+    const nextState: Partial<OrderToolsState> = {};
     if (
       typeof nextOpenOrders === "boolean" &&
       nextOpenOrders !== lastOrderToolsOpenOrdersProp
     ) {
       lastOrderToolsOpenOrdersProp = nextOpenOrders;
-      setOrderToolsState({ openOrders: nextOpenOrders });
+      nextState.openOrders = nextOpenOrders;
+    }
+    if (
+      typeof nextPositions === "boolean" &&
+      nextPositions !== lastOrderToolsPositionsProp
+    ) {
+      lastOrderToolsPositionsProp = nextPositions;
+      nextState.positions = nextPositions;
+    }
+    if (Object.keys(nextState).length > 0) {
+      setOrderToolsState({ ...orderToolsState(), ...nextState });
     }
   });
 
