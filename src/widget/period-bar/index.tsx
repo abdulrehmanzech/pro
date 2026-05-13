@@ -66,6 +66,8 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
     }
   };
   const [fullScreen, setFullScreen] = createSignal(false);
+  const getPortalMount = () =>
+    (document.fullscreenElement as HTMLElement | null) ?? document.body;
 
   const fullScreenChange = () => {
     setFullScreen(!!document.fullscreenElement);
@@ -470,7 +472,7 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
                 </svg>
               </div>
               <Show when={orderMenuVisible()}>
-                <Portal>
+                <Portal mount={getPortalMount()}>
                   <div
                     ref={(el) => {
                       orderMenuContentRef = el as HTMLDivElement;
