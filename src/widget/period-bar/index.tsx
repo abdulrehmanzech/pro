@@ -490,6 +490,21 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
                         <input
                           class="klinecharts-pro-order-tools-checkbox-input"
                           type="checkbox"
+                          checked={props.orderToolsState?.quickOrder ?? true}
+                          onChange={(event) => {
+                            props.onOrderToolsStateChange?.({
+                              quickOrder: event.currentTarget.checked,
+                            });
+                          }}
+                        />
+                        <span class="klinecharts-pro-order-tools-checkbox-fill" />
+                      </span>
+                      <span class="klinecharts-pro-order-tools-label">Quick Order</span>
+                    </label>                    <label class="klinecharts-pro-order-tools-item">
+                      <span class="klinecharts-pro-order-tools-checkbox-box">
+                        <input
+                          class="klinecharts-pro-order-tools-checkbox-input"
+                          type="checkbox"
                           checked={props.orderToolsState?.openOrders ?? true}
                           onChange={(event) => {
                             props.onOrderToolsStateChange?.({

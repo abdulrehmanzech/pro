@@ -181,6 +181,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
   const [mobileMoreModalVisible, setMobileMoreModalVisible] =
     createSignal(false);
   const [orderToolsState, setOrderToolsState] = createSignal<OrderToolsState>({
+    quickOrder: props.orderTools?.quickOrder ?? true,
     openOrders: props.orderTools?.openOrders ?? true,
     positions: props.orderTools?.positions ?? true,
     orderHistory: props.orderTools?.orderHistory ?? true,
@@ -567,14 +568,23 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     props.orderTools?.onChange?.(mergedState);
   };
 
+  let lastOrderToolsQuickOrderProp = props.orderTools?.quickOrder;
   let lastOrderToolsOpenOrdersProp = props.orderTools?.openOrders;
   let lastOrderToolsPositionsProp = props.orderTools?.positions;
   let lastOrderToolsOrderHistoryProp = props.orderTools?.orderHistory;
   createEffect(() => {
+    const nextQuickOrder = props.orderTools?.quickOrder;
     const nextOpenOrders = props.orderTools?.openOrders;
     const nextPositions = props.orderTools?.positions;
     const nextOrderHistory = props.orderTools?.orderHistory;
     const nextState: Partial<OrderToolsState> = {};
+    if (
+      typeof nextQuickOrder === "boolean" &&
+      nextQuickOrder !== lastOrderToolsQuickOrderProp
+    ) {
+      lastOrderToolsQuickOrderProp = nextQuickOrder;
+      nextState.quickOrder = nextQuickOrder;
+    }
     if (
       typeof nextOpenOrders === "boolean" &&
       nextOpenOrders !== lastOrderToolsOpenOrdersProp

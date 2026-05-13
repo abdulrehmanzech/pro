@@ -76,12 +76,14 @@ export interface IndicatorEventData {
 /** Callback type for indicator change events */
 export type IndicatorEventCallback = (data: IndicatorEventData) => void;
 export interface OrderToolsState {
+	quickOrder: boolean;
 	openOrders: boolean;
 	positions: boolean;
 	orderHistory: boolean;
 }
 export interface OrderToolsOptions {
 	visible?: boolean;
+	quickOrder?: boolean;
 	openOrders?: boolean;
 	positions?: boolean;
 	orderHistory?: boolean;
@@ -248,6 +250,7 @@ export declare class KLineChartPro implements ChartPro {
 	setSettingModalVisible(visible: boolean): void;
 	getOrderToolsState(): OrderToolsState;
 	setOrderToolsState(state: {
+		quickOrder?: boolean;
 		openOrders?: boolean;
 		positions?: boolean;
 		orderHistory?: boolean;

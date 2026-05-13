@@ -120,6 +120,7 @@ export interface IndicatorEventData {
 export type IndicatorEventCallback = (data: IndicatorEventData) => void;
 
 export interface OrderToolsState {
+  quickOrder: boolean;
   openOrders: boolean;
   positions: boolean;
   orderHistory: boolean;
@@ -127,6 +128,7 @@ export interface OrderToolsState {
 
 export interface OrderToolsOptions {
   visible?: boolean;
+  quickOrder?: boolean;
   openOrders?: boolean;
   positions?: boolean;
   orderHistory?: boolean;
