@@ -183,6 +183,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
   const [orderToolsState, setOrderToolsState] = createSignal<OrderToolsState>({
     openOrders: props.orderTools?.openOrders ?? true,
     positions: props.orderTools?.positions ?? true,
+    orderHistory: props.orderTools?.orderHistory ?? true,
   });
 
   const [indicatorSettingModalParams, setIndicatorSettingModalParams] =
@@ -568,9 +569,11 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
 
   let lastOrderToolsOpenOrdersProp = props.orderTools?.openOrders;
   let lastOrderToolsPositionsProp = props.orderTools?.positions;
+  let lastOrderToolsOrderHistoryProp = props.orderTools?.orderHistory;
   createEffect(() => {
     const nextOpenOrders = props.orderTools?.openOrders;
     const nextPositions = props.orderTools?.positions;
+    const nextOrderHistory = props.orderTools?.orderHistory;
     const nextState: Partial<OrderToolsState> = {};
     if (
       typeof nextOpenOrders === "boolean" &&
@@ -585,6 +588,13 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     ) {
       lastOrderToolsPositionsProp = nextPositions;
       nextState.positions = nextPositions;
+    }
+    if (
+      typeof nextOrderHistory === "boolean" &&
+      nextOrderHistory !== lastOrderToolsOrderHistoryProp
+    ) {
+      lastOrderToolsOrderHistoryProp = nextOrderHistory;
+      nextState.orderHistory = nextOrderHistory;
     }
     if (Object.keys(nextState).length > 0) {
       setOrderToolsState({ ...orderToolsState(), ...nextState });

@@ -78,11 +78,13 @@ export type IndicatorEventCallback = (data: IndicatorEventData) => void;
 export interface OrderToolsState {
 	openOrders: boolean;
 	positions: boolean;
+	orderHistory: boolean;
 }
 export interface OrderToolsOptions {
 	visible?: boolean;
 	openOrders?: boolean;
 	positions?: boolean;
+	orderHistory?: boolean;
 	onChange?: (state: OrderToolsState) => void;
 }
 export interface ChartProOptions {
@@ -244,6 +246,7 @@ export declare class KLineChartPro implements ChartPro {
 	setOrderToolsState(state: {
 		openOrders?: boolean;
 		positions?: boolean;
+		orderHistory?: boolean;
 	}): void;
 	convertToPixel(points: Partial<Point> | Array<Partial<Point>>, finder: {
 		paneId?: string;

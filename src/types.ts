@@ -122,12 +122,14 @@ export type IndicatorEventCallback = (data: IndicatorEventData) => void;
 export interface OrderToolsState {
   openOrders: boolean;
   positions: boolean;
+  orderHistory: boolean;
 }
 
 export interface OrderToolsOptions {
   visible?: boolean;
   openOrders?: boolean;
   positions?: boolean;
+  orderHistory?: boolean;
   onChange?: (state: OrderToolsState) => void;
 }
 
