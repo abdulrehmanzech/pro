@@ -32,6 +32,7 @@ import {
   Styles,
   TooltipIconPosition,
   ActionType,
+  ActionCallback,
   PaneOptions,
   Indicator,
   DomPosition,
@@ -42,6 +43,9 @@ import {
   CandleType,
   YAxisType,
   Point,
+  Coordinate,
+  VisibleRange,
+  KLineData,
 } from "klinecharts";
 
 import lodashSet from "lodash/set";
@@ -73,6 +77,7 @@ import {
   ChartSettings,
   IndicatorInfo,
   IndicatorEventCallback,
+  OrderToolsState,
 } from "./types";
 
 export interface ChartProComponentProps
@@ -129,6 +134,7 @@ function createIndicator(
       // ignore if override not supported
     }
   }
+
   return paneId;
 }
 
@@ -174,6 +180,9 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
 
   const [mobileMoreModalVisible, setMobileMoreModalVisible] =
     createSignal(false);
+  const [orderToolsState, setOrderToolsState] = createSignal<OrderToolsState>({
+    openOrders: props.orderTools?.openOrders ?? true,
+  });
 
   const [indicatorSettingModalParams, setIndicatorSettingModalParams] =
     createSignal({
@@ -439,7 +448,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
 
           if (currentPoints < requiredPoints) {
             console.warn(
-              `⚠️ ${overlayInfo.type} ${overlayId} has only ${currentPoints} point(s), should have ${requiredPoints}`
+              `âš ï¸ ${overlayInfo.type} ${overlayId} has only ${currentPoints} point(s), should have ${requiredPoints}`
             );
           }
         }
@@ -474,7 +483,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
 
           if (currentPoints < requiredPoints) {
             console.warn(
-              `⚠️ Saving ${drawing.type} with only ${currentPoints} point(s), needs ${requiredPoints}`
+              `âš ï¸ Saving ${drawing.type} with only ${currentPoints} point(s), needs ${requiredPoints}`
             );
           }
 
@@ -516,7 +525,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
               
         //       } else {
         //         console.warn(
-        //           `📥 Skipping ${drawing.type}: Only ${currentPoints} point(s), need ${requiredPoints}`
+        //           `ðŸ“¥ Skipping ${drawing.type}: Only ${currentPoints} point(s), need ${requiredPoints}`
         //         );
         //       }
         //     });
@@ -547,6 +556,25 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     }
   };
 
+  const applyOrderToolsState = (nextState: Partial<OrderToolsState>) => {
+    const mergedState = {
+      ...orderToolsState(),
+      ...nextState,
+    };
+    setOrderToolsState(mergedState);
+    props.orderTools?.onChange?.(mergedState);
+  };
+
+  createEffect(() => {
+    const nextOpenOrders = props.orderTools?.openOrders;
+    if (
+      typeof nextOpenOrders === "boolean" &&
+      nextOpenOrders !== orderToolsState().openOrders
+    ) {
+      setOrderToolsState({ openOrders: nextOpenOrders });
+    }
+  });
+
   props.ref({
     setTheme,
     getTheme: () => theme(),
@@ -576,7 +604,9 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       widget?.overrideIndicator(config, paneId);
     },
     createOverlay: (overlay: OverlayCreate): string | null => {
-      return widget?.createOverlay?.(overlay) ?? null;
+      const result = widget?.createOverlay?.(overlay);
+      if (typeof result === "string") return result;
+      return null;
     },
 
     removeOverlay: (options: { groupId?: string; id?: string }): void => {
@@ -597,7 +627,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
           drawingStates.delete(options.id);
         }
 
-        // ✅ **Auto-sync to storage**
+        // âœ… **Auto-sync to storage**
         syncDrawingsToStorage();
       }
     },
@@ -644,9 +674,52 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       }
     },
 
+    convertToPixel: (
+      points: Partial<Point> | Array<Partial<Point>>,
+      finder: { paneId?: string; absolute?: boolean }
+    ): Partial<Coordinate> | Array<Partial<Coordinate>> => {
+      if (!widget) {
+        return Array.isArray(points) ? [] : {};
+      }
+      return widget.convertToPixel(points, finder);
+    },
+    convertFromPixel: (
+      coordinates: Array<Partial<Coordinate>>,
+      finder: { paneId?: string; absolute?: boolean }
+    ): Partial<Point> | Array<Partial<Point>> => {
+      if (!widget) {
+        return [];
+      }
+      return widget.convertFromPixel(coordinates, finder);
+    },
+    getVisibleRange: (): VisibleRange => {
+      if (!widget) {
+        return { from: 0, to: 0 };
+      }
+      return widget.getVisibleRange();
+    },
+    getDataList: (): KLineData[] => {
+      if (!widget) return [];
+      return widget.getDataList();
+    },
+    subscribeAction: (type: ActionType, callback: ActionCallback): void => {
+      if (widget) {
+        widget.subscribeAction(type, callback);
+      }
+    },
+    unsubscribeAction: (type: ActionType, callback?: ActionCallback): void => {
+      if (widget) {
+        widget.unsubscribeAction(type, callback);
+      }
+    },
+
     setIndicatorModalVisible,
     setTimezoneModalVisible,
     setSettingModalVisible,
+    getOrderToolsState: () => orderToolsState(),
+    setOrderToolsState: (state: Partial<OrderToolsState>) => {
+      applyOrderToolsState(state);
+    },
 
     dispose: (): void => {
       // Note: We already have a global dispose function from klinecharts
@@ -868,7 +941,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
 
         if (currentPoints < requiredPoints) {
           console.warn(
-            `⚠️ ${drawing.type} ${drawing.id} has only ${currentPoints} point(s), should have ${requiredPoints}`
+            `âš ï¸ ${drawing.type} ${drawing.id} has only ${currentPoints} point(s), should have ${requiredPoints}`
           );
         }
       });
@@ -894,7 +967,8 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
             mode: drawing.mode ?? OverlayMode.Normal,
           };
 
-          const overlayId = widget?.createOverlay(overlayConfig);
+          const overlayIdRaw = widget?.createOverlay(overlayConfig);
+          const overlayId = typeof overlayIdRaw === "string" ? overlayIdRaw : null;
 
           if (overlayId) {
 
@@ -912,7 +986,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
             });
           }
         } catch (error) {
-          console.error(`   ❌ Error restoring ${drawing.type}:`, error);
+          console.error(`   âŒ Error restoring ${drawing.type}:`, error);
         }
       });
 
@@ -941,7 +1015,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
         // // Return cleanup function
         // return () => {
         //   clearInterval(intervalId);
-        //   console.log(`🔧 Auto-save disabled for ${ticker}`);
+        //   console.log(`ðŸ”§ Auto-save disabled for ${ticker}`);
         // };
       }
     },
@@ -1115,7 +1189,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       drawingStorage.saveDrawings(currentSymbol.ticker, allDrawings);
       
     } catch (error) {
-      console.error('❌ Error refreshing local storage:', error);
+      console.error('âŒ Error refreshing local storage:', error);
     }
   };
   
@@ -1132,7 +1206,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     // Small delay to ensure any overlay removal is processed
   };
   
-  // ✅ Use setTimeout to ensure widgetRef is available
+  // âœ… Use setTimeout to ensure widgetRef is available
   setTimeout(() => {
     if (widgetRef) {
       widgetRef.addEventListener('contextmenu', handleRightClick);
@@ -1295,14 +1369,15 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       widget.createOverlay = function (...args) {
         const overlayConfig = args[0] as OverlayCreate;
         const result = originalCreateOverlay.apply(this, args);
+        const overlayId = typeof result === "string" ? result : null;
 
-        if (result) {
+        if (overlayId) {
 
           // Start monitoring this overlay for completion
-          monitorOverlayCompletion(result, overlayConfig.name || "unknown");
+          monitorOverlayCompletion(overlayId, overlayConfig.name || "unknown");
 
           // Also update tracking immediately
-          updateOverlayTracking(result);
+          updateOverlayTracking(overlayId);
           syncDrawingsToStorage();
 
         }
@@ -1329,10 +1404,10 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
 //     }
 
 //     if (overlayId) {
-//       // ✅ REMOVE FROM TRACKER
+//       // âœ… REMOVE FROM TRACKER
 //       overlayTracker.delete(overlayId);
 
-//       // ✅ CLEANUP MONITORING STATE
+//       // âœ… CLEANUP MONITORING STATE
 //       const state = drawingStates.get(overlayId);
 //       if (state) {
 //         if (state.checkInterval) {
@@ -1345,14 +1420,14 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
 //         drawingStates.delete(overlayId);
 //       }
 
-//       console.log(`🗑️ Removed overlay ${overlayId}`);
+//       console.log(`ðŸ—‘ï¸ Removed overlay ${overlayId}`);
 
-//       // ✅ **SYNC TO LOCAL STORAGE** <-- Correct position: Sirf jab overlayId mile
+//       // âœ… **SYNC TO LOCAL STORAGE** <-- Correct position: Sirf jab overlayId mile
 //       const currentSymbol = symbol();
 //       if (currentSymbol?.ticker) {
 //         const allDrawings = Array.from(overlayTracker.values());
 //         drawingStorage.saveDrawings(currentSymbol.ticker, allDrawings);
-//         console.log(`💾 Synced ${allDrawings.length} drawings to storage`);
+//         console.log(`ðŸ’¾ Synced ${allDrawings.length} drawings to storage`);
 //       }
 //     }
 
@@ -1603,6 +1678,9 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
             setScreenshotUrl(url);
           }
         }}
+        showOrderToolsMenu={props.orderTools?.visible ?? false}
+        orderToolsState={orderToolsState()}
+        onOrderToolsStateChange={applyOrderToolsState}
       />
       <div class="klinecharts-pro-content">
         <Show when={loadingVisible()}>

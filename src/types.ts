@@ -27,7 +27,6 @@ export interface SymbolInfo {
   logo?: string;
 }
 
-
 export interface Period {
   multiplier: number;
   timespan: string;
@@ -120,6 +119,17 @@ export interface IndicatorEventData {
 /** Callback type for indicator change events */
 export type IndicatorEventCallback = (data: IndicatorEventData) => void;
 
+export interface OrderToolsState {
+  openOrders: boolean;
+}
+
+export interface OrderToolsOptions {
+  visible?: boolean;
+  openOrders?: boolean;
+  onChange?: (state: OrderToolsState) => void;
+}
+
+
 
 export interface ChartProOptions {
   container: string | HTMLElement;
@@ -143,8 +153,15 @@ export interface ChartProOptions {
   onMobileMoreClick?: () => void;
   /** Custom background color for screenshots */
   screenshotBackgroundColor?: string;
+  /** Native header order tools dropdown state */
+  orderTools?: OrderToolsOptions;
 }
-import type { CandleType, LineType, OverlayCreate, OverlayMode, OverlayStyle, Point, YAxisType } from "klinecharts";
+import type { ActionType, ActionCallback, CandleType, Coordinate, LineType, OverlayCreate, OverlayMode, OverlayStyle, Point, VisibleRange, YAxisType } from "klinecharts";
+
+export interface ChartConvertFinder {
+  paneId?: string;
+  absolute?: boolean;
+}
 
 // Use OverlayCreate directly or create a compatible type
 export type OverlayOptions = OverlayCreate;
@@ -220,4 +237,22 @@ export interface ChartPro {
   setIndicatorModalVisible(visible: boolean): void;
   setTimezoneModalVisible(visible: boolean): void;
   setSettingModalVisible(visible: boolean): void;
+  getOrderToolsState(): OrderToolsState;
+  setOrderToolsState(state: Partial<OrderToolsState>): void;
+
+  // Underlying klinecharts chart methods forwarded so consumers can build
+  // DOM overlays synchronized with the canvas (price-pixel conversions,
+  // visible-range/data access, and action subscription).
+  convertToPixel(
+    points: Partial<Point> | Array<Partial<Point>>,
+    finder: ChartConvertFinder
+  ): Partial<Coordinate> | Array<Partial<Coordinate>>;
+  convertFromPixel(
+    coordinates: Array<Partial<Coordinate>>,
+    finder: ChartConvertFinder
+  ): Partial<Point> | Array<Partial<Point>>;
+  getVisibleRange(): VisibleRange;
+  getDataList(): KLineData[];
+  subscribeAction(type: ActionType, callback: ActionCallback): void;
+  unsubscribeAction(type: ActionType, callback?: ActionCallback): void;
 }
