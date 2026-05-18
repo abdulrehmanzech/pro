@@ -205,11 +205,11 @@ const st = {
     if (e.length > 1) {
       const s = e[1].x > e[0].x ? e[0].x : e[1].x, l = [1, 0.786, 0.618, 0.5, 0.382, 0.236, 0], o = e[0].y - e[1].y, h = t.points, g = h[0].value - h[1].value;
       l.forEach((d) => {
-        const v = e[1].y + o * d, b = (h[1].value + g * d).toFixed(n.price);
+        const v = e[1].y + o * d, $ = (h[1].value + g * d).toFixed(n.price);
         r.push({ coordinates: [{ x: e[0].x, y: v }, { x: e[1].x, y: v }] }), a.push({
           x: s,
           y: v,
-          text: `${b} (${(d * 100).toFixed(1)}%)`,
+          text: `${$} (${(d * 100).toFixed(1)}%)`,
           baseline: "bottom"
         });
       });
@@ -258,7 +258,7 @@ const st = {
       }];
       let g = e[0].x - n, d = e[0].y - n;
       for (let v = 2; v < 9; v++) {
-        const b = h[v - 2].r + h[v - 1].r;
+        const $ = h[v - 2].r + h[v - 1].r;
         let x = 0;
         switch (v % 4) {
           case 0: {
@@ -281,7 +281,7 @@ const st = {
         const S = x + Math.PI / 2, N = ie({ x: g, y: d }, e[0], s);
         h.push({
           ...N,
-          r: b,
+          r: $,
           startAngle: x,
           endAngle: S
         });
@@ -312,10 +312,10 @@ const st = {
     if (e.length > 1) {
       const s = e[1].x > e[0].x ? -38 : 4, l = e[1].y > e[0].y ? -2 : 20, o = e[1].x - e[0].x, h = e[1].y - e[0].y;
       [1, 0.75, 0.618, 0.5, 0.382, 0.25, 0].forEach((d) => {
-        const v = e[1].x - o * d, b = e[1].y - h * d;
-        n.push({ coordinates: [{ x: v, y: e[0].y }, { x: v, y: e[1].y }] }), n.push({ coordinates: [{ x: e[0].x, y: b }, { x: e[1].x, y: b }] }), r = r.concat(Ke([e[0], { x: v, y: e[1].y }], t)), r = r.concat(Ke([e[0], { x: e[1].x, y: b }], t)), a.unshift({
+        const v = e[1].x - o * d, $ = e[1].y - h * d;
+        n.push({ coordinates: [{ x: v, y: e[0].y }, { x: v, y: e[1].y }] }), n.push({ coordinates: [{ x: e[0].x, y: $ }, { x: e[1].x, y: $ }] }), r = r.concat(Ke([e[0], { x: v, y: e[1].y }], t)), r = r.concat(Ke([e[0], { x: e[1].x, y: $ }], t)), a.unshift({
           x: e[0].x + s,
-          y: b + 10,
+          y: $ + 10,
           text: `${d.toFixed(3)}`
         }), a.unshift({
           x: v - 18,
@@ -351,11 +351,11 @@ const st = {
     if (e.length > 2) {
       const s = t.points, l = s[1].value - s[0].value, o = e[1].y - e[0].y, h = [0, 0.236, 0.382, 0.5, 0.618, 0.786, 1], g = e[2].x > e[1].x ? e[1].x : e[2].x;
       h.forEach((d) => {
-        const v = e[2].y + o * d, b = (s[2].value + l * d).toFixed(n.price);
+        const v = e[2].y + o * d, $ = (s[2].value + l * d).toFixed(n.price);
         r.push({ coordinates: [{ x: e[1].x, y: v }, { x: e[2].x, y: v }] }), a.push({
           x: g,
           y: v,
-          text: `${b} (${(d * 100).toFixed(1)}%)`,
+          text: `${$} (${(d * 100).toFixed(1)}%)`,
           baseline: "bottom"
         });
       });
@@ -605,7 +605,7 @@ const st = {
     ];
   }
 }, Lt = 12, A0 = 20, xt = {
-  name: "tradeMarker",
+  name: "tradeExecutionMarker",
   totalStep: 2,
   needDefaultPointFigure: !1,
   needDefaultXAxisFigure: !1,
@@ -613,38 +613,43 @@ const st = {
   createPointFigures: ({ overlay: e, coordinates: t }) => {
     if (t.length === 0)
       return [];
-    const n = e.extendData || {}, r = t[0], a = n.side === "sell" ? "sell" : "buy", s = a === "sell" ? "#ff667a" : "#27d69b", l = a === "sell" ? "S" : "B", o = Number(n.spacing), h = Math.max(
+    const n = e.extendData || {}, r = t[0], a = n.side === "sell" ? "sell" : "buy", s = a === "sell" ? "#ff667a" : "#27d69b", l = a === "sell" ? "S" : "B", o = t[1], g = (o ? Math.abs(o.x - r.x) : 0) || Number(n.spacing), d = Math.max(
       Lt,
       Math.min(
         A0,
-        Number.isFinite(o) && o > 0 ? Math.round(o * 0.42) : A0
+        Number.isFinite(g) && g > 0 ? Math.round(g * 0.42) : A0
       )
-    ), g = a === "sell" ? -h * 0.72 : h * 0.72, d = r.x, v = r.y + g;
+    ), v = a === "sell" ? -d * 0.72 : d * 0.72, $ = r.x, x = r.y + v;
     return [
       {
-        type: "circle",
+        type: "rect",
         attrs: {
-          x: d,
-          y: v,
-          r: h / 2
+          x: $ - d / 2,
+          y: x - d / 2,
+          width: d,
+          height: d
         },
         styles: {
-          style: "fill",
-          color: s
+          style: "stroke_fill",
+          color: s,
+          backgroundColor: s,
+          borderColor: "rgba(16,24,32,0.32)",
+          borderSize: 1,
+          borderRadius: d / 2
         }
       },
       {
         type: "text",
         attrs: {
-          x: d,
-          y: v,
+          x: $,
+          y: x,
           text: l,
           align: "center",
           baseline: "middle"
         },
         styles: {
           color: "#101820",
-          size: Math.max(9, Math.min(12, h * 0.58)),
+          size: Math.max(9, Math.min(12, d * 0.58)),
           weight: 700
         },
         ignoreEvent: !0
@@ -785,7 +790,7 @@ function St(e, t, n) {
   let r, a, s;
   arguments.length === 2 && typeof t == "object" || arguments.length === 1 ? (r = !0, a = e, s = t || {}) : (r = e, a = t, s = n || {});
   let l = null, o = Ee, h = null, g = !1, d = "initialValue" in s, v = typeof r == "function" && H(r);
-  const b = /* @__PURE__ */ new Set(), [x, S] = (s.storage || A)(s.initialValue), [N, I] = A(void 0), [K, F] = A(void 0, {
+  const $ = /* @__PURE__ */ new Set(), [x, S] = (s.storage || A)(s.initialValue), [N, I] = A(void 0), [K, F] = A(void 0, {
     equals: !1
   }), [T, E] = A(d ? "ready" : "unresolved");
   if (o1.context) {
@@ -801,9 +806,9 @@ function St(e, t, n) {
   function p1(D, G) {
     I1(() => {
       G === void 0 && S(() => D), E(G !== void 0 ? "errored" : "ready"), I(G);
-      for (const R of b.keys())
+      for (const R of $.keys())
         R.decrement();
-      b.clear();
+      $.clear();
     }, !1);
   }
   function i1() {
@@ -811,7 +816,7 @@ function St(e, t, n) {
     if (R !== void 0 && !l)
       throw R;
     return J && !J.user && D && w0(() => {
-      K(), l && (D.resolved || b.has(D) || (D.increment(), b.add(D)));
+      K(), l && (D.resolved || $.has(D) || (D.increment(), $.add(D)));
     }), G;
   }
   function y1(D = !0) {
@@ -1046,30 +1051,30 @@ function Et(e, t, n = {}) {
   return B1(() => M0(s)), () => {
     let h = e() || [], g, d;
     return h[Mt], M1(() => {
-      let b = h.length, x, S, N, I, K, F, T, E, z;
-      if (b === 0)
+      let $ = h.length, x, S, N, I, K, F, T, E, z;
+      if ($ === 0)
         l !== 0 && (M0(s), s = [], r = [], a = [], l = 0, o && (o = [])), n.fallback && (r = [Nt], a[0] = se((p1) => (s[0] = p1, n.fallback())), l = 1);
       else if (l === 0) {
-        for (a = new Array(b), d = 0; d < b; d++)
+        for (a = new Array($), d = 0; d < $; d++)
           r[d] = h[d], a[d] = se(v);
-        l = b;
+        l = $;
       } else {
-        for (N = new Array(b), I = new Array(b), o && (K = new Array(b)), F = 0, T = Math.min(l, b); F < T && r[F] === h[F]; F++)
+        for (N = new Array($), I = new Array($), o && (K = new Array($)), F = 0, T = Math.min(l, $); F < T && r[F] === h[F]; F++)
           ;
-        for (T = l - 1, E = b - 1; T >= F && E >= F && r[T] === h[E]; T--, E--)
+        for (T = l - 1, E = $ - 1; T >= F && E >= F && r[T] === h[E]; T--, E--)
           N[E] = a[T], I[E] = s[T], o && (K[E] = o[T]);
         for (x = /* @__PURE__ */ new Map(), S = new Array(E + 1), d = E; d >= F; d--)
           z = h[d], g = x.get(z), S[d] = g === void 0 ? -1 : g, x.set(z, d);
         for (g = F; g <= T; g++)
           z = r[g], d = x.get(z), d !== void 0 && d !== -1 ? (N[d] = a[g], I[d] = s[g], o && (K[d] = o[g]), d = S[d], x.set(z, d)) : s[g]();
-        for (d = F; d < b; d++)
+        for (d = F; d < $; d++)
           d in N ? (a[d] = N[d], s[d] = I[d], o && (o[d] = K[d], o[d](d))) : a[d] = se(v);
-        a = a.slice(0, l = b), r = h.slice(0);
+        a = a.slice(0, l = $), r = h.slice(0);
       }
       return a;
     });
-    function v(b) {
-      if (s[d] = b, o) {
+    function v($) {
+      if (s[d] = $, o) {
         const [x, S] = A(d);
         return o[d] = S, t(h[d], x);
       }
@@ -1205,10 +1210,10 @@ function Kt(e, t, n) {
       const d = g.get(t[l]);
       if (d != null)
         if (o < d && d < s) {
-          let v = l, b = 1, x;
-          for (; ++v < a && v < s && !((x = g.get(t[v])) == null || x !== d + b); )
-            b++;
-          if (b > d - o) {
+          let v = l, $ = 1, x;
+          for (; ++v < a && v < s && !((x = g.get(t[v])) == null || x !== d + $); )
+            $++;
+          if ($ > d - o) {
             const S = t[l];
             for (; o < d; )
               e.insertBefore(n[o++], S);
@@ -1958,8 +1963,8 @@ be.exports;
   function h(g, d) {
     if (d)
       return g.slice();
-    var v = g.length, b = o ? o(v) : new g.constructor(v);
-    return g.copy(b), b;
+    var v = g.length, $ = o ? o(v) : new g.constructor(v);
+    return g.copy($), $;
   }
   e.exports = h;
 })(be, be.exports);
@@ -2136,11 +2141,11 @@ function ye(e, t, n, r, a, s) {
     if (l = M4(e), !o)
       return b4(e, l);
   } else {
-    var v = w4(e), b = v == V9 || v == R4;
+    var v = w4(e), $ = v == V9 || v == R4;
     if (I4(e))
       return $4(e, o);
-    if (v == Y9 || v == H9 || b && !a) {
-      if (l = h || b ? {} : T4(e), !o)
+    if (v == Y9 || v == H9 || $ && !a) {
+      if (l = h || $ ? {} : T4(e), !o)
         return h ? x4(e, _4(l, e)) : L4(e, v4(l, e));
     } else {
       if (!X[v])
@@ -2277,8 +2282,8 @@ const ka = /* @__PURE__ */ p('<div class="klinecharts-pro-loading"><i class="cir
       }), o;
     })();
   })(), null), Q((l) => {
-    const o = !!e.isMobile, h = e.isMobile ? "100%" : `${e.width ?? 400}px`, g = (e.isMobile, "auto"), d = e.isMobile ? "60vh" : "90vh", v = !!e.isMobile, b = !!e.isMobile, x = !!e.isMobile;
-    return o !== l._v$ && t.classList.toggle("mobile-modal", l._v$ = o), h !== l._v$2 && n.style.setProperty("width", l._v$2 = h), g !== l._v$3 && n.style.setProperty("height", l._v$3 = g), d !== l._v$4 && n.style.setProperty("max-height", l._v$4 = d), v !== l._v$5 && n.classList.toggle("mobile-inner", l._v$5 = v), b !== l._v$6 && r.classList.toggle("mobile-title", l._v$6 = b), x !== l._v$7 && s.classList.toggle("mobile-content", l._v$7 = x), l;
+    const o = !!e.isMobile, h = e.isMobile ? "100%" : `${e.width ?? 400}px`, g = (e.isMobile, "auto"), d = e.isMobile ? "60vh" : "90vh", v = !!e.isMobile, $ = !!e.isMobile, x = !!e.isMobile;
+    return o !== l._v$ && t.classList.toggle("mobile-modal", l._v$ = o), h !== l._v$2 && n.style.setProperty("width", l._v$2 = h), g !== l._v$3 && n.style.setProperty("height", l._v$3 = g), d !== l._v$4 && n.style.setProperty("max-height", l._v$4 = d), v !== l._v$5 && n.classList.toggle("mobile-inner", l._v$5 = v), $ !== l._v$6 && r.classList.toggle("mobile-title", l._v$6 = $), x !== l._v$7 && s.classList.toggle("mobile-content", l._v$7 = x), l;
   }, {
     _v$: void 0,
     _v$2: void 0,
@@ -2297,9 +2302,9 @@ const Ia = /* @__PURE__ */ p('<div tabindex="0"><div class="selector-container">
     if (!e.dataSource || !e.searchable)
       return e.dataSource;
     const d = r().toLowerCase().trim();
-    return d ? typeof e.dataSource[0] == "string" ? e.dataSource.filter((b) => b.toLowerCase().includes(d)) : e.dataSource.filter((b) => {
+    return d ? typeof e.dataSource[0] == "string" ? e.dataSource.filter(($) => $.toLowerCase().includes(d)) : e.dataSource.filter(($) => {
       var N, I;
-      const x = ((N = b.text) == null ? void 0 : N.toString().toLowerCase()) || "", S = ((I = b.key) == null ? void 0 : I.toLowerCase()) || "";
+      const x = ((N = $.text) == null ? void 0 : N.toString().toLowerCase()) || "", S = ((I = $.key) == null ? void 0 : I.toLowerCase()) || "";
       return x.includes(d) || S.includes(d);
     }) : e.dataSource;
   }), h = () => {
@@ -2310,12 +2315,12 @@ const Ia = /* @__PURE__ */ p('<div tabindex="0"><div class="selector-container">
     l && v && l.contains(v) || (n(!1), a(""));
   };
   return (() => {
-    const d = Ia.cloneNode(!0), v = d.firstChild, b = v.firstChild;
+    const d = Ia.cloneNode(!0), v = d.firstChild, $ = v.firstChild;
     d.addEventListener("blur", g), d.$$click = (S) => {
       S.stopPropagation(), h();
     };
     const x = l;
-    return typeof x == "function" ? E1(x, d) : l = d, L(b, () => e.value), L(d, (() => {
+    return typeof x == "function" ? E1(x, d) : l = d, L($, () => e.value), L(d, (() => {
       const S = H(() => !!(e.dataSource && e.dataSource.length > 0));
       return () => S() && (() => {
         const N = Da.cloneNode(!0), I = N.firstChild;
@@ -2375,8 +2380,8 @@ const Ea = /* @__PURE__ */ p('<span class="prefix"></span>'), Ba = /* @__PURE__ 
       const h = o.target.value;
       if ("precision" in t) {
         let v;
-        const b = Math.max(0, Math.floor(t.precision));
-        b <= 0 ? v = new RegExp(/^[1-9]\d*$/) : v = new RegExp("^\\d+\\.?\\d{0," + b + "}$"), (h === "" || v.test(h) && +h >= t.min && +h <= t.max) && ((g = t.onChange) == null || g.call(t, h === "" ? h : +h));
+        const $ = Math.max(0, Math.floor(t.precision));
+        $ <= 0 ? v = new RegExp(/^[1-9]\d*$/) : v = new RegExp("^\\d+\\.?\\d{0," + $ + "}$"), (h === "" || v.test(h) && +h >= t.min && +h <= t.max) && ((g = t.onChange) == null || g.call(t, h === "" ? h : +h));
       } else
         (d = t.onChange) == null || d.call(t, h);
     }), l.addEventListener("blur", () => {
@@ -2666,7 +2671,7 @@ const i = (e, t) => {
     top: 0,
     left: 0,
     minWidth: 220
-  }), b = () => {
+  }), $ = () => {
     s(window.innerWidth < 768), h() && z();
   }, [x, S] = A(!1), N = () => document.fullscreenElement ?? document.body, I = () => {
     S(!!document.fullscreenElement);
@@ -2699,9 +2704,9 @@ const i = (e, t) => {
       F(!1), E(!1);
   };
   Ge(() => {
-    window.addEventListener("resize", b), document.addEventListener("fullscreenchange", I), document.addEventListener("mousedown", i1), window.addEventListener("scroll", y1, !0), document.addEventListener("mozfullscreenchange", I), document.addEventListener("webkitfullscreenchange", I), document.addEventListener("msfullscreenchange", I), t && (t.addEventListener("scroll", D), setTimeout(D, 100));
+    window.addEventListener("resize", $), document.addEventListener("fullscreenchange", I), document.addEventListener("mousedown", i1), window.addEventListener("scroll", y1, !0), document.addEventListener("mozfullscreenchange", I), document.addEventListener("webkitfullscreenchange", I), document.addEventListener("msfullscreenchange", I), t && (t.addEventListener("scroll", D), setTimeout(D, 100));
   }), B1(() => {
-    window.removeEventListener("resize", b), document.removeEventListener("fullscreenchange", I), document.removeEventListener("mousedown", i1), window.removeEventListener("scroll", y1, !0), document.removeEventListener("mozfullscreenchange", I), document.removeEventListener("webkitfullscreenchange", I), document.removeEventListener("msfullscreenchange", I), t && t.removeEventListener("scroll", D);
+    window.removeEventListener("resize", $), document.removeEventListener("fullscreenchange", I), document.removeEventListener("mousedown", i1), window.removeEventListener("scroll", y1, !0), document.removeEventListener("mozfullscreenchange", I), document.removeEventListener("webkitfullscreenchange", I), document.removeEventListener("msfullscreenchange", I), t && t.removeEventListener("scroll", D);
   });
   const G = H(() => {
     const O = e.periods.filter((Z) => {
@@ -3027,7 +3032,7 @@ function Vu(e) {
   ];
 }
 const m1 = (e) => ju[e.name](e.class), Yu = /* @__PURE__ */ p('<div class="klinecharts-pro-drawing-bar"><span class="split-line"></span><div class="item" tabindex="0"><span style="width:32px;height:32px"></span><div class="icon-arrow"><svg viewBox="0 0 4 6"><path d="M1.07298,0.159458C0.827521,-0.0531526,0.429553,-0.0531526,0.184094,0.159458C-0.0613648,0.372068,-0.0613648,0.716778,0.184094,0.929388L2.61275,3.03303L0.260362,5.07061C0.0149035,5.28322,0.0149035,5.62793,0.260362,5.84054C0.505822,6.05315,0.903789,6.05315,1.14925,5.84054L3.81591,3.53075C4.01812,3.3556,4.05374,3.0908,3.92279,2.88406C3.93219,2.73496,3.87113,2.58315,3.73964,2.46925L1.07298,0.159458Z" stroke="none" stroke-opacity="0"></path></svg></div></div><div class="item"><span style="width:32px;height:32px"></span></div><div class="item"><span style="width:32px;height:32px"></span></div><span class="split-line"></span><div class="item"><span style="width:32px;height:32px"></span></div></div>'), Gu = /* @__PURE__ */ p('<div class="item" tabindex="0"><span style="width:32px;height:32px"></span><div class="icon-arrow"><svg viewBox="0 0 4 6"><path d="M1.07298,0.159458C0.827521,-0.0531526,0.429553,-0.0531526,0.184094,0.159458C-0.0613648,0.372068,-0.0613648,0.716778,0.184094,0.929388L2.61275,3.03303L0.260362,5.07061C0.0149035,5.28322,0.0149035,5.62793,0.260362,5.84054C0.505822,6.05315,0.903789,6.05315,1.14925,5.84054L3.81591,3.53075C4.01812,3.3556,4.05374,3.0908,3.92279,2.88406C3.93219,2.73496,3.87113,2.58315,3.73964,2.46925L1.07298,0.159458Z" stroke="none" stroke-opacity="0"></path></svg></div></div>'), o9 = /* @__PURE__ */ p('<li><span style="padding-left:8px"></span></li>'), c9 = "drawing_tools", Wu = (e) => {
-  const [t, n] = A("horizontalStraightLine"), [r, a] = A("priceChannelLine"), [s, l] = A("circle"), [o, h] = A("fibonacciLine"), [g, d] = A("xabcd"), [v, b] = A("weak_magnet"), [x, S] = A("normal"), [N, I] = A(!1), [K, F] = A(!0), [T, E] = A(""), z = H(() => [{
+  const [t, n] = A("horizontalStraightLine"), [r, a] = A("priceChannelLine"), [s, l] = A("circle"), [o, h] = A("fibonacciLine"), [g, d] = A("xabcd"), [v, $] = A("weak_magnet"), [x, S] = A("normal"), [N, I] = A(!1), [K, F] = A(!0), [T, E] = A(""), z = H(() => [{
     key: "singleLine",
     icon: t(),
     list: zu(e.locale),
@@ -3129,7 +3134,7 @@ const m1 = (e) => ju[e.name](e.class), Yu = /* @__PURE__ */ p('<div class="kline
           return p1().map((V) => (() => {
             const j = o9.cloneNode(!0), h1 = j.firstChild;
             return j.$$click = () => {
-              b(V.key), S(V.key), e.onModeChange(V.key), E("");
+              $(V.key), S(V.key), e.onModeChange(V.key), E("");
             }, L(j, _(m1, {
               get name() {
                 return V.key;
@@ -3650,8 +3655,8 @@ const ed = /* @__PURE__ */ p('<div class="klinecharts-pro-setting-modal-content"
   const h = (g, d) => {
     const v = {};
     ze(v, g.key, d);
-    const b = t1.clone(t());
-    ze(b, g.key, d), n(b), a(r().map((x) => ({
+    const $ = t1.clone(t());
+    ze($, g.key, d), n($), a(r().map((x) => ({
       ...x
     }))), e.onChange(v);
   };
@@ -3687,7 +3692,7 @@ const ed = /* @__PURE__ */ p('<div class="klinecharts-pro-setting-modal-content"
         },
         children: (d) => {
           let v;
-          const b = t1.formatValue(t(), d.key);
+          const $ = t1.formatValue(t(), d.key);
           switch (d.component) {
             case "select": {
               v = _(W9, {
@@ -3698,7 +3703,7 @@ const ed = /* @__PURE__ */ p('<div class="klinecharts-pro-setting-modal-content"
                   };
                 },
                 get value() {
-                  return i(b, e.locale);
+                  return i($, e.locale);
                 },
                 get dataSource() {
                   return d.dataSource;
@@ -3711,7 +3716,7 @@ const ed = /* @__PURE__ */ p('<div class="klinecharts-pro-setting-modal-content"
               break;
             }
             case "switch": {
-              const x = !!b;
+              const x = !!$;
               v = _(Fa, {
                 open: x,
                 onChange: () => {
@@ -4031,7 +4036,7 @@ function Ce(e, t, n, r) {
 const md = (e) => {
   var d0, h0, C0, y0, f0, g0, m0, p0;
   let t, n = null, r;
-  const [a, s] = A(!1), [l, o] = A(e.theme), [h, g] = A(e.styles), [d, v] = A(e.locale), [b, x] = A(e.symbol), [S, N] = A(e.period), [I, K] = A(!1), [F, T] = A([...e.mainIndicators]), [E, z] = A({}), [p1, i1] = A(!1), [y1, D] = A({
+  const [a, s] = A(!1), [l, o] = A(e.theme), [h, g] = A(e.styles), [d, v] = A(e.locale), [$, x] = A(e.symbol), [S, N] = A(e.period), [I, K] = A(!1), [F, T] = A([...e.mainIndicators]), [E, z] = A({}), [p1, i1] = A(!1), [y1, D] = A({
     key: e.timezone,
     text: d9(e.timezone, e.locale)
   }), [G, R] = A(!1), [O, Z] = A(), [d1, l1] = A(""), [W, v1] = A(e.drawingBarVisible), [C, e1] = A(!1), [M, V] = A(!1), [j, h1] = A(!1), [_1, D1] = A({
@@ -4162,7 +4167,7 @@ const md = (e) => {
         return;
       const P = De(k);
       if (P) {
-        const y = r1.get(c), $ = ((f = y == null ? void 0 : y.points) == null ? void 0 : f.length) || 0, w = ((m = P.points) == null ? void 0 : m.length) || 0;
+        const y = r1.get(c), b = ((f = y == null ? void 0 : y.points) == null ? void 0 : f.length) || 0, w = ((m = P.points) == null ? void 0 : m.length) || 0;
         r1.set(c, P);
         const U = z1(P.type);
         if (w >= U) {
@@ -4192,8 +4197,8 @@ const md = (e) => {
         k.checkInterval && clearInterval(k.checkInterval), k.mouseUpHandler && (document.removeEventListener("mouseup", k.mouseUpHandler), document.removeEventListener("touchend", k.mouseUpHandler)), Z1(c);
         const y = r1.get(c);
         if (y) {
-          const $ = z1(y.type), w = ((P = y.points) == null ? void 0 : P.length) || 0;
-          w < $ && console.warn(`âš ï¸ ${y.type} ${c} has only ${w} point(s), should have ${$}`);
+          const b = z1(y.type), w = ((P = y.points) == null ? void 0 : P.length) || 0;
+          w < b && console.warn(`âš ï¸ ${y.type} ${c} has only ${w} point(s), should have ${b}`);
         }
       }
     }, 3e4);
@@ -4208,8 +4213,8 @@ const md = (e) => {
               ...P
             };
             y.extendData && (y.extendData = k1(y.extendData)), y.styles && (y.styles = k1(y.styles));
-            const $ = z1(P.type), w = ((U = P.points) == null ? void 0 : U.length) || 0;
-            return w < $ && console.warn(`âš ï¸ Saving ${P.type} with only ${w} point(s), needs ${$}`), y;
+            const b = z1(P.type), w = ((U = P.points) == null ? void 0 : U.length) || 0;
+            return w < b && console.warn(`âš ï¸ Saving ${P.type} with only ${w} point(s), needs ${b}`), y;
           }),
           timestamp: Date.now()
         };
@@ -4234,7 +4239,7 @@ const md = (e) => {
     }
   };
   const B = () => {
-    const c = b();
+    const c = $();
     if (c != null && c.ticker) {
       const u = Array.from(r1.values());
       A1.saveDrawings(c.ticker, u);
@@ -4249,8 +4254,8 @@ const md = (e) => {
   };
   let ee = (f0 = e.orderTools) == null ? void 0 : f0.quickOrder, te = (g0 = e.orderTools) == null ? void 0 : g0.openOrders, c0 = (m0 = e.orderTools) == null ? void 0 : m0.positions, l0 = (p0 = e.orderTools) == null ? void 0 : p0.orderHistory;
   f1(() => {
-    var P, y, $, w;
-    const c = (P = e.orderTools) == null ? void 0 : P.quickOrder, u = (y = e.orderTools) == null ? void 0 : y.openOrders, f = ($ = e.orderTools) == null ? void 0 : $.positions, m = (w = e.orderTools) == null ? void 0 : w.orderHistory, k = {};
+    var P, y, b, w;
+    const c = (P = e.orderTools) == null ? void 0 : P.quickOrder, u = (y = e.orderTools) == null ? void 0 : y.openOrders, f = (b = e.orderTools) == null ? void 0 : b.positions, m = (w = e.orderTools) == null ? void 0 : w.orderHistory, k = {};
     typeof c == "boolean" && c !== ee && (ee = c, k.quickOrder = c), typeof u == "boolean" && u !== te && (te = u, k.openOrders = u), typeof f == "boolean" && f !== c0 && (c0 = f, k.positions = f), typeof m == "boolean" && m !== l0 && (l0 = m, k.orderHistory = m), Object.keys(k).length > 0 && D1({
       ..._1(),
       ...k
@@ -4270,7 +4275,7 @@ const md = (e) => {
     },
     getTimezone: () => y1().key,
     setSymbol: x,
-    getSymbol: () => b(),
+    getSymbol: () => $(),
     setPeriod: N,
     getPeriod: () => S(),
     getMainIndicators: () => F(),
@@ -4336,7 +4341,7 @@ const md = (e) => {
       n && "resize" in n && typeof n.resize == "function" ? n.resize() : console.warn("resize method not available on widget");
     },
     getSettings: () => {
-      var f, m, k, P, y, $, w, U, n1, T1, ne, ce, v0, _0, $0, b0;
+      var f, m, k, P, y, b, w, U, n1, T1, ne, ce, v0, _0, $0, b0;
       if (!n)
         return {};
       const c = n.getStyles(), u = (f = c.candle) == null ? void 0 : f.bar;
@@ -4346,7 +4351,7 @@ const md = (e) => {
         candleBarStyle: u == null ? void 0 : u.style,
         // bar.style might be LineType
         showLastPrice: (y = (P = (k = c.candle) == null ? void 0 : k.priceMark) == null ? void 0 : P.last) == null ? void 0 : y.show,
-        showHighestPrice: (U = (w = ($ = c.candle) == null ? void 0 : $.priceMark) == null ? void 0 : w.high) == null ? void 0 : U.show,
+        showHighestPrice: (U = (w = (b = c.candle) == null ? void 0 : b.priceMark) == null ? void 0 : w.high) == null ? void 0 : U.show,
         showLowestPrice: (ne = (T1 = (n1 = c.candle) == null ? void 0 : n1.priceMark) == null ? void 0 : T1.low) == null ? void 0 : ne.show,
         // Indicator settings
         showIndicatorLastValue: (v0 = (ce = c.indicator) == null ? void 0 : ce.lastValueMark) == null ? void 0 : v0.show,
@@ -4359,7 +4364,7 @@ const md = (e) => {
       };
     },
     setSettings: (c) => {
-      var f, m, k, P, y, $, w, U, n1, T1, ne;
+      var f, m, k, P, y, b, w, U, n1, T1, ne;
       if (!n)
         return;
       const u = {};
@@ -4391,7 +4396,7 @@ const md = (e) => {
         priceMark: {
           ...(y = u.candle) == null ? void 0 : y.priceMark,
           high: {
-            ...(w = ($ = u.candle) == null ? void 0 : $.priceMark) == null ? void 0 : w.high,
+            ...(w = (b = u.candle) == null ? void 0 : b.priceMark) == null ? void 0 : w.high,
             show: c.showHighestPrice
           }
         }
@@ -4422,7 +4427,7 @@ const md = (e) => {
       }), n.setStyles(u);
     },
     resetSettings: () => {
-      var f, m, k, P, y, $, w;
+      var f, m, k, P, y, b, w;
       if (!n)
         return;
       n.getStyles();
@@ -4477,7 +4482,7 @@ const md = (e) => {
           },
           yAxis: {
             type: (y = u.yAxis) == null ? void 0 : y.type,
-            reverse: ($ = u.yAxis) == null ? void 0 : $.reverse
+            reverse: (b = u.yAxis) == null ? void 0 : b.reverse
           },
           grid: {
             show: (w = u.grid) == null ? void 0 : w.show
@@ -4508,11 +4513,11 @@ const md = (e) => {
             visible: f.visible ?? !0,
             lock: f.lock ?? !1,
             mode: f.mode ?? L0.Normal
-          }, y = n == null ? void 0 : n.createOverlay(P), $ = typeof y == "string" ? y : null;
-          $ && (r1.set($, {
+          }, y = n == null ? void 0 : n.createOverlay(P), b = typeof y == "string" ? y : null;
+          b && (r1.set(b, {
             ...f,
-            id: $
-          }), u1.set($, {
+            id: b
+          }), u1.set(b, {
             monitoring: !1,
             complete: !0,
             lastPointCount: ((k = f.points) == null ? void 0 : k.length) || 0
@@ -4548,15 +4553,15 @@ const md = (e) => {
         break;
       }
       case "week": {
-        const y = new Date(m).getDay(), $ = y === 0 ? 6 : y - 1;
-        m = m - $ * 60 * 60 * 24;
+        const y = new Date(m).getDay(), b = y === 0 ? 6 : y - 1;
+        m = m - b * 60 * 60 * 24;
         const w = new Date(m);
         m = (/* @__PURE__ */ new Date(`${w.getFullYear()}-${w.getMonth() + 1}-${w.getDate()}`)).getTime(), k = f * c.multiplier * 7 * 24 * 60 * 60 * 1e3;
         break;
       }
       case "month": {
-        const P = new Date(m), y = P.getFullYear(), $ = P.getMonth() + 1;
-        m = (/* @__PURE__ */ new Date(`${y}-${$}-01`)).getTime(), k = f * c.multiplier * 30 * 24 * 60 * 60 * 1e3;
+        const P = new Date(m), y = P.getFullYear(), b = P.getMonth() + 1;
+        m = (/* @__PURE__ */ new Date(`${y}-${b}-01`)).getTime(), k = f * c.multiplier * 30 * 24 * 60 * 60 * 1e3;
         const w = new Date(k);
         k = (/* @__PURE__ */ new Date(`${w.getFullYear()}-${w.getMonth() + 1}-01`)).getTime();
         break;
@@ -4564,8 +4569,8 @@ const md = (e) => {
       case "year": {
         const y = new Date(m).getFullYear();
         m = (/* @__PURE__ */ new Date(`${y}-01-01`)).getTime(), k = f * c.multiplier * 365 * 24 * 60 * 60 * 1e3;
-        const $ = new Date(k);
-        k = (/* @__PURE__ */ new Date(`${$.getFullYear()}-01-01`)).getTime();
+        const b = new Date(k);
+        k = (/* @__PURE__ */ new Date(`${b.getFullYear()}-01-01`)).getTime();
         break;
       }
     }
@@ -4574,21 +4579,21 @@ const md = (e) => {
   return Ge(() => {
     if (window.addEventListener("resize", u0), n = tt(t, {
       customApi: {
-        formatDate: (y, $, w, U) => {
+        formatDate: (y, b, w, U) => {
           switch (S().timespan) {
             case "minute":
-              return U === le.XAxis ? t1.formatDate(y, $, "HH:mm") : t1.formatDate(y, $, "YYYY-MM-DD HH:mm");
+              return U === le.XAxis ? t1.formatDate(y, b, "HH:mm") : t1.formatDate(y, b, "YYYY-MM-DD HH:mm");
             case "hour":
-              return U === le.XAxis ? t1.formatDate(y, $, "MM-DD HH:mm") : t1.formatDate(y, $, "YYYY-MM-DD HH:mm");
+              return U === le.XAxis ? t1.formatDate(y, b, "MM-DD HH:mm") : t1.formatDate(y, b, "YYYY-MM-DD HH:mm");
             case "day":
             case "week":
-              return t1.formatDate(y, $, "YYYY-MM-DD");
+              return t1.formatDate(y, b, "YYYY-MM-DD");
             case "month":
-              return U === le.XAxis ? t1.formatDate(y, $, "YYYY-MM") : t1.formatDate(y, $, "YYYY-MM-DD");
+              return U === le.XAxis ? t1.formatDate(y, b, "YYYY-MM") : t1.formatDate(y, b, "YYYY-MM-DD");
             case "year":
-              return U === le.XAxis ? t1.formatDate(y, $, "YYYY") : t1.formatDate(y, $, "YYYY-MM-DD");
+              return U === le.XAxis ? t1.formatDate(y, b, "YYYY") : t1.formatDate(y, b, "YYYY-MM-DD");
           }
-          return t1.formatDate(y, $, "YYYY-MM-DD HH:mm");
+          return t1.formatDate(y, b, "YYYY-MM-DD HH:mm");
         }
       }
     }), n) {
@@ -4602,18 +4607,18 @@ const md = (e) => {
           w.appendChild(e.watermark);
         y.appendChild(w);
       }
-      const $ = n.getDom("candle_pane", x0.YAxis);
-      r = document.createElement("span"), r.className = "klinecharts-pro-price-unit", $ == null || $.appendChild(r);
+      const b = n.getDom("candle_pane", x0.YAxis);
+      r = document.createElement("span"), r.className = "klinecharts-pro-price-unit", b == null || b.appendChild(r);
     }
     let c = !1;
     const u = () => {
-      const y = b();
+      const y = $();
       if (y != null && y.ticker)
         try {
-          const $ = Array.from(r1.values());
-          A1.saveDrawings(y.ticker, $);
-        } catch ($) {
-          console.error("âŒ Error refreshing local storage:", $);
+          const b = Array.from(r1.values());
+          A1.saveDrawings(y.ticker, b);
+        } catch (b) {
+          console.error("âŒ Error refreshing local storage:", b);
         }
     }, f = (y) => {
       c || (c = !0, y.preventDefault());
@@ -4625,14 +4630,14 @@ const md = (e) => {
     });
     const m = n == null ? void 0 : n.removeOverlay;
     n && m && (n.removeOverlay = function(...y) {
-      const $ = m.apply(this, y), w = y[0];
+      const b = m.apply(this, y), w = y[0];
       let U;
       if (typeof w == "string" ? U = w : w && typeof w == "object" && w.id && (U = w.id), U) {
         r1.delete(U);
         const n1 = u1.get(U);
         n1 && (n1.checkInterval && clearInterval(n1.checkInterval), n1.mouseUpHandler && (document.removeEventListener("mouseup", n1.mouseUpHandler), document.removeEventListener("touchend", n1.mouseUpHandler)), u1.delete(U)), u();
       }
-      return $;
+      return b;
     }), F().forEach((y) => {
       Ce(n, y, !0, {
         id: "candle_pane"
@@ -4640,12 +4645,12 @@ const md = (e) => {
     });
     const k = {};
     e.subIndicators.forEach((y) => {
-      const $ = Ce(n, y, !0);
-      $ && (k[y] = $);
+      const b = Ce(n, y, !0);
+      b && (k[y] = b);
     }), z(k), n == null || n.loadMore((y) => {
       s(!0), (async () => {
         try {
-          const w = S(), [U] = Ne(w, y, 1), [n1] = Ne(w, U, 500), T1 = await e.datafeed.getHistoryKLineData(b(), w, n1, U);
+          const w = S(), [U] = Ne(w, y, 1), [n1] = Ne(w, U, 500), T1 = await e.datafeed.getHistoryKLineData($(), w, n1, U);
           n == null || n.applyMoreData(T1, T1.length > 0);
         } finally {
           s(!1);
@@ -4659,8 +4664,8 @@ const md = (e) => {
               name: y.indicatorName,
               visible: !0
             }, y.paneId);
-            const $ = y.paneId === "candle_pane" ? "main" : "sub";
-            g1(y.indicatorName, y.paneId, $, "change");
+            const b = y.paneId === "candle_pane" ? "main" : "sub";
+            g1(y.indicatorName, y.paneId, b, "change");
             break;
           }
           case "invisible": {
@@ -4668,53 +4673,53 @@ const md = (e) => {
               name: y.indicatorName,
               visible: !1
             }, y.paneId);
-            const $ = y.paneId === "candle_pane" ? "main" : "sub";
-            g1(y.indicatorName, y.paneId, $, "change");
+            const b = y.paneId === "candle_pane" ? "main" : "sub";
+            g1(y.indicatorName, y.paneId, b, "change");
             break;
           }
           case "setting": {
-            const $ = n == null ? void 0 : n.getIndicatorByPaneId(y.paneId, y.indicatorName);
+            const b = n == null ? void 0 : n.getIndicatorByPaneId(y.paneId, y.indicatorName);
             L1({
               visible: !0,
               indicatorName: y.indicatorName,
               paneId: y.paneId,
-              calcParams: $.calcParams
+              calcParams: b.calcParams
             });
             break;
           }
           case "close":
             if (y.paneId === "candle_pane") {
-              const $ = [...F()];
-              n == null || n.removeIndicator("candle_pane", y.indicatorName), $.splice($.indexOf(y.indicatorName), 1), T($), g1(y.indicatorName, "candle_pane", "main", "remove");
+              const b = [...F()];
+              n == null || n.removeIndicator("candle_pane", y.indicatorName), b.splice(b.indexOf(y.indicatorName), 1), T(b), g1(y.indicatorName, "candle_pane", "main", "remove");
             } else {
-              const $ = {
+              const b = {
                 ...E()
               };
-              n == null || n.removeIndicator(y.paneId, y.indicatorName), delete $[y.indicatorName], z($), g1(y.indicatorName, y.paneId, "sub", "remove");
+              n == null || n.removeIndicator(y.paneId, y.indicatorName), delete b[y.indicatorName], z(b), g1(y.indicatorName, y.paneId, "sub", "remove");
             }
         }
     });
     const P = n == null ? void 0 : n.createOverlay;
     n && P && (n.createOverlay = function(...y) {
-      const $ = y[0], w = P.apply(this, y), U = typeof w == "string" ? w : null;
-      return U && (Oe(U, $.name || "unknown"), Z1(U), B()), w;
+      const b = y[0], w = P.apply(this, y), U = typeof w == "string" ? w : null;
+      return U && (Oe(U, b.name || "unknown"), Z1(U), B()), w;
     });
   }), B1(() => {
     window.removeEventListener("resize", u0), u1.clear(), r1.clear(), k0(t);
   }), f1(() => {
-    const c = b();
+    const c = $();
     c != null && c.priceCurrency ? (r.innerHTML = c == null ? void 0 : c.priceCurrency.toLocaleUpperCase(), r.style.display = "flex") : r.style.display = "none", n == null || n.setPriceVolumePrecision((c == null ? void 0 : c.pricePrecision) ?? 2, (c == null ? void 0 : c.volumePrecision) ?? 0);
   }), f1((c) => {
-    const u = b(), f = S();
+    const u = $(), f = S();
     let m = !0;
     return B1(() => {
       m = !1;
     }), c && e.datafeed.unsubscribe(c.symbol, c.period), s(!0), V(!0), (async () => {
       try {
-        const [P, y] = Ne(f, (/* @__PURE__ */ new Date()).getTime(), 500), $ = await e.datafeed.getHistoryKLineData(u, f, P, y);
+        const [P, y] = Ne(f, (/* @__PURE__ */ new Date()).getTime(), 500), b = await e.datafeed.getHistoryKLineData(u, f, P, y);
         if (!m)
           return;
-        n == null || n.applyNewData($, $.length > 0), e.datafeed.subscribe(u, f, (w) => {
+        n == null || n.applyNewData(b, b.length > 0), e.datafeed.subscribe(u, f, (w) => {
           n == null || n.updateData(w);
         });
       } finally {
@@ -4826,7 +4831,7 @@ const md = (e) => {
       return e.locale;
     },
     get symbol() {
-      return b();
+      return $();
     },
     get spread() {
       return W();
