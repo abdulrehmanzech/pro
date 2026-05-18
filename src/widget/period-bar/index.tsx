@@ -210,7 +210,7 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
   });
 
   createEffect(() => {
-    if (isMobile() || !props.showOrderToolsMenu) {
+    if (!props.showOrderToolsMenu) {
       setOrderMenuVisible(false);
       return;
     }
@@ -416,7 +416,7 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
             "padding-right": fullScreen() ? "0px" : "var(--klinecharts-pro-period-bar-padding-right)",
           }}
         >
-          <Show when={!isMobile() && props.showOrderToolsMenu}>
+          <Show when={props.showOrderToolsMenu}>
             <div
               ref={(el) => {
                 orderMenuRef = el as HTMLDivElement;
@@ -434,7 +434,7 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
                 }}
                 style={{
                   gap: "6px",
-                  padding: "0 10px",
+                  padding: isMobile() ? "0 8px" : "0 10px",
                 }}
               >
                 <svg
