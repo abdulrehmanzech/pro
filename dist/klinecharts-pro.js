@@ -205,11 +205,11 @@ const M9 = {
     if (e.length > 1) {
       const s = e[1].x > e[0].x ? e[0].x : e[1].x, l = [1, 0.786, 0.618, 0.5, 0.382, 0.236, 0], c = e[0].y - e[1].y, y = t.points, m = y[0].value - y[1].value;
       l.forEach((d) => {
-        const L = e[1].y + c * d, _ = (y[1].value + m * d).toFixed(n.price);
+        const L = e[1].y + c * d, v = (y[1].value + m * d).toFixed(n.price);
         r.push({ coordinates: [{ x: e[0].x, y: L }, { x: e[1].x, y: L }] }), i.push({
           x: s,
           y: L,
-          text: `${_} (${(d * 100).toFixed(1)}%)`,
+          text: `${v} (${(d * 100).toFixed(1)}%)`,
           baseline: "bottom"
         });
       });
@@ -258,7 +258,7 @@ const M9 = {
       }];
       let m = e[0].x - n, d = e[0].y - n;
       for (let L = 2; L < 9; L++) {
-        const _ = y[L - 2].r + y[L - 1].r;
+        const v = y[L - 2].r + y[L - 1].r;
         let A = 0;
         switch (L % 4) {
           case 0: {
@@ -281,7 +281,7 @@ const M9 = {
         const T = A + Math.PI / 2, D = ye({ x: m, y: d }, e[0], s);
         y.push({
           ...D,
-          r: _,
+          r: v,
           startAngle: A,
           endAngle: T
         });
@@ -312,10 +312,10 @@ const M9 = {
     if (e.length > 1) {
       const s = e[1].x > e[0].x ? -38 : 4, l = e[1].y > e[0].y ? -2 : 20, c = e[1].x - e[0].x, y = e[1].y - e[0].y;
       [1, 0.75, 0.618, 0.5, 0.382, 0.25, 0].forEach((d) => {
-        const L = e[1].x - c * d, _ = e[1].y - y * d;
-        n.push({ coordinates: [{ x: L, y: e[0].y }, { x: L, y: e[1].y }] }), n.push({ coordinates: [{ x: e[0].x, y: _ }, { x: e[1].x, y: _ }] }), r = r.concat(t0([e[0], { x: L, y: e[1].y }], t)), r = r.concat(t0([e[0], { x: e[1].x, y: _ }], t)), i.unshift({
+        const L = e[1].x - c * d, v = e[1].y - y * d;
+        n.push({ coordinates: [{ x: L, y: e[0].y }, { x: L, y: e[1].y }] }), n.push({ coordinates: [{ x: e[0].x, y: v }, { x: e[1].x, y: v }] }), r = r.concat(t0([e[0], { x: L, y: e[1].y }], t)), r = r.concat(t0([e[0], { x: e[1].x, y: v }], t)), i.unshift({
           x: e[0].x + s,
-          y: _ + 10,
+          y: v + 10,
           text: `${d.toFixed(3)}`
         }), i.unshift({
           x: L - 18,
@@ -351,11 +351,11 @@ const M9 = {
     if (e.length > 2) {
       const s = t.points, l = s[1].value - s[0].value, c = e[1].y - e[0].y, y = [0, 0.236, 0.382, 0.5, 0.618, 0.786, 1], m = e[2].x > e[1].x ? e[1].x : e[2].x;
       y.forEach((d) => {
-        const L = e[2].y + c * d, _ = (s[2].value + l * d).toFixed(n.price);
+        const L = e[2].y + c * d, v = (s[2].value + l * d).toFixed(n.price);
         r.push({ coordinates: [{ x: e[1].x, y: L }, { x: e[2].x, y: L }] }), i.push({
           x: m,
           y: L,
-          text: `${_} (${(d * 100).toFixed(1)}%)`,
+          text: `${v} (${(d * 100).toFixed(1)}%)`,
           baseline: "bottom"
         });
       });
@@ -737,7 +737,7 @@ function G9(e, t, n) {
   let r, i, s;
   arguments.length === 2 && typeof t == "object" || arguments.length === 1 ? (r = !0, i = e, s = t || {}) : (r = e, i = t, s = n || {});
   let l = null, c = Xe, y = null, m = !1, d = "initialValue" in s, L = typeof r == "function" && R(r);
-  const _ = /* @__PURE__ */ new Set(), [A, T] = (s.storage || w)(s.initialValue), [D, I] = w(void 0), [F, K] = w(void 0, {
+  const v = /* @__PURE__ */ new Set(), [A, T] = (s.storage || w)(s.initialValue), [D, I] = w(void 0), [F, K] = w(void 0, {
     equals: !1
   }), [P, B] = w(d ? "ready" : "unresolved");
   if (s1.context) {
@@ -753,9 +753,9 @@ function G9(e, t, n) {
   function p1(O, W) {
     N1(() => {
       W === void 0 && T(() => O), B(W !== void 0 ? "errored" : "ready"), I(W);
-      for (const H of _.keys())
+      for (const H of v.keys())
         H.decrement();
-      _.clear();
+      v.clear();
     }, !1);
   }
   function a1() {
@@ -763,7 +763,7 @@ function G9(e, t, n) {
     if (H !== void 0 && !l)
       throw H;
     return t1 && !t1.user && O && R0(() => {
-      F(), l && (O.resolved || _.has(O) || (O.increment(), _.add(O)));
+      F(), l && (O.resolved || v.has(O) || (O.increment(), v.add(O)));
     }), W;
   }
   function y1(O = !0) {
@@ -998,30 +998,30 @@ function n5(e, t, n = {}) {
   return K1(() => H0(s)), () => {
     let y = e() || [], m, d;
     return y[Y9], T1(() => {
-      let _ = y.length, A, T, D, I, F, K, P, B, z;
-      if (_ === 0)
+      let v = y.length, A, T, D, I, F, K, P, B, z;
+      if (v === 0)
         l !== 0 && (H0(s), s = [], r = [], i = [], l = 0, c && (c = [])), n.fallback && (r = [t5], i[0] = Ce((p1) => (s[0] = p1, n.fallback())), l = 1);
       else if (l === 0) {
-        for (i = new Array(_), d = 0; d < _; d++)
+        for (i = new Array(v), d = 0; d < v; d++)
           r[d] = y[d], i[d] = Ce(L);
-        l = _;
+        l = v;
       } else {
-        for (D = new Array(_), I = new Array(_), c && (F = new Array(_)), K = 0, P = Math.min(l, _); K < P && r[K] === y[K]; K++)
+        for (D = new Array(v), I = new Array(v), c && (F = new Array(v)), K = 0, P = Math.min(l, v); K < P && r[K] === y[K]; K++)
           ;
-        for (P = l - 1, B = _ - 1; P >= K && B >= K && r[P] === y[B]; P--, B--)
+        for (P = l - 1, B = v - 1; P >= K && B >= K && r[P] === y[B]; P--, B--)
           D[B] = i[P], I[B] = s[P], c && (F[B] = c[P]);
         for (A = /* @__PURE__ */ new Map(), T = new Array(B + 1), d = B; d >= K; d--)
           z = y[d], m = A.get(z), T[d] = m === void 0 ? -1 : m, A.set(z, d);
         for (m = K; m <= P; m++)
           z = r[m], d = A.get(z), d !== void 0 && d !== -1 ? (D[d] = i[m], I[d] = s[m], c && (F[d] = c[m]), d = T[d], A.set(z, d)) : s[m]();
-        for (d = K; d < _; d++)
+        for (d = K; d < v; d++)
           d in D ? (i[d] = D[d], s[d] = I[d], c && (c[d] = F[d], c[d](d))) : i[d] = Ce(L);
-        i = i.slice(0, l = _), r = y.slice(0);
+        i = i.slice(0, l = v), r = y.slice(0);
       }
       return i;
     });
-    function L(_) {
-      if (s[d] = _, c) {
+    function L(v) {
+      if (s[d] = v, c) {
         const [A, T] = w(d);
         return c[d] = T, t(y[d], A);
       }
@@ -1157,10 +1157,10 @@ function a5(e, t, n) {
       const d = m.get(t[l]);
       if (d != null)
         if (c < d && d < s) {
-          let L = l, _ = 1, A;
-          for (; ++L < i && L < s && !((A = m.get(t[L])) == null || A !== d + _); )
-            _++;
-          if (_ > d - c) {
+          let L = l, v = 1, A;
+          for (; ++L < i && L < s && !((A = m.get(t[L])) == null || A !== d + v); )
+            v++;
+          if (v > d - c) {
             const T = t[l];
             for (; c < d; )
               e.insertBefore(n[c++], T);
@@ -1910,8 +1910,8 @@ Ue.exports;
   function y(m, d) {
     if (d)
       return m.slice();
-    var L = m.length, _ = c ? c(L) : new m.constructor(L);
-    return m.copy(_), _;
+    var L = m.length, v = c ? c(L) : new m.constructor(L);
+    return m.copy(v), v;
   }
   e.exports = y;
 })(Ue, Ue.exports);
@@ -2088,11 +2088,11 @@ function Te(e, t, n, r, i, s) {
     if (l = Y4(e), !c)
       return Q4(e, l);
   } else {
-    var L = V4(e), _ = L == d9 || L == di;
+    var L = V4(e), v = L == d9 || L == di;
     if (X4(e))
       return j4(e, c);
-    if (L == h9 || L == u9 || _ && !i) {
-      if (l = y || _ ? {} : q4(e), !c)
+    if (L == h9 || L == u9 || v && !i) {
+      if (l = y || v ? {} : q4(e), !c)
         return y ? Z4(e, K4(l, e)) : z4(e, F4(l, e));
     } else {
       if (!J[L])
@@ -2229,8 +2229,8 @@ const Ri = /* @__PURE__ */ p('<div class="klinecharts-pro-loading"><i class="cir
       }), c;
     })();
   })(), null), Q((l) => {
-    const c = !!e.isMobile, y = e.isMobile ? "100%" : `${e.width ?? 400}px`, m = (e.isMobile, "auto"), d = e.isMobile ? "60vh" : "90vh", L = !!e.isMobile, _ = !!e.isMobile, A = !!e.isMobile;
-    return c !== l._v$ && t.classList.toggle("mobile-modal", l._v$ = c), y !== l._v$2 && n.style.setProperty("width", l._v$2 = y), m !== l._v$3 && n.style.setProperty("height", l._v$3 = m), d !== l._v$4 && n.style.setProperty("max-height", l._v$4 = d), L !== l._v$5 && n.classList.toggle("mobile-inner", l._v$5 = L), _ !== l._v$6 && r.classList.toggle("mobile-title", l._v$6 = _), A !== l._v$7 && s.classList.toggle("mobile-content", l._v$7 = A), l;
+    const c = !!e.isMobile, y = e.isMobile ? "100%" : `${e.width ?? 400}px`, m = (e.isMobile, "auto"), d = e.isMobile ? "60vh" : "90vh", L = !!e.isMobile, v = !!e.isMobile, A = !!e.isMobile;
+    return c !== l._v$ && t.classList.toggle("mobile-modal", l._v$ = c), y !== l._v$2 && n.style.setProperty("width", l._v$2 = y), m !== l._v$3 && n.style.setProperty("height", l._v$3 = m), d !== l._v$4 && n.style.setProperty("max-height", l._v$4 = d), L !== l._v$5 && n.classList.toggle("mobile-inner", l._v$5 = L), v !== l._v$6 && r.classList.toggle("mobile-title", l._v$6 = v), A !== l._v$7 && s.classList.toggle("mobile-content", l._v$7 = A), l;
   }, {
     _v$: void 0,
     _v$2: void 0,
@@ -2249,9 +2249,9 @@ const Xi = /* @__PURE__ */ p('<div tabindex="0"><div class="selector-container">
     if (!e.dataSource || !e.searchable)
       return e.dataSource;
     const d = r().toLowerCase().trim();
-    return d ? typeof e.dataSource[0] == "string" ? e.dataSource.filter((_) => _.toLowerCase().includes(d)) : e.dataSource.filter((_) => {
+    return d ? typeof e.dataSource[0] == "string" ? e.dataSource.filter((v) => v.toLowerCase().includes(d)) : e.dataSource.filter((v) => {
       var D, I;
-      const A = ((D = _.text) == null ? void 0 : D.toString().toLowerCase()) || "", T = ((I = _.key) == null ? void 0 : I.toLowerCase()) || "";
+      const A = ((D = v.text) == null ? void 0 : D.toString().toLowerCase()) || "", T = ((I = v.key) == null ? void 0 : I.toLowerCase()) || "";
       return A.includes(d) || T.includes(d);
     }) : e.dataSource;
   }), y = () => {
@@ -2262,12 +2262,12 @@ const Xi = /* @__PURE__ */ p('<div tabindex="0"><div class="selector-container">
     l && L && l.contains(L) || (n(!1), i(""));
   };
   return (() => {
-    const d = Xi.cloneNode(!0), L = d.firstChild, _ = L.firstChild;
+    const d = Xi.cloneNode(!0), L = d.firstChild, v = L.firstChild;
     d.addEventListener("blur", m), d.$$click = (T) => {
       T.stopPropagation(), y();
     };
     const A = l;
-    return typeof A == "function" ? F1(A, d) : l = d, b(_, () => e.value), b(d, (() => {
+    return typeof A == "function" ? F1(A, d) : l = d, b(v, () => e.value), b(d, (() => {
       const T = R(() => !!(e.dataSource && e.dataSource.length > 0));
       return () => T() && (() => {
         const D = Ji.cloneNode(!0), I = D.firstChild;
@@ -2327,8 +2327,8 @@ const na = /* @__PURE__ */ p('<span class="prefix"></span>'), ra = /* @__PURE__ 
       const y = c.target.value;
       if ("precision" in t) {
         let L;
-        const _ = Math.max(0, Math.floor(t.precision));
-        _ <= 0 ? L = new RegExp(/^[1-9]\d*$/) : L = new RegExp("^\\d+\\.?\\d{0," + _ + "}$"), (y === "" || L.test(y) && +y >= t.min && +y <= t.max) && ((m = t.onChange) == null || m.call(t, y === "" ? y : +y));
+        const v = Math.max(0, Math.floor(t.precision));
+        v <= 0 ? L = new RegExp(/^[1-9]\d*$/) : L = new RegExp("^\\d+\\.?\\d{0," + v + "}$"), (y === "" || L.test(y) && +y >= t.min && +y <= t.max) && ((m = t.onChange) == null || m.call(t, y === "" ? y : +y));
       } else
         (d = t.onChange) == null || d.call(t, y);
     }), l.addEventListener("blur", () => {
@@ -2618,7 +2618,7 @@ const a = (e, t) => {
     top: 0,
     left: 0,
     minWidth: 220
-  }), _ = () => {
+  }), v = () => {
     s(window.innerWidth < 768), y() && z();
   }, [A, T] = w(!1), D = () => document.fullscreenElement ?? document.body, I = () => {
     T(!!document.fullscreenElement);
@@ -2651,9 +2651,9 @@ const a = (e, t) => {
       K(!1), B(!1);
   };
   d0(() => {
-    window.addEventListener("resize", _), document.addEventListener("fullscreenchange", I), document.addEventListener("mousedown", a1), window.addEventListener("scroll", y1, !0), document.addEventListener("mozfullscreenchange", I), document.addEventListener("webkitfullscreenchange", I), document.addEventListener("msfullscreenchange", I), t && (t.addEventListener("scroll", O), setTimeout(O, 100));
+    window.addEventListener("resize", v), document.addEventListener("fullscreenchange", I), document.addEventListener("mousedown", a1), window.addEventListener("scroll", y1, !0), document.addEventListener("mozfullscreenchange", I), document.addEventListener("webkitfullscreenchange", I), document.addEventListener("msfullscreenchange", I), t && (t.addEventListener("scroll", O), setTimeout(O, 100));
   }), K1(() => {
-    window.removeEventListener("resize", _), document.removeEventListener("fullscreenchange", I), document.removeEventListener("mousedown", a1), window.removeEventListener("scroll", y1, !0), document.removeEventListener("mozfullscreenchange", I), document.removeEventListener("webkitfullscreenchange", I), document.removeEventListener("msfullscreenchange", I), t && t.removeEventListener("scroll", O);
+    window.removeEventListener("resize", v), document.removeEventListener("fullscreenchange", I), document.removeEventListener("mousedown", a1), window.removeEventListener("scroll", y1, !0), document.removeEventListener("mozfullscreenchange", I), document.removeEventListener("webkitfullscreenchange", I), document.removeEventListener("msfullscreenchange", I), t && t.removeEventListener("scroll", O);
   });
   const W = R(() => {
     const N = e.periods.filter((Z) => {
@@ -2979,7 +2979,7 @@ function yd(e) {
   ];
 }
 const g1 = (e) => od[e.name](e.class), Cd = /* @__PURE__ */ p('<div class="klinecharts-pro-drawing-bar"><span class="split-line"></span><div class="item" tabindex="0"><span style="width:32px;height:32px"></span><div class="icon-arrow"><svg viewBox="0 0 4 6"><path d="M1.07298,0.159458C0.827521,-0.0531526,0.429553,-0.0531526,0.184094,0.159458C-0.0613648,0.372068,-0.0613648,0.716778,0.184094,0.929388L2.61275,3.03303L0.260362,5.07061C0.0149035,5.28322,0.0149035,5.62793,0.260362,5.84054C0.505822,6.05315,0.903789,6.05315,1.14925,5.84054L3.81591,3.53075C4.01812,3.3556,4.05374,3.0908,3.92279,2.88406C3.93219,2.73496,3.87113,2.58315,3.73964,2.46925L1.07298,0.159458Z" stroke="none" stroke-opacity="0"></path></svg></div></div><div class="item"><span style="width:32px;height:32px"></span></div><div class="item"><span style="width:32px;height:32px"></span></div><span class="split-line"></span><div class="item"><span style="width:32px;height:32px"></span></div></div>'), fd = /* @__PURE__ */ p('<div class="item" tabindex="0"><span style="width:32px;height:32px"></span><div class="icon-arrow"><svg viewBox="0 0 4 6"><path d="M1.07298,0.159458C0.827521,-0.0531526,0.429553,-0.0531526,0.184094,0.159458C-0.0613648,0.372068,-0.0613648,0.716778,0.184094,0.929388L2.61275,3.03303L0.260362,5.07061C0.0149035,5.28322,0.0149035,5.62793,0.260362,5.84054C0.505822,6.05315,0.903789,6.05315,1.14925,5.84054L3.81591,3.53075C4.01812,3.3556,4.05374,3.0908,3.92279,2.88406C3.93219,2.73496,3.87113,2.58315,3.73964,2.46925L1.07298,0.159458Z" stroke="none" stroke-opacity="0"></path></svg></div></div>'), kt = /* @__PURE__ */ p('<li><span style="padding-left:8px"></span></li>'), At = "drawing_tools", gd = (e) => {
-  const [t, n] = w("horizontalStraightLine"), [r, i] = w("priceChannelLine"), [s, l] = w("circle"), [c, y] = w("fibonacciLine"), [m, d] = w("xabcd"), [L, _] = w("weak_magnet"), [A, T] = w("normal"), [D, I] = w(!1), [F, K] = w(!0), [P, B] = w(""), z = R(() => [{
+  const [t, n] = w("horizontalStraightLine"), [r, i] = w("priceChannelLine"), [s, l] = w("circle"), [c, y] = w("fibonacciLine"), [m, d] = w("xabcd"), [L, v] = w("weak_magnet"), [A, T] = w("normal"), [D, I] = w(!1), [F, K] = w(!0), [P, B] = w(""), z = R(() => [{
     key: "singleLine",
     icon: t(),
     list: cd(e.locale),
@@ -3081,7 +3081,7 @@ const g1 = (e) => od[e.name](e.class), Cd = /* @__PURE__ */ p('<div class="kline
           return p1().map((G) => (() => {
             const j = kt.cloneNode(!0), d1 = j.firstChild;
             return j.$$click = () => {
-              _(G.key), T(G.key), e.onModeChange(G.key), B("");
+              v(G.key), T(G.key), e.onModeChange(G.key), B("");
             }, b(j, x(g1, {
               get name() {
                 return G.key;
@@ -3602,8 +3602,8 @@ const _d = /* @__PURE__ */ p('<div class="klinecharts-pro-setting-modal-content"
   const y = (m, d) => {
     const L = {};
     i0(L, m.key, d);
-    const _ = r1.clone(t());
-    i0(_, m.key, d), n(_), i(r().map((A) => ({
+    const v = r1.clone(t());
+    i0(v, m.key, d), n(v), i(r().map((A) => ({
       ...A
     }))), e.onChange(L);
   };
@@ -3639,7 +3639,7 @@ const _d = /* @__PURE__ */ p('<div class="klinecharts-pro-setting-modal-content"
         },
         children: (d) => {
           let L;
-          const _ = r1.formatValue(t(), d.key);
+          const v = r1.formatValue(t(), d.key);
           switch (d.component) {
             case "select": {
               L = x(C9, {
@@ -3650,7 +3650,7 @@ const _d = /* @__PURE__ */ p('<div class="klinecharts-pro-setting-modal-content"
                   };
                 },
                 get value() {
-                  return a(_, e.locale);
+                  return a(v, e.locale);
                 },
                 get dataSource() {
                   return d.dataSource;
@@ -3663,7 +3663,7 @@ const _d = /* @__PURE__ */ p('<div class="klinecharts-pro-setting-modal-content"
               break;
             }
             case "switch": {
-              const A = !!_;
+              const A = !!v;
               L = x(sa, {
                 open: A,
                 onChange: () => {
@@ -3983,7 +3983,7 @@ function Se(e, t, n, r) {
 const Fd = (e) => {
   var I0, O0, N0, D0, E0, B0, U0, F0;
   let t, n = null, r;
-  const [i, s] = w(!1), [l, c] = w(e.theme), [y, m] = w(e.styles), [d, L] = w(e.locale), [_, A] = w(e.symbol), [T, D] = w(e.period), [I, F] = w(!1), [K, P] = w([...e.mainIndicators]), [B, z] = w({}), [p1, a1] = w(!1), [y1, O] = w({
+  const [i, s] = w(!1), [l, c] = w(e.theme), [y, m] = w(e.styles), [d, L] = w(e.locale), [v, A] = w(e.symbol), [T, D] = w(e.period), [I, F] = w(!1), [K, P] = w([...e.mainIndicators]), [B, z] = w({}), [p1, a1] = w(!1), [y1, O] = w({
     key: e.timezone,
     text: St(e.timezone, e.locale)
   }), [W, H] = w(!1), [N, Z] = w(), [u1, c1] = w(""), [X, v1] = w(e.drawingBarVisible), [g, n1] = w(!1), [S, G] = w(!1), [j, d1] = w(!1), [C1, D1] = w({
@@ -4017,14 +4017,14 @@ const Fd = (e) => {
     if (e.onIndicatorChange)
       if (C === "add" || C === "change")
         setTimeout(() => {
-          const $ = ve(o, u, h);
+          const _ = ve(o, u, h);
           e.onIndicatorChange({
             action: C,
-            indicator: $
+            indicator: _
           });
         }, 50);
       else {
-        const $ = {
+        const _ = {
           name: o,
           shortName: o,
           paneId: u,
@@ -4037,7 +4037,7 @@ const Fd = (e) => {
         };
         e.onIndicatorChange({
           action: C,
-          indicator: $
+          indicator: _
         });
       }
   }, _e = (o) => ({
@@ -4078,12 +4078,12 @@ const Fd = (e) => {
     for (const C in o)
       if (!(C === "__proto__" || C === "constructor" || C === "prototype"))
         try {
-          const $ = o[C];
-          if (typeof $ == "function")
+          const _ = o[C];
+          if (typeof _ == "function")
             continue;
-          h[C] = Y1($, u);
-        } catch ($) {
-          h[C] = `[Error: ${$.message}]`;
+          h[C] = Y1(_, u);
+        } catch (_) {
+          h[C] = `[Error: ${_.message}]`;
         }
     return h;
   }, m9 = (o) => {
@@ -4111,12 +4111,12 @@ const Fd = (e) => {
   }, $e = (o) => {
     var u, h, C;
     try {
-      const $ = (u = n == null ? void 0 : n.getOverlayById) == null ? void 0 : u.call(n, o);
-      if (!$)
+      const _ = (u = n == null ? void 0 : n.getOverlayById) == null ? void 0 : u.call(n, o);
+      if (!_)
         return;
-      const k = m9($);
+      const k = m9(_);
       if (k) {
-        const f = V.get(o), v = ((h = f == null ? void 0 : f.points) == null ? void 0 : h.length) || 0, M = ((C = k.points) == null ? void 0 : C.length) || 0;
+        const f = V.get(o), $ = ((h = f == null ? void 0 : f.points) == null ? void 0 : h.length) || 0, M = ((C = k.points) == null ? void 0 : C.length) || 0;
         V.set(o, k);
         const E = _e(k.type);
         if (M >= E) {
@@ -4124,8 +4124,8 @@ const Fd = (e) => {
           q && !q.complete && (q.complete = !0, q.checkInterval && (clearInterval(q.checkInterval), q.checkInterval = void 0));
         }
       }
-    } catch ($) {
-      console.error(`Error updating overlay tracking for ${o}:`, $);
+    } catch (_) {
+      console.error(`Error updating overlay tracking for ${o}:`, _);
     }
   }, p9 = (o, u) => {
     if (l1.has(o))
@@ -4141,13 +4141,13 @@ const Fd = (e) => {
     };
     document.addEventListener("mouseup", C), document.addEventListener("touchend", C), setTimeout(() => {
       var k;
-      const $ = l1.get(o);
-      if ($ && !$.complete) {
-        $.checkInterval && clearInterval($.checkInterval), $.mouseUpHandler && (document.removeEventListener("mouseup", $.mouseUpHandler), document.removeEventListener("touchend", $.mouseUpHandler)), $e(o);
+      const _ = l1.get(o);
+      if (_ && !_.complete) {
+        _.checkInterval && clearInterval(_.checkInterval), _.mouseUpHandler && (document.removeEventListener("mouseup", _.mouseUpHandler), document.removeEventListener("touchend", _.mouseUpHandler)), $e(o);
         const f = V.get(o);
         if (f) {
-          const v = _e(f.type), M = ((k = f.points) == null ? void 0 : k.length) || 0;
-          M < v && console.warn(`âš ï¸ ${f.type} ${o} has only ${M} point(s), should have ${v}`);
+          const $ = _e(f.type), M = ((k = f.points) == null ? void 0 : k.length) || 0;
+          M < $ && console.warn(`âš ï¸ ${f.type} ${o} has only ${M} point(s), should have ${$}`);
         }
       }
     }, 3e4);
@@ -4155,15 +4155,15 @@ const Fd = (e) => {
   let G1 = {
     saveDrawings: (o, u) => {
       try {
-        const h = `kline_drawings_${o}`, $ = {
+        const h = `kline_drawings_${o}`, _ = {
           drawings: u.map((k) => {
             var E;
             const f = {
               ...k
             };
             f.extendData && (f.extendData = Y1(f.extendData)), f.styles && (f.styles = Y1(f.styles));
-            const v = _e(k.type), M = ((E = k.points) == null ? void 0 : E.length) || 0;
-            return M < v && console.warn(`âš ï¸ Saving ${k.type} with only ${M} point(s), needs ${v}`), f;
+            const $ = _e(k.type), M = ((E = k.points) == null ? void 0 : E.length) || 0;
+            return M < $ && console.warn(`âš ï¸ Saving ${k.type} with only ${M} point(s), needs ${$}`), f;
           }),
           timestamp: Date.now()
         };
@@ -4188,7 +4188,7 @@ const Fd = (e) => {
     }
   };
   const x0 = () => {
-    const o = _();
+    const o = v();
     if (o != null && o.ticker) {
       const u = Array.from(V.values());
       G1.saveDrawings(o.ticker, u);
@@ -4202,7 +4202,7 @@ const Fd = (e) => {
     D1(u), (C = (h = e.orderTools) == null ? void 0 : h.onChange) == null || C.call(h, u);
   }, be = (o) => {
     var h;
-    const u = Math.min(Math.max(((h = _()) == null ? void 0 : h.pricePrecision) ?? 2, 0), 8);
+    const u = Math.min(Math.max(((h = v()) == null ? void 0 : h.pricePrecision) ?? 2, 0), 8);
     return o.toLocaleString(void 0, {
       minimumFractionDigits: u,
       maximumFractionDigits: u
@@ -4213,24 +4213,24 @@ const Fd = (e) => {
     if (!Number.isFinite(u))
       return NaN;
     try {
-      const $ = n == null ? void 0 : n.convertFromPixel([{
+      const _ = n == null ? void 0 : n.convertFromPixel([{
         x: (o == null ? void 0 : o.x) ?? 0,
         y: u
       }], {
         paneId: "candle_pane"
-      }), k = Number((h = $ == null ? void 0 : $[0]) == null ? void 0 : h.value);
+      }), k = Number((h = _ == null ? void 0 : _[0]) == null ? void 0 : h.value);
       if (Number.isFinite(k) && k > 0)
         return k;
     } catch {
     }
     try {
-      const $ = n == null ? void 0 : n.convertFromPixel([{
+      const _ = n == null ? void 0 : n.convertFromPixel([{
         x: (o == null ? void 0 : o.x) ?? 0,
         y: u
       }], {
         paneId: "candle_pane",
         absolute: !0
-      }), k = Number((C = $ == null ? void 0 : $[0]) == null ? void 0 : C.value);
+      }), k = Number((C = _ == null ? void 0 : _[0]) == null ? void 0 : C.value);
       if (Number.isFinite(k) && k > 0)
         return k;
     } catch {
@@ -4246,8 +4246,8 @@ const Fd = (e) => {
     }
     const u = (k = n == null ? void 0 : n.getSize) == null ? void 0 : k.call(n, "candle_pane", We.YAxis);
     u != null && u.width && Number.isFinite(u.width) && pe(Math.max(44, Math.ceil(u.width)));
-    const h = Number(o.y), C = v9(o), $ = t.clientHeight;
-    if (!Number.isFinite(h) || !Number.isFinite(C) || C <= 0 || h < 0 || h > $) {
+    const h = Number(o.y), C = v9(o), _ = t.clientHeight;
+    if (!Number.isFinite(h) || !Number.isFinite(C) || C <= 0 || h < 0 || h > _) {
       if (ge() || A1())
         return;
       $1(null), w1(!1);
@@ -4272,7 +4272,7 @@ const Fd = (e) => {
     u && ((C = (h = e.orderTools) == null ? void 0 : h.onQuickOrderAction) == null || C.call(h, {
       action: o,
       price: u.price,
-      symbol: _()
+      symbol: v()
     }), w1(!1), H1(null), b1(!1));
   }, _9 = async () => {
     var u;
@@ -4296,11 +4296,11 @@ const Fd = (e) => {
   };
   let w0 = (E0 = e.orderTools) == null ? void 0 : E0.quickOrder, M0 = (B0 = e.orderTools) == null ? void 0 : B0.openOrders, S0 = (U0 = e.orderTools) == null ? void 0 : U0.positions, T0 = (F0 = e.orderTools) == null ? void 0 : F0.orderHistory;
   f1(() => {
-    var k, f, v, M;
-    const o = (k = e.orderTools) == null ? void 0 : k.quickOrder, u = (f = e.orderTools) == null ? void 0 : f.openOrders, h = (v = e.orderTools) == null ? void 0 : v.positions, C = (M = e.orderTools) == null ? void 0 : M.orderHistory, $ = {};
-    typeof o == "boolean" && o !== w0 && (w0 = o, $.quickOrder = o), typeof u == "boolean" && u !== M0 && (M0 = u, $.openOrders = u), typeof h == "boolean" && h !== S0 && (S0 = h, $.positions = h), typeof C == "boolean" && C !== T0 && (T0 = C, $.orderHistory = C), Object.keys($).length > 0 && D1({
+    var k, f, $, M;
+    const o = (k = e.orderTools) == null ? void 0 : k.quickOrder, u = (f = e.orderTools) == null ? void 0 : f.openOrders, h = ($ = e.orderTools) == null ? void 0 : $.positions, C = (M = e.orderTools) == null ? void 0 : M.orderHistory, _ = {};
+    typeof o == "boolean" && o !== w0 && (w0 = o, _.quickOrder = o), typeof u == "boolean" && u !== M0 && (M0 = u, _.openOrders = u), typeof h == "boolean" && h !== S0 && (S0 = h, _.positions = h), typeof C == "boolean" && C !== T0 && (T0 = C, _.orderHistory = C), Object.keys(_).length > 0 && D1({
       ...C1(),
-      ...$
+      ..._
     });
   }), e.ref({
     setTheme: c,
@@ -4317,7 +4317,7 @@ const Fd = (e) => {
     },
     getTimezone: () => y1().key,
     setSymbol: A,
-    getSymbol: () => _(),
+    getSymbol: () => v(),
     setPeriod: D,
     getPeriod: () => T(),
     getMainIndicators: () => K(),
@@ -4383,7 +4383,7 @@ const Fd = (e) => {
       n && "resize" in n && typeof n.resize == "function" ? n.resize() : console.warn("resize method not available on widget");
     },
     getSettings: () => {
-      var h, C, $, k, f, v, M, E, q, L1, I1, W1, le, ue, E1, Le;
+      var h, C, _, k, f, $, M, E, q, L1, I1, W1, le, ue, E1, Le;
       if (!n)
         return {};
       const o = n.getStyles(), u = (h = o.candle) == null ? void 0 : h.bar;
@@ -4392,8 +4392,8 @@ const Fd = (e) => {
         candleType: (C = o.candle) == null ? void 0 : C.type,
         candleBarStyle: u == null ? void 0 : u.style,
         // bar.style might be LineType
-        showLastPrice: (f = (k = ($ = o.candle) == null ? void 0 : $.priceMark) == null ? void 0 : k.last) == null ? void 0 : f.show,
-        showHighestPrice: (E = (M = (v = o.candle) == null ? void 0 : v.priceMark) == null ? void 0 : M.high) == null ? void 0 : E.show,
+        showLastPrice: (f = (k = (_ = o.candle) == null ? void 0 : _.priceMark) == null ? void 0 : k.last) == null ? void 0 : f.show,
+        showHighestPrice: (E = (M = ($ = o.candle) == null ? void 0 : $.priceMark) == null ? void 0 : M.high) == null ? void 0 : E.show,
         showLowestPrice: (I1 = (L1 = (q = o.candle) == null ? void 0 : q.priceMark) == null ? void 0 : L1.low) == null ? void 0 : I1.show,
         // Indicator settings
         showIndicatorLastValue: (le = (W1 = o.indicator) == null ? void 0 : W1.lastValueMark) == null ? void 0 : le.show,
@@ -4406,7 +4406,7 @@ const Fd = (e) => {
       };
     },
     setSettings: (o) => {
-      var h, C, $, k, f, v, M, E, q, L1, I1;
+      var h, C, _, k, f, $, M, E, q, L1, I1;
       if (!n)
         return;
       const u = {};
@@ -4429,7 +4429,7 @@ const Fd = (e) => {
         priceMark: {
           ...(C = u.candle) == null ? void 0 : C.priceMark,
           last: {
-            ...(k = ($ = u.candle) == null ? void 0 : $.priceMark) == null ? void 0 : k.last,
+            ...(k = (_ = u.candle) == null ? void 0 : _.priceMark) == null ? void 0 : k.last,
             show: o.showLastPrice
           }
         }
@@ -4438,7 +4438,7 @@ const Fd = (e) => {
         priceMark: {
           ...(f = u.candle) == null ? void 0 : f.priceMark,
           high: {
-            ...(M = (v = u.candle) == null ? void 0 : v.priceMark) == null ? void 0 : M.high,
+            ...(M = ($ = u.candle) == null ? void 0 : $.priceMark) == null ? void 0 : M.high,
             show: o.showHighestPrice
           }
         }
@@ -4469,7 +4469,7 @@ const Fd = (e) => {
       }), n.setStyles(u);
     },
     resetSettings: () => {
-      var h, C, $, k, f, v, M;
+      var h, C, _, k, f, $, M;
       if (!n)
         return;
       n.getStyles();
@@ -4517,14 +4517,14 @@ const Fd = (e) => {
           candle: {
             type: (h = u.candle) == null ? void 0 : h.type,
             bar: (C = u.candle) == null ? void 0 : C.bar,
-            priceMark: ($ = u.candle) == null ? void 0 : $.priceMark
+            priceMark: (_ = u.candle) == null ? void 0 : _.priceMark
           },
           indicator: {
             lastValueMark: (k = u.indicator) == null ? void 0 : k.lastValueMark
           },
           yAxis: {
             type: (f = u.yAxis) == null ? void 0 : f.type,
-            reverse: (v = u.yAxis) == null ? void 0 : v.reverse
+            reverse: ($ = u.yAxis) == null ? void 0 : $.reverse
           },
           grid: {
             show: (M = u.grid) == null ? void 0 : M.show
@@ -4539,13 +4539,13 @@ const Fd = (e) => {
       const u = Array.from(V.values());
       u.forEach((h, C) => {
         var f;
-        const $ = _e(h.type), k = ((f = h.points) == null ? void 0 : f.length) || 0;
-        k < $ && console.warn(`âš ï¸ ${h.type} ${h.id} has only ${k} point(s), should have ${$}`);
+        const _ = _e(h.type), k = ((f = h.points) == null ? void 0 : f.length) || 0;
+        k < _ && console.warn(`âš ï¸ ${h.type} ${h.id} has only ${k} point(s), should have ${_}`);
       }), G1.saveDrawings(o, u);
     },
     loadDrawings: (o) => {
       G1.loadDrawings(o).forEach((h, C) => {
-        var $;
+        var _;
         try {
           const k = {
             name: h.type,
@@ -4555,14 +4555,14 @@ const Fd = (e) => {
             visible: h.visible ?? !0,
             lock: h.lock ?? !1,
             mode: h.mode ?? z0.Normal
-          }, f = n == null ? void 0 : n.createOverlay(k), v = typeof f == "string" ? f : null;
-          v && (V.set(v, {
+          }, f = n == null ? void 0 : n.createOverlay(k), $ = typeof f == "string" ? f : null;
+          $ && (V.set($, {
             ...h,
-            id: v
-          }), l1.set(v, {
+            id: $
+          }), l1.set($, {
             monitoring: !1,
             complete: !0,
-            lastPointCount: (($ = h.points) == null ? void 0 : $.length) || 0
+            lastPointCount: ((_ = h.points) == null ? void 0 : _.length) || 0
           }));
         } catch (k) {
           console.error(`   âŒ Error restoring ${h.type}:`, k);
@@ -4580,62 +4580,62 @@ const Fd = (e) => {
   const P0 = () => {
     n == null || n.resize();
   }, Ge = (o, u, h) => {
-    let C = u, $ = C;
+    let C = u, _ = C;
     switch (o.timespan) {
       case "minute": {
-        C = C - C % (60 * 1e3), $ = C - h * o.multiplier * 60 * 1e3;
+        C = C - C % (60 * 1e3), _ = C - h * o.multiplier * 60 * 1e3;
         break;
       }
       case "hour": {
-        C = C - C % (60 * 60 * 1e3), $ = C - h * o.multiplier * 60 * 60 * 1e3;
+        C = C - C % (60 * 60 * 1e3), _ = C - h * o.multiplier * 60 * 60 * 1e3;
         break;
       }
       case "day": {
-        C = C - C % (60 * 60 * 1e3), $ = C - h * o.multiplier * 24 * 60 * 60 * 1e3;
+        C = C - C % (60 * 60 * 1e3), _ = C - h * o.multiplier * 24 * 60 * 60 * 1e3;
         break;
       }
       case "week": {
-        const f = new Date(C).getDay(), v = f === 0 ? 6 : f - 1;
-        C = C - v * 60 * 60 * 24;
+        const f = new Date(C).getDay(), $ = f === 0 ? 6 : f - 1;
+        C = C - $ * 60 * 60 * 24;
         const M = new Date(C);
-        C = (/* @__PURE__ */ new Date(`${M.getFullYear()}-${M.getMonth() + 1}-${M.getDate()}`)).getTime(), $ = h * o.multiplier * 7 * 24 * 60 * 60 * 1e3;
+        C = (/* @__PURE__ */ new Date(`${M.getFullYear()}-${M.getMonth() + 1}-${M.getDate()}`)).getTime(), _ = h * o.multiplier * 7 * 24 * 60 * 60 * 1e3;
         break;
       }
       case "month": {
-        const k = new Date(C), f = k.getFullYear(), v = k.getMonth() + 1;
-        C = (/* @__PURE__ */ new Date(`${f}-${v}-01`)).getTime(), $ = h * o.multiplier * 30 * 24 * 60 * 60 * 1e3;
-        const M = new Date($);
-        $ = (/* @__PURE__ */ new Date(`${M.getFullYear()}-${M.getMonth() + 1}-01`)).getTime();
+        const k = new Date(C), f = k.getFullYear(), $ = k.getMonth() + 1;
+        C = (/* @__PURE__ */ new Date(`${f}-${$}-01`)).getTime(), _ = h * o.multiplier * 30 * 24 * 60 * 60 * 1e3;
+        const M = new Date(_);
+        _ = (/* @__PURE__ */ new Date(`${M.getFullYear()}-${M.getMonth() + 1}-01`)).getTime();
         break;
       }
       case "year": {
         const f = new Date(C).getFullYear();
-        C = (/* @__PURE__ */ new Date(`${f}-01-01`)).getTime(), $ = h * o.multiplier * 365 * 24 * 60 * 60 * 1e3;
-        const v = new Date($);
-        $ = (/* @__PURE__ */ new Date(`${v.getFullYear()}-01-01`)).getTime();
+        C = (/* @__PURE__ */ new Date(`${f}-01-01`)).getTime(), _ = h * o.multiplier * 365 * 24 * 60 * 60 * 1e3;
+        const $ = new Date(_);
+        _ = (/* @__PURE__ */ new Date(`${$.getFullYear()}-01-01`)).getTime();
         break;
       }
     }
-    return [$, C];
+    return [_, C];
   };
   return d0(() => {
     if (window.addEventListener("resize", P0), n = x9(t, {
       customApi: {
-        formatDate: (f, v, M, E) => {
+        formatDate: (f, $, M, E) => {
           switch (T().timespan) {
             case "minute":
-              return E === xe.XAxis ? r1.formatDate(f, v, "HH:mm") : r1.formatDate(f, v, "YYYY-MM-DD HH:mm");
+              return E === xe.XAxis ? r1.formatDate(f, $, "HH:mm") : r1.formatDate(f, $, "YYYY-MM-DD HH:mm");
             case "hour":
-              return E === xe.XAxis ? r1.formatDate(f, v, "MM-DD HH:mm") : r1.formatDate(f, v, "YYYY-MM-DD HH:mm");
+              return E === xe.XAxis ? r1.formatDate(f, $, "MM-DD HH:mm") : r1.formatDate(f, $, "YYYY-MM-DD HH:mm");
             case "day":
             case "week":
-              return r1.formatDate(f, v, "YYYY-MM-DD");
+              return r1.formatDate(f, $, "YYYY-MM-DD");
             case "month":
-              return E === xe.XAxis ? r1.formatDate(f, v, "YYYY-MM") : r1.formatDate(f, v, "YYYY-MM-DD");
+              return E === xe.XAxis ? r1.formatDate(f, $, "YYYY-MM") : r1.formatDate(f, $, "YYYY-MM-DD");
             case "year":
-              return E === xe.XAxis ? r1.formatDate(f, v, "YYYY") : r1.formatDate(f, v, "YYYY-MM-DD");
+              return E === xe.XAxis ? r1.formatDate(f, $, "YYYY") : r1.formatDate(f, $, "YYYY-MM-DD");
           }
-          return r1.formatDate(f, v, "YYYY-MM-DD HH:mm");
+          return r1.formatDate(f, $, "YYYY-MM-DD HH:mm");
         }
       }
     }), n) {
@@ -4649,18 +4649,18 @@ const Fd = (e) => {
           M.appendChild(e.watermark);
         f.appendChild(M);
       }
-      const v = n.getDom("candle_pane", We.YAxis);
-      r = document.createElement("span"), r.className = "klinecharts-pro-price-unit", v == null || v.appendChild(r);
+      const $ = n.getDom("candle_pane", We.YAxis);
+      r = document.createElement("span"), r.className = "klinecharts-pro-price-unit", $ == null || $.appendChild(r);
     }
     let o = !1;
     const u = () => {
-      const f = _();
+      const f = v();
       if (f != null && f.ticker)
         try {
-          const v = Array.from(V.values());
-          G1.saveDrawings(f.ticker, v);
-        } catch (v) {
-          console.error("âŒ Error refreshing local storage:", v);
+          const $ = Array.from(V.values());
+          G1.saveDrawings(f.ticker, $);
+        } catch ($) {
+          console.error("âŒ Error refreshing local storage:", $);
         }
     }, h = (f) => {
       o || (o = !0, f.preventDefault());
@@ -4672,27 +4672,27 @@ const Fd = (e) => {
     });
     const C = n == null ? void 0 : n.removeOverlay;
     n && C && (n.removeOverlay = function(...f) {
-      const v = C.apply(this, f), M = f[0];
+      const $ = C.apply(this, f), M = f[0];
       let E;
       if (typeof M == "string" ? E = M : M && typeof M == "object" && M.id && (E = M.id), E) {
         V.delete(E);
         const q = l1.get(E);
         q && (q.checkInterval && clearInterval(q.checkInterval), q.mouseUpHandler && (document.removeEventListener("mouseup", q.mouseUpHandler), document.removeEventListener("touchend", q.mouseUpHandler)), l1.delete(E)), u();
       }
-      return v;
+      return $;
     }), K().forEach((f) => {
       Se(n, f, !0, {
         id: "candle_pane"
       });
     });
-    const $ = {};
+    const _ = {};
     e.subIndicators.forEach((f) => {
-      const v = Se(n, f, !0);
-      v && ($[f] = v);
-    }), z($), n == null || n.loadMore((f) => {
+      const $ = Se(n, f, !0);
+      $ && (_[f] = $);
+    }), z(_), n == null || n.loadMore((f) => {
       s(!0), (async () => {
         try {
-          const M = T(), [E] = Ge(M, f, 1), [q] = Ge(M, E, 500), L1 = await e.datafeed.getHistoryKLineData(_(), M, q, E);
+          const M = T(), [E] = Ge(M, f, 1), [q] = Ge(M, E, 500), L1 = await e.datafeed.getHistoryKLineData(v(), M, q, E);
           n == null || n.applyMoreData(L1, L1.length > 0);
         } finally {
           s(!1);
@@ -4706,8 +4706,8 @@ const Fd = (e) => {
               name: f.indicatorName,
               visible: !0
             }, f.paneId);
-            const v = f.paneId === "candle_pane" ? "main" : "sub";
-            M1(f.indicatorName, f.paneId, v, "change");
+            const $ = f.paneId === "candle_pane" ? "main" : "sub";
+            M1(f.indicatorName, f.paneId, $, "change");
             break;
           }
           case "invisible": {
@@ -4715,53 +4715,53 @@ const Fd = (e) => {
               name: f.indicatorName,
               visible: !1
             }, f.paneId);
-            const v = f.paneId === "candle_pane" ? "main" : "sub";
-            M1(f.indicatorName, f.paneId, v, "change");
+            const $ = f.paneId === "candle_pane" ? "main" : "sub";
+            M1(f.indicatorName, f.paneId, $, "change");
             break;
           }
           case "setting": {
-            const v = n == null ? void 0 : n.getIndicatorByPaneId(f.paneId, f.indicatorName);
+            const $ = n == null ? void 0 : n.getIndicatorByPaneId(f.paneId, f.indicatorName);
             U({
               visible: !0,
               indicatorName: f.indicatorName,
               paneId: f.paneId,
-              calcParams: v.calcParams
+              calcParams: $.calcParams
             });
             break;
           }
           case "close":
             if (f.paneId === "candle_pane") {
-              const v = [...K()];
-              n == null || n.removeIndicator("candle_pane", f.indicatorName), v.splice(v.indexOf(f.indicatorName), 1), P(v), M1(f.indicatorName, "candle_pane", "main", "remove");
+              const $ = [...K()];
+              n == null || n.removeIndicator("candle_pane", f.indicatorName), $.splice($.indexOf(f.indicatorName), 1), P($), M1(f.indicatorName, "candle_pane", "main", "remove");
             } else {
-              const v = {
+              const $ = {
                 ...B()
               };
-              n == null || n.removeIndicator(f.paneId, f.indicatorName), delete v[f.indicatorName], z(v), M1(f.indicatorName, f.paneId, "sub", "remove");
+              n == null || n.removeIndicator(f.paneId, f.indicatorName), delete $[f.indicatorName], z($), M1(f.indicatorName, f.paneId, "sub", "remove");
             }
         }
     }), n == null || n.subscribeAction(ke.OnCrosshairChange, A0);
     const k = n == null ? void 0 : n.createOverlay;
     n && k && (n.createOverlay = function(...f) {
-      const v = f[0], M = k.apply(this, f), E = typeof M == "string" ? M : null;
-      return E && (p9(E, v.name || "unknown"), $e(E), x0()), M;
+      const $ = f[0], M = k.apply(this, f), E = typeof M == "string" ? M : null;
+      return E && (p9(E, $.name || "unknown"), $e(E), x0()), M;
     });
   }), K1(() => {
     window.removeEventListener("resize", P0), n == null || n.unsubscribeAction(ke.OnCrosshairChange, A0), l1.clear(), V.clear(), Z0(t);
   }), f1(() => {
-    const o = _();
+    const o = v();
     o != null && o.priceCurrency ? (r.innerHTML = o == null ? void 0 : o.priceCurrency.toLocaleUpperCase(), r.style.display = "flex") : r.style.display = "none", n == null || n.setPriceVolumePrecision((o == null ? void 0 : o.pricePrecision) ?? 2, (o == null ? void 0 : o.volumePrecision) ?? 0);
   }), f1((o) => {
-    const u = _(), h = T();
+    const u = v(), h = T();
     let C = !0;
     return K1(() => {
       C = !1;
     }), o && e.datafeed.unsubscribe(o.symbol, o.period), s(!0), G(!0), (async () => {
       try {
-        const [k, f] = Ge(h, (/* @__PURE__ */ new Date()).getTime(), 500), v = await e.datafeed.getHistoryKLineData(u, h, k, f);
+        const [k, f] = Ge(h, (/* @__PURE__ */ new Date()).getTime(), 500), $ = await e.datafeed.getHistoryKLineData(u, h, k, f);
         if (!C)
           return;
-        n == null || n.applyNewData(v, v.length > 0), e.datafeed.subscribe(u, h, (M) => {
+        n == null || n.applyNewData($, $.length > 0), e.datafeed.subscribe(u, h, (M) => {
           n == null || n.updateData(M);
         });
       } finally {
@@ -4873,7 +4873,7 @@ const Fd = (e) => {
       return e.locale;
     },
     get symbol() {
-      return _();
+      return v();
     },
     get spread() {
       return X();
@@ -4972,27 +4972,24 @@ const Fd = (e) => {
       },
       keyed: !0,
       children: (h) => (() => {
-        const C = Bd.cloneNode(!0), $ = C.firstChild;
+        const C = Bd.cloneNode(!0), _ = C.firstChild;
         return C.addEventListener("mouseleave", () => {
           A1() || b1(!1);
         }), C.$$mousemove = (k) => {
           k.stopPropagation(), q1();
         }, C.addEventListener("mouseenter", () => {
           b1(!0), q1();
-        }), $.$$click = (k) => {
-          k.stopPropagation(), w1((f) => {
-            const v = !f;
-            return b1(v), H1(v ? {
-              y: h.y,
-              price: h.price,
-              yAxisWidth: me()
-            } : null), v;
-          }), q1();
-        }, $.$$mousedown = (k) => {
+        }), _.$$click = (k) => {
+          k.stopPropagation(), b1(!0), H1({
+            y: h.y,
+            price: h.price,
+            yAxisWidth: me()
+          }), w1(!0), q1();
+        }, _.$$mousedown = (k) => {
           k.preventDefault(), k.stopPropagation(), q1();
         }, Q((k) => {
-          const f = `${Math.max(0, h.y - 12)}px`, v = `${me()}px`, M = C1().quickOrder ? "block" : "none";
-          return f !== k._v$ && C.style.setProperty("top", k._v$ = f), v !== k._v$2 && C.style.setProperty("right", k._v$2 = v), M !== k._v$3 && C.style.setProperty("display", k._v$3 = M), k;
+          const f = `${Math.max(0, h.y - 12)}px`, $ = `${me()}px`, M = C1().quickOrder ? "block" : "none";
+          return f !== k._v$ && C.style.setProperty("top", k._v$ = f), $ !== k._v$2 && C.style.setProperty("right", k._v$2 = $), M !== k._v$3 && C.style.setProperty("display", k._v$3 = M), k;
         }, {
           _v$: void 0,
           _v$2: void 0,
@@ -5005,18 +5002,18 @@ const Fd = (e) => {
       },
       keyed: !0,
       children: (h) => (() => {
-        const C = Ud.cloneNode(!0), $ = C.firstChild, k = $.firstChild, f = k.firstChild, v = f.nextSibling, M = v.nextSibling, E = M.nextSibling;
+        const C = Ud.cloneNode(!0), _ = C.firstChild, k = _.firstChild, f = k.firstChild, $ = f.nextSibling, M = $.nextSibling, E = M.nextSibling;
         E.nextSibling;
         const q = k.nextSibling, L1 = q.firstChild, I1 = L1.nextSibling, W1 = I1.nextSibling, le = W1.nextSibling;
         le.nextSibling;
         const ue = q.nextSibling, E1 = ue.nextSibling, Le = E1.firstChild, K0 = Le.nextSibling;
         K0.nextSibling;
         const qe = E1.nextSibling;
-        return qe.firstChild, C.addEventListener("mouseleave", () => b1(!1)), C.addEventListener("mouseenter", () => b1(!0)), $.$$mousemove = (x1) => {
+        return qe.firstChild, C.addEventListener("mouseleave", () => b1(!1)), C.addEventListener("mouseenter", () => b1(!0)), _.$$mousemove = (x1) => {
           x1.stopPropagation(), q1();
-        }, $.$$mousedown = (x1) => {
+        }, _.$$mousedown = (x1) => {
           x1.preventDefault(), x1.stopPropagation(), q1();
-        }, k.$$click = () => Ye("limit"), b(k, () => _().shortName ?? _().name ?? _().ticker, v), b(k, () => be(h.price), E), q.$$click = () => Ye("stop"), b(q, () => _().shortName ?? _().name ?? _().ticker, I1), b(q, () => be(h.price), le), ue.$$click = () => Ye("create"), E1.$$click = _9, b(E1, () => be(h.price), K0), qe.$$click = $9, b(qe, () => be(h.price), null), Q((x1) => {
+        }, k.$$click = () => Ye("limit"), b(k, () => v().shortName ?? v().name ?? v().ticker, $), b(k, () => be(h.price), E), q.$$click = () => Ye("stop"), b(q, () => v().shortName ?? v().name ?? v().ticker, I1), b(q, () => be(h.price), le), ue.$$click = () => Ye("create"), E1.$$click = _9, b(E1, () => be(h.price), K0), qe.$$click = $9, b(qe, () => be(h.price), null), Q((x1) => {
           const j0 = `${Math.max(0, h.y + 24)}px`, Q0 = `${h.yAxisWidth}px`;
           return j0 !== x1._v$4 && C.style.setProperty("top", x1._v$4 = j0), Q0 !== x1._v$5 && C.style.setProperty("right", x1._v$5 = Q0), x1;
         }, {
