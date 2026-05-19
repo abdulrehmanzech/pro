@@ -126,6 +126,7 @@ function createIndicator(
       paneOptions
     ) ?? null;
 
+    
   // Set custom default MA periods when the indicator is created
   if (paneId && indicatorName === 'MA') {
     try {
