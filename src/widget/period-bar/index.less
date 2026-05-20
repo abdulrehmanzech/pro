@@ -193,15 +193,28 @@
 }
 
 .@{prefix-cls}-order-tools-chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
   color: var(--klinecharts-pro-text-second-color);
   font-size: 0;
-  line-height: 16px;
+  line-height: 0;
 }
 
 .@{prefix-cls}-order-tools-chevron::before {
-  content: ">";
-  font-size: 14px;
-  line-height: 16px;
+  content: "";
+  width: 6px;
+  height: 6px;
+  border: solid currentColor;
+  border-width: 0 1.5px 1.5px 0;
+  transform: rotate(45deg);
+  transition: transform 0.16s ease;
+}
+
+.@{prefix-cls}-order-tools-group-open .@{prefix-cls}-order-tools-chevron::before {
+  transform: rotate(225deg);
 }
 
 .@{prefix-cls}-order-tools-checkbox-box {

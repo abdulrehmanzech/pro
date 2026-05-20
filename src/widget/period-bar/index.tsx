@@ -504,7 +504,6 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
                       <button
                         type="button"
                         class="klinecharts-pro-order-tools-group-title"
-                        onMouseEnter={() => setQuickOrderSubmenuVisible(true)}
                         onClick={(event) => {
                           event.preventDefault();
                           event.stopPropagation();
