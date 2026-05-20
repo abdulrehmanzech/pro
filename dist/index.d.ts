@@ -81,6 +81,7 @@ export interface OrderToolsState {
 	quickOrderPlusButton: boolean;
 	openOrders: boolean;
 	positions: boolean;
+	liquidationPrice: boolean;
 	orderHistory: boolean;
 }
 export type QuickOrderMenuAction = "limit" | "stop" | "create";
@@ -96,6 +97,7 @@ export interface OrderToolsOptions {
 	quickOrderPlusButton?: boolean;
 	openOrders?: boolean;
 	positions?: boolean;
+	liquidationPrice?: boolean;
 	orderHistory?: boolean;
 	onChange?: (state: OrderToolsState) => void;
 	onQuickOrderAction?: (event: QuickOrderMenuEvent) => void;
@@ -266,6 +268,7 @@ export declare class KLineChartPro implements ChartPro {
 		quickOrderPlusButton?: boolean;
 		openOrders?: boolean;
 		positions?: boolean;
+		liquidationPrice?: boolean;
 		orderHistory?: boolean;
 	}): void;
 	convertToPixel(points: Partial<Point> | Array<Partial<Point>>, finder: {
