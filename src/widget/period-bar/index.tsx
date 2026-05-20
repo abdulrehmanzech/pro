@@ -57,6 +57,8 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
     localStorage.getItem("klinechart_secondary_period") || "",
   );
   const [orderMenuVisible, setOrderMenuVisible] = createSignal(false);
+  const [quickOrderSubmenuVisible, setQuickOrderSubmenuVisible] =
+    createSignal(false);
   const [orderMenuPosition, setOrderMenuPosition] = createSignal({ top: 0, left: 0, minWidth: 220 });
 
   const handleResize = () => {
@@ -99,6 +101,8 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
       const nextVisible = !visible;
       if (nextVisible) {
         queueMicrotask(updateOrderMenuPosition);
+      } else {
+        setQuickOrderSubmenuVisible(false);
       }
       return nextVisible;
     });
@@ -115,6 +119,7 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
     if (orderMenuRef?.contains(target) || orderMenuContentRef?.contains(target)) {
       return;
     }
+    setQuickOrderSubmenuVisible(false);
     setOrderMenuVisible(false);
   };
 
@@ -479,6 +484,7 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
                     }}
                     class="klinecharts-pro-order-tools-popover"
                     onMouseDown={(event) => event.stopPropagation()}
+                    onMouseLeave={() => setQuickOrderSubmenuVisible(false)}
                     style={{
                       position: "fixed",
                       top: `${orderMenuPosition().top}px`,
@@ -487,22 +493,72 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
                       "z-index": 9999,
                     }}
                   >
+                    <div
+                      class="klinecharts-pro-order-tools-group"
+                      onMouseEnter={() => setQuickOrderSubmenuVisible(true)}
+                    >
+                      <button
+                        type="button"
+                        class="klinecharts-pro-order-tools-group-title"
+                        onClick={(event) => {
+                          event.preventDefault();
+                          event.stopPropagation();
+                          setQuickOrderSubmenuVisible((visible) => !visible);
+                        }}
+                      >
+                        <span class="klinecharts-pro-order-tools-label">Quick Order</span>
+                        <span class="klinecharts-pro-order-tools-chevron">›</span>
+                      </button>
+                      <Show when={quickOrderSubmenuVisible()}>
+                        <div
+                          class="klinecharts-pro-order-tools-submenu"
+                          onMouseEnter={() => setQuickOrderSubmenuVisible(true)}
+                        >
+                      <label class="klinecharts-pro-order-tools-item">
+                        <span class="klinecharts-pro-order-tools-checkbox-box">
+                          <input
+                            class="klinecharts-pro-order-tools-checkbox-input"
+                            type="checkbox"
+                            checked={
+                              props.orderToolsState?.quickOrderFloatingWindow ??
+                              props.orderToolsState?.quickOrder ??
+                              true
+                            }
+                            onChange={(event) => {
+                              props.onOrderToolsStateChange?.({
+                                quickOrderFloatingWindow:
+                                  event.currentTarget.checked,
+                              });
+                            }}
+                          />
+                          <span class="klinecharts-pro-order-tools-checkbox-fill" />
+                        </span>
+                        <span class="klinecharts-pro-order-tools-label">Floating Window</span>
+                      </label>
+                      <label class="klinecharts-pro-order-tools-item">
+                        <span class="klinecharts-pro-order-tools-checkbox-box">
+                          <input
+                            class="klinecharts-pro-order-tools-checkbox-input"
+                            type="checkbox"
+                            checked={
+                              props.orderToolsState?.quickOrderPlusButton ??
+                              props.orderToolsState?.quickOrder ??
+                              true
+                            }
+                            onChange={(event) => {
+                              props.onOrderToolsStateChange?.({
+                                quickOrderPlusButton: event.currentTarget.checked,
+                              });
+                            }}
+                          />
+                          <span class="klinecharts-pro-order-tools-checkbox-fill" />
+                        </span>
+                        <span class="klinecharts-pro-order-tools-label">Plus Button</span>
+                      </label>
+                        </div>
+                      </Show>
+                    </div>
                     <label class="klinecharts-pro-order-tools-item">
-                      <span class="klinecharts-pro-order-tools-checkbox-box">
-                        <input
-                          class="klinecharts-pro-order-tools-checkbox-input"
-                          type="checkbox"
-                          checked={props.orderToolsState?.quickOrder ?? true}
-                          onChange={(event) => {
-                            props.onOrderToolsStateChange?.({
-                              quickOrder: event.currentTarget.checked,
-                            });
-                          }}
-                        />
-                        <span class="klinecharts-pro-order-tools-checkbox-fill" />
-                      </span>
-                      <span class="klinecharts-pro-order-tools-label">Quick Order</span>
-                    </label>                    <label class="klinecharts-pro-order-tools-item">
                       <span class="klinecharts-pro-order-tools-checkbox-box">
                         <input
                           class="klinecharts-pro-order-tools-checkbox-input"

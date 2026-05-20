@@ -95,7 +95,17 @@ export default class KLineChartPro implements ChartPro {
           onMobilePeriodClick={options.onMobilePeriodClick}
           onMobileMoreClick={options.onMobileMoreClick}
           screenshotBackgroundColor={options.screenshotBackgroundColor}
-          orderTools={options.orderTools ?? { visible: false, quickOrder: true, openOrders: true, positions: true, orderHistory: true }}
+          orderTools={
+            options.orderTools ?? {
+              visible: false,
+              quickOrder: true,
+              quickOrderFloatingWindow: true,
+              quickOrderPlusButton: true,
+              openOrders: true,
+              positions: true,
+              orderHistory: true,
+            }
+          }
         />
       ),
       this._container
@@ -261,10 +271,24 @@ export default class KLineChartPro implements ChartPro {
   }
 
   getOrderToolsState() {
-    return this._chartApi?.getOrderToolsState?.() ?? { quickOrder: true, openOrders: true, positions: true, orderHistory: true };
+    return this._chartApi?.getOrderToolsState?.() ?? {
+      quickOrder: true,
+      quickOrderFloatingWindow: true,
+      quickOrderPlusButton: true,
+      openOrders: true,
+      positions: true,
+      orderHistory: true,
+    };
   }
 
-  setOrderToolsState(state: { quickOrder?: boolean; openOrders?: boolean; positions?: boolean; orderHistory?: boolean }): void {
+  setOrderToolsState(state: {
+    quickOrder?: boolean;
+    quickOrderFloatingWindow?: boolean;
+    quickOrderPlusButton?: boolean;
+    openOrders?: boolean;
+    positions?: boolean;
+    orderHistory?: boolean;
+  }): void {
     this._chartApi?.setOrderToolsState?.(state);
   }
 

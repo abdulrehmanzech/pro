@@ -121,6 +121,8 @@ export type IndicatorEventCallback = (data: IndicatorEventData) => void;
 
 export interface OrderToolsState {
   quickOrder: boolean;
+  quickOrderFloatingWindow: boolean;
+  quickOrderPlusButton: boolean;
   openOrders: boolean;
   positions: boolean;
   orderHistory: boolean;
@@ -137,6 +139,8 @@ export interface QuickOrderMenuEvent {
 export interface OrderToolsOptions {
   visible?: boolean;
   quickOrder?: boolean;
+  quickOrderFloatingWindow?: boolean;
+  quickOrderPlusButton?: boolean;
   openOrders?: boolean;
   positions?: boolean;
   orderHistory?: boolean;

@@ -183,8 +183,13 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
 
   const [mobileMoreModalVisible, setMobileMoreModalVisible] =
     createSignal(false);
+  const quickOrderDefault = props.orderTools?.quickOrder ?? true;
   const [orderToolsState, setOrderToolsState] = createSignal<OrderToolsState>({
-    quickOrder: props.orderTools?.quickOrder ?? true,
+    quickOrder: quickOrderDefault,
+    quickOrderFloatingWindow:
+      props.orderTools?.quickOrderFloatingWindow ?? quickOrderDefault,
+    quickOrderPlusButton:
+      props.orderTools?.quickOrderPlusButton ?? quickOrderDefault,
     openOrders: props.orderTools?.openOrders ?? true,
     positions: props.orderTools?.positions ?? true,
     orderHistory: props.orderTools?.orderHistory ?? true,
@@ -684,10 +689,21 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
   };
 
   const applyOrderToolsState = (nextState: Partial<OrderToolsState>) => {
-    const mergedState = {
+    const mergedState: OrderToolsState = {
       ...orderToolsState(),
       ...nextState,
     };
+    if ("quickOrder" in nextState) {
+      const enabled = nextState.quickOrder ?? false;
+      mergedState.quickOrderFloatingWindow = enabled;
+      mergedState.quickOrderPlusButton = enabled;
+    } else if (
+      "quickOrderFloatingWindow" in nextState ||
+      "quickOrderPlusButton" in nextState
+    ) {
+      mergedState.quickOrder =
+        mergedState.quickOrderFloatingWindow || mergedState.quickOrderPlusButton;
+    }
     setOrderToolsState(mergedState);
     props.orderTools?.onChange?.(mergedState);
   };
@@ -729,7 +745,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
 
   const handleQuickOrderCrosshairChange = (data?: any) => {
     if (
-      !orderToolsState().quickOrder ||
+      !orderToolsState().quickOrderPlusButton ||
       data?.paneId !== "candle_pane" ||
       !widgetRef
     ) {
@@ -1076,11 +1092,18 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
   };
 
   let lastOrderToolsQuickOrderProp = props.orderTools?.quickOrder;
+  let lastOrderToolsQuickOrderFloatingWindowProp =
+    props.orderTools?.quickOrderFloatingWindow;
+  let lastOrderToolsQuickOrderPlusButtonProp =
+    props.orderTools?.quickOrderPlusButton;
   let lastOrderToolsOpenOrdersProp = props.orderTools?.openOrders;
   let lastOrderToolsPositionsProp = props.orderTools?.positions;
   let lastOrderToolsOrderHistoryProp = props.orderTools?.orderHistory;
   createEffect(() => {
     const nextQuickOrder = props.orderTools?.quickOrder;
+    const nextQuickOrderFloatingWindow =
+      props.orderTools?.quickOrderFloatingWindow;
+    const nextQuickOrderPlusButton = props.orderTools?.quickOrderPlusButton;
     const nextOpenOrders = props.orderTools?.openOrders;
     const nextPositions = props.orderTools?.positions;
     const nextOrderHistory = props.orderTools?.orderHistory;
@@ -1091,6 +1114,28 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     ) {
       lastOrderToolsQuickOrderProp = nextQuickOrder;
       nextState.quickOrder = nextQuickOrder;
+      if (typeof nextQuickOrderFloatingWindow !== "boolean") {
+        nextState.quickOrderFloatingWindow = nextQuickOrder;
+      }
+      if (typeof nextQuickOrderPlusButton !== "boolean") {
+        nextState.quickOrderPlusButton = nextQuickOrder;
+      }
+    }
+    if (
+      typeof nextQuickOrderFloatingWindow === "boolean" &&
+      nextQuickOrderFloatingWindow !==
+        lastOrderToolsQuickOrderFloatingWindowProp
+    ) {
+      lastOrderToolsQuickOrderFloatingWindowProp =
+        nextQuickOrderFloatingWindow;
+      nextState.quickOrderFloatingWindow = nextQuickOrderFloatingWindow;
+    }
+    if (
+      typeof nextQuickOrderPlusButton === "boolean" &&
+      nextQuickOrderPlusButton !== lastOrderToolsQuickOrderPlusButtonProp
+    ) {
+      lastOrderToolsQuickOrderPlusButtonProp = nextQuickOrderPlusButton;
+      nextState.quickOrderPlusButton = nextQuickOrderPlusButton;
     }
     if (
       typeof nextOpenOrders === "boolean" &&
@@ -1114,7 +1159,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       nextState.orderHistory = nextOrderHistory;
     }
     if (Object.keys(nextState).length > 0) {
-      setOrderToolsState({ ...orderToolsState(), ...nextState });
+      applyOrderToolsState(nextState);
     }
   });
 
@@ -2532,7 +2577,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
               style={{
                 top: `${Math.max(0, marker.y - 12)}px`,
                 right: `${quickOrderYAxisWidth()}px`,
-                display: orderToolsState().quickOrder ? "block" : "none",
+                display: orderToolsState().quickOrderPlusButton ? "block" : "none",
               }}
             >
               <button
