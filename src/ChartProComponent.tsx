@@ -590,7 +590,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
           timestamp: Date.now(),
         };
 
-        // localStorage.setItem(key, JSON.stringify(storageData, null, 2));
+        localStorage.setItem(key, JSON.stringify(storageData));
 
         // Log what was saved for debugging
         
@@ -602,32 +602,21 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     loadDrawings: (ticker: string): OverlayInfo[] => {
       try {
         const key = `kline_drawings_${ticker}`;
-        // const data = localStorage.getItem(key);
-        // if (data) {
-        //   const parsed = JSON.parse(data);
-        
-
-        //   // Validate loaded drawings
-        //   const validDrawings: OverlayInfo[] = [];
-
-        //   if (parsed.drawings) {
-        //     parsed.drawings.forEach((drawing: OverlayInfo, index: number) => {
-        //       const requiredPoints = getRequiredPoints(drawing.type);
-        //       const currentPoints = drawing.points?.length || 0;
-
-        //       if (currentPoints >= requiredPoints) {
-        //         validDrawings.push(drawing);
-              
-        //       } else {
-        //         console.warn(
-        //           `ðŸ“¥ Skipping ${drawing.type}: Only ${currentPoints} point(s), need ${requiredPoints}`
-        //         );
-        //       }
-        //     });
-        //   }
-
-        //   return validDrawings;
-        // }
+        const data = localStorage.getItem(key);
+        if (data) {
+          const parsed = JSON.parse(data);
+          const validDrawings: OverlayInfo[] = [];
+          if (Array.isArray(parsed.drawings)) {
+            parsed.drawings.forEach((drawing: OverlayInfo) => {
+              const requiredPoints = getRequiredPoints(drawing.type);
+              const currentPoints = drawing.points?.length || 0;
+              if (currentPoints >= requiredPoints) {
+                validDrawings.push(drawing);
+              }
+            });
+          }
+          return validDrawings;
+        }
       } catch (error) {
         console.error("Library: Error loading drawings:", error);
       }
@@ -637,7 +626,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     clearDrawings: (ticker: string) => {
       try {
         const key = `kline_drawings_${ticker}`;
-        // localStorage.removeItem(key);
+        localStorage.removeItem(key);
       } catch (error) {
         console.error("Library: Error clearing drawings:", error);
       }
@@ -649,6 +638,49 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       const allDrawings = Array.from(overlayTracker.values());
       drawingStorage.saveDrawings(currentSymbol.ticker, allDrawings);
     }
+  };
+
+  const restoreDrawingsForSymbol = (ticker?: string) => {
+    if (!ticker || !widget) {
+      return;
+    }
+    overlayTracker.forEach((_, id) => {
+      widget?.removeOverlay?.({ id });
+    });
+    overlayTracker.clear();
+    drawingStates.clear();
+    setOverlayToolbar(null);
+    setOverlayToolbarDropdown(null);
+
+    const savedDrawings = drawingStorage.loadDrawings(ticker);
+    savedDrawings.forEach((drawing) => {
+      try {
+        const overlayConfig = withOverlayToolbarEvents({
+          name: drawing.type,
+          points: drawing.points || [],
+          extendData: drawing.extendData,
+          styles: drawing.styles,
+          visible: drawing.visible ?? true,
+          lock: drawing.lock ?? false,
+          mode: drawing.mode || OverlayMode.Normal,
+        });
+        const overlayIdRaw = widget?.createOverlay(overlayConfig);
+        const overlayId = typeof overlayIdRaw === "string" ? overlayIdRaw : null;
+        if (overlayId) {
+          overlayTracker.set(overlayId, {
+            ...drawing,
+            id: overlayId,
+          });
+          drawingStates.set(overlayId, {
+            monitoring: false,
+            complete: true,
+            lastPointCount: drawing.points?.length || 0,
+          });
+        }
+      } catch (error) {
+        console.error("Library: Error restoring drawing:", error);
+      }
+    });
   };
 
   const applyOrderToolsState = (nextState: Partial<OrderToolsState>) => {
@@ -826,7 +858,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     const dashedValue = Array.isArray(overlay.styles?.line?.dashedValue)
       ? overlay.styles.line.dashedValue
       : [];
-    const color = overlay.styles?.line?.color ?? "#1e293b";
+    const color = overlay.styles?.line?.color ?? "#2f6df6";
     setOverlayToolbar({
       id: overlay.id,
       x: position.x,
@@ -868,7 +900,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
           size: Number((overlay.styles as any)?.line?.size) || 3,
           style: (overlay.styles as any)?.line?.style ?? LineType.Solid,
           dashedValue: (overlay.styles as any)?.line?.dashedValue ?? [6, 4],
-          color: (overlay.styles as any)?.line?.color ?? "#1e293b",
+          color: (overlay.styles as any)?.line?.color ?? "#2f6df6",
         },
       } as any,
       onClick: (event) => {
@@ -910,6 +942,10 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       return;
     }
     widget?.overrideOverlay?.({ id: toolbar.id, ...updates });
+    setTimeout(() => {
+      updateOverlayTracking(toolbar.id);
+      syncDrawingsToStorage();
+    }, 0);
   };
 
   const toggleToolbarOverlayLock = () => {
@@ -965,7 +1001,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     const lineSize = 1;
     const lineStyle = LineType.Solid;
     const dashedValue = [6, 4];
-    const color = "#1e293b";
+    const color = "#2f6df6";
     updateToolbarOverlay({
       styles: { line: { size: lineSize, style: lineStyle, dashedValue, color } },
     });
@@ -2022,6 +2058,11 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
         if (!isCurrent) return;
         
         widget?.applyNewData(kLineDataList, kLineDataList.length > 0);
+        setTimeout(() => {
+          if (isCurrent) {
+            restoreDrawingsForSymbol(s?.ticker);
+          }
+        }, 0);
         props.datafeed.subscribe(s, p, (data) => {
           widget?.updateData(data);
         });
