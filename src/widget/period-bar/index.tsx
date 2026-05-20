@@ -509,9 +509,10 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
                         }}
                       >
                         <span class="klinecharts-pro-order-tools-title-left">
-                          <span
+                          <label
                             class="klinecharts-pro-order-tools-checkbox-box"
                             onClick={(event) => event.stopPropagation()}
+                            onMouseDown={(event) => event.stopPropagation()}
                           >
                             <input
                               class="klinecharts-pro-order-tools-checkbox-input"
@@ -524,15 +525,15 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
                                   props.orderToolsState?.quickOrder ??
                                   true)
                               }
-                              onClick={(event) => event.stopPropagation()}
                               onChange={(event) => {
+                                event.stopPropagation();
                                 props.onOrderToolsStateChange?.({
                                   quickOrder: event.currentTarget.checked,
                                 });
                               }}
                             />
                             <span class="klinecharts-pro-order-tools-checkbox-fill" />
-                          </span>
+                          </label>
                           <span class="klinecharts-pro-order-tools-label">Quick Order</span>
                         </span>
                         <span class="klinecharts-pro-order-tools-chevron">›</span>
