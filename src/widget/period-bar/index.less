@@ -181,7 +181,7 @@
   position: absolute;
   top: 0;
   left: calc(100% + 6px);
-  display: flex;
+  display: none;
   flex-direction: column;
   gap: 4px;
   box-sizing: border-box;
@@ -191,6 +191,12 @@
   border-radius: 8px;
   background: var(--klinecharts-pro-popover-background-color);
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
+}
+
+.@{prefix-cls}-order-tools-group:hover .@{prefix-cls}-order-tools-submenu,
+.@{prefix-cls}-order-tools-group:focus-within .@{prefix-cls}-order-tools-submenu,
+.@{prefix-cls}-order-tools-group-open .@{prefix-cls}-order-tools-submenu {
+  display: flex;
 }
 
 .@{prefix-cls}-order-tools-chevron {

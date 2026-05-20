@@ -494,7 +494,11 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
                     }}
                   >
                     <div
-                      class="klinecharts-pro-order-tools-group"
+                      class={`klinecharts-pro-order-tools-group${
+                        quickOrderSubmenuVisible()
+                          ? " klinecharts-pro-order-tools-group-open"
+                          : ""
+                      }`}
                       onMouseEnter={() => setQuickOrderSubmenuVisible(true)}
                     >
                       <button
@@ -509,11 +513,10 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
                         <span class="klinecharts-pro-order-tools-label">Quick Order</span>
                         <span class="klinecharts-pro-order-tools-chevron">›</span>
                       </button>
-                      <Show when={quickOrderSubmenuVisible()}>
-                        <div
-                          class="klinecharts-pro-order-tools-submenu"
-                          onMouseEnter={() => setQuickOrderSubmenuVisible(true)}
-                        >
+                      <div
+                        class="klinecharts-pro-order-tools-submenu"
+                        onMouseEnter={() => setQuickOrderSubmenuVisible(true)}
+                      >
                       <label class="klinecharts-pro-order-tools-item">
                         <span class="klinecharts-pro-order-tools-checkbox-box">
                           <input
@@ -555,8 +558,7 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
                         </span>
                         <span class="klinecharts-pro-order-tools-label">Plus Button</span>
                       </label>
-                        </div>
-                      </Show>
+                      </div>
                     </div>
                     <label class="klinecharts-pro-order-tools-item">
                       <span class="klinecharts-pro-order-tools-checkbox-box">
