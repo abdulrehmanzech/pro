@@ -17,6 +17,7 @@ import {
   createEffect,
   onMount,
   Show,
+  For,
   onCleanup,
   startTransition,
   Component,
@@ -78,6 +79,7 @@ import {
   IndicatorInfo,
   IndicatorEventCallback,
   OrderToolsState,
+  QuickOrderMenuAction,
 } from "./types";
 
 export interface ChartProComponentProps
@@ -187,6 +189,95 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     positions: props.orderTools?.positions ?? true,
     orderHistory: props.orderTools?.orderHistory ?? true,
   });
+  const [quickOrderMarker, setQuickOrderMarker] = createSignal<{
+    y: number;
+    price: number;
+  } | null>(null);
+  const [quickOrderMenuVisible, setQuickOrderMenuVisible] = createSignal(false);
+  const [quickOrderInteracting, setQuickOrderInteracting] = createSignal(false);
+  const [quickOrderYAxisWidth, setQuickOrderYAxisWidth] = createSignal(64);
+  const [quickOrderMenuAnchor, setQuickOrderMenuAnchor] = createSignal<{
+    y: number;
+    price: number;
+    yAxisWidth: number;
+  } | null>(null);
+  const QUICK_ORDER_MENU_SCALE_GAP = 6;
+  const [overlayToolbar, setOverlayToolbar] = createSignal<{
+    id: string;
+    x: number;
+    y: number;
+    lineSize: number;
+    lineStyle: LineType;
+    dashedValue: number[];
+    color: string;
+    locked: boolean;
+    visible: boolean;
+  } | null>(null);
+  const [overlayToolbarDropdown, setOverlayToolbarDropdown] = createSignal<
+    "color" | "width" | "style" | null
+  >(null);
+  const overlayToolbarColors = [
+    "#000000",
+    "#2b3342",
+    "#3f4653",
+    "#565d69",
+    "#6f7580",
+    "#8a9099",
+    "#a7acb3",
+    "#c4c8ce",
+    "#ffffff",
+    "#ff4d67",
+    "#ffa629",
+    "#f7ed4a",
+    "#2fc58d",
+    "#4ab09c",
+    "#52c4d3",
+    "#3157f6",
+    "#6a36b8",
+    "#a644b9",
+    "#d83972",
+    "#f2a3a6",
+    "#f5c879",
+    "#f7ee97",
+    "#a6d29f",
+    "#7fc9b9",
+    "#91d7df",
+    "#8fb2ee",
+    "#b09ad2",
+    "#c89ccf",
+    "#d987ab",
+    "#e8757a",
+    "#efb34f",
+    "#efe36e",
+    "#86c17d",
+    "#66b7a8",
+    "#68c4d0",
+    "#5f91e4",
+    "#8059c9",
+    "#aa62c2",
+    "#d34d83",
+    "#b9353d",
+    "#ea8527",
+    "#e8c245",
+    "#4b8c43",
+    "#2f6f60",
+    "#47919b",
+    "#2646c6",
+    "#56309c",
+    "#892f95",
+    "#a82563",
+    "#8e2528",
+    "#de5c1f",
+    "#dc8527",
+    "#255a22",
+    "#164b34",
+    "#225b63",
+    "#15309b",
+    "#442180",
+    "#6b1f74",
+    "#86154e",
+  ];
+  let lastQuickOrderCrosshair: any = null;
 
   const [indicatorSettingModalParams, setIndicatorSettingModalParams] =
     createSignal({
@@ -569,6 +660,385 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     props.orderTools?.onChange?.(mergedState);
   };
 
+  const formatQuickOrderPrice = (price: number): string => {
+    const precision = Math.min(Math.max(symbol()?.pricePrecision ?? 2, 0), 8);
+    return price.toLocaleString(undefined, {
+      minimumFractionDigits: precision,
+      maximumFractionDigits: precision,
+    });
+  };
+
+  const resolveQuickOrderPrice = (crosshair: any): number => {
+    const y = Number(crosshair?.y);
+    if (!Number.isFinite(y)) {
+      return NaN;
+    }
+    try {
+      const converted = widget?.convertFromPixel([{ x: crosshair?.x ?? 0, y }], {
+        paneId: "candle_pane",
+      }) as Array<Partial<Point>>;
+      const value = Number(converted?.[0]?.value);
+      if (Number.isFinite(value) && value > 0) {
+        return value;
+      }
+    } catch (e) {}
+    try {
+      const converted = widget?.convertFromPixel([{ x: crosshair?.x ?? 0, y }], {
+        paneId: "candle_pane",
+        absolute: true,
+      }) as Array<Partial<Point>>;
+      const value = Number(converted?.[0]?.value);
+      if (Number.isFinite(value) && value > 0) {
+        return value;
+      }
+    } catch (e) {}
+    return NaN;
+  };
+
+  const handleQuickOrderCrosshairChange = (data?: any) => {
+    if (
+      !orderToolsState().quickOrder ||
+      data?.paneId !== "candle_pane" ||
+      !widgetRef
+    ) {
+      if (quickOrderInteracting() || quickOrderMenuVisible()) {
+        return;
+      }
+      setQuickOrderMarker(null);
+      setQuickOrderMenuVisible(false);
+      return;
+    }
+    const yAxisSize = widget?.getSize?.("candle_pane", DomPosition.YAxis as any);
+    if (yAxisSize?.width && Number.isFinite(yAxisSize.width)) {
+      setQuickOrderYAxisWidth(Math.max(44, Math.ceil(yAxisSize.width)));
+    }
+    const y = Number(data.y);
+    const price = resolveQuickOrderPrice(data);
+    const height = widgetRef.clientHeight;
+    if (!Number.isFinite(y) || !Number.isFinite(price) || price <= 0 || y < 0 || y > height) {
+      if (quickOrderInteracting() || quickOrderMenuVisible()) {
+        return;
+      }
+      setQuickOrderMarker(null);
+      setQuickOrderMenuVisible(false);
+      return;
+    }
+    lastQuickOrderCrosshair = { ...data };
+    setQuickOrderMarker({ y, price });
+  };
+
+  const restoreQuickOrderCrosshair = () => {
+    if (!lastQuickOrderCrosshair) {
+      return;
+    }
+    try {
+      (widget as any)?.executeAction?.(ActionType.OnCrosshairChange, lastQuickOrderCrosshair);
+    } catch (e) {}
+  };
+
+  const runQuickOrderAction = (action: QuickOrderMenuAction) => {
+    const marker = quickOrderMenuAnchor() ?? quickOrderMarker();
+    if (!marker) {
+      return;
+    }
+    props.orderTools?.onQuickOrderAction?.({
+      action,
+      price: marker.price,
+      symbol: symbol(),
+    });
+    setQuickOrderMenuVisible(false);
+    setQuickOrderMenuAnchor(null);
+    setQuickOrderInteracting(false);
+  };
+
+  const copyQuickOrderPrice = async () => {
+    const marker = quickOrderMenuAnchor() ?? quickOrderMarker();
+    if (!marker) {
+      return;
+    }
+    try {
+      await navigator.clipboard?.writeText(String(marker.price));
+    } catch (e) {}
+    setQuickOrderMenuVisible(false);
+    setQuickOrderMenuAnchor(null);
+    setQuickOrderInteracting(false);
+  };
+
+  const drawQuickOrderHorizontalLine = () => {
+    const marker = quickOrderMenuAnchor() ?? quickOrderMarker();
+    if (!marker) {
+      return;
+    }
+    widget?.createOverlay(withOverlayToolbarEvents({
+      name: "horizontalStraightLine",
+      points: [{ value: marker.price }],
+      lock: false,
+    }));
+    setQuickOrderMenuVisible(false);
+    setQuickOrderMenuAnchor(null);
+    setQuickOrderInteracting(false);
+  };
+
+  const resolveOverlayToolbarPosition = (event: any) => {
+    const contentRect = widgetRef?.parentElement?.getBoundingClientRect?.();
+    const widgetRect = widgetRef?.getBoundingClientRect?.();
+    const overlay = event?.overlay;
+    const point = overlay?.points?.[0];
+    let x = 72;
+    let y = 40;
+    if (contentRect) {
+      if (Number.isFinite(event?.pageX)) {
+        x = event.pageX - contentRect.left;
+      } else if (Number.isFinite(event?.x) && widgetRect) {
+        x = widgetRect.left - contentRect.left + event.x;
+      }
+      if (Number.isFinite(event?.pageY)) {
+        y = event.pageY - contentRect.top;
+      } else if (Number.isFinite(event?.y) && widgetRect) {
+        y = widgetRect.top - contentRect.top + event.y;
+      } else if (Number.isFinite(point?.value)) {
+        try {
+          const pixel = widget?.convertToPixel?.(
+            [{ value: point.value }],
+            { paneId: "candle_pane", absolute: true } as any
+          ) as Array<Partial<Coordinate>>;
+          const pixelY = Number(pixel?.[0]?.y);
+          if (Number.isFinite(pixelY)) {
+            y = pixelY - contentRect.top;
+          }
+        } catch (e) {}
+      }
+    }
+    return {
+      x: Math.max(12, Math.min(x - 28, (contentRect?.width ?? 360) - 320)),
+      y: Math.max(8, y - 52),
+    };
+  };
+
+  const showOverlayToolbar = (event: any) => {
+    const overlay = event?.overlay;
+    if (!overlay?.id || overlay.name !== "horizontalStraightLine") {
+      return false;
+    }
+    const position = resolveOverlayToolbarPosition(event);
+    const lineSize = Number(overlay.styles?.line?.size) || 3;
+    const lineStyle = overlay.styles?.line?.style ?? LineType.Solid;
+    const dashedValue = Array.isArray(overlay.styles?.line?.dashedValue)
+      ? overlay.styles.line.dashedValue
+      : [];
+    const color = overlay.styles?.line?.color ?? "#1e293b";
+    setOverlayToolbar({
+      id: overlay.id,
+      x: position.x,
+      y: position.y,
+      lineSize,
+      lineStyle,
+      dashedValue,
+      color,
+      locked: overlay.lock ?? false,
+      visible: overlay.visible ?? true,
+    });
+    return false;
+  };
+
+  const hideOverlayToolbar = (event: any) => {
+    const id = event?.overlay?.id;
+    if (!id || overlayToolbar()?.id === id) {
+      setOverlayToolbar(null);
+      setOverlayToolbarDropdown(null);
+    }
+    return false;
+  };
+
+  const withOverlayToolbarEvents = (overlay: OverlayCreate): OverlayCreate => {
+    if (overlay.name !== "horizontalStraightLine") {
+      return overlay;
+    }
+    const onClick = overlay.onClick;
+    const onSelected = overlay.onSelected;
+    const onDeselected = overlay.onDeselected;
+    const onRemoved = overlay.onRemoved;
+    const onPressedMoveEnd = overlay.onPressedMoveEnd;
+    return {
+      ...overlay,
+      styles: {
+        ...overlay.styles,
+        line: {
+          ...(overlay.styles as any)?.line,
+          size: Number((overlay.styles as any)?.line?.size) || 3,
+          style: (overlay.styles as any)?.line?.style ?? LineType.Solid,
+          dashedValue: (overlay.styles as any)?.line?.dashedValue ?? [6, 4],
+          color: (overlay.styles as any)?.line?.color ?? "#1e293b",
+        },
+      } as any,
+      onClick: (event) => {
+        showOverlayToolbar(event);
+        return onClick?.(event) ?? false;
+      },
+      onSelected: (event) => {
+        showOverlayToolbar(event);
+        return onSelected?.(event) ?? false;
+      },
+      onPressedMoveEnd: (event) => {
+        showOverlayToolbar(event);
+        return onPressedMoveEnd?.(event) ?? false;
+      },
+      onDeselected: (event) => {
+        hideOverlayToolbar(event);
+        return onDeselected?.(event) ?? false;
+      },
+      onRemoved: (event) => {
+        hideOverlayToolbar(event);
+        return onRemoved?.(event) ?? false;
+      },
+    };
+  };
+
+  const removeToolbarOverlay = () => {
+    const toolbar = overlayToolbar();
+    if (!toolbar) {
+      return;
+    }
+    widget?.removeOverlay?.({ id: toolbar.id });
+    setOverlayToolbar(null);
+    setOverlayToolbarDropdown(null);
+  };
+
+  const updateToolbarOverlay = (updates: Record<string, unknown>) => {
+    const toolbar = overlayToolbar();
+    if (!toolbar) {
+      return;
+    }
+    widget?.overrideOverlay?.({ id: toolbar.id, ...updates });
+  };
+
+  const toggleToolbarOverlayLock = () => {
+    const toolbar = overlayToolbar();
+    if (!toolbar) {
+      return;
+    }
+    const locked = !toolbar.locked;
+    updateToolbarOverlay({ lock: locked });
+    setOverlayToolbar({ ...toolbar, locked });
+  };
+
+  const toggleToolbarOverlayVisible = () => {
+    const toolbar = overlayToolbar();
+    if (!toolbar) {
+      return;
+    }
+    const visible = !toolbar.visible;
+    updateToolbarOverlay({ visible });
+    setOverlayToolbar({ ...toolbar, visible });
+  };
+
+  const setToolbarOverlayLineSize = (lineSize: number) => {
+    const toolbar = overlayToolbar();
+    if (!toolbar) {
+      return;
+    }
+    updateToolbarOverlay({ styles: { line: { size: lineSize } } });
+    setOverlayToolbar({ ...toolbar, lineSize });
+    setOverlayToolbarDropdown(null);
+  };
+
+  const setToolbarOverlayLineStyle = (
+    lineStyle: LineType,
+    dashedValue: number[]
+  ) => {
+    const toolbar = overlayToolbar();
+    if (!toolbar) {
+      return;
+    }
+    updateToolbarOverlay({
+      styles: { line: { style: lineStyle, dashedValue } },
+    });
+    setOverlayToolbar({ ...toolbar, lineStyle, dashedValue });
+    setOverlayToolbarDropdown(null);
+  };
+
+  const resetToolbarOverlayStyle = () => {
+    const toolbar = overlayToolbar();
+    if (!toolbar) {
+      return;
+    }
+    const lineSize = 1;
+    const lineStyle = LineType.Solid;
+    const dashedValue = [6, 4];
+    const color = "#1e293b";
+    updateToolbarOverlay({
+      styles: { line: { size: lineSize, style: lineStyle, dashedValue, color } },
+    });
+    setOverlayToolbar({ ...toolbar, lineSize, lineStyle, dashedValue, color });
+    setOverlayToolbarDropdown(null);
+  };
+
+  const setToolbarOverlayColor = (color: string) => {
+    const toolbar = overlayToolbar();
+    if (!toolbar) {
+      return;
+    }
+    updateToolbarOverlay({ styles: { line: { color } } });
+    setOverlayToolbar({ ...toolbar, color });
+  };
+
+  const startToolbarOverlayDrag = (event: MouseEvent) => {
+    const toolbar = overlayToolbar();
+    if (!toolbar || !widgetRef) {
+      return;
+    }
+    event.preventDefault();
+    event.stopPropagation();
+    setOverlayToolbarDropdown(null);
+    const contentRect = widgetRef.parentElement?.getBoundingClientRect?.();
+    if (!contentRect) {
+      return;
+    }
+    const startX = event.clientX;
+    const startY = event.clientY;
+    const initialX = toolbar.x;
+    const initialY = toolbar.y;
+
+    const moveOverlay = (moveEvent: MouseEvent) => {
+      moveEvent.preventDefault();
+      const nextX = initialX + moveEvent.clientX - startX;
+      const nextY = initialY + moveEvent.clientY - startY;
+      setOverlayToolbar({
+        ...toolbar,
+        x: Math.max(8, Math.min(nextX, contentRect.width - 320)),
+        y: Math.max(8, Math.min(nextY, contentRect.height - 48)),
+      });
+    };
+
+    const stopDrag = () => {
+      document.removeEventListener("mousemove", moveOverlay);
+      document.removeEventListener("mouseup", stopDrag);
+    };
+
+    document.addEventListener("mousemove", moveOverlay);
+    document.addEventListener("mouseup", stopDrag);
+  };
+
+  const closeQuickOrderMenu = () => {
+    setQuickOrderMenuVisible(false);
+    setQuickOrderMenuAnchor(null);
+    setQuickOrderInteracting(false);
+  };
+
+  const handleQuickOrderDocumentPointerDown = (event: MouseEvent) => {
+    if (!quickOrderMenuVisible()) {
+      return;
+    }
+    const target = event.target as HTMLElement | null;
+    if (target?.closest?.(".klinecharts-pro-quick-order-marker")) {
+      return;
+    }
+    if (target?.closest?.(".klinecharts-pro-quick-order-menu-anchor")) {
+      return;
+    }
+    closeQuickOrderMenu();
+  };
+
   let lastOrderToolsQuickOrderProp = props.orderTools?.quickOrder;
   let lastOrderToolsOpenOrdersProp = props.orderTools?.openOrders;
   let lastOrderToolsPositionsProp = props.orderTools?.positions;
@@ -641,7 +1111,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       widget?.overrideIndicator(config, paneId);
     },
     createOverlay: (overlay: OverlayCreate): string | null => {
-      const result = widget?.createOverlay?.(overlay);
+      const result = widget?.createOverlay?.(withOverlayToolbarEvents(overlay));
       if (typeof result === "string") return result;
       return null;
     },
@@ -1403,13 +1873,18 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
         }
       }
     });
+    widget?.subscribeAction(ActionType.OnCrosshairChange, handleQuickOrderCrosshairChange);
+    document.addEventListener("mousedown", handleQuickOrderDocumentPointerDown);
 
     // === MONKEY PATCH createOverlay ===
     const originalCreateOverlay = widget?.createOverlay;
     if (widget && originalCreateOverlay) {
       widget.createOverlay = function (...args) {
-        const overlayConfig = args[0] as OverlayCreate;
-        const result = originalCreateOverlay.apply(this, args);
+        const overlayConfig = withOverlayToolbarEvents(args[0] as OverlayCreate);
+        const result = originalCreateOverlay.apply(
+          this,
+          [overlayConfig, ...args.slice(1)] as Parameters<typeof originalCreateOverlay>
+        );
         const overlayId = typeof result === "string" ? result : null;
 
         if (overlayId) {
@@ -1483,6 +1958,8 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
   // ... (keep the rest of the code the same)
   onCleanup(() => {
     window.removeEventListener("resize", documentResize);
+    widget?.unsubscribeAction(ActionType.OnCrosshairChange, handleQuickOrderCrosshairChange);
+    document.removeEventListener("mousedown", handleQuickOrderDocumentPointerDown);
 
     // Cleanup all monitoring intervals
     // drawingStates.forEach((state, overlayId) => {
@@ -1723,15 +2200,21 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
         orderToolsState={orderToolsState()}
         onOrderToolsStateChange={applyOrderToolsState}
       />
-      <div class="klinecharts-pro-content">
+      <div
+        class="klinecharts-pro-content"
+        onMouseLeave={() => {
+          setQuickOrderMarker(null);
+          setQuickOrderInteracting(false);
+        }}
+      >
         <Show when={loadingVisible()}>
           <Loading />
         </Show>
         <Show when={drawingBarVisible()}>
-          <DrawingBar
-            locale={props.locale}
-            onDrawingItemClick={(overlay) => {
-              widget?.createOverlay(overlay);
+        <DrawingBar
+          locale={props.locale}
+          onDrawingItemClick={(overlay) => {
+              widget?.createOverlay(withOverlayToolbarEvents(overlay));
             }}
             onModeChange={(mode) => {
               widget?.overrideOverlay({ mode: mode as OverlayMode });
@@ -1752,6 +2235,331 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
           class="klinecharts-pro-widget"
           data-drawing-bar-visible={drawingBarVisible()}
         />
+        <Show when={overlayToolbar()} keyed>
+          {(toolbar) => (
+            <div
+              class="klinecharts-pro-overlay-toolbar"
+              style={{
+                left: `${toolbar.x}px`,
+                top: `${toolbar.y}px`,
+              }}
+              onMouseDown={(event) => {
+                event.preventDefault();
+                event.stopPropagation();
+              }}
+              onClick={(event) => {
+                event.stopPropagation();
+              }}
+            >
+              <button
+                type="button"
+                class="overlay-toolbar-icon drag"
+                title="Move"
+                onMouseDown={startToolbarOverlayDrag}
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="9" cy="6" r="1.5" />
+                  <circle cx="15" cy="6" r="1.5" />
+                  <circle cx="9" cy="12" r="1.5" />
+                  <circle cx="15" cy="12" r="1.5" />
+                  <circle cx="9" cy="18" r="1.5" />
+                  <circle cx="15" cy="18" r="1.5" />
+                </svg>
+              </button>
+              <button
+                type="button"
+                class="overlay-toolbar-icon refresh"
+                title="Reset"
+                onClick={resetToolbarOverlayStyle}
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  width="20"
+                  height="20"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.4"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M3 12a9 9 0 0 1 15.4-6.36L21 8" />
+                  <path d="M21 3v5h-5" />
+                  <path d="M21 12a9 9 0 0 1-15.4 6.36L3 16" />
+                  <path d="M3 21v-5h5" />
+                </svg>
+              </button>
+              <div class="overlay-toolbar-picker">
+                <button
+                  type="button"
+                  class={`overlay-toolbar-icon edit ${
+                    overlayToolbarDropdown() === "color" ? "active" : ""
+                  }`}
+                  title="Color"
+                  onClick={() =>
+                    setOverlayToolbarDropdown(
+                      overlayToolbarDropdown() === "color" ? null : "color"
+                    )
+                  }
+                >
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 20h9" />
+                    <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
+                  </svg>
+                </button>
+                <Show when={overlayToolbarDropdown() === "color"}>
+                  <div class="overlay-toolbar-color-popover">
+                    <div class="overlay-toolbar-color-grid">
+                      <For each={overlayToolbarColors}>
+                        {(color) => (
+                          <button
+                            type="button"
+                            class={`overlay-toolbar-color-swatch ${
+                              toolbar.color.toLowerCase() === color.toLowerCase()
+                                ? "selected"
+                                : ""
+                            }`}
+                            style={{ background: color }}
+                            onClick={() => setToolbarOverlayColor(color)}
+                          />
+                        )}
+                      </For>
+                    </div>
+                    <div class="overlay-toolbar-color-footer">
+                      <button type="button" class="overlay-toolbar-add-color">
+                        +
+                      </button>
+                      <div class="overlay-toolbar-color-slider">
+                        <span />
+                      </div>
+                    </div>
+                  </div>
+                </Show>
+              </div>
+              <div class="overlay-toolbar-picker">
+                <button
+                  type="button"
+                  class={`overlay-toolbar-line-size ${
+                    overlayToolbarDropdown() === "width" ? "active" : ""
+                  }`}
+                  title="Line width"
+                  onClick={() =>
+                    setOverlayToolbarDropdown(
+                      overlayToolbarDropdown() === "width" ? null : "width"
+                    )
+                  }
+                >
+                  <span class="overlay-toolbar-line-preview" />
+                  <span>{toolbar.lineSize}px</span>
+                </button>
+                <Show when={overlayToolbarDropdown() === "width"}>
+                  <div class="overlay-toolbar-dropdown width-menu">
+                    <For each={[1, 2, 3, 4]}>
+                      {(size) => (
+                        <button
+                          type="button"
+                          class={toolbar.lineSize === size ? "selected" : ""}
+                          onClick={() => setToolbarOverlayLineSize(size)}
+                        >
+                          <span
+                            class="overlay-toolbar-width-sample"
+                            style={{ height: `${size}px` }}
+                          />
+                        </button>
+                      )}
+                    </For>
+                  </div>
+                </Show>
+              </div>
+              <div class="overlay-toolbar-picker">
+                <button
+                  type="button"
+                  class={`overlay-toolbar-icon minus ${
+                    overlayToolbarDropdown() === "style" ? "active" : ""
+                  }`}
+                  title="Line style"
+                  onClick={() =>
+                    setOverlayToolbarDropdown(
+                      overlayToolbarDropdown() === "style" ? null : "style"
+                    )
+                  }
+                >
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M4 12h16" />
+                  </svg>
+                </button>
+                <Show when={overlayToolbarDropdown() === "style"}>
+                  <div class="overlay-toolbar-dropdown style-menu">
+                    <button
+                      type="button"
+                      class={
+                        toolbar.lineStyle === LineType.Solid ? "selected" : ""
+                      }
+                      onClick={() =>
+                        setToolbarOverlayLineStyle(LineType.Solid, [])
+                      }
+                    >
+                      <span class="overlay-toolbar-style-sample solid" />
+                    </button>
+                    <button
+                      type="button"
+                      class={
+                        toolbar.lineStyle === LineType.Dashed &&
+                        toolbar.dashedValue?.[0] === 6
+                          ? "selected"
+                          : ""
+                      }
+                      onClick={() =>
+                        setToolbarOverlayLineStyle(LineType.Dashed, [6, 4])
+                      }
+                    >
+                      <span class="overlay-toolbar-style-sample dashed" />
+                    </button>
+                    <button
+                      type="button"
+                      class={
+                        toolbar.lineStyle === LineType.Dashed &&
+                        toolbar.dashedValue?.[0] === 2
+                          ? "selected"
+                          : ""
+                      }
+                      onClick={() =>
+                        setToolbarOverlayLineStyle(LineType.Dashed, [2, 4])
+                      }
+                    >
+                      <span class="overlay-toolbar-style-sample dotted" />
+                    </button>
+                  </div>
+                </Show>
+              </div>
+              <button
+                type="button"
+                class={`overlay-toolbar-icon visibility ${toolbar.visible ? "" : "muted"}`}
+                title={toolbar.visible ? "Hide" : "Show"}
+                onClick={toggleToolbarOverlayVisible}
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <rect x="5" y="5" width="14" height="14" rx="2" />
+                  <path d="M20 4 4 20" />
+                </svg>
+              </button>
+              <button
+                type="button"
+                class={`overlay-toolbar-icon lock ${toolbar.locked ? "active" : ""}`}
+                title={toolbar.locked ? "Unlock" : "Lock"}
+                onClick={toggleToolbarOverlayLock}
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <rect x="5" y="10" width="14" height="10" rx="2" />
+                  <path d="M8 10V7a4 4 0 0 1 8 0v3" />
+                </svg>
+              </button>
+              <button
+                type="button"
+                class="overlay-toolbar-icon delete"
+                title="Delete"
+                onClick={removeToolbarOverlay}
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M3 6h18" />
+                  <path d="M8 6V4h8v2" />
+                  <path d="M19 6 18 20H6L5 6" />
+                  <path d="M10 11v5" />
+                  <path d="M14 11v5" />
+                </svg>
+              </button>
+            </div>
+          )}
+        </Show>
+        <Show when={quickOrderMarker()} keyed>
+          {(marker) => (
+            <div
+              class="klinecharts-pro-quick-order-marker"
+              onMouseEnter={() => {
+                setQuickOrderInteracting(true);
+                restoreQuickOrderCrosshair();
+              }}
+              onMouseMove={(event) => {
+                event.stopPropagation();
+                restoreQuickOrderCrosshair();
+              }}
+              onMouseLeave={() => {
+                if (!quickOrderMenuVisible()) {
+                  setQuickOrderInteracting(false);
+                }
+              }}
+              style={{
+                top: `${Math.max(0, marker.y - 12)}px`,
+                right: `${quickOrderYAxisWidth()}px`,
+                display: orderToolsState().quickOrder ? "block" : "none",
+              }}
+            >
+              <button
+                type="button"
+                class="klinecharts-pro-quick-order-plus"
+                onMouseDown={(event) => {
+                  event.preventDefault();
+                  event.stopPropagation();
+                  restoreQuickOrderCrosshair();
+                }}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  setQuickOrderInteracting(true);
+                  setQuickOrderMenuAnchor({
+                    y: marker.y,
+                    price: marker.price,
+                    yAxisWidth: quickOrderYAxisWidth(),
+                  });
+                  setQuickOrderMenuVisible(true);
+                  restoreQuickOrderCrosshair();
+                }}
+              >
+                +
+              </button>
+            </div>
+          )}
+        </Show>
+        <Show when={quickOrderMenuVisible() && quickOrderMenuAnchor()} keyed>
+          {(anchor) => (
+            <div
+              class="klinecharts-pro-quick-order-menu-anchor"
+              onMouseEnter={() => setQuickOrderInteracting(true)}
+              onMouseLeave={() => setQuickOrderInteracting(false)}
+              style={{
+                top: `${Math.max(0, anchor.y + 24)}px`,
+                right: `${anchor.yAxisWidth + QUICK_ORDER_MENU_SCALE_GAP}px`,
+              }}
+            >
+                <div
+                  class="klinecharts-pro-quick-order-menu"
+                  onMouseDown={(event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    restoreQuickOrderCrosshair();
+                  }}
+                  onMouseMove={() => {
+                    restoreQuickOrderCrosshair();
+                  }}
+                >
+                  <button type="button" onClick={() => runQuickOrderAction("limit")}>
+                    Buy {symbol().shortName ?? symbol().name ?? symbol().ticker} @ {formatQuickOrderPrice(anchor.price)} Limit
+                  </button>
+                  <button type="button" onClick={() => runQuickOrderAction("stop")}>
+                    Buy {symbol().shortName ?? symbol().name ?? symbol().ticker} @ {formatQuickOrderPrice(anchor.price)} Stop
+                  </button>
+                  <button type="button" onClick={() => runQuickOrderAction("create")}>
+                    Create new order...
+                  </button>
+                  <button type="button" onClick={copyQuickOrderPrice}>
+                    Copy Price ({formatQuickOrderPrice(anchor.price)})
+                  </button>
+                  <button type="button" onClick={drawQuickOrderHorizontalLine}>
+                    Draw horizontal line on {formatQuickOrderPrice(anchor.price)}
+                  </button>
+                </div>
+            </div>
+          )}
+        </Show>
       </div>
 
       <Show when={symbolSearchModalVisible()}>

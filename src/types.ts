@@ -126,6 +126,14 @@ export interface OrderToolsState {
   orderHistory: boolean;
 }
 
+export type QuickOrderMenuAction = "limit" | "stop" | "create";
+
+export interface QuickOrderMenuEvent {
+  action: QuickOrderMenuAction;
+  price: number;
+  symbol: SymbolInfo;
+}
+
 export interface OrderToolsOptions {
   visible?: boolean;
   quickOrder?: boolean;
@@ -133,6 +141,7 @@ export interface OrderToolsOptions {
   positions?: boolean;
   orderHistory?: boolean;
   onChange?: (state: OrderToolsState) => void;
+  onQuickOrderAction?: (event: QuickOrderMenuEvent) => void;
 }
 
 

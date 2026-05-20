@@ -4323,7 +4323,7 @@ const ph = (e) => {
     const c = i == null ? void 0 : i.overlay;
     if (!(c != null && c.id) || c.name !== "horizontalStraightLine")
       return !1;
-    const d = j9(i), h = Number((A = (v = c.styles) == null ? void 0 : v.line) == null ? void 0 : A.size) || 3, m = ((N = (S = c.styles) == null ? void 0 : S.line) == null ? void 0 : N.style) ?? z1.Solid, $ = Array.isArray((l1 = (J = c.styles) == null ? void 0 : J.line) == null ? void 0 : l1.dashedValue) ? c.styles.line.dashedValue : [], C = ((h1 = (c1 = c.styles) == null ? void 0 : c1.line) == null ? void 0 : h1.color) ?? "#6c5ce7";
+    const d = j9(i), h = Number((A = (v = c.styles) == null ? void 0 : v.line) == null ? void 0 : A.size) || 3, m = ((N = (S = c.styles) == null ? void 0 : S.line) == null ? void 0 : N.style) ?? z1.Solid, $ = Array.isArray((l1 = (J = c.styles) == null ? void 0 : J.line) == null ? void 0 : l1.dashedValue) ? c.styles.line.dashedValue : [], C = ((h1 = (c1 = c.styles) == null ? void 0 : c1.line) == null ? void 0 : h1.color) ?? "#1e293b";
     return I({
       id: c.id,
       x: d.x,
@@ -4353,7 +4353,7 @@ const ph = (e) => {
           size: Number((A = (v = i.styles) == null ? void 0 : v.line) == null ? void 0 : A.size) || 3,
           style: ((N = (S = i.styles) == null ? void 0 : S.line) == null ? void 0 : N.style) ?? z1.Solid,
           dashedValue: ((l1 = (J = i.styles) == null ? void 0 : J.line) == null ? void 0 : l1.dashedValue) ?? [6, 4],
-          color: ((h1 = (c1 = i.styles) == null ? void 0 : c1.line) == null ? void 0 : h1.color) ?? "#6c5ce7"
+          color: ((h1 = (c1 = i.styles) == null ? void 0 : c1.line) == null ? void 0 : h1.color) ?? "#1e293b"
         }
       },
       onClick: (t1) => (dt(t1), (c == null ? void 0 : c(t1)) ?? !1),
@@ -4427,7 +4427,7 @@ const ph = (e) => {
     const i = _1();
     if (!i)
       return;
-    const c = 1, d = z1.Solid, h = [6, 4], m = "#6c5ce7";
+    const c = 1, d = z1.Solid, h = [6, 4], m = "#1e293b";
     oe({
       styles: {
         line: {
