@@ -162,6 +162,10 @@
   appearance: none;
 }
 
+.@{prefix-cls}-order-tools-group-title .@{prefix-cls}-order-tools-chevron {
+  margin-left: auto;
+}
+
 .@{prefix-cls}-order-tools-group-title:hover,
 .@{prefix-cls}-order-tools-group:hover > .@{prefix-cls}-order-tools-group-title,
 .@{prefix-cls}-order-tools-title-left:hover,
@@ -234,6 +238,7 @@
   border: 2px solid var(--color-border-default, var(--klinecharts-pro-border-color));
   border-radius: 2px;
   flex: 0 0 auto;
+  cursor: pointer;
   transition: border-color .2s;
 }
 
@@ -254,6 +259,7 @@
   opacity: 0;
   transform: scale(0);
   transition: opacity .2s, transform .2s;
+  cursor: pointer;
 }
 
 .@{prefix-cls}-order-tools-checkbox-input:checked + .@{prefix-cls}-order-tools-checkbox-fill {

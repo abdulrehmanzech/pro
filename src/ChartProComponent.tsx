@@ -2628,10 +2628,10 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
                   }}
                 >
                   <button type="button" onClick={() => runQuickOrderAction("limit")}>
-                    Buy {symbol().shortName ?? symbol().name ?? symbol().ticker} @ {formatQuickOrderPrice(anchor.price)} Limit
+                    Trade {symbol().shortName ?? symbol().name ?? symbol().ticker} @ {formatQuickOrderPrice(anchor.price)} Limit
                   </button>
                   <button type="button" onClick={() => runQuickOrderAction("stop")}>
-                    Buy {symbol().shortName ?? symbol().name ?? symbol().ticker} @ {formatQuickOrderPrice(anchor.price)} Stop
+                    Trade {symbol().shortName ?? symbol().name ?? symbol().ticker} @ {formatQuickOrderPrice(anchor.price)} Stop
                   </button>
                   <button type="button" onClick={() => runQuickOrderAction("create")}>
                     Create new order...
