@@ -156,10 +156,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 8px;
   box-sizing: border-box;
   width: 100%;
-  min-height: 34px;
+  min-height: 32px;
   padding: 8px 10px;
   border: 0;
   border-radius: 6px;
@@ -167,11 +167,13 @@
   color: var(--klinecharts-pro-text-color);
   font: inherit;
   text-align: left;
+  appearance: none;
   cursor: pointer;
   user-select: none;
 }
 
 .@{prefix-cls}-order-tools-group-title:hover,
+.@{prefix-cls}-order-tools-group:hover > .@{prefix-cls}-order-tools-group-title,
 .@{prefix-cls}-order-tools-title-left:hover,
 .@{prefix-cls}-order-tools-group-title:has(.@{prefix-cls}-order-tools-checkbox-box:hover),
 .@{prefix-cls}-order-tools-group-open .@{prefix-cls}-order-tools-group-title {
@@ -182,6 +184,7 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  flex: 1 1 auto;
   min-width: 0;
 }
 
@@ -196,7 +199,7 @@
   gap: 4px;
   box-sizing: border-box;
   width: 100%;
-  padding: 2px 8px 6px 18px;
+  padding: 2px 4px 6px 14px;
 }
 
 .@{prefix-cls}-order-tools-group-open .@{prefix-cls}-order-tools-submenu {
