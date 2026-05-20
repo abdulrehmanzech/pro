@@ -501,7 +501,7 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
                     >
                       <button
                         type="button"
-                        class="klinecharts-pro-order-tools-group-title"
+                        class="klinecharts-pro-order-tools-item klinecharts-pro-order-tools-group-title"
                         onClick={(event) => {
                           event.preventDefault();
                           event.stopPropagation();
