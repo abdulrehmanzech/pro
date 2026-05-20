@@ -484,7 +484,6 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
                     }}
                     class="klinecharts-pro-order-tools-popover"
                     onMouseDown={(event) => event.stopPropagation()}
-                    onMouseLeave={() => setQuickOrderSubmenuVisible(false)}
                     style={{
                       position: "fixed",
                       top: `${orderMenuPosition().top}px`,
@@ -499,7 +498,6 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
                           ? " klinecharts-pro-order-tools-group-open"
                           : ""
                       }`}
-                      onMouseLeave={() => setQuickOrderSubmenuVisible(false)}
                     >
                       <button
                         type="button"
@@ -515,7 +513,6 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
                       </button>
                       <div
                         class="klinecharts-pro-order-tools-submenu"
-                        onMouseEnter={() => setQuickOrderSubmenuVisible(true)}
                       >
                       <label class="klinecharts-pro-order-tools-item">
                         <span class="klinecharts-pro-order-tools-checkbox-box">
