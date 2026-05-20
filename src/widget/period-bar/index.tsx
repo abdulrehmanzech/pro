@@ -508,7 +508,33 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
                           setQuickOrderSubmenuVisible((visible) => !visible);
                         }}
                       >
-                        <span class="klinecharts-pro-order-tools-label">Quick Order</span>
+                        <span class="klinecharts-pro-order-tools-title-left">
+                          <span
+                            class="klinecharts-pro-order-tools-checkbox-box"
+                            onClick={(event) => event.stopPropagation()}
+                          >
+                            <input
+                              class="klinecharts-pro-order-tools-checkbox-input"
+                              type="checkbox"
+                              checked={
+                                (props.orderToolsState?.quickOrderFloatingWindow ??
+                                  props.orderToolsState?.quickOrder ??
+                                  true) ||
+                                (props.orderToolsState?.quickOrderPlusButton ??
+                                  props.orderToolsState?.quickOrder ??
+                                  true)
+                              }
+                              onClick={(event) => event.stopPropagation()}
+                              onChange={(event) => {
+                                props.onOrderToolsStateChange?.({
+                                  quickOrder: event.currentTarget.checked,
+                                });
+                              }}
+                            />
+                            <span class="klinecharts-pro-order-tools-checkbox-fill" />
+                          </span>
+                          <span class="klinecharts-pro-order-tools-label">Quick Order</span>
+                        </span>
                         <span class="klinecharts-pro-order-tools-chevron">›</span>
                       </button>
                       <div
