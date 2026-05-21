@@ -81,6 +81,7 @@ export interface OrderToolsState {
 	quickOrderPlusButton: boolean;
 	openOrders: boolean;
 	positions: boolean;
+	breakevenPrice: boolean;
 	liquidationPrice: boolean;
 	orderHistory: boolean;
 }
@@ -97,6 +98,7 @@ export interface OrderToolsOptions {
 	quickOrderPlusButton?: boolean;
 	openOrders?: boolean;
 	positions?: boolean;
+	breakevenPrice?: boolean;
 	liquidationPrice?: boolean;
 	orderHistory?: boolean;
 	onChange?: (state: OrderToolsState) => void;
@@ -268,6 +270,7 @@ export declare class KLineChartPro implements ChartPro {
 		quickOrderPlusButton?: boolean;
 		openOrders?: boolean;
 		positions?: boolean;
+		breakevenPrice?: boolean;
 		liquidationPrice?: boolean;
 		orderHistory?: boolean;
 	}): void;

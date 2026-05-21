@@ -192,6 +192,8 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       props.orderTools?.quickOrderPlusButton ?? quickOrderDefault,
     openOrders: props.orderTools?.openOrders ?? true,
     positions: props.orderTools?.positions ?? true,
+    breakevenPrice: props.orderTools?.breakevenPrice ?? true,
+    liquidationPrice: props.orderTools?.liquidationPrice ?? true,
     orderHistory: props.orderTools?.orderHistory ?? true,
   });
   const [quickOrderMarker, setQuickOrderMarker] = createSignal<{
@@ -1098,6 +1100,8 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     props.orderTools?.quickOrderPlusButton;
   let lastOrderToolsOpenOrdersProp = props.orderTools?.openOrders;
   let lastOrderToolsPositionsProp = props.orderTools?.positions;
+  let lastOrderToolsBreakevenPriceProp = props.orderTools?.breakevenPrice;
+  let lastOrderToolsLiquidationPriceProp = props.orderTools?.liquidationPrice;
   let lastOrderToolsOrderHistoryProp = props.orderTools?.orderHistory;
   createEffect(() => {
     const nextQuickOrder = props.orderTools?.quickOrder;
@@ -1106,6 +1110,8 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     const nextQuickOrderPlusButton = props.orderTools?.quickOrderPlusButton;
     const nextOpenOrders = props.orderTools?.openOrders;
     const nextPositions = props.orderTools?.positions;
+    const nextBreakevenPrice = props.orderTools?.breakevenPrice;
+    const nextLiquidationPrice = props.orderTools?.liquidationPrice;
     const nextOrderHistory = props.orderTools?.orderHistory;
     const nextState: Partial<OrderToolsState> = {};
     if (
@@ -1150,6 +1156,20 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     ) {
       lastOrderToolsPositionsProp = nextPositions;
       nextState.positions = nextPositions;
+    }
+    if (
+      typeof nextBreakevenPrice === "boolean" &&
+      nextBreakevenPrice !== lastOrderToolsBreakevenPriceProp
+    ) {
+      lastOrderToolsBreakevenPriceProp = nextBreakevenPrice;
+      nextState.breakevenPrice = nextBreakevenPrice;
+    }
+    if (
+      typeof nextLiquidationPrice === "boolean" &&
+      nextLiquidationPrice !== lastOrderToolsLiquidationPriceProp
+    ) {
+      lastOrderToolsLiquidationPriceProp = nextLiquidationPrice;
+      nextState.liquidationPrice = nextLiquidationPrice;
     }
     if (
       typeof nextOrderHistory === "boolean" &&

@@ -103,6 +103,8 @@ export default class KLineChartPro implements ChartPro {
               quickOrderPlusButton: true,
               openOrders: true,
               positions: true,
+              breakevenPrice: true,
+              liquidationPrice: true,
               orderHistory: true,
             }
           }
@@ -277,6 +279,8 @@ export default class KLineChartPro implements ChartPro {
       quickOrderPlusButton: true,
       openOrders: true,
       positions: true,
+      breakevenPrice: true,
+      liquidationPrice: true,
       orderHistory: true,
     };
   }
@@ -287,6 +291,8 @@ export default class KLineChartPro implements ChartPro {
     quickOrderPlusButton?: boolean;
     openOrders?: boolean;
     positions?: boolean;
+    breakevenPrice?: boolean;
+    liquidationPrice?: boolean;
     orderHistory?: boolean;
   }): void {
     this._chartApi?.setOrderToolsState?.(state);

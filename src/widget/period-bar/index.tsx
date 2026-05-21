@@ -619,6 +619,36 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
                         <input
                           class="klinecharts-pro-order-tools-checkbox-input"
                           type="checkbox"
+                          checked={props.orderToolsState?.breakevenPrice ?? true}
+                          onChange={(event) => {
+                            props.onOrderToolsStateChange?.({
+                              breakevenPrice: event.currentTarget.checked,
+                            });
+                          }}
+                        />
+                        <span class="klinecharts-pro-order-tools-checkbox-fill" />
+                      </span>
+                      <span class="klinecharts-pro-order-tools-label">Breakeven Price</span>
+                    </label>                    <label class="klinecharts-pro-order-tools-item">
+                      <span class="klinecharts-pro-order-tools-checkbox-box">
+                        <input
+                          class="klinecharts-pro-order-tools-checkbox-input"
+                          type="checkbox"
+                          checked={props.orderToolsState?.liquidationPrice ?? true}
+                          onChange={(event) => {
+                            props.onOrderToolsStateChange?.({
+                              liquidationPrice: event.currentTarget.checked,
+                            });
+                          }}
+                        />
+                        <span class="klinecharts-pro-order-tools-checkbox-fill" />
+                      </span>
+                      <span class="klinecharts-pro-order-tools-label">Liquidation Price</span>
+                    </label>                    <label class="klinecharts-pro-order-tools-item">
+                      <span class="klinecharts-pro-order-tools-checkbox-box">
+                        <input
+                          class="klinecharts-pro-order-tools-checkbox-input"
+                          type="checkbox"
                           checked={props.orderToolsState?.orderHistory ?? true}
                           onChange={(event) => {
                             props.onOrderToolsStateChange?.({
