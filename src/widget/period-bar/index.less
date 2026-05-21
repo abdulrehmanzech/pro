@@ -220,6 +220,8 @@
 
 .@{prefix-cls}-order-tools-switch {
   position: relative;
+  display: inline-flex;
+  align-items: center;
   width: 34px;
   height: 20px;
   padding: 0;
@@ -233,11 +235,12 @@
 .@{prefix-cls}-order-tools-switch span {
   position: absolute;
   left: 2px;
-  top: 2px;
+  top: 50%;
   width: 16px;
   height: 16px;
   border-radius: 50%;
   background: #ffffff;
+  transform: translateY(-50%);
   transition: transform 0.16s ease;
 }
 
@@ -247,7 +250,7 @@
 }
 
 .@{prefix-cls}-order-tools-switch-on span {
-  transform: translateX(14px);
+  transform: translate(14px, -50%);
 }
 
 .@{prefix-cls}-order-tools-display {
@@ -263,12 +266,25 @@
   min-width: 84px;
   height: 28px;
   padding: 0 10px;
-  border: 1px solid var(--color-primary-default, var(--klinecharts-pro-primary-color));
+  border: 1px solid transparent;
   border-radius: 7px;
   color: var(--klinecharts-pro-text-color);
   background: var(--color-bg, #171a27);
   font: inherit;
   cursor: pointer;
+  outline: none;
+  transition: border-color 0.16s ease, box-shadow 0.16s ease;
+}
+
+.@{prefix-cls}-order-tools-display-button:hover,
+.@{prefix-cls}-order-tools-display-button:focus-visible,
+.@{prefix-cls}-order-tools-display-button:active {
+  border-color: var(--color-primary-default, var(--klinecharts-pro-primary-color));
+  box-shadow: 0 0 0 2px color-mix(
+    in srgb,
+    var(--color-primary-default, var(--klinecharts-pro-primary-color)) 18%,
+    transparent
+  );
 }
 
 .@{prefix-cls}-order-tools-display-arrow {
