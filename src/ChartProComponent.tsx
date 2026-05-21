@@ -141,6 +141,38 @@ function createIndicator(
   return paneId;
 }
 
+function getPeriodDurationMs(period: Period): number {
+  const multiplier = Math.max(1, period.multiplier || 1);
+  switch (period.timespan) {
+    case "minute":
+      return multiplier * 60 * 1000;
+    case "hour":
+      return multiplier * 60 * 60 * 1000;
+    case "day":
+      return multiplier * 24 * 60 * 60 * 1000;
+    case "week":
+      return multiplier * 7 * 24 * 60 * 60 * 1000;
+    case "month":
+      return multiplier * 30 * 24 * 60 * 60 * 1000;
+    case "year":
+      return multiplier * 365 * 24 * 60 * 60 * 1000;
+    default:
+      return 60 * 60 * 1000;
+  }
+}
+
+function formatCountdownDuration(ms: number): string {
+  const totalSeconds = Math.max(0, Math.ceil(ms / 1000));
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  const pad = (value: number) => String(value).padStart(2, "0");
+  if (hours > 0) {
+    return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+  }
+  return `${pad(minutes)}:${pad(seconds)}`;
+}
+
 const ChartProComponent: Component<ChartProComponentProps> = (props) => {
   let widgetRef: HTMLDivElement | undefined = undefined;
   let widget: Nullable<Chart> = null;
@@ -213,6 +245,13 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     yAxisWidth: number;
   } | null>(null);
   const QUICK_ORDER_MENU_SCALE_GAP = 6;
+  const [countdownPriceMark, setCountdownPriceMark] = createSignal<{
+    top: number;
+    width: number;
+    priceText: string;
+    text: string;
+    color: string;
+  } | null>(null);
   const [overlayToolbar, setOverlayToolbar] = createSignal<{
     id: string;
     x: number;
@@ -719,6 +758,69 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     return price.toLocaleString(undefined, {
       minimumFractionDigits: precision,
       maximumFractionDigits: precision,
+    });
+  };
+
+  const updateCountdownPriceMark = (now = Date.now()) => {
+    if (
+      !widget ||
+      !widgetRef ||
+      !orderToolsState().marketPriceLine ||
+      !orderToolsState().countDown
+    ) {
+      setCountdownPriceMark(null);
+      return;
+    }
+
+    widget.setStyles({
+      candle: {
+        priceMark: {
+          last: { show: false },
+        },
+      },
+    });
+
+    const dataList = widget.getDataList?.() ?? [];
+    const latest = dataList[dataList.length - 1] as KLineData | undefined;
+    const price = Number(latest?.close);
+    if (!latest || !Number.isFinite(price) || price <= 0) {
+      setCountdownPriceMark(null);
+      return;
+    }
+
+    const pixel = widget.convertToPixel?.(
+      [{ value: price }],
+      { paneId: "candle_pane", absolute: true } as any
+    ) as Array<Partial<Coordinate>> | undefined;
+    const y = Number(pixel?.[0]?.y);
+    const paneSize = widget.getSize?.("candle_pane");
+    const height = paneSize?.height ?? widgetRef.clientHeight;
+    if (!Number.isFinite(y) || y < 0 || y > height) {
+      setCountdownPriceMark(null);
+      return;
+    }
+
+    const precision = Math.min(Math.max(symbol()?.pricePrecision ?? 2, 0), 8);
+    const priceText = price.toLocaleString(undefined, {
+      minimumFractionDigits: precision,
+      maximumFractionDigits: precision,
+    });
+    const periodMs = getPeriodDurationMs(period());
+    const elapsed = now % periodMs;
+    const remaining = elapsed === 0 ? periodMs : periodMs - elapsed;
+    const close = Number(latest.close);
+    const open = Number(latest.open);
+    const labelHeight = 40;
+    const labelTop = Math.max(0, Math.min(y - labelHeight / 2, height - labelHeight));
+    setCountdownPriceMark({
+      top: labelTop,
+      width: Math.min(96, Math.max(78, priceText.length * 7 + 16)),
+      priceText,
+      text: formatCountdownDuration(remaining),
+      color:
+        Number.isFinite(close) && Number.isFinite(open) && close < open
+          ? "var(--color-sell, #f6465d)"
+          : "var(--color-buy, #2ebd85)",
     });
   };
 
@@ -1232,6 +1334,25 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     }
   });
 
+  createEffect(() => {
+    orderToolsState().marketPriceLine;
+    orderToolsState().countDown;
+    period();
+    symbol();
+    widget?.setStyles({
+      candle: {
+        priceMark: {
+          last: {
+            show:
+              orderToolsState().marketPriceLine &&
+              !orderToolsState().countDown,
+          },
+        },
+      },
+    });
+    updateCountdownPriceMark();
+  });
+
   props.ref({
     setTheme,
     getTheme: () => theme(),
@@ -1461,7 +1582,12 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
             ...styleUpdates.candle?.priceMark,
             last: {
               ...styleUpdates.candle?.priceMark?.last,
-              show: settings.showLastPrice,
+              show:
+                settings.showLastPrice &&
+                !(
+                  orderToolsState().marketPriceLine &&
+                  orderToolsState().countDown
+                ),
             },
           },
         };
@@ -1684,7 +1810,18 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
 
   const documentResize = () => {
     widget?.resize();
+    updateCountdownPriceMark();
   };
+
+  const handleCountdownPriceMarkUpdate: ActionCallback = () => {
+    updateCountdownPriceMark();
+  };
+  const countdownPriceMarkActions: ActionType[] = [
+    ActionType.OnVisibleRangeChange,
+    ActionType.OnZoom,
+    ActionType.OnScroll,
+  ];
+  let countdownPriceMarkTimer: number | undefined;
 
   const adjustFromTo = (period: Period, toTimestamp: number, count: number) => {
     let to = toTimestamp;
@@ -2024,6 +2161,14 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       }
     });
     widget?.subscribeAction(ActionType.OnCrosshairChange, handleQuickOrderCrosshairChange);
+    countdownPriceMarkActions.forEach((action) => {
+      widget?.subscribeAction(action, handleCountdownPriceMarkUpdate);
+    });
+    countdownPriceMarkTimer = window.setInterval(
+      () => updateCountdownPriceMark(),
+      1000
+    );
+    updateCountdownPriceMark();
     document.addEventListener("mousedown", handleQuickOrderDocumentPointerDown);
 
     // === MONKEY PATCH createOverlay ===
@@ -2109,6 +2254,13 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
   onCleanup(() => {
     window.removeEventListener("resize", documentResize);
     widget?.unsubscribeAction(ActionType.OnCrosshairChange, handleQuickOrderCrosshairChange);
+    countdownPriceMarkActions.forEach((action) => {
+      widget?.unsubscribeAction(action, handleCountdownPriceMarkUpdate);
+    });
+    if (countdownPriceMarkTimer) {
+      window.clearInterval(countdownPriceMarkTimer);
+      countdownPriceMarkTimer = undefined;
+    }
     document.removeEventListener("mousedown", handleQuickOrderDocumentPointerDown);
 
     // Cleanup all monitoring intervals
@@ -2172,13 +2324,16 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
         if (!isCurrent) return;
         
         widget?.applyNewData(kLineDataList, kLineDataList.length > 0);
+        updateCountdownPriceMark();
         setTimeout(() => {
           if (isCurrent) {
             restoreDrawingsForSymbol(s?.ticker);
+            updateCountdownPriceMark();
           }
         }, 0);
         props.datafeed.subscribe(s, p, (data) => {
           widget?.updateData(data);
+          updateCountdownPriceMark();
         });
       } finally {
         if (isCurrent) {
@@ -2390,6 +2545,26 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
           class="klinecharts-pro-widget"
           data-drawing-bar-visible={drawingBarVisible()}
         />
+        <Show when={countdownPriceMark()} keyed>
+          {(mark) => (
+            <div
+              class="klinecharts-pro-countdown-price-mark"
+              style={{
+                top: `${mark.top}px`,
+                right: "0px",
+                width: `${mark.width}px`,
+                background: mark.color,
+              }}
+            >
+              <span class="klinecharts-pro-countdown-price-mark-price">
+                {mark.priceText}
+              </span>
+              <span class="klinecharts-pro-countdown-price-mark-timer">
+                {mark.text}
+              </span>
+            </div>
+          )}
+        </Show>
         <Show when={overlayToolbar()} keyed>
           {(toolbar) => (
             <div
