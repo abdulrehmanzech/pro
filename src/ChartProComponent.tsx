@@ -750,12 +750,26 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       const enabled = nextState.quickOrder ?? false;
       mergedState.quickOrderFloatingWindow = enabled;
       mergedState.quickOrderPlusButton = enabled;
+    } else if ("priceLine" in nextState) {
+      const enabled = nextState.priceLine ?? false;
+      mergedState.marketPriceLine = enabled;
+      mergedState.countDown = enabled;
+      mergedState.bidAskPrice = enabled;
     } else if (
       "quickOrderFloatingWindow" in nextState ||
       "quickOrderPlusButton" in nextState
     ) {
       mergedState.quickOrder =
         mergedState.quickOrderFloatingWindow || mergedState.quickOrderPlusButton;
+    } else if (
+      "marketPriceLine" in nextState ||
+      "countDown" in nextState ||
+      "bidAskPrice" in nextState
+    ) {
+      mergedState.priceLine =
+        mergedState.marketPriceLine ||
+        mergedState.countDown ||
+        mergedState.bidAskPrice;
     }
     setOrderToolsState(mergedState);
     props.orderTools?.onChange?.(mergedState);

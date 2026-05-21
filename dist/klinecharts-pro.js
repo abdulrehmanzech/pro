@@ -4345,8 +4345,11 @@ const nf = (e) => {
     if ("quickOrder" in i) {
       const C = i.quickOrder ?? !1;
       s.quickOrderFloatingWindow = C, s.quickOrderPlusButton = C;
+    } else if ("priceLine" in i) {
+      const C = i.priceLine ?? !1;
+      s.marketPriceLine = C, s.countDown = C, s.bidAskPrice = C;
     } else
-      ("quickOrderFloatingWindow" in i || "quickOrderPlusButton" in i) && (s.quickOrder = s.quickOrderFloatingWindow || s.quickOrderPlusButton);
+      "quickOrderFloatingWindow" in i || "quickOrderPlusButton" in i ? s.quickOrder = s.quickOrderFloatingWindow || s.quickOrderPlusButton : ("marketPriceLine" in i || "countDown" in i || "bidAskPrice" in i) && (s.priceLine = s.marketPriceLine || s.countDown || s.bidAskPrice);
     ee(s), (h = (u = e.orderTools) == null ? void 0 : u.onChange) == null || h.call(u, s);
   }, M1 = (i) => {
     var u;
