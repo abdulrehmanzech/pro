@@ -83,6 +83,10 @@ export interface OrderToolsState {
 	positions: boolean;
 	breakevenPrice: boolean;
 	liquidationPrice: boolean;
+	priceLine: boolean;
+	marketPriceLine: boolean;
+	countDown: boolean;
+	bidAskPrice: boolean;
 	orderHistory: boolean;
 }
 export type QuickOrderMenuAction = "limit" | "stop" | "create";
@@ -100,6 +104,10 @@ export interface OrderToolsOptions {
 	positions?: boolean;
 	breakevenPrice?: boolean;
 	liquidationPrice?: boolean;
+	priceLine?: boolean;
+	marketPriceLine?: boolean;
+	countDown?: boolean;
+	bidAskPrice?: boolean;
 	orderHistory?: boolean;
 	onChange?: (state: OrderToolsState) => void;
 	onQuickOrderAction?: (event: QuickOrderMenuEvent) => void;
@@ -272,6 +280,10 @@ export declare class KLineChartPro implements ChartPro {
 		positions?: boolean;
 		breakevenPrice?: boolean;
 		liquidationPrice?: boolean;
+		priceLine?: boolean;
+		marketPriceLine?: boolean;
+		countDown?: boolean;
+		bidAskPrice?: boolean;
 		orderHistory?: boolean;
 	}): void;
 	convertToPixel(points: Partial<Point> | Array<Partial<Point>>, finder: {

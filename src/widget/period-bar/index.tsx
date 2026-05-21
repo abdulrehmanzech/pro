@@ -59,6 +59,8 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
   const [orderMenuVisible, setOrderMenuVisible] = createSignal(false);
   const [quickOrderSubmenuVisible, setQuickOrderSubmenuVisible] =
     createSignal(false);
+  const [priceLineSubmenuVisible, setPriceLineSubmenuVisible] =
+    createSignal(false);
   const [orderMenuPosition, setOrderMenuPosition] = createSignal({ top: 0, left: 0, minWidth: 220 });
 
   const handleResize = () => {
@@ -103,6 +105,7 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
         queueMicrotask(updateOrderMenuPosition);
       } else {
         setQuickOrderSubmenuVisible(false);
+        setPriceLineSubmenuVisible(false);
       }
       return nextVisible;
     });
@@ -644,7 +647,120 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
                         <span class="klinecharts-pro-order-tools-checkbox-fill" />
                       </span>
                       <span class="klinecharts-pro-order-tools-label">Liquidation Price</span>
-                    </label>                    <label class="klinecharts-pro-order-tools-item">
+                    </label>
+                    <div
+                      class={`klinecharts-pro-order-tools-group${
+                        priceLineSubmenuVisible()
+                          ? " klinecharts-pro-order-tools-group-open"
+                          : ""
+                      }`}
+                    >
+                      <button
+                        type="button"
+                        class="klinecharts-pro-order-tools-item klinecharts-pro-order-tools-group-title"
+                        onClick={(event) => {
+                          event.preventDefault();
+                          event.stopPropagation();
+                          setPriceLineSubmenuVisible((visible) => !visible);
+                        }}
+                      >
+                        <span class="klinecharts-pro-order-tools-title-left">
+                          <label
+                            class="klinecharts-pro-order-tools-checkbox-box"
+                            onClick={(event) => event.stopPropagation()}
+                            onMouseDown={(event) => event.stopPropagation()}
+                          >
+                            <input
+                              class="klinecharts-pro-order-tools-checkbox-input"
+                              type="checkbox"
+                              checked={
+                                (props.orderToolsState?.marketPriceLine ??
+                                  props.orderToolsState?.priceLine ??
+                                  true) ||
+                                (props.orderToolsState?.countDown ??
+                                  props.orderToolsState?.priceLine ??
+                                  true) ||
+                                (props.orderToolsState?.bidAskPrice ??
+                                  props.orderToolsState?.priceLine ??
+                                  true)
+                              }
+                              onChange={(event) => {
+                                event.stopPropagation();
+                                props.onOrderToolsStateChange?.({
+                                  priceLine: event.currentTarget.checked,
+                                });
+                              }}
+                            />
+                            <span class="klinecharts-pro-order-tools-checkbox-fill" />
+                          </label>
+                          <span class="klinecharts-pro-order-tools-label">Price Line</span>
+                        </span>
+                        <span class="klinecharts-pro-order-tools-chevron">&rsaquo;</span>
+                      </button>
+                      <div class="klinecharts-pro-order-tools-submenu">
+                        <label class="klinecharts-pro-order-tools-item">
+                          <span class="klinecharts-pro-order-tools-checkbox-box">
+                            <input
+                              class="klinecharts-pro-order-tools-checkbox-input"
+                              type="checkbox"
+                              checked={
+                                props.orderToolsState?.marketPriceLine ??
+                                props.orderToolsState?.priceLine ??
+                                true
+                              }
+                              onChange={(event) => {
+                                props.onOrderToolsStateChange?.({
+                                  marketPriceLine: event.currentTarget.checked,
+                                });
+                              }}
+                            />
+                            <span class="klinecharts-pro-order-tools-checkbox-fill" />
+                          </span>
+                          <span class="klinecharts-pro-order-tools-label">Market Price Line</span>
+                        </label>
+                        <label class="klinecharts-pro-order-tools-item">
+                          <span class="klinecharts-pro-order-tools-checkbox-box">
+                            <input
+                              class="klinecharts-pro-order-tools-checkbox-input"
+                              type="checkbox"
+                              checked={
+                                props.orderToolsState?.countDown ??
+                                props.orderToolsState?.priceLine ??
+                                true
+                              }
+                              onChange={(event) => {
+                                props.onOrderToolsStateChange?.({
+                                  countDown: event.currentTarget.checked,
+                                });
+                              }}
+                            />
+                            <span class="klinecharts-pro-order-tools-checkbox-fill" />
+                          </span>
+                          <span class="klinecharts-pro-order-tools-label">Count Down</span>
+                        </label>
+                        <label class="klinecharts-pro-order-tools-item">
+                          <span class="klinecharts-pro-order-tools-checkbox-box">
+                            <input
+                              class="klinecharts-pro-order-tools-checkbox-input"
+                              type="checkbox"
+                              checked={
+                                props.orderToolsState?.bidAskPrice ??
+                                props.orderToolsState?.priceLine ??
+                                true
+                              }
+                              onChange={(event) => {
+                                props.onOrderToolsStateChange?.({
+                                  bidAskPrice: event.currentTarget.checked,
+                                });
+                              }}
+                            />
+                            <span class="klinecharts-pro-order-tools-checkbox-fill" />
+                          </span>
+                          <span class="klinecharts-pro-order-tools-label">Bid & Ask Price</span>
+                        </label>
+                      </div>
+                    </div>
+                    <label class="klinecharts-pro-order-tools-item">
                       <span class="klinecharts-pro-order-tools-checkbox-box">
                         <input
                           class="klinecharts-pro-order-tools-checkbox-input"

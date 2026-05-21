@@ -194,6 +194,10 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     positions: props.orderTools?.positions ?? true,
     breakevenPrice: props.orderTools?.breakevenPrice ?? true,
     liquidationPrice: props.orderTools?.liquidationPrice ?? true,
+    priceLine: props.orderTools?.priceLine ?? true,
+    marketPriceLine: props.orderTools?.marketPriceLine ?? true,
+    countDown: props.orderTools?.countDown ?? true,
+    bidAskPrice: props.orderTools?.bidAskPrice ?? true,
     orderHistory: props.orderTools?.orderHistory ?? true,
   });
   const [quickOrderMarker, setQuickOrderMarker] = createSignal<{
@@ -1102,6 +1106,10 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
   let lastOrderToolsPositionsProp = props.orderTools?.positions;
   let lastOrderToolsBreakevenPriceProp = props.orderTools?.breakevenPrice;
   let lastOrderToolsLiquidationPriceProp = props.orderTools?.liquidationPrice;
+  let lastOrderToolsPriceLineProp = props.orderTools?.priceLine;
+  let lastOrderToolsMarketPriceLineProp = props.orderTools?.marketPriceLine;
+  let lastOrderToolsCountDownProp = props.orderTools?.countDown;
+  let lastOrderToolsBidAskPriceProp = props.orderTools?.bidAskPrice;
   let lastOrderToolsOrderHistoryProp = props.orderTools?.orderHistory;
   createEffect(() => {
     const nextQuickOrder = props.orderTools?.quickOrder;
@@ -1112,6 +1120,10 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     const nextPositions = props.orderTools?.positions;
     const nextBreakevenPrice = props.orderTools?.breakevenPrice;
     const nextLiquidationPrice = props.orderTools?.liquidationPrice;
+    const nextPriceLine = props.orderTools?.priceLine;
+    const nextMarketPriceLine = props.orderTools?.marketPriceLine;
+    const nextCountDown = props.orderTools?.countDown;
+    const nextBidAskPrice = props.orderTools?.bidAskPrice;
     const nextOrderHistory = props.orderTools?.orderHistory;
     const nextState: Partial<OrderToolsState> = {};
     if (
@@ -1170,6 +1182,43 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     ) {
       lastOrderToolsLiquidationPriceProp = nextLiquidationPrice;
       nextState.liquidationPrice = nextLiquidationPrice;
+    }
+    if (
+      typeof nextPriceLine === "boolean" &&
+      nextPriceLine !== lastOrderToolsPriceLineProp
+    ) {
+      lastOrderToolsPriceLineProp = nextPriceLine;
+      nextState.priceLine = nextPriceLine;
+      if (typeof nextMarketPriceLine !== "boolean") {
+        nextState.marketPriceLine = nextPriceLine;
+      }
+      if (typeof nextCountDown !== "boolean") {
+        nextState.countDown = nextPriceLine;
+      }
+      if (typeof nextBidAskPrice !== "boolean") {
+        nextState.bidAskPrice = nextPriceLine;
+      }
+    }
+    if (
+      typeof nextMarketPriceLine === "boolean" &&
+      nextMarketPriceLine !== lastOrderToolsMarketPriceLineProp
+    ) {
+      lastOrderToolsMarketPriceLineProp = nextMarketPriceLine;
+      nextState.marketPriceLine = nextMarketPriceLine;
+    }
+    if (
+      typeof nextCountDown === "boolean" &&
+      nextCountDown !== lastOrderToolsCountDownProp
+    ) {
+      lastOrderToolsCountDownProp = nextCountDown;
+      nextState.countDown = nextCountDown;
+    }
+    if (
+      typeof nextBidAskPrice === "boolean" &&
+      nextBidAskPrice !== lastOrderToolsBidAskPriceProp
+    ) {
+      lastOrderToolsBidAskPriceProp = nextBidAskPrice;
+      nextState.bidAskPrice = nextBidAskPrice;
     }
     if (
       typeof nextOrderHistory === "boolean" &&

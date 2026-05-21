@@ -105,6 +105,10 @@ export default class KLineChartPro implements ChartPro {
               positions: true,
               breakevenPrice: true,
               liquidationPrice: true,
+              priceLine: true,
+              marketPriceLine: true,
+              countDown: true,
+              bidAskPrice: true,
               orderHistory: true,
             }
           }
@@ -281,6 +285,10 @@ export default class KLineChartPro implements ChartPro {
       positions: true,
       breakevenPrice: true,
       liquidationPrice: true,
+      priceLine: true,
+      marketPriceLine: true,
+      countDown: true,
+      bidAskPrice: true,
       orderHistory: true,
     };
   }
@@ -293,6 +301,10 @@ export default class KLineChartPro implements ChartPro {
     positions?: boolean;
     breakevenPrice?: boolean;
     liquidationPrice?: boolean;
+    priceLine?: boolean;
+    marketPriceLine?: boolean;
+    countDown?: boolean;
+    bidAskPrice?: boolean;
     orderHistory?: boolean;
   }): void {
     this._chartApi?.setOrderToolsState?.(state);
