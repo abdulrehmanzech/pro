@@ -4388,10 +4388,10 @@ const nf = (e) => {
     const x = Math.min(Math.max(((J0 = A()) == null ? void 0 : J0.pricePrecision) ?? 2, 0), 8), M = h.toLocaleString(void 0, {
       minimumFractionDigits: x,
       maximumFractionDigits: x
-    }), P = (e9 = r.getSize) == null ? void 0 : e9.call(r, "candle_pane", it.YAxis), z = P != null && P.width && Number.isFinite(P.width) ? Math.max(74, Math.floor(P.width) - 2) : 96, N = tf(I()), H = i % N, se = H === 0 ? N : N - H, R = Number(u.close), fe = Number(u.open), ke = r.getStyles().candle.priceMark.last, D = ke.text, de = Number(D.size) || 12, G = Number(D.paddingTop) || 2, ye = Number(D.paddingBottom) || 2, Ce = Number(D.paddingLeft) || 4, Ve = Number(D.paddingRight) || 4, He = Math.max(34, de * 2 + G + ye + 6), C1 = Math.max(0, Math.min(v - He / 2, p - He));
+    }), P = (e9 = r.getSize) == null ? void 0 : e9.call(r, "candle_pane", it.YAxis), z = P != null && P.width && Number.isFinite(P.width) ? Math.max(74, Math.floor(P.width) - 2) : 96, N = tf(I()), H = i % N, se = H === 0 ? N : N - H, R = Number(u.close), fe = Number(u.open), ke = r.getStyles().candle.priceMark.last, D = ke.text, de = Number(D.size) || 12, G = Number(D.paddingTop) || 2, ye = Number(D.paddingBottom) || 2, Ce = Math.min(Number(D.paddingLeft) || 4, 3), Ve = Math.min(Number(D.paddingRight) || 4, 3), He = Math.max(34, de * 2 + G + ye + 6), C1 = Math.max(0, Math.min(v - He / 2, p - He));
     h1({
       top: C1,
-      width: Math.min(z, Math.max(78, M.length * (de * 0.68) + Ce + Ve + 12)),
+      width: Math.min(z, Math.max(62, M.length * (de * 0.56) + Ce + Ve + 4)),
       priceText: M,
       text: rf(se),
       color: Number.isFinite(R) && Number.isFinite(fe) && R < fe ? ke.downColor : ke.upColor,

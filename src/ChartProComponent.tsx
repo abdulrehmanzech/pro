@@ -828,15 +828,21 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     const nativeTextSize = Number(textStyles.size) || 12;
     const paddingTop = Number(textStyles.paddingTop) || 2;
     const paddingBottom = Number(textStyles.paddingBottom) || 2;
-    const paddingLeft = Number(textStyles.paddingLeft) || 4;
-    const paddingRight = Number(textStyles.paddingRight) || 4;
+    const paddingLeft = Math.min(Number(textStyles.paddingLeft) || 4, 3);
+    const paddingRight = Math.min(Number(textStyles.paddingRight) || 4, 3);
     const labelHeight = Math.max(34, nativeTextSize * 2 + paddingTop + paddingBottom + 6);
     const labelTop = Math.max(0, Math.min(y - labelHeight / 2, height - labelHeight));
     setCountdownPriceMark({
       top: labelTop,
       width: Math.min(
         yAxisWidth,
-        Math.max(78, priceText.length * (nativeTextSize * 0.68) + paddingLeft + paddingRight + 12)
+        Math.max(
+          62,
+          priceText.length * (nativeTextSize * 0.56) +
+            paddingLeft +
+            paddingRight +
+            4
+        )
       ),
       priceText,
       text: formatCountdownDuration(remaining),
