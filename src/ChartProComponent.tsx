@@ -251,6 +251,14 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     priceText: string;
     text: string;
     color: string;
+    textSize: number;
+    textFamily: string;
+    textWeight: string | number;
+    paddingLeft: number;
+    paddingRight: number;
+    paddingTop: number;
+    paddingBottom: number;
+    borderRadius: number;
   } | null>(null);
   const [overlayToolbar, setOverlayToolbar] = createSignal<{
     id: string;
@@ -805,22 +813,45 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       minimumFractionDigits: precision,
       maximumFractionDigits: precision,
     });
+    const yAxisSize = widget.getSize?.("candle_pane", DomPosition.YAxis as any);
+    const yAxisWidth =
+      yAxisSize?.width && Number.isFinite(yAxisSize.width)
+        ? Math.max(74, Math.floor(yAxisSize.width) - 2)
+        : 96;
     const periodMs = getPeriodDurationMs(period());
     const elapsed = now % periodMs;
     const remaining = elapsed === 0 ? periodMs : periodMs - elapsed;
     const close = Number(latest.close);
     const open = Number(latest.open);
-    const labelHeight = 40;
+    const lastPriceMarkStyles = widget.getStyles().candle.priceMark.last;
+    const textStyles = lastPriceMarkStyles.text;
+    const nativeTextSize = Number(textStyles.size) || 12;
+    const paddingTop = Number(textStyles.paddingTop) || 2;
+    const paddingBottom = Number(textStyles.paddingBottom) || 2;
+    const paddingLeft = Number(textStyles.paddingLeft) || 4;
+    const paddingRight = Number(textStyles.paddingRight) || 4;
+    const labelHeight = Math.max(34, nativeTextSize * 2 + paddingTop + paddingBottom + 6);
     const labelTop = Math.max(0, Math.min(y - labelHeight / 2, height - labelHeight));
     setCountdownPriceMark({
       top: labelTop,
-      width: Math.min(96, Math.max(78, priceText.length * 7 + 16)),
+      width: Math.min(
+        yAxisWidth,
+        Math.max(78, priceText.length * (nativeTextSize * 0.68) + paddingLeft + paddingRight + 12)
+      ),
       priceText,
       text: formatCountdownDuration(remaining),
       color:
         Number.isFinite(close) && Number.isFinite(open) && close < open
-          ? "var(--color-sell, #f6465d)"
-          : "var(--color-buy, #2ebd85)",
+          ? lastPriceMarkStyles.downColor
+          : lastPriceMarkStyles.upColor,
+      textSize: nativeTextSize,
+      textFamily: textStyles.family,
+      textWeight: textStyles.weight,
+      paddingLeft,
+      paddingRight,
+      paddingTop,
+      paddingBottom,
+      borderRadius: Number(textStyles.borderRadius) || 2,
     });
   };
 
@@ -2554,12 +2585,29 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
                 right: "0px",
                 width: `${mark.width}px`,
                 background: mark.color,
+                "border-radius": `${mark.borderRadius}px`,
+                "font-family": mark.textFamily,
+                "font-weight": mark.textWeight,
+                "padding-left": `${mark.paddingLeft}px`,
+                "padding-right": `${mark.paddingRight}px`,
+                "padding-top": `${mark.paddingTop}px`,
+                "padding-bottom": `${mark.paddingBottom}px`,
               }}
             >
-              <span class="klinecharts-pro-countdown-price-mark-price">
+              <span
+                class="klinecharts-pro-countdown-price-mark-price"
+                style={{
+                  "font-size": `${mark.textSize}px`,
+                }}
+              >
                 {mark.priceText}
               </span>
-              <span class="klinecharts-pro-countdown-price-mark-timer">
+              <span
+                class="klinecharts-pro-countdown-price-mark-timer"
+                style={{
+                  "font-size": `${Math.max(10, mark.textSize - 1)}px`,
+                }}
+              >
                 {mark.text}
               </span>
             </div>
