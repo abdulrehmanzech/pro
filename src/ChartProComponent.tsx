@@ -790,7 +790,6 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     if (
       !widget ||
       !widgetRef ||
-      !orderToolsState().marketPriceLine ||
       !orderToolsState().countDown
     ) {
       setCountdownPriceMark(null);
@@ -800,7 +799,11 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     widget.setStyles({
       candle: {
         priceMark: {
-          last: { show: false },
+          last: {
+            show: true,
+            line: { show: orderToolsState().marketPriceLine },
+            text: { show: false },
+          },
         },
       },
     });
@@ -1419,9 +1422,9 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       candle: {
         priceMark: {
           last: {
-            show:
-              orderToolsState().marketPriceLine &&
-              !orderToolsState().countDown,
+            show: true,
+            line: { show: orderToolsState().marketPriceLine },
+            text: { show: !orderToolsState().countDown },
           },
         },
       },
@@ -1658,12 +1661,13 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
             ...styleUpdates.candle?.priceMark,
             last: {
               ...styleUpdates.candle?.priceMark?.last,
-              show:
-                settings.showLastPrice &&
-                !(
-                  orderToolsState().marketPriceLine &&
-                  orderToolsState().countDown
-                ),
+              show: settings.showLastPrice,
+              text: {
+                ...styleUpdates.candle?.priceMark?.last?.text,
+                show:
+                  settings.showLastPrice &&
+                  !orderToolsState().countDown,
+              },
             },
           },
         };
