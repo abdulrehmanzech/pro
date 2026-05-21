@@ -223,11 +223,11 @@
   width: 34px;
   height: 20px;
   padding: 0;
-  border: 0;
+  border: 1px solid var(--color-border-default, var(--klinecharts-pro-border-color));
   border-radius: 999px;
-  background: var(--klinecharts-pro-border-color);
+  background: transparent;
   cursor: pointer;
-  transition: background 0.16s ease;
+  transition: background 0.16s ease, border-color 0.16s ease;
 }
 
 .@{prefix-cls}-order-tools-switch span {
@@ -243,6 +243,7 @@
 
 .@{prefix-cls}-order-tools-switch-on {
   background: var(--color-primary-default, var(--klinecharts-pro-primary-color));
+  border-color: var(--color-primary-default, var(--klinecharts-pro-primary-color));
 }
 
 .@{prefix-cls}-order-tools-switch-on span {
@@ -265,17 +266,25 @@
   border: 1px solid var(--color-primary-default, var(--klinecharts-pro-primary-color));
   border-radius: 7px;
   color: var(--klinecharts-pro-text-color);
-  background: transparent;
+  background: var(--color-bg, #171a27);
   font: inherit;
   cursor: pointer;
 }
 
 .@{prefix-cls}-order-tools-display-arrow {
-  width: 0;
-  height: 0;
-  border-left: 4px solid transparent;
-  border-right: 4px solid transparent;
-  border-top: 5px solid var(--klinecharts-pro-text-second-color);
+  width: 13px;
+  height: 13px;
+  color: var(--klinecharts-pro-text-second-color);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.16s ease;
+}
+
+.@{prefix-cls}-order-tools-display-arrow-open {
+  transform: rotate(180deg);
 }
 
 .@{prefix-cls}-order-tools-display-menu {
@@ -287,8 +296,10 @@
   padding: 6px;
   border-radius: 8px;
   border: 1px solid var(--klinecharts-pro-border-color);
-  background: var(--klinecharts-pro-popover-background-color);
-  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.32);
+  background-color: var(--color-bg, #171a27);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.46);
+  opacity: 1;
+  backdrop-filter: none;
 }
 
 .@{prefix-cls}-order-tools-display-menu button {
@@ -308,7 +319,19 @@
 .@{prefix-cls}-order-tools-display-menu button:hover,
 .@{prefix-cls}-order-tools-display-menu button.selected {
   color: var(--klinecharts-pro-text-color);
-  background: var(--klinecharts-pro-hover-background-color);
+  background: color-mix(
+    in srgb,
+    var(--color-primary-default, var(--klinecharts-pro-primary-color)) 18%,
+    transparent
+  );
+}
+
+.@{prefix-cls}-order-tools-display-menu button.selected {
+  color: #ffffff;
+}
+
+.@{prefix-cls}-order-tools-display-menu button:hover {
+  color: #ffffff;
 }
 
 .@{prefix-cls}-order-tools-chevron {

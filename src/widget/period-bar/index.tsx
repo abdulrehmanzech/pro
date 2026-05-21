@@ -678,7 +678,17 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
                               {displayLabel(
                                 props.orderToolsState?.openOrdersDisplay ?? "right"
                               )}
-                              <span class="klinecharts-pro-order-tools-display-arrow" />
+                              <svg
+                                class={`klinecharts-pro-order-tools-display-arrow${
+                                  openOrdersDisplayMenuVisible()
+                                    ? " klinecharts-pro-order-tools-display-arrow-open"
+                                    : ""
+                                }`}
+                                viewBox="0 0 16 16"
+                                aria-hidden="true"
+                              >
+                                <path d="M4 6l4 4 4-4" />
+                              </svg>
                             </button>
                             <Show when={openOrdersDisplayMenuVisible()}>
                               <div class="klinecharts-pro-order-tools-display-menu">
