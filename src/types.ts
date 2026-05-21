@@ -124,6 +124,8 @@ export interface OrderToolsState {
   quickOrderFloatingWindow: boolean;
   quickOrderPlusButton: boolean;
   openOrders: boolean;
+  openOrdersExtendedPriceLine: boolean;
+  openOrdersDisplay: "left" | "center" | "right";
   positions: boolean;
   breakevenPrice: boolean;
   liquidationPrice: boolean;
@@ -148,6 +150,8 @@ export interface OrderToolsOptions {
   quickOrderFloatingWindow?: boolean;
   quickOrderPlusButton?: boolean;
   openOrders?: boolean;
+  openOrdersExtendedPriceLine?: boolean;
+  openOrdersDisplay?: "left" | "center" | "right";
   positions?: boolean;
   breakevenPrice?: boolean;
   liquidationPrice?: boolean;

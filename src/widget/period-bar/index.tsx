@@ -47,6 +47,9 @@ export interface PeriodBarProps {
   onOrderToolsStateChange?: (state: Partial<OrderToolsState>) => void;
 }
 
+const displayLabel = (value: "left" | "center" | "right") =>
+  value.charAt(0).toUpperCase() + value.slice(1);
+
 const PeriodBar: Component<PeriodBarProps> = (props) => {
   let ref: HTMLElement;
   let orderMenuRef: HTMLDivElement | undefined;
@@ -58,6 +61,10 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
   );
   const [orderMenuVisible, setOrderMenuVisible] = createSignal(false);
   const [quickOrderSubmenuVisible, setQuickOrderSubmenuVisible] =
+    createSignal(false);
+  const [openOrdersSubmenuVisible, setOpenOrdersSubmenuVisible] =
+    createSignal(false);
+  const [openOrdersDisplayMenuVisible, setOpenOrdersDisplayMenuVisible] =
     createSignal(false);
   const [priceLineSubmenuVisible, setPriceLineSubmenuVisible] =
     createSignal(false);
@@ -587,22 +594,124 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
                       </label>
                       </div>
                     </div>
+                    <div
+                      class={`klinecharts-pro-order-tools-group${
+                        openOrdersSubmenuVisible()
+                          ? " klinecharts-pro-order-tools-group-open"
+                          : ""
+                      }`}
+                    >
+                      <button
+                        type="button"
+                        class="klinecharts-pro-order-tools-item klinecharts-pro-order-tools-group-title"
+                        onClick={(event) => {
+                          event.preventDefault();
+                          event.stopPropagation();
+                          setOpenOrdersSubmenuVisible((visible) => !visible);
+                          setOpenOrdersDisplayMenuVisible(false);
+                        }}
+                      >
+                        <span class="klinecharts-pro-order-tools-title-left">
+                          <label
+                            class="klinecharts-pro-order-tools-checkbox-box"
+                            onClick={(event) => event.stopPropagation()}
+                            onMouseDown={(event) => event.stopPropagation()}
+                          >
+                            <input
+                              class="klinecharts-pro-order-tools-checkbox-input"
+                              type="checkbox"
+                              checked={props.orderToolsState?.openOrders ?? true}
+                              onChange={(event) => {
+                                event.stopPropagation();
+                                props.onOrderToolsStateChange?.({
+                                  openOrders: event.currentTarget.checked,
+                                });
+                              }}
+                            />
+                            <span class="klinecharts-pro-order-tools-checkbox-fill" />
+                          </label>
+                          <span class="klinecharts-pro-order-tools-label">Open Orders</span>
+                        </span>
+                        <span class="klinecharts-pro-order-tools-chevron">&rsaquo;</span>
+                      </button>
+                      <div class="klinecharts-pro-order-tools-submenu">
+                        <div class="klinecharts-pro-order-tools-setting-row">
+                          <span class="klinecharts-pro-order-tools-label">
+                            Extended Price Line
+                          </span>
+                          <button
+                            type="button"
+                            class={`klinecharts-pro-order-tools-switch${
+                              props.orderToolsState?.openOrdersExtendedPriceLine ??
+                              true
+                                ? " klinecharts-pro-order-tools-switch-on"
+                                : ""
+                            }`}
+                            onClick={(event) => {
+                              event.preventDefault();
+                              event.stopPropagation();
+                              props.onOrderToolsStateChange?.({
+                                openOrdersExtendedPriceLine: !(
+                                  props.orderToolsState?.openOrdersExtendedPriceLine ??
+                                  true
+                                ),
+                              });
+                            }}
+                          >
+                            <span />
+                          </button>
+                        </div>
+                        <div class="klinecharts-pro-order-tools-setting-row">
+                          <span class="klinecharts-pro-order-tools-label">Display</span>
+                          <div class="klinecharts-pro-order-tools-display">
+                            <button
+                              type="button"
+                              class="klinecharts-pro-order-tools-display-button"
+                              onClick={(event) => {
+                                event.preventDefault();
+                                event.stopPropagation();
+                                setOpenOrdersDisplayMenuVisible(
+                                  (visible) => !visible
+                                );
+                              }}
+                            >
+                              {displayLabel(
+                                props.orderToolsState?.openOrdersDisplay ?? "right"
+                              )}
+                              <span class="klinecharts-pro-order-tools-display-arrow" />
+                            </button>
+                            <Show when={openOrdersDisplayMenuVisible()}>
+                              <div class="klinecharts-pro-order-tools-display-menu">
+                                {(["left", "center", "right"] as const).map(
+                                  (value) => (
+                                    <button
+                                      type="button"
+                                      class={
+                                        (props.orderToolsState?.openOrdersDisplay ??
+                                          "right") === value
+                                          ? "selected"
+                                          : ""
+                                      }
+                                      onClick={(event) => {
+                                        event.preventDefault();
+                                        event.stopPropagation();
+                                        props.onOrderToolsStateChange?.({
+                                          openOrdersDisplay: value,
+                                        });
+                                        setOpenOrdersDisplayMenuVisible(false);
+                                      }}
+                                    >
+                                      {displayLabel(value)}
+                                    </button>
+                                  )
+                                )}
+                              </div>
+                            </Show>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                     <label class="klinecharts-pro-order-tools-item">
-                      <span class="klinecharts-pro-order-tools-checkbox-box">
-                        <input
-                          class="klinecharts-pro-order-tools-checkbox-input"
-                          type="checkbox"
-                          checked={props.orderToolsState?.openOrders ?? true}
-                          onChange={(event) => {
-                            props.onOrderToolsStateChange?.({
-                              openOrders: event.currentTarget.checked,
-                            });
-                          }}
-                        />
-                        <span class="klinecharts-pro-order-tools-checkbox-fill" />
-                      </span>
-                      <span class="klinecharts-pro-order-tools-label">Open Orders</span>
-                    </label>                    <label class="klinecharts-pro-order-tools-item">
                       <span class="klinecharts-pro-order-tools-checkbox-box">
                         <input
                           class="klinecharts-pro-order-tools-checkbox-input"

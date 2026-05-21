@@ -223,6 +223,9 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     quickOrderPlusButton:
       props.orderTools?.quickOrderPlusButton ?? quickOrderDefault,
     openOrders: props.orderTools?.openOrders ?? true,
+    openOrdersExtendedPriceLine:
+      props.orderTools?.openOrdersExtendedPriceLine ?? true,
+    openOrdersDisplay: props.orderTools?.openOrdersDisplay ?? "right",
     positions: props.orderTools?.positions ?? true,
     breakevenPrice: props.orderTools?.breakevenPrice ?? true,
     liquidationPrice: props.orderTools?.liquidationPrice ?? true,
@@ -1256,6 +1259,9 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
   let lastOrderToolsQuickOrderPlusButtonProp =
     props.orderTools?.quickOrderPlusButton;
   let lastOrderToolsOpenOrdersProp = props.orderTools?.openOrders;
+  let lastOrderToolsOpenOrdersExtendedPriceLineProp =
+    props.orderTools?.openOrdersExtendedPriceLine;
+  let lastOrderToolsOpenOrdersDisplayProp = props.orderTools?.openOrdersDisplay;
   let lastOrderToolsPositionsProp = props.orderTools?.positions;
   let lastOrderToolsBreakevenPriceProp = props.orderTools?.breakevenPrice;
   let lastOrderToolsLiquidationPriceProp = props.orderTools?.liquidationPrice;
@@ -1270,6 +1276,9 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       props.orderTools?.quickOrderFloatingWindow;
     const nextQuickOrderPlusButton = props.orderTools?.quickOrderPlusButton;
     const nextOpenOrders = props.orderTools?.openOrders;
+    const nextOpenOrdersExtendedPriceLine =
+      props.orderTools?.openOrdersExtendedPriceLine;
+    const nextOpenOrdersDisplay = props.orderTools?.openOrdersDisplay;
     const nextPositions = props.orderTools?.positions;
     const nextBreakevenPrice = props.orderTools?.breakevenPrice;
     const nextLiquidationPrice = props.orderTools?.liquidationPrice;
@@ -1314,6 +1323,22 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     ) {
       lastOrderToolsOpenOrdersProp = nextOpenOrders;
       nextState.openOrders = nextOpenOrders;
+    }
+    if (
+      typeof nextOpenOrdersExtendedPriceLine === "boolean" &&
+      nextOpenOrdersExtendedPriceLine !==
+        lastOrderToolsOpenOrdersExtendedPriceLineProp
+    ) {
+      lastOrderToolsOpenOrdersExtendedPriceLineProp =
+        nextOpenOrdersExtendedPriceLine;
+      nextState.openOrdersExtendedPriceLine = nextOpenOrdersExtendedPriceLine;
+    }
+    if (
+      nextOpenOrdersDisplay !== undefined &&
+      nextOpenOrdersDisplay !== lastOrderToolsOpenOrdersDisplayProp
+    ) {
+      lastOrderToolsOpenOrdersDisplayProp = nextOpenOrdersDisplay;
+      nextState.openOrdersDisplay = nextOpenOrdersDisplay;
     }
     if (
       typeof nextPositions === "boolean" &&

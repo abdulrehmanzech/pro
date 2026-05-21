@@ -2806,7 +2806,7 @@ const a = (e, t) => {
                   p.preventDefault(), p.stopPropagation(), K((M) => !M);
                 }, k(t1, () => {
                   var p;
-                  return V9(((p = e.orderToolsState) == null ? void 0 : p.openOrdersDisplay) ?? "left");
+                  return V9(((p = e.orderToolsState) == null ? void 0 : p.openOrdersDisplay) ?? "right");
                 }, qt), k(ut, L(Z, {
                   get when() {
                     return E();
@@ -2822,7 +2822,7 @@ const a = (e, t) => {
                         }), K(!1);
                       }, k(me, () => V9(M)), I(() => {
                         var xe;
-                        return he(me, (((xe = e.orderToolsState) == null ? void 0 : xe.openOrdersDisplay) ?? "left") === M ? "selected" : "");
+                        return he(me, (((xe = e.orderToolsState) == null ? void 0 : xe.openOrdersDisplay) ?? "right") === M ? "selected" : "");
                       }), me;
                     })())), p;
                   }
@@ -4119,7 +4119,7 @@ const ff = (e) => {
     quickOrderPlusButton: ((E0 = e.orderTools) == null ? void 0 : E0.quickOrderPlusButton) ?? se,
     openOrders: ((B0 = e.orderTools) == null ? void 0 : B0.openOrders) ?? !0,
     openOrdersExtendedPriceLine: ((U0 = e.orderTools) == null ? void 0 : U0.openOrdersExtendedPriceLine) ?? !0,
-    openOrdersDisplay: ((F0 = e.orderTools) == null ? void 0 : F0.openOrdersDisplay) ?? "left",
+    openOrdersDisplay: ((F0 = e.orderTools) == null ? void 0 : F0.openOrdersDisplay) ?? "right",
     positions: ((K0 = e.orderTools) == null ? void 0 : K0.positions) ?? !0,
     breakevenPrice: ((j0 = e.orderTools) == null ? void 0 : j0.breakevenPrice) ?? !0,
     liquidationPrice: ((z0 = e.orderTools) == null ? void 0 : z0.liquidationPrice) ?? !0,
@@ -5853,7 +5853,7 @@ class bf {
           quickOrderPlusButton: !0,
           openOrders: !0,
           openOrdersExtendedPriceLine: !0,
-          openOrdersDisplay: "left",
+          openOrdersDisplay: "right",
           positions: !0,
           breakevenPrice: !0,
           liquidationPrice: !0,
@@ -6002,7 +6002,7 @@ class bf {
       quickOrderPlusButton: !0,
       openOrders: !0,
       openOrdersExtendedPriceLine: !0,
-      openOrdersDisplay: "left",
+      openOrdersDisplay: "right",
       positions: !0,
       breakevenPrice: !0,
       liquidationPrice: !0,

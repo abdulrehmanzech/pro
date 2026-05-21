@@ -102,6 +102,8 @@ export default class KLineChartPro implements ChartPro {
               quickOrderFloatingWindow: true,
               quickOrderPlusButton: true,
               openOrders: true,
+              openOrdersExtendedPriceLine: true,
+              openOrdersDisplay: "right",
               positions: true,
               breakevenPrice: true,
               liquidationPrice: true,
@@ -282,6 +284,8 @@ export default class KLineChartPro implements ChartPro {
       quickOrderFloatingWindow: true,
       quickOrderPlusButton: true,
       openOrders: true,
+      openOrdersExtendedPriceLine: true,
+      openOrdersDisplay: "right",
       positions: true,
       breakevenPrice: true,
       liquidationPrice: true,
@@ -298,6 +302,8 @@ export default class KLineChartPro implements ChartPro {
     quickOrderFloatingWindow?: boolean;
     quickOrderPlusButton?: boolean;
     openOrders?: boolean;
+    openOrdersExtendedPriceLine?: boolean;
+    openOrdersDisplay?: "left" | "center" | "right";
     positions?: boolean;
     breakevenPrice?: boolean;
     liquidationPrice?: boolean;
