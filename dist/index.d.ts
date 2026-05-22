@@ -213,6 +213,7 @@ export interface ChartPro {
 		width: number;
 		height: number;
 	} | null;
+	getDom(paneId?: string, position?: string): HTMLElement | null;
 	subscribeAction(type: ActionType, callback: ActionCallback): void;
 	unsubscribeAction(type: ActionType, callback?: ActionCallback): void;
 }
@@ -306,6 +307,7 @@ export declare class KLineChartPro implements ChartPro {
 		width: number;
 		height: number;
 	} | null;
+	getDom(paneId?: string, position?: any): HTMLElement | null;
 	subscribeAction(type: ActionType, callback: ActionCallback): void;
 	unsubscribeAction(type: ActionType, callback?: ActionCallback): void;
 }

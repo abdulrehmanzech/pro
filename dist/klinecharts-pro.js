@@ -4813,6 +4813,7 @@ const ff = (e) => {
     },
     getDataList: () => r ? r.getDataList() : [],
     getSize: (i, a) => r ? r.getSize(i, a) : null,
+    getDom: (i, a) => r ? r.getDom(i, a) : null,
     subscribeAction: (i, a) => {
       r && r.subscribeAction(i, a);
     },
@@ -6052,6 +6053,10 @@ class bf {
   getSize(t, r) {
     var n, o;
     return ((o = (n = this._chartApi) == null ? void 0 : n.getSize) == null ? void 0 : o.call(n, t, r)) ?? null;
+  }
+  getDom(t, r) {
+    var n, o;
+    return ((o = (n = this._chartApi) == null ? void 0 : n.getDom) == null ? void 0 : o.call(n, t, r)) ?? null;
   }
   subscribeAction(t, r) {
     var n, o;
