@@ -3750,8 +3750,8 @@ const Uh = /* @__PURE__ */ $('<div class="klinecharts-pro-setting-modal-content"
               w = L(Er, {
                 get style() {
                   return {
-                    width: l() ? "100%" : "120px",
-                    "min-width": l() ? "auto" : "120px"
+                    width: l() ? "100%" : "190px",
+                    "min-width": l() ? "auto" : "190px"
                   };
                 },
                 get value() {
