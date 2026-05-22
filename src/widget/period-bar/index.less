@@ -84,9 +84,20 @@
       color: var(--klinecharts-pro-primary-color);
     }
     svg {
-      width: 16px;
-      height: 16px;
-      margin-right: 4px;
+      display: block;
+      flex: 0 0 24px;
+      width: 24px;
+      height: 24px;
+      margin-right: 0;
+      color: currentColor;
+    }
+    svg + span {
+      margin-left: 4px;
+    }
+    &.order-tools-trigger svg + svg {
+      flex-basis: 18px;
+      width: 18px;
+      height: 18px;
     }
   }
   .period + .tools {
