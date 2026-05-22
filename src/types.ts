@@ -149,6 +149,7 @@ export interface OrderToolsOptions {
   quickOrder?: boolean;
   quickOrderFloatingWindow?: boolean;
   quickOrderPlusButton?: boolean;
+  quickOrderPlusIcon?: string;
   openOrders?: boolean;
   openOrdersExtendedPriceLine?: boolean;
   openOrdersDisplay?: "left" | "center" | "right";
