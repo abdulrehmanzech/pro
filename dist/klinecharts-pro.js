@@ -3747,11 +3747,12 @@ const Uh = /* @__PURE__ */ $('<div class="klinecharts-pro-setting-modal-content"
           const A = le.formatValue(t(), y.key);
           switch (y.component) {
             case "select": {
+              const O = y.key === "candle.type" ? "170px" : "120px";
               w = L(Er, {
                 get style() {
                   return {
-                    width: l() ? "100%" : "170px",
-                    "min-width": l() ? "auto" : "170px"
+                    width: l() ? "100%" : O,
+                    "min-width": l() ? "auto" : O
                   };
                 },
                 get value() {
@@ -3760,9 +3761,9 @@ const Uh = /* @__PURE__ */ $('<div class="klinecharts-pro-setting-modal-content"
                 get dataSource() {
                   return y.dataSource;
                 },
-                onSelected: (O) => {
-                  const B = O.key;
-                  g(y, B);
+                onSelected: (B) => {
+                  const K = B.key;
+                  g(y, K);
                 }
               });
               break;

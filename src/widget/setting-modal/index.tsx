@@ -95,9 +95,10 @@ const SettingModal: Component<SettingModalProps> = props => {
               const value = utils.formatValue(styles(), option.key)
               switch (option.component) {
                 case 'select': {
+                  const selectWidth = option.key === 'candle.type' ? '170px' : '120px'
                   component = (
                     <Select
-                      style={{ width: isMobile() ? '100%' : '170px', 'min-width': isMobile() ? 'auto' : '170px' }}
+                      style={{ width: isMobile() ? '100%' : selectWidth, 'min-width': isMobile() ? 'auto' : selectWidth }}
                       value={i18n(value as string, props.locale)}
                       dataSource={option.dataSource}
                       onSelected={(data) => {
