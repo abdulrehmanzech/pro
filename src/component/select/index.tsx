@@ -130,6 +130,7 @@ const Select: Component<SelectProps> = (props) => {
               const v = d[props.valueKey ?? "text"] ?? data;
               return (
                 <li
+                  classList={{ selected: props.value === v }}
                   onClick={(e) => {
                     e.stopPropagation();
                     if (props.value !== v) {

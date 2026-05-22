@@ -97,7 +97,7 @@ const SettingModal: Component<SettingModalProps> = props => {
                 case 'select': {
                   component = (
                     <Select
-                      style={{ width: isMobile() ? '100%' : '120px', 'min-width': isMobile() ? 'auto' : '120px' }}
+                      style={{ width: isMobile() ? '100%' : '170px', 'min-width': isMobile() ? 'auto' : '170px' }}
                       value={i18n(value as string, props.locale)}
                       dataSource={option.dataSource}
                       onSelected={(data) => {
