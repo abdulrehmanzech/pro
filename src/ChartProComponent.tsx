@@ -1563,6 +1563,10 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       if (!widget) return null;
       return widget.getSize(paneId, position as any);
     },
+    getDom: (paneId?: string, position?: string) => {
+      if (!widget) return null;
+      return widget.getDom(paneId, position as any);
+    },
     subscribeAction: (type: ActionType, callback: ActionCallback): void => {
       if (widget) {
         widget.subscribeAction(type, callback);

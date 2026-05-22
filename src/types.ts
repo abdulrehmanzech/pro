@@ -289,6 +289,7 @@ export interface ChartPro {
   getVisibleRange(): VisibleRange;
   getDataList(): KLineData[];
   getSize(paneId?: string, position?: string): { width: number; height: number } | null;
+  getDom(paneId?: string, position?: string): HTMLElement | null;
   subscribeAction(type: ActionType, callback: ActionCallback): void;
   unsubscribeAction(type: ActionType, callback?: ActionCallback): void;
 }
