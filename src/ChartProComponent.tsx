@@ -42,11 +42,13 @@ import {
   DeepPartial,
   LineType,
   CandleType,
+  CandleStyle,
   YAxisType,
   Point,
   Coordinate,
   VisibleRange,
   KLineData,
+  TooltipData,
 } from "klinecharts";
 
 import lodashSet from "lodash/set";
@@ -2378,6 +2380,95 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     );
   });
 
+  const formatCandleTooltipDate = (timestamp: number): string => {
+    const date = new Date(timestamp);
+    const year = date.getFullYear();
+    const month = `${date.getMonth() + 1}`.padStart(2, "0");
+    const day = `${date.getDate()}`.padStart(2, "0");
+    const hours = `${date.getHours()}`.padStart(2, "0");
+    const minutes = `${date.getMinutes()}`.padStart(2, "0");
+    const dateText = `${year}-${month}-${day}`;
+    switch (period().timespan) {
+      case "minute":
+      case "hour":
+        return `${dateText} ${hours}:${minutes}`;
+      case "day":
+      case "week":
+        return dateText;
+      case "month":
+        return dateText;
+      case "year":
+        return dateText;
+    }
+    return `${dateText} ${hours}:${minutes}`;
+  };
+
+  const createCandleTooltipData = (
+    data: { current: KLineData },
+    styles: CandleStyle
+  ): TooltipData[] => {
+    const { current } = data;
+    const textColor = styles.tooltip.text.color;
+    const candleColor =
+      current.close > current.open
+        ? styles.bar.upColor
+        : current.close < current.open
+          ? styles.bar.downColor
+          : styles.bar.noChangeColor;
+    const pricePrecision = Math.min(
+      Math.max(symbol()?.pricePrecision ?? 2, 0),
+      8
+    );
+    const volumePrecision = Math.min(
+      Math.max(symbol()?.volumePrecision ?? 0, 0),
+      8
+    );
+    const priceValue = (value: number) => ({
+      text: utils.formatPrecision(value, pricePrecision),
+      color: candleColor,
+    });
+
+    return [
+      {
+        title: "time",
+        value: {
+          text: formatCandleTooltipDate(current.timestamp),
+          color: textColor,
+        },
+      },
+      { title: "open", value: priceValue(current.open) },
+      { title: "high", value: priceValue(current.high) },
+      { title: "low", value: priceValue(current.low) },
+      { title: "close", value: priceValue(current.close) },
+      {
+        title: "volume",
+        value: {
+          text: utils.formatBigNumber(
+            utils.formatPrecision(
+              current.volume ?? styles.tooltip.defaultValue,
+              volumePrecision
+            )
+          ),
+          color: candleColor,
+        },
+      },
+    ];
+  };
+
+  const applyCandleTooltipStyles = () => {
+    widget?.setStyles({
+      candle: {
+        tooltip: {
+          custom: createCandleTooltipData,
+          rect: {
+            offsetLeft: 0,
+            paddingLeft: 0,
+          },
+        },
+      },
+    });
+  };
+
   createEffect((prev?: PrevSymbolPeriod) => {
     const s = symbol();
     const p = period();
@@ -2434,15 +2525,8 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     const t = theme();
     widget?.setStyles(t);
     const color = t === "dark" ? "#929AA5" : "#76808F";
+    applyCandleTooltipStyles();
     widget?.setStyles({
-      candle: {
-        tooltip: {
-          rect: {
-            offsetLeft: 0,
-            paddingLeft: 0,
-          },
-        },
-      },
       indicator: {
         tooltip: {
           icons: [
@@ -2539,6 +2623,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
   createEffect(() => {
     if (styles()) {
       widget?.setStyles(styles());
+      applyCandleTooltipStyles();
       setWidgetDefaultStyles(lodashClone(widget!.getStyles()));
     }
   });
@@ -3082,6 +3167,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
           }}
           onChange={(style) => {
             widget?.setStyles(style);
+            applyCandleTooltipStyles();
           }}
           onRestoreDefault={(options: SelectDataSourceItem[]) => {
             const style = {};
@@ -3094,6 +3180,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
               );
             });
             widget?.setStyles(style);
+            applyCandleTooltipStyles();
           }}
         />
       </Show>
