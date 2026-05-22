@@ -105,14 +105,20 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
     });
   };
 
+  const closeOrderToolSubmenus = () => {
+    setQuickOrderSubmenuVisible(false);
+    setOpenOrdersSubmenuVisible(false);
+    setOpenOrdersDisplayMenuVisible(false);
+    setPriceLineSubmenuVisible(false);
+  };
+
   const toggleOrderMenu = () => {
     setOrderMenuVisible((visible) => {
       const nextVisible = !visible;
       if (nextVisible) {
         queueMicrotask(updateOrderMenuPosition);
       } else {
-        setQuickOrderSubmenuVisible(false);
-        setPriceLineSubmenuVisible(false);
+        closeOrderToolSubmenus();
       }
       return nextVisible;
     });
@@ -129,7 +135,7 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
     if (orderMenuRef?.contains(target) || orderMenuContentRef?.contains(target)) {
       return;
     }
-    setQuickOrderSubmenuVisible(false);
+    closeOrderToolSubmenus();
     setOrderMenuVisible(false);
   };
 
@@ -537,6 +543,7 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
                               }
                               onChange={(event) => {
                                 event.stopPropagation();
+                                setQuickOrderSubmenuVisible(true);
                                 props.onOrderToolsStateChange?.({
                                   quickOrder: event.currentTarget.checked,
                                 });
@@ -623,6 +630,7 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
                               checked={props.orderToolsState?.openOrders ?? true}
                               onChange={(event) => {
                                 event.stopPropagation();
+                                setOpenOrdersSubmenuVisible(true);
                                 props.onOrderToolsStateChange?.({
                                   openOrders: event.currentTarget.checked,
                                 });
@@ -805,6 +813,7 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
                               }
                               onChange={(event) => {
                                 event.stopPropagation();
+                                setPriceLineSubmenuVisible(true);
                                 props.onOrderToolsStateChange?.({
                                   priceLine: event.currentTarget.checked,
                                 });
