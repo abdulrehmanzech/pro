@@ -1,0 +1,166 @@
+@import (reference) '../../base.less';
+
+.@{prefix-cls}-time-tools-tabs {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  min-width: 0;
+
+  button {
+    border: 0;
+    padding: 0;
+    background: transparent;
+    color: var(--klinecharts-pro-text-second-color);
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 24px;
+    cursor: pointer;
+
+    &.active {
+      color: var(--klinecharts-pro-text-color);
+    }
+  }
+}
+
+.@{prefix-cls}-time-tools-content {
+  min-height: 290px;
+  padding: 4px 20px 0;
+  box-sizing: border-box;
+}
+
+.@{prefix-cls}-time-tools-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.@{prefix-cls}-time-tools-range {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 32px minmax(0, 1fr);
+  gap: 12px;
+  align-items: end;
+}
+
+.@{prefix-cls}-time-tools-arrow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 38px;
+  color: var(--klinecharts-pro-text-second-color);
+  font-size: 18px;
+}
+
+.@{prefix-cls}-time-tools-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+
+  span {
+    color: var(--klinecharts-pro-text-second-color);
+    font-size: 13px;
+  }
+
+  input {
+    width: 100%;
+    height: 40px;
+    padding: 0 14px;
+    border: 1px solid var(--klinecharts-pro-border-color);
+    border-radius: 8px;
+    outline: none;
+    box-sizing: border-box;
+    background: transparent;
+    color: var(--klinecharts-pro-text-color);
+    font-size: 15px;
+  }
+}
+
+.@{prefix-cls}-time-tools-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 8px 0;
+
+  > div {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    min-width: 0;
+  }
+
+  strong {
+    color: var(--klinecharts-pro-text-color);
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  span {
+    color: var(--klinecharts-pro-text-second-color);
+    font-size: 13px;
+  }
+
+  select {
+    flex: 0 0 126px;
+    height: 34px;
+    padding: 0 12px;
+    border: 1px solid var(--klinecharts-pro-border-color);
+    border-radius: 7px;
+    outline: none;
+    background: transparent;
+    color: var(--klinecharts-pro-text-color);
+  }
+}
+
+.@{prefix-cls}-time-tools-switch {
+  position: relative;
+  flex: 0 0 auto;
+  width: 40px;
+  height: 22px;
+  border: 0;
+  border-radius: 999px;
+  background: #5b6472;
+  cursor: pointer;
+
+  span {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #ffffff;
+    transition: transform 0.16s ease;
+  }
+
+  &.on {
+    background: var(--klinecharts-pro-primary-color);
+
+    span {
+      transform: translateX(18px);
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .@{prefix-cls}-time-tools-tabs {
+    gap: 14px;
+
+    button {
+      font-size: 15px;
+    }
+  }
+
+  .@{prefix-cls}-time-tools-content {
+    min-height: 250px;
+    padding: 0;
+  }
+
+  .@{prefix-cls}-time-tools-range {
+    grid-template-columns: 1fr;
+  }
+
+  .@{prefix-cls}-time-tools-arrow {
+    display: none;
+  }
+}

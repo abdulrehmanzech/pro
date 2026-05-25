@@ -66,7 +66,12 @@ import {
   IndicatorSettingModal,
   SymbolSearchModal,
   MobileMoreModal,
+  TimeToolsModal,
 } from "./widget";
+import type {
+  TimeAnchorSettings,
+  TimeRangeValue,
+} from "./widget/time-tools-modal";
 
 import { translateTimezone } from "./widget/timezone-modal/data";
 
@@ -215,6 +220,21 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
   const [widgetDefaultStyles, setWidgetDefaultStyles] = createSignal<Styles>();
 
   const [screenshotUrl, setScreenshotUrl] = createSignal("");
+  const [timeToolsModalVisible, setTimeToolsModalVisible] = createSignal(false);
+  const [timeToolsTimestamp, setTimeToolsTimestamp] = createSignal(Date.now());
+  const [timeToolsRange, setTimeToolsRange] = createSignal<TimeRangeValue>({
+    from: Date.now() - 30 * 24 * 60 * 60 * 1000,
+    to: Date.now(),
+  });
+  const [timeAnchorSettings, setTimeAnchorSettings] =
+    createSignal<TimeAnchorSettings>({
+      enabled: false,
+      timestamp: Date.now(),
+      anchorPoint: "date",
+      anchorLine: false,
+      acrossTokens: false,
+    });
+  let timeAnchorLineOverlayId: string | null = null;
 
   const [drawingBarVisible, setDrawingBarVisible] = createSignal(
     props.drawingBarVisible
@@ -1977,6 +1997,95 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     return [from, to];
   };
 
+  const getCenteredTimeRange = (timestamp: number, candleCount = 500) => {
+    const duration = getPeriodDurationMs(period());
+    const half = Math.max(1, Math.floor(candleCount / 2)) * duration;
+    return {
+      from: timestamp - half,
+      to: timestamp + half,
+    };
+  };
+
+  const scrollToChartTimestamp = (timestamp: number) => {
+    if (!widget || !Number.isFinite(timestamp)) {
+      return;
+    }
+    widget.scrollToTimestamp?.(timestamp, 250);
+    updateCountdownPriceMark();
+  };
+
+  const syncTimeAnchorLine = () => {
+    if (timeAnchorLineOverlayId) {
+      widget?.removeOverlay?.({ id: timeAnchorLineOverlayId });
+      timeAnchorLineOverlayId = null;
+    }
+    const anchor = timeAnchorSettings();
+    if (!widget || !anchor.enabled || !anchor.anchorLine) {
+      return;
+    }
+    const result = widget.createOverlay?.({
+      name: "verticalStraightLine",
+      points: [{ timestamp: anchor.timestamp }],
+      lock: true,
+      styles: {
+        line: {
+          color: "rgba(156, 163, 175, 0.75)",
+          size: 1,
+          style: LineType.Dashed,
+          dashedValue: [4, 4],
+        },
+      },
+    } as any);
+    timeAnchorLineOverlayId = typeof result === "string" ? result : null;
+  };
+
+  const loadTimeRange = async (
+    range: TimeRangeValue,
+    scrollTarget?: number,
+  ) => {
+    if (!widget) {
+      return;
+    }
+    setIsLoading(true);
+    setLoadingVisible(true);
+    try {
+      const p = period();
+      const nextRange =
+        range.from <= range.to
+          ? range
+          : { from: range.to, to: range.from };
+      const kLineDataList = await props.datafeed.getHistoryKLineData(
+        symbol(),
+        p,
+        nextRange.from,
+        nextRange.to,
+      );
+      widget.applyNewData(kLineDataList, kLineDataList.length > 0);
+      setTimeToolsRange(nextRange);
+      requestAnimationFrame(() => {
+        scrollToChartTimestamp(scrollTarget ?? nextRange.to);
+        syncTimeAnchorLine();
+      });
+    } finally {
+      setIsLoading(false);
+      setLoadingVisible(false);
+    }
+  };
+
+  const goToChartDate = async (timestamp: number) => {
+    setTimeToolsTimestamp(timestamp);
+    await loadTimeRange(getCenteredTimeRange(timestamp), timestamp);
+  };
+
+  const applyTimeAnchorSettings = (settings: TimeAnchorSettings) => {
+    setTimeAnchorSettings(settings);
+    if (settings.enabled) {
+      setTimeToolsTimestamp(settings.timestamp);
+      requestAnimationFrame(() => scrollToChartTimestamp(settings.timestamp));
+    }
+    requestAnimationFrame(syncTimeAnchorLine);
+  };
+
   // ... (keep all the imports and other code the same until onMount)
 
   onMount(() => {
@@ -2498,7 +2607,16 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     
     const get = async () => {
       try {
-        const [from, to] = adjustFromTo(p, new Date().getTime(), 500);
+        const anchor = timeAnchorSettings();
+        const shouldUseAnchor =
+          anchor.enabled &&
+          (!prev ||
+            prev.symbol.ticker === s.ticker ||
+            anchor.acrossTokens);
+        const targetTimestamp = shouldUseAnchor
+          ? anchor.timestamp + getPeriodDurationMs(p) * 250
+          : new Date().getTime();
+        const [from, to] = adjustFromTo(p, targetTimestamp, 500);
         const kLineDataList = await props.datafeed.getHistoryKLineData(
           s,
           p,
@@ -2509,6 +2627,14 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
         if (!isCurrent) return;
         
         widget?.applyNewData(kLineDataList, kLineDataList.length > 0);
+        if (shouldUseAnchor) {
+          requestAnimationFrame(() => {
+            scrollToChartTimestamp(anchor.timestamp);
+            syncTimeAnchorLine();
+          });
+        } else {
+          syncTimeAnchorLine();
+        }
         updateCountdownPriceMark();
         setTimeout(() => {
           if (isCurrent) {
@@ -2667,6 +2793,27 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
           }
         }}
         onPeriodChange={setPeriod}
+        onTimeToolsClick={() => {
+          const dataList = widget?.getDataList?.() ?? [];
+          const visibleRange = widget?.getVisibleRange?.();
+          const fromIndex = Math.max(0, Math.floor(visibleRange?.from ?? 0));
+          const toIndex = Math.min(
+            dataList.length - 1,
+            Math.ceil(visibleRange?.to ?? dataList.length - 1),
+          );
+          const fromTimestamp = dataList[fromIndex]?.timestamp;
+          const toTimestamp = dataList[toIndex]?.timestamp;
+          const currentTimestamp =
+            toTimestamp ?? dataList[dataList.length - 1]?.timestamp ?? Date.now();
+          setTimeToolsTimestamp(currentTimestamp);
+          if (Number.isFinite(fromTimestamp) && Number.isFinite(toTimestamp)) {
+            setTimeToolsRange({
+              from: fromTimestamp as number,
+              to: toTimestamp as number,
+            });
+          }
+          setTimeToolsModalVisible(true);
+        }}
         onIndicatorClick={() => {
           setIndicatorModalVisible((visible) => !visible);
         }}
@@ -3202,6 +3349,21 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
           onClose={() => {
             setScreenshotUrl("");
           }}
+        />
+      </Show>
+      <Show when={timeToolsModalVisible()}>
+        <TimeToolsModal
+          initialTimestamp={timeToolsTimestamp()}
+          initialRange={timeToolsRange()}
+          anchorSettings={timeAnchorSettings()}
+          onClose={() => {
+            setTimeToolsModalVisible(false);
+          }}
+          onGoToDate={goToChartDate}
+          onTimeRange={(range) => {
+            loadTimeRange(range);
+          }}
+          onTimeAnchorChange={applyTimeAnchorSettings}
         />
       </Show>
       <Show when={indicatorSettingModalParams().visible}>

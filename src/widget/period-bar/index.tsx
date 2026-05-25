@@ -36,6 +36,7 @@ export interface PeriodBarProps {
   onMenuClick: () => void;
   onSymbolClick: () => void;
   onPeriodChange: (period: Period) => void;
+  onTimeToolsClick: () => void;
   onIndicatorClick: () => void;
   onTimezoneClick: () => void;
   onSettingClick: () => void;
@@ -405,6 +406,26 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
               <circle cx="12" cy="12" r="3" />
             </svg>
           </span>
+        </Show>
+
+        <Show when={!isMobile()}>
+          <div class="item tools" title="Time Tools" onClick={props.onTimeToolsClick}>
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.9"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <rect x="3" y="5" width="18" height="16" rx="2" />
+              <path d="M16 3v4" />
+              <path d="M8 3v4" />
+              <path d="M3 10h18" />
+              <path d="M12 14v4" />
+              <path d="M10 16h4" />
+            </svg>
+          </div>
         </Show>
 
         <Show when={!isMobile()}>
