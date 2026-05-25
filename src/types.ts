@@ -165,6 +165,13 @@ export interface OrderToolsOptions {
   onQuickOrderAction?: (event: QuickOrderMenuEvent) => void;
 }
 
+export interface IndicatorTooltipIconStyles {
+  visibleMarginLeft?: number;
+  secondaryMarginLeft?: number;
+  marginTop?: number;
+  size?: number;
+}
+
 
 
 export interface ChartProOptions {
@@ -189,6 +196,8 @@ export interface ChartProOptions {
   onMobileMoreClick?: () => void;
   /** Custom background color for screenshots */
   screenshotBackgroundColor?: string;
+  /** Fine-grained styling for the indicator tooltip action icons */
+  indicatorTooltipIconStyles?: IndicatorTooltipIconStyles;
   /** Native header order tools dropdown state */
   orderTools?: OrderToolsOptions;
 }

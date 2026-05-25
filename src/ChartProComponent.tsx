@@ -82,6 +82,7 @@ import {
   IndicatorEventCallback,
   OrderToolsState,
   QuickOrderMenuAction,
+  IndicatorTooltipIconStyles,
 } from "./types";
 
 export interface ChartProComponentProps
@@ -90,6 +91,7 @@ export interface ChartProComponentProps
   onMobilePeriodClick?: (period: Period) => void;
   onMobileMoreClick?: () => void;
   screenshotBackgroundColor?: string;
+  indicatorTooltipIconStyles: IndicatorTooltipIconStyles;
   ref: (chart: ChartPro) => void;
 }
 
@@ -189,6 +191,12 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
 
   const [symbol, setSymbol] = createSignal(props.symbol);
   const [period, setPeriod] = createSignal(props.period);
+  const indicatorTooltipIconStyles = () => ({
+    visibleMarginLeft: props.indicatorTooltipIconStyles?.visibleMarginLeft ?? 7,
+    secondaryMarginLeft: props.indicatorTooltipIconStyles?.secondaryMarginLeft ?? 7,
+    marginTop: props.indicatorTooltipIconStyles?.marginTop ?? 1,
+    size: props.indicatorTooltipIconStyles?.size ?? 12,
+  });
   const [indicatorModalVisible, setIndicatorModalVisible] = createSignal(false);
   const [mainIndicators, setMainIndicators] = createSignal([
     ...props.mainIndicators!,
@@ -2533,8 +2541,8 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
             {
               id: "visible",
               position: TooltipIconPosition.Middle,
-              marginLeft: 8,
-              marginTop: 0,
+              marginLeft: indicatorTooltipIconStyles().visibleMarginLeft,
+              marginTop: indicatorTooltipIconStyles().marginTop,
               marginRight: 0,
               marginBottom: 0,
               paddingLeft: 0,
@@ -2543,7 +2551,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
               paddingBottom: 0,
               icon: "\ue903",
               fontFamily: "icomoon",
-              size: 14,
+              size: indicatorTooltipIconStyles().size,
               color: color,
               activeColor: color,
               backgroundColor: "transparent",
@@ -2552,8 +2560,8 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
             {
               id: "invisible",
               position: TooltipIconPosition.Middle,
-              marginLeft: 8,
-              marginTop: 3,
+              marginLeft: indicatorTooltipIconStyles().secondaryMarginLeft,
+              marginTop: indicatorTooltipIconStyles().marginTop,
               marginRight: 0,
               marginBottom: 0,
               paddingLeft: 0,
@@ -2562,7 +2570,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
               paddingBottom: 0,
               icon: "\ue901",
               fontFamily: "icomoon",
-              size: 12,
+              size: indicatorTooltipIconStyles().size,
               color: color,
               activeColor: color,
               backgroundColor: "transparent",
@@ -2571,8 +2579,8 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
             {
               id: "setting",
               position: TooltipIconPosition.Middle,
-              marginLeft: 6,
-              marginTop: 3,
+              marginLeft: indicatorTooltipIconStyles().secondaryMarginLeft,
+              marginTop: indicatorTooltipIconStyles().marginTop,
               marginBottom: 0,
               marginRight: 0,
               paddingLeft: 0,
@@ -2581,7 +2589,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
               paddingBottom: 0,
               icon: "\ue902",
               fontFamily: "icomoon",
-              size: 12,
+              size: indicatorTooltipIconStyles().size,
               color: color,
               activeColor: color,
               backgroundColor: "transparent",
@@ -2590,8 +2598,8 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
             {
               id: "close",
               position: TooltipIconPosition.Middle,
-              marginLeft: 6,
-              marginTop: 3,
+              marginLeft: indicatorTooltipIconStyles().secondaryMarginLeft,
+              marginTop: indicatorTooltipIconStyles().marginTop,
               marginRight: 0,
               marginBottom: 0,
               paddingLeft: 0,
@@ -2600,7 +2608,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
               paddingBottom: 0,
               icon: "\ue900",
               fontFamily: "icomoon",
-              size: 12,
+              size: indicatorTooltipIconStyles().size,
               color: color,
               activeColor: color,
               backgroundColor: "transparent",
