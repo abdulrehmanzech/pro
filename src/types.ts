@@ -172,6 +172,11 @@ export interface IndicatorTooltipIconStyles {
   size?: number;
 }
 
+export interface ChartViewToggleOptions {
+  view: "chart" | "depth";
+  onToggle: () => void;
+}
+
 
 
 export interface ChartProOptions {
@@ -198,6 +203,8 @@ export interface ChartProOptions {
   screenshotBackgroundColor?: string;
   /** Fine-grained styling for the indicator tooltip action icons */
   indicatorTooltipIconStyles?: IndicatorTooltipIconStyles;
+  /** Optional header chart/depth view toggle rendered next to fullscreen */
+  chartViewToggle?: ChartViewToggleOptions;
   /** Native header order tools dropdown state */
   orderTools?: OrderToolsOptions;
 }

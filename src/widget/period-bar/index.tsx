@@ -42,6 +42,10 @@ export interface PeriodBarProps {
   onScreenshotClick: () => void;
   onMobilePeriodClick?: (period: Period) => void;
   onMobileMoreClick?: () => void;
+  chartViewToggle?: {
+    view: "chart" | "depth";
+    onToggle: () => void;
+  };
   showOrderToolsMenu?: boolean;
   orderToolsState?: OrderToolsState;
   onOrderToolsStateChange?: (state: Partial<OrderToolsState>) => void;
@@ -973,6 +977,23 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
               </>
             )}
           </div>
+          <Show when={!isMobile() && props.chartViewToggle}>
+            <div
+              class="item tools chart-view-toggle"
+              onClick={props.chartViewToggle!.onToggle}
+              title={props.chartViewToggle!.view === "chart" ? "View Depth" : "View Chart"}
+            >
+              {props.chartViewToggle!.view === "chart" ? (
+                <svg viewBox="0 0 24 24">
+                  <path d="M3 20V7l4 3 5-7 5 4h4v13H3Zm5-3 4-5.5 7 5.45V9h-2.7l-3.9-3.1-4.95 6.95L5 10.4V14l3 3Z" />
+                </svg>
+              ) : (
+                <svg viewBox="0 0 24 24">
+                  <path d="M5 20V8h3v12H5Zm5.5 0V4h3v16h-3ZM16 20v-9h3v9h-3Z" />
+                </svg>
+              )}
+            </div>
+          </Show>
         </div>
       </div>
       <Show when={isMobile() && showRightArrow()}>
