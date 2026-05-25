@@ -76,6 +76,7 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
 
   const handleResize = () => {
     setIsMobile(window.innerWidth < 768);
+    requestAnimationFrame(checkScroll);
     if (orderMenuVisible()) {
       updateOrderMenuPosition();
     }
@@ -150,14 +151,18 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
   };
 
   const checkScroll = () => {
-    if (ref && isMobile()) {
-      const el = ref as HTMLElement;
-      setShowLeftArrow(el.scrollLeft > 10);
-      setShowRightArrow(el.scrollLeft + el.clientWidth < el.scrollWidth - 10);
-    } else {
+    if (!ref) {
       setShowLeftArrow(false);
       setShowRightArrow(false);
+      return;
     }
+
+    const el = ref as HTMLElement;
+    const hasOverflow = el.scrollWidth > el.clientWidth + 2;
+    setShowLeftArrow(hasOverflow && el.scrollLeft > 2);
+    setShowRightArrow(
+      hasOverflow && el.scrollLeft + el.clientWidth < el.scrollWidth - 2
+    );
   };
 
   onMount(() => {
@@ -253,7 +258,7 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
         "align-items": "center",
       }}
     >
-      <Show when={isMobile() && showLeftArrow()}>
+      <Show when={showLeftArrow()}>
         <div
           class="scroll-indicator left"
           onClick={() => ref.scrollBy({ left: -100, behavior: "smooth" })}
@@ -294,7 +299,7 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
         class="klinecharts-pro-period-bar"
         style={{
           width: "100%",
-          overflow: isMobile() ? "auto" : "visible",
+          overflow: "auto",
         }}
       >
         <div class="menu-container">
@@ -438,6 +443,7 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
             gap: "4px",
             "margin-left": "auto",
             "align-items": "center",
+            flex: "0 0 auto",
             "padding-right": fullScreen() ? "0px" : "var(--klinecharts-pro-period-bar-padding-right)",
           }}
         >
@@ -989,14 +995,15 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
                 </svg>
               ) : (
                 <svg viewBox="0 0 24 24">
-                  <path d="M5 20V8h3v12H5Zm5.5 0V4h3v16h-3ZM16 20v-9h3v9h-3Z" />
+                  <path fill="none" d="M0 0h24v24H0z" />
+                  <path d="M9 4H7v2H5v12h2v2h2v-2h2V6H9zM19 8h-2V4h-2v4h-2v7h2v5h2v-5h2z" />
                 </svg>
               )}
             </div>
           </Show>
         </div>
       </div>
-      <Show when={isMobile() && showRightArrow()}>
+      <Show when={showRightArrow()}>
         <div
           class="scroll-indicator right"
           onClick={() => ref.scrollBy({ left: 100, behavior: "smooth" })}
