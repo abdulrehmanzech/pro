@@ -983,7 +983,7 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
               </>
             )}
           </div>
-          <Show when={!isMobile() && props.chartViewToggle}>
+          <Show when={props.chartViewToggle}>
             <div
               class="item tools chart-view-toggle"
               onClick={props.chartViewToggle!.onToggle}

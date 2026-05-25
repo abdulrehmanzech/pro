@@ -2965,7 +2965,7 @@ const s = (e, t) => {
       return () => b() ? sd.cloneNode(!0) : ld.cloneNode(!0);
     })()), k(oe, L(R, {
       get when() {
-        return !o() && e.chartViewToggle;
+        return e.chartViewToggle;
       },
       get children() {
         const b = rd.cloneNode(!0);
