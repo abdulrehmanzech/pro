@@ -942,9 +942,9 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
             </svg>
             {/* <span>{i18n('screenshot', props.locale)}</span> */}
           </div>
-        </Show>
+          </Show>
           <div
-            class="item tools"
+            class="item tools fullscreen-toggle"
             onClick={() => {
               if (!fullScreen()) {
                 const el: any = ref?.closest(".klinecharts-pro");
@@ -983,7 +983,7 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
               </>
             )}
           </div>
-          <Show when={props.chartViewToggle}>
+          <Show when={props.chartViewToggle && !fullScreen()}>
             <div
               class="item tools chart-view-toggle"
               onClick={props.chartViewToggle!.onToggle}
