@@ -2553,7 +2553,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
               id: "invisible",
               position: TooltipIconPosition.Middle,
               marginLeft: 8,
-              marginTop: 0,
+              marginTop: 3,
               marginRight: 0,
               marginBottom: 0,
               paddingLeft: 0,
