@@ -2144,6 +2144,27 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     };
   };
 
+  const getTimeAnchorRequestRange = (
+    anchor: TimeAnchorSettings,
+    currentPeriod: Period,
+    candleCount = 600,
+  ) => {
+    const duration = getPeriodDurationMs(currentPeriod);
+    const safeCount = Math.max(120, candleCount);
+    let beforeRatio = 0.5;
+    if (anchor.anchorPoint === "left") {
+      beforeRatio = 0.12;
+    } else if (anchor.anchorPoint === "right") {
+      beforeRatio = 0.88;
+    }
+    const beforeCount = Math.max(20, Math.floor(safeCount * beforeRatio));
+    const afterCount = Math.max(20, safeCount - beforeCount);
+    return {
+      from: anchor.timestamp - beforeCount * duration,
+      to: Math.min(Date.now(), anchor.timestamp + afterCount * duration),
+    };
+  };
+
   const normalizeTimeToolsRange = (range: TimeRangeValue) => {
     const fromDate = new Date(range.from);
     const toDate = new Date(range.to);
@@ -2250,10 +2271,22 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     updateCountdownPriceMark();
   };
 
-  const resolveLoadedDataIndexByTimestamp = (timestamp: number) => {
+  const resolveLoadedDataIndexByTimestamp = (
+    timestamp: number,
+    mode: "floor" | "nearest" = "floor",
+  ) => {
     const dataList = widget?.getDataList?.() ?? [];
     if (dataList.length === 0 || !Number.isFinite(timestamp)) {
       return -1;
+    }
+
+    if (mode === "floor") {
+      for (let index = dataList.length - 1; index >= 0; index -= 1) {
+        const itemTimestamp = Number(dataList[index]?.timestamp);
+        if (Number.isFinite(itemTimestamp) && itemTimestamp <= timestamp) {
+          return index;
+        }
+      }
     }
 
     let nearestIndex = 0;
@@ -2269,7 +2302,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
         nearestIndex = index;
       }
     }
-    return nearestIndex;
+    return nearestDistance === Infinity ? -1 : nearestIndex;
   };
 
   const resolveAnchorSlotX = (anchorPoint: TimeAnchorSettings["anchorPoint"]) => {
@@ -2322,7 +2355,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       return;
     }
 
-    const anchorIndex = resolveLoadedDataIndexByTimestamp(anchor.timestamp);
+    const anchorIndex = resolveLoadedDataIndexByTimestamp(anchor.timestamp, "floor");
     const slotX = resolveAnchorSlotX(anchor.anchorPoint);
     if (anchorIndex < 0 || slotX === null) {
       scrollToChartTimestamp(anchor.timestamp);
@@ -3012,10 +3045,12 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
           (!prev ||
             prev.symbol.ticker === s.ticker ||
             anchor.acrossTokens);
-        const targetTimestamp = shouldUseAnchor
-          ? anchor.timestamp + getPeriodDurationMs(p) * 250
-          : new Date().getTime();
-        const [from, to] = adjustFromTo(p, targetTimestamp, 500);
+        const anchorRange = shouldUseAnchor
+          ? getTimeAnchorRequestRange(anchor, p)
+          : null;
+        const [from, to] = anchorRange
+          ? [anchorRange.from, anchorRange.to]
+          : adjustFromTo(p, new Date().getTime(), 500);
         const kLineDataList = await props.datafeed.getHistoryKLineData(
           s,
           p,
