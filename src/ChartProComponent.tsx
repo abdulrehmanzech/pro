@@ -2174,6 +2174,20 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     });
   };
 
+  const resolveRangeEndTimestamp = (
+    dataList: KLineData[],
+    range: TimeRangeValue,
+  ) => {
+    const to = Math.max(range.from, range.to);
+    for (let index = dataList.length - 1; index >= 0; index -= 1) {
+      const timestamp = Number(dataList[index]?.timestamp);
+      if (Number.isFinite(timestamp) && timestamp <= to) {
+        return timestamp;
+      }
+    }
+    return to;
+  };
+
   const scrollToChartTimestamp = (timestamp: number) => {
     if (!widget || !Number.isFinite(timestamp)) {
       return;
@@ -2240,12 +2254,9 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       );
       setTimeToolsRange(requestRange);
       requestAnimationFrame(() => {
-        const middleData =
-          rangedKLineDataList[Math.floor(rangedKLineDataList.length / 2)];
         scrollToChartTimestamp(
           scrollTarget ??
-            middleData?.timestamp ??
-            Math.floor((requestRange.from + requestRange.to) / 2),
+            resolveRangeEndTimestamp(rangedKLineDataList, requestRange),
         );
         syncTimeAnchorLine();
       });
