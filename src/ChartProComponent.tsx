@@ -2188,6 +2188,25 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     return to;
   };
 
+  const fitLoadedRangeToViewport = (dataList: KLineData[]) => {
+    if (!widget || !widgetRef || dataList.length === 0) {
+      return;
+    }
+
+    const yAxisWidth = widget.getSize("candle_pane", DomPosition.YAxis)?.width ?? 0;
+    const paneWidth =
+      widget.getSize("candle_pane", DomPosition.Main)?.width ??
+      widgetRef.clientWidth - yAxisWidth;
+    const drawableWidth = Math.max(1, paneWidth - 8);
+    const barSpace = Math.max(2, drawableWidth / Math.max(1, dataList.length));
+
+    widget.setOffsetRightDistance(0);
+    widget.setLeftMinVisibleBarCount(0);
+    widget.setRightMinVisibleBarCount(0);
+    widget.setBarSpace(barSpace);
+    widget.scrollToDataIndex(dataList.length - 1, 0);
+  };
+
   const scrollToChartTimestamp = (timestamp: number) => {
     if (!widget || !Number.isFinite(timestamp)) {
       return;
@@ -2254,6 +2273,9 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       );
       setTimeToolsRange(requestRange);
       requestAnimationFrame(() => {
+        if (!scrollTarget) {
+          fitLoadedRangeToViewport(rangedKLineDataList);
+        }
         scrollToChartTimestamp(
           scrollTarget ??
             resolveRangeEndTimestamp(rangedKLineDataList, requestRange),
