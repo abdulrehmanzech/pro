@@ -301,6 +301,11 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     text: string;
     timestamp: number;
   } | null>(null);
+  const [timeAnchorLine, setTimeAnchorLine] = createSignal<{
+    left: number;
+    top: number;
+    height: number;
+  } | null>(null);
   const [overlayToolbar, setOverlayToolbar] = createSignal<{
     id: string;
     x: number;
@@ -1934,11 +1939,13 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     widget?.resize();
     updateCountdownPriceMark();
     updateTimeNavigationTooltip();
+    syncTimeAnchorLine();
   };
 
   const handleCountdownPriceMarkUpdate: ActionCallback = () => {
     updateCountdownPriceMark();
     updateTimeNavigationTooltip();
+    syncTimeAnchorLine();
   };
   const countdownPriceMarkActions: ActionType[] = [
     ActionType.OnVisibleRangeChange,
@@ -2305,28 +2312,30 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     }
     const anchor = settings ?? timeAnchorSettings();
     if (!widget || !anchor.enabled || !anchor.anchorLine) {
+      setTimeAnchorLine(null);
       return;
     }
     const dataIndex = resolveLoadedDataIndexByTimestamp(anchor.timestamp);
-    const result = widget.createOverlay?.({
-      name: "verticalStraightLine",
-      points: [
-        dataIndex >= 0
-          ? { timestamp: anchor.timestamp, dataIndex }
-          : { timestamp: anchor.timestamp },
-      ],
-      lock: true,
-      visible: true,
-      styles: {
-        line: {
-          color: "rgba(156, 163, 175, 0.75)",
-          size: 1,
-          style: LineType.Dashed,
-          dashedValue: [4, 4],
-        },
-      },
-    } as any);
-    timeAnchorLineOverlayId = typeof result === "string" ? result : null;
+    const point =
+      dataIndex >= 0
+        ? { dataIndex }
+        : { timestamp: anchor.timestamp };
+    const pixel = widget.convertToPixel?.(
+      [point],
+      { paneId: "candle_pane", absolute: true } as any,
+    ) as Array<Partial<Coordinate>> | undefined;
+    const x = Number(pixel?.[0]?.x);
+    const mainSize = widget.getSize("candle_pane", DomPosition.Main);
+    const height = Math.max(1, widgetRef?.clientHeight ?? mainSize?.height ?? 0);
+    if (!Number.isFinite(x) || !widgetRef || x < -2 || x > widgetRef.clientWidth + 2) {
+      setTimeAnchorLine(null);
+      return;
+    }
+    setTimeAnchorLine({
+      left: x,
+      top: 0,
+      height,
+    });
   };
 
   const loadTimeRange = async (
@@ -3200,6 +3209,18 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
           class="klinecharts-pro-widget"
           data-drawing-bar-visible={drawingBarVisible()}
         />
+        <Show when={timeAnchorLine()} keyed>
+          {(line) => (
+            <div
+              class="klinecharts-pro-time-anchor-line"
+              style={{
+                left: `${line.left}px`,
+                top: `${line.top}px`,
+                height: `${line.height}px`,
+              }}
+            />
+          )}
+        </Show>
         <Show when={timeNavigationTooltip()} keyed>
           {(tooltip) => (
             <div
