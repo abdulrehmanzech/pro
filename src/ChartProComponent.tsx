@@ -21,6 +21,7 @@ import {
   onCleanup,
   startTransition,
   Component,
+  untrack,
 } from "solid-js";
 
 import {
@@ -1942,18 +1943,46 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     syncTimeAnchorLine();
   };
 
+  let countdownPriceMarkTimer: number | undefined;
+  let timeNavigationTooltipRetryTimer: number | undefined;
+  let timeAnchorSlotCaptureTimer: number | undefined;
+  let isRestoringTimeAnchor = false;
+
+  const syncTimeAnchorTimestampFromSlot = () => {
+    if (isRestoringTimeAnchor) {
+      return;
+    }
+    const anchor = timeAnchorSettings();
+    if (!anchor.enabled || anchor.anchorPoint === "date") {
+      return;
+    }
+    const timestamp = resolveTimestampAtAnchorSlot(anchor.anchorPoint, anchor.timestamp);
+    if (Number.isFinite(timestamp) && timestamp !== anchor.timestamp) {
+      setTimeAnchorSettings({ ...anchor, timestamp });
+    }
+  };
+
+  const scheduleTimeAnchorSlotCapture = () => {
+    if (timeAnchorSlotCaptureTimer) {
+      window.clearTimeout(timeAnchorSlotCaptureTimer);
+    }
+    timeAnchorSlotCaptureTimer = window.setTimeout(() => {
+      timeAnchorSlotCaptureTimer = undefined;
+      syncTimeAnchorTimestampFromSlot();
+    }, 80);
+  };
+
   const handleCountdownPriceMarkUpdate: ActionCallback = () => {
     updateCountdownPriceMark();
     updateTimeNavigationTooltip();
     syncTimeAnchorLine();
+    scheduleTimeAnchorSlotCapture();
   };
   const countdownPriceMarkActions: ActionType[] = [
     ActionType.OnVisibleRangeChange,
     ActionType.OnZoom,
     ActionType.OnScroll,
   ];
-  let countdownPriceMarkTimer: number | undefined;
-  let timeNavigationTooltipRetryTimer: number | undefined;
 
   const formatTimeNavigationTooltip = (timestamp: number) => {
     const date = new Date(timestamp);
@@ -2050,6 +2079,10 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     if (timeNavigationTooltipRetryTimer) {
       window.clearTimeout(timeNavigationTooltipRetryTimer);
       timeNavigationTooltipRetryTimer = undefined;
+    }
+    if (timeAnchorSlotCaptureTimer) {
+      window.clearTimeout(timeAnchorSlotCaptureTimer);
+      timeAnchorSlotCaptureTimer = undefined;
     }
     const target = resolveTimeNavigationTooltipTarget(timestamp);
     if (target) {
@@ -2350,8 +2383,12 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       return;
     }
 
+    isRestoringTimeAnchor = true;
     if (anchor.anchorPoint === "date") {
       scrollToChartTimestamp(anchor.timestamp);
+      window.setTimeout(() => {
+        isRestoringTimeAnchor = false;
+      }, 220);
       return;
     }
 
@@ -2359,6 +2396,9 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     const slotX = resolveAnchorSlotX(anchor.anchorPoint);
     if (anchorIndex < 0 || slotX === null) {
       scrollToChartTimestamp(anchor.timestamp);
+      window.setTimeout(() => {
+        isRestoringTimeAnchor = false;
+      }, 220);
       return;
     }
 
@@ -2375,6 +2415,9 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       requestAnimationFrame(() => {
         syncTimeAnchorLine(anchor);
         showTimeNavigationTooltipWhenReady(anchor.timestamp);
+        window.setTimeout(() => {
+          isRestoringTimeAnchor = false;
+        }, 120);
       });
     });
     updateCountdownPriceMark();
@@ -3039,7 +3082,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     
     const get = async () => {
       try {
-        const anchor = timeAnchorSettings();
+        const anchor = untrack(timeAnchorSettings);
         const shouldUseAnchor =
           anchor.enabled &&
           (!prev ||
