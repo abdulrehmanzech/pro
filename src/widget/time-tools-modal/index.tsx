@@ -78,6 +78,9 @@ const toDateParts = (timestamp: number): DateParts => {
 const toTimestamp = (parts: DateParts) =>
   new Date(parts.year, parts.month, parts.day, parts.hour, parts.minute, 0, 0).getTime();
 
+const toDateKey = (parts: Pick<DateParts, "year" | "month" | "day">) =>
+  parts.year * 10000 + (parts.month + 1) * 100 + parts.day;
+
 const formatDisplayValue = (parts: DateParts) => {
   const period = parts.hour >= 12 ? "PM" : "AM";
   const hour12 = parts.hour % 12 || 12;
@@ -113,6 +116,7 @@ const DateTimePicker: Component<{
   value: DateParts;
   onChange: (value: DateParts) => void;
   showInput?: boolean;
+  onDateSelect?: () => void;
   range?: {
     from: DateParts;
     to: DateParts;
@@ -153,6 +157,7 @@ const DateTimePicker: Component<{
       month: date.getMonth(),
       day: date.getDate(),
     });
+    props.onDateSelect?.();
     setViewYear(date.getFullYear());
     setViewMonth(date.getMonth());
   };
@@ -295,25 +300,13 @@ const DateTimePicker: Component<{
             <div class="klinecharts-pro-time-tools-grid">
               {weekdays.map((weekday) => <span class="weekday">{weekday}</span>)}
               {calendarDays().map(({ date, current }) => {
-                const dateStart = new Date(
-                  date.getFullYear(),
-                  date.getMonth(),
-                  date.getDate(),
-                ).getTime();
-                const rangeFrom = props.range
-                  ? new Date(
-                      props.range.from.year,
-                      props.range.from.month,
-                      props.range.from.day,
-                    ).getTime()
-                  : NaN;
-                const rangeTo = props.range
-                  ? new Date(
-                      props.range.to.year,
-                      props.range.to.month,
-                      props.range.to.day,
-                    ).getTime()
-                  : NaN;
+                const dateStart = toDateKey({
+                  year: date.getFullYear(),
+                  month: date.getMonth(),
+                  day: date.getDate(),
+                });
+                const rangeFrom = props.range ? toDateKey(props.range.from) : NaN;
+                const rangeTo = props.range ? toDateKey(props.range.to) : NaN;
                 const rangeStart = Math.min(rangeFrom, rangeTo);
                 const rangeEnd = Math.max(rangeFrom, rangeTo);
                 const inRange =
@@ -500,6 +493,7 @@ const TimeToolsModal: Component<TimeToolsModalProps> = (props) => {
                 label="Start"
                 value={rangeFrom()}
                 onChange={setRangeFrom}
+                onDateSelect={() => setActiveRangeSide("to")}
                 showInput={false}
                 range={{ from: rangeFrom(), to: rangeTo() }}
               />
