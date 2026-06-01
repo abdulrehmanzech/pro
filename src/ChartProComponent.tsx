@@ -2330,10 +2330,34 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
   };
 
   const applyTimeAnchorSettings = (settings: TimeAnchorSettings) => {
-    setTimeAnchorSettings(settings);
-    if (settings.enabled) {
-      setTimeToolsTimestamp(settings.timestamp);
-      requestAnimationFrame(() => scrollToChartTimestamp(settings.timestamp));
+    const resolveViewportAnchorTimestamp = () => {
+      if (!widget || settings.anchorPoint === "date") {
+        return settings.timestamp;
+      }
+      const dataList = widget.getDataList?.() ?? [];
+      const visibleRange = widget.getVisibleRange?.();
+      if (dataList.length === 0 || !visibleRange) {
+        return settings.timestamp;
+      }
+      const from = Math.max(0, Math.ceil(visibleRange.from));
+      const to = Math.min(dataList.length - 1, Math.floor(visibleRange.to));
+      const index =
+        settings.anchorPoint === "left"
+          ? from
+          : settings.anchorPoint === "right"
+            ? to
+            : Math.round((from + to) / 2);
+      const timestamp = Number(dataList[index]?.timestamp);
+      return Number.isFinite(timestamp) ? timestamp : settings.timestamp;
+    };
+    const nextSettings = {
+      ...settings,
+      timestamp: resolveViewportAnchorTimestamp(),
+    };
+    setTimeAnchorSettings(nextSettings);
+    if (nextSettings.enabled) {
+      setTimeToolsTimestamp(nextSettings.timestamp);
+      requestAnimationFrame(() => scrollToChartTimestamp(nextSettings.timestamp));
     }
     requestAnimationFrame(syncTimeAnchorLine);
   };

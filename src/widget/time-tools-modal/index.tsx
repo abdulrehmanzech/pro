@@ -21,7 +21,7 @@ export type TimeToolsTab = "goToDate" | "timeRange" | "timeAnchor";
 export interface TimeAnchorSettings {
   enabled: boolean;
   timestamp: number;
-  anchorPoint: "date" | "current";
+  anchorPoint: "date" | "left" | "center" | "right";
   anchorLine: boolean;
   acrossTokens: boolean;
 }
@@ -431,7 +431,7 @@ const TimeToolsModal: Component<TimeToolsModalProps> = (props) => {
       const settings = anchorSettings();
       props.onTimeAnchorChange({
         ...settings,
-        timestamp: settings.anchorPoint === "current" ? Date.now() : toTimestamp(goToDate()),
+        timestamp: settings.anchorPoint === "date" ? toTimestamp(goToDate()) : settings.timestamp,
       });
     }
     props.onClose();
@@ -524,24 +524,29 @@ const TimeToolsModal: Component<TimeToolsModalProps> = (props) => {
                 <span />
               </button>
             </div>
-            <div class="klinecharts-pro-time-tools-row">
+            <div class={`klinecharts-pro-time-tools-row${anchorSettings().enabled ? "" : " disabled"}`}>
               <div>
                 <strong>Anchor Point</strong>
               </div>
               <select
                 value={anchorSettings().anchorPoint}
+                disabled={!anchorSettings().enabled}
                 onChange={(event) =>
                   updateAnchor({
-                    anchorPoint: event.currentTarget.value as "date" | "current",
+                    anchorPoint: event.currentTarget.value as TimeAnchorSettings["anchorPoint"],
                   })
                 }
               >
                 <option value="date">Date</option>
-                <option value="current">Current</option>
+                <option value="left">Left</option>
+                <option value="center">Center</option>
+                <option value="right">Right</option>
               </select>
             </div>
-            {anchorSettings().anchorPoint === "date" && (
-              <DateTimePicker label="Anchor date" value={goToDate()} onChange={setGoToDate} />
+            {anchorSettings().enabled && anchorSettings().anchorPoint === "date" && (
+              <div class="klinecharts-pro-time-tools-anchor-date">
+                <DateTimePicker label="Anchor date" value={goToDate()} onChange={setGoToDate} />
+              </div>
             )}
             <div class="klinecharts-pro-time-tools-row with-divider">
               <div>
