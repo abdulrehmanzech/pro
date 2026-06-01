@@ -2137,6 +2137,31 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     };
   };
 
+  const normalizeTimeToolsRange = (range: TimeRangeValue) => {
+    const fromDate = new Date(range.from);
+    const toDate = new Date(range.to);
+    return {
+      from: new Date(
+        fromDate.getFullYear(),
+        fromDate.getMonth(),
+        fromDate.getDate(),
+        0,
+        0,
+        0,
+        0,
+      ).getTime(),
+      to: new Date(
+        toDate.getFullYear(),
+        toDate.getMonth(),
+        toDate.getDate(),
+        23,
+        59,
+        59,
+        999,
+      ).getTime(),
+    };
+  };
+
   const scrollToChartTimestamp = (timestamp: number) => {
     if (!widget || !Number.isFinite(timestamp)) {
       return;
@@ -2186,16 +2211,17 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
         range.from <= range.to
           ? range
           : { from: range.to, to: range.from };
+      const requestRange = normalizeTimeToolsRange(nextRange);
       const kLineDataList = await props.datafeed.getHistoryKLineData(
         symbol(),
         p,
-        nextRange.from,
-        nextRange.to,
+        requestRange.from,
+        requestRange.to,
       );
       widget.applyNewData(kLineDataList, kLineDataList.length > 0);
-      setTimeToolsRange(nextRange);
+      setTimeToolsRange(requestRange);
       requestAnimationFrame(() => {
-        scrollToChartTimestamp(scrollTarget ?? Math.floor((nextRange.from + nextRange.to) / 2));
+        scrollToChartTimestamp(scrollTarget ?? Math.floor((requestRange.from + requestRange.to) / 2));
         syncTimeAnchorLine();
       });
     } finally {
