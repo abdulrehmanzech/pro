@@ -2272,6 +2272,46 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     return nearestIndex;
   };
 
+  const resolveAnchorSlotX = (anchorPoint: TimeAnchorSettings["anchorPoint"]) => {
+    if (!widget || !widgetRef) {
+      return null;
+    }
+    const mainSize = widget.getSize("candle_pane", DomPosition.Main);
+    const paneWidth = mainSize?.width ?? widgetRef.clientWidth;
+    if (anchorPoint === "left") {
+      return 0;
+    }
+    if (anchorPoint === "center") {
+      return paneWidth / 2;
+    }
+    if (anchorPoint === "right") {
+      return paneWidth;
+    }
+    return null;
+  };
+
+  const resolveTimestampAtAnchorSlot = (
+    anchorPoint: TimeAnchorSettings["anchorPoint"],
+    fallbackTimestamp: number,
+  ) => {
+    const slotX = resolveAnchorSlotX(anchorPoint);
+    const dataList = widget?.getDataList?.() ?? [];
+    if (!widget || slotX === null || dataList.length === 0) {
+      return fallbackTimestamp;
+    }
+    const point = widget.convertFromPixel?.(
+      [{ x: slotX, y: 0 }],
+      { paneId: "candle_pane", absolute: true } as any,
+    ) as Array<Partial<Point>> | undefined;
+    const dataIndex = Number(point?.[0]?.dataIndex);
+    const boundedIndex = Math.max(
+      0,
+      Math.min(dataList.length - 1, Number.isFinite(dataIndex) ? Math.round(dataIndex) : -1),
+    );
+    const timestamp = Number(dataList[boundedIndex]?.timestamp);
+    return Number.isFinite(timestamp) ? timestamp : fallbackTimestamp;
+  };
+
   const scrollToAnchorPosition = (anchor: TimeAnchorSettings) => {
     if (!widget || !Number.isFinite(anchor.timestamp)) {
       return;
@@ -2283,25 +2323,27 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     }
 
     const anchorIndex = resolveLoadedDataIndexByTimestamp(anchor.timestamp);
-    const visibleRange = widget.getVisibleRange?.();
-    if (anchorIndex < 0 || !visibleRange) {
+    const slotX = resolveAnchorSlotX(anchor.anchorPoint);
+    if (anchorIndex < 0 || slotX === null) {
       scrollToChartTimestamp(anchor.timestamp);
       return;
     }
 
-    const visibleCount = Math.max(1, visibleRange.to - visibleRange.from);
-    const targetIndex =
-      anchor.anchorPoint === "left"
-        ? anchorIndex + visibleCount
-        : anchor.anchorPoint === "right"
-          ? anchorIndex
-          : anchorIndex + visibleCount / 2;
-
-    widget.scrollToDataIndex(
-      Math.max(0, Math.min(widget.getDataList().length - 1, Math.round(targetIndex))),
-      250,
-    );
-    requestAnimationFrame(() => showTimeNavigationTooltipWhenReady(anchor.timestamp));
+    widget.scrollToDataIndex(anchorIndex, 0);
+    requestAnimationFrame(() => {
+      const pixel = widget?.convertToPixel?.(
+        [{ dataIndex: anchorIndex }],
+        { paneId: "candle_pane", absolute: true } as any,
+      ) as Array<Partial<Coordinate>> | undefined;
+      const currentX = Number(pixel?.[0]?.x);
+      if (Number.isFinite(currentX)) {
+        widget?.scrollByDistance(slotX - currentX, 0);
+      }
+      requestAnimationFrame(() => {
+        syncTimeAnchorLine(anchor);
+        showTimeNavigationTooltipWhenReady(anchor.timestamp);
+      });
+    });
     updateCountdownPriceMark();
   };
 
@@ -2310,17 +2352,9 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       return null;
     }
 
-    const mainSize = widget.getSize("candle_pane", DomPosition.Main);
-    const paneWidth = mainSize?.width ?? widgetRef.clientWidth;
-
-    if (anchor.anchorPoint === "left") {
-      return 0;
-    }
-    if (anchor.anchorPoint === "center") {
-      return paneWidth / 2;
-    }
-    if (anchor.anchorPoint === "right") {
-      return paneWidth;
+    const slotX = resolveAnchorSlotX(anchor.anchorPoint);
+    if (slotX !== null) {
+      return slotX;
     }
 
     const dataIndex = resolveLoadedDataIndexByTimestamp(anchor.timestamp);
@@ -2429,21 +2463,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       if (!widget || settings.anchorPoint === "date") {
         return settings.timestamp;
       }
-      const dataList = widget.getDataList?.() ?? [];
-      const visibleRange = widget.getVisibleRange?.();
-      if (dataList.length === 0 || !visibleRange) {
-        return settings.timestamp;
-      }
-      const from = Math.max(0, Math.ceil(visibleRange.from));
-      const to = Math.min(dataList.length - 1, Math.floor(visibleRange.to));
-      const index =
-        settings.anchorPoint === "left"
-          ? from
-          : settings.anchorPoint === "right"
-            ? to
-            : Math.round((from + to) / 2);
-      const timestamp = Number(dataList[index]?.timestamp);
-      return Number.isFinite(timestamp) ? timestamp : settings.timestamp;
+      return resolveTimestampAtAnchorSlot(settings.anchorPoint, settings.timestamp);
     };
     const nextSettings = {
       ...settings,
