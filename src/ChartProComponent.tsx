@@ -2243,19 +2243,80 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     updateCountdownPriceMark();
   };
 
-  const syncTimeAnchorLine = () => {
+  const resolveLoadedDataIndexByTimestamp = (timestamp: number) => {
+    const dataList = widget?.getDataList?.() ?? [];
+    if (dataList.length === 0 || !Number.isFinite(timestamp)) {
+      return -1;
+    }
+
+    let nearestIndex = 0;
+    let nearestDistance = Infinity;
+    for (let index = 0; index < dataList.length; index += 1) {
+      const itemTimestamp = Number(dataList[index]?.timestamp);
+      if (!Number.isFinite(itemTimestamp)) {
+        continue;
+      }
+      const distance = Math.abs(itemTimestamp - timestamp);
+      if (distance < nearestDistance) {
+        nearestDistance = distance;
+        nearestIndex = index;
+      }
+    }
+    return nearestIndex;
+  };
+
+  const scrollToAnchorPosition = (anchor: TimeAnchorSettings) => {
+    if (!widget || !Number.isFinite(anchor.timestamp)) {
+      return;
+    }
+
+    if (anchor.anchorPoint === "date") {
+      scrollToChartTimestamp(anchor.timestamp);
+      return;
+    }
+
+    const anchorIndex = resolveLoadedDataIndexByTimestamp(anchor.timestamp);
+    const visibleRange = widget.getVisibleRange?.();
+    if (anchorIndex < 0 || !visibleRange) {
+      scrollToChartTimestamp(anchor.timestamp);
+      return;
+    }
+
+    const visibleCount = Math.max(1, visibleRange.to - visibleRange.from);
+    const targetIndex =
+      anchor.anchorPoint === "left"
+        ? anchorIndex + visibleCount
+        : anchor.anchorPoint === "right"
+          ? anchorIndex
+          : anchorIndex + visibleCount / 2;
+
+    widget.scrollToDataIndex(
+      Math.max(0, Math.min(widget.getDataList().length - 1, Math.round(targetIndex))),
+      250,
+    );
+    requestAnimationFrame(() => showTimeNavigationTooltipWhenReady(anchor.timestamp));
+    updateCountdownPriceMark();
+  };
+
+  const syncTimeAnchorLine = (settings?: TimeAnchorSettings) => {
     if (timeAnchorLineOverlayId) {
       widget?.removeOverlay?.({ id: timeAnchorLineOverlayId });
       timeAnchorLineOverlayId = null;
     }
-    const anchor = timeAnchorSettings();
+    const anchor = settings ?? timeAnchorSettings();
     if (!widget || !anchor.enabled || !anchor.anchorLine) {
       return;
     }
+    const dataIndex = resolveLoadedDataIndexByTimestamp(anchor.timestamp);
     const result = widget.createOverlay?.({
       name: "verticalStraightLine",
-      points: [{ timestamp: anchor.timestamp }],
+      points: [
+        dataIndex >= 0
+          ? { timestamp: anchor.timestamp, dataIndex }
+          : { timestamp: anchor.timestamp },
+      ],
       lock: true,
+      visible: true,
       styles: {
         line: {
           color: "rgba(156, 163, 175, 0.75)",
@@ -2357,9 +2418,13 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     setTimeAnchorSettings(nextSettings);
     if (nextSettings.enabled) {
       setTimeToolsTimestamp(nextSettings.timestamp);
-      requestAnimationFrame(() => scrollToChartTimestamp(nextSettings.timestamp));
+      requestAnimationFrame(() => {
+        scrollToAnchorPosition(nextSettings);
+        syncTimeAnchorLine(nextSettings);
+      });
+    } else {
+      requestAnimationFrame(() => syncTimeAnchorLine(nextSettings));
     }
-    requestAnimationFrame(syncTimeAnchorLine);
   };
 
   // ... (keep all the imports and other code the same until onMount)
@@ -2909,8 +2974,8 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
         widget?.applyNewData(kLineDataList, kLineDataList.length > 0);
         if (shouldUseAnchor) {
           requestAnimationFrame(() => {
-            scrollToChartTimestamp(anchor.timestamp);
-            syncTimeAnchorLine();
+            scrollToAnchorPosition(anchor);
+            syncTimeAnchorLine(anchor);
           });
         } else {
           syncTimeAnchorLine();
