@@ -5614,7 +5614,7 @@ const Bm = (e) => {
       }, 220);
       return;
     }
-    const i = h0(r.timestamp, "floor"), s = gn(r.anchorPoint);
+    const i = h0(r.timestamp, "nearest"), s = gn(r.anchorPoint);
     if (i < 0 || s === null) {
       mn(r.timestamp), window.setTimeout(() => {
         dt = !1;

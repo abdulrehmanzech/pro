@@ -2392,7 +2392,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       return;
     }
 
-    const anchorIndex = resolveLoadedDataIndexByTimestamp(anchor.timestamp, "floor");
+    const anchorIndex = resolveLoadedDataIndexByTimestamp(anchor.timestamp, "nearest");
     const slotX = resolveAnchorSlotX(anchor.anchorPoint);
     if (anchorIndex < 0 || slotX === null) {
       scrollToChartTimestamp(anchor.timestamp);
