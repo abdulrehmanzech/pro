@@ -2188,6 +2188,34 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     return to;
   };
 
+  const resolveRangeEndDataIndex = (
+    dataList: KLineData[],
+    range: TimeRangeValue,
+  ) => {
+    const to = Math.max(range.from, range.to);
+    for (let index = dataList.length - 1; index >= 0; index -= 1) {
+      const timestamp = Number(dataList[index]?.timestamp);
+      if (Number.isFinite(timestamp) && timestamp <= to) {
+        return index;
+      }
+    }
+    return dataList.length - 1;
+  };
+
+  const getExtendedTimeRange = (
+    range: TimeRangeValue,
+    currentPeriod: Period,
+  ) => {
+    const duration = getPeriodDurationMs(currentPeriod);
+    const rangeDuration = Math.abs(range.to - range.from);
+    const selectedBarCount = Math.max(1, Math.ceil(rangeDuration / duration) + 1);
+    const forwardBuffer = Math.max(selectedBarCount, 120) * duration;
+    return {
+      from: range.from,
+      to: Math.max(range.to, Math.min(Date.now(), range.to + forwardBuffer)),
+    };
+  };
+
   const fitLoadedRangeToViewport = (dataList: KLineData[]) => {
     if (!widget || !widgetRef || dataList.length === 0) {
       return;
@@ -2204,7 +2232,6 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     widget.setLeftMinVisibleBarCount(0);
     widget.setRightMinVisibleBarCount(0);
     widget.setBarSpace(barSpace);
-    widget.scrollToDataIndex(dataList.length - 1, 0);
   };
 
   const scrollToChartTimestamp = (timestamp: number) => {
@@ -2257,29 +2284,38 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
           ? range
           : { from: range.to, to: range.from };
       const requestRange = normalizeTimeToolsRange(nextRange);
+      const dataRequestRange = scrollTarget
+        ? requestRange
+        : getExtendedTimeRange(requestRange, p);
       const kLineDataList = await props.datafeed.getHistoryKLineData(
         symbol(),
         p,
-        requestRange.from,
-        requestRange.to,
+        dataRequestRange.from,
+        dataRequestRange.to,
       );
       const rangedKLineDataList = filterKLineDataByRange(
         kLineDataList,
         requestRange,
       );
       widget.applyNewData(
-        rangedKLineDataList,
-        rangedKLineDataList.length > 0,
+        kLineDataList,
+        kLineDataList.length > 0,
       );
       setTimeToolsRange(requestRange);
       requestAnimationFrame(() => {
+        const rangeEndIndex = resolveRangeEndDataIndex(
+          kLineDataList,
+          requestRange,
+        );
         if (!scrollTarget) {
           fitLoadedRangeToViewport(rangedKLineDataList);
-        }
-        scrollToChartTimestamp(
-          scrollTarget ??
+          widget?.scrollToDataIndex(rangeEndIndex, 0);
+          showTimeNavigationTooltipWhenReady(
             resolveRangeEndTimestamp(rangedKLineDataList, requestRange),
-        );
+          );
+        } else {
+          scrollToChartTimestamp(scrollTarget);
+        }
         syncTimeAnchorLine();
       });
     } finally {
