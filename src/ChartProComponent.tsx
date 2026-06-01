@@ -2195,7 +2195,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       widget.applyNewData(kLineDataList, kLineDataList.length > 0);
       setTimeToolsRange(nextRange);
       requestAnimationFrame(() => {
-        scrollToChartTimestamp(scrollTarget ?? nextRange.to);
+        scrollToChartTimestamp(scrollTarget ?? Math.floor((nextRange.from + nextRange.to) / 2));
         syncTimeAnchorLine();
       });
     } finally {
@@ -2930,22 +2930,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
         }}
         onPeriodChange={setPeriod}
         onTimeToolsClick={() => {
-          const dataList = widget?.getDataList?.() ?? [];
-          const visibleRange = widget?.getVisibleRange?.();
-          const fromIndex = Math.max(0, Math.floor(visibleRange?.from ?? 0));
-          const toIndex = Math.min(
-            dataList.length - 1,
-            Math.ceil(visibleRange?.to ?? dataList.length - 1),
-          );
-          const fromTimestamp = dataList[fromIndex]?.timestamp;
-          const toTimestamp = dataList[toIndex]?.timestamp;
           setTimeToolsTimestamp(Date.now());
-          if (Number.isFinite(fromTimestamp) && Number.isFinite(toTimestamp)) {
-            setTimeToolsRange({
-              from: fromTimestamp as number,
-              to: toTimestamp as number,
-            });
-          }
           setTimeToolsModalVisible(true);
         }}
         onIndicatorClick={() => {
