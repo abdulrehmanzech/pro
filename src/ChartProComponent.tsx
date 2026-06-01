@@ -2305,16 +2305,24 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     updateCountdownPriceMark();
   };
 
-  const syncTimeAnchorLine = (settings?: TimeAnchorSettings) => {
-    if (timeAnchorLineOverlayId) {
-      widget?.removeOverlay?.({ id: timeAnchorLineOverlayId });
-      timeAnchorLineOverlayId = null;
+  const resolveAnchorLineX = (anchor: TimeAnchorSettings) => {
+    if (!widget || !widgetRef) {
+      return null;
     }
-    const anchor = settings ?? timeAnchorSettings();
-    if (!widget || !anchor.enabled || !anchor.anchorLine) {
-      setTimeAnchorLine(null);
-      return;
+
+    const mainSize = widget.getSize("candle_pane", DomPosition.Main);
+    const paneWidth = mainSize?.width ?? widgetRef.clientWidth;
+
+    if (anchor.anchorPoint === "left") {
+      return 0;
     }
+    if (anchor.anchorPoint === "center") {
+      return paneWidth / 2;
+    }
+    if (anchor.anchorPoint === "right") {
+      return paneWidth;
+    }
+
     const dataIndex = resolveLoadedDataIndexByTimestamp(anchor.timestamp);
     const point =
       dataIndex >= 0
@@ -2325,9 +2333,26 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       { paneId: "candle_pane", absolute: true } as any,
     ) as Array<Partial<Coordinate>> | undefined;
     const x = Number(pixel?.[0]?.x);
+    if (!Number.isFinite(x) || x < -2 || x > widgetRef.clientWidth + 2) {
+      return null;
+    }
+    return x;
+  };
+
+  const syncTimeAnchorLine = (settings?: TimeAnchorSettings) => {
+    if (timeAnchorLineOverlayId) {
+      widget?.removeOverlay?.({ id: timeAnchorLineOverlayId });
+      timeAnchorLineOverlayId = null;
+    }
+    const anchor = settings ?? timeAnchorSettings();
+    if (!widget || !anchor.enabled || !anchor.anchorLine) {
+      setTimeAnchorLine(null);
+      return;
+    }
+    const x = resolveAnchorLineX(anchor);
     const mainSize = widget.getSize("candle_pane", DomPosition.Main);
     const height = Math.max(1, widgetRef?.clientHeight ?? mainSize?.height ?? 0);
-    if (!Number.isFinite(x) || !widgetRef || x < -2 || x > widgetRef.clientWidth + 2) {
+    if (x === null) {
       setTimeAnchorLine(null);
       return;
     }
