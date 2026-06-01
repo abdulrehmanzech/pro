@@ -295,6 +295,12 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     paddingBottom: number;
     borderRadius: number;
   } | null>(null);
+  const [timeNavigationTooltip, setTimeNavigationTooltip] = createSignal<{
+    left: number;
+    top: number;
+    text: string;
+    timestamp: number;
+  } | null>(null);
   const [overlayToolbar, setOverlayToolbar] = createSignal<{
     id: string;
     x: number;
@@ -1927,10 +1933,12 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
   const documentResize = () => {
     widget?.resize();
     updateCountdownPriceMark();
+    updateTimeNavigationTooltip();
   };
 
   const handleCountdownPriceMarkUpdate: ActionCallback = () => {
     updateCountdownPriceMark();
+    updateTimeNavigationTooltip();
   };
   const countdownPriceMarkActions: ActionType[] = [
     ActionType.OnVisibleRangeChange,
@@ -1938,6 +1946,129 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     ActionType.OnScroll,
   ];
   let countdownPriceMarkTimer: number | undefined;
+  let timeNavigationTooltipRetryTimer: number | undefined;
+
+  const formatTimeNavigationTooltip = (timestamp: number) => {
+    const date = new Date(timestamp);
+    const year = date.getFullYear();
+    const month = `${date.getMonth() + 1}`.padStart(2, "0");
+    const day = `${date.getDate()}`.padStart(2, "0");
+    const hours = `${date.getHours()}`.padStart(2, "0");
+    const minutes = `${date.getMinutes()}`.padStart(2, "0");
+    return `${year}/${month}/${day} ${hours}:${minutes}`;
+  };
+
+  const resolveNearestLoadedCandle = (timestamp: number) => {
+    const dataList = widget?.getDataList?.() ?? [];
+    if (dataList.length === 0) {
+      return null;
+    }
+    let nearest = dataList[0] as KLineData | undefined;
+    let nearestIndex = 0;
+    let nearestTimestamp = Number(nearest?.timestamp);
+    let nearestDistance = Math.abs(nearestTimestamp - timestamp);
+    for (let index = 1; index < dataList.length; index += 1) {
+      const item = dataList[index] as KLineData | undefined;
+      const itemTimestamp = Number(item?.timestamp);
+      if (!Number.isFinite(itemTimestamp)) {
+        continue;
+      }
+      const distance = Math.abs(itemTimestamp - timestamp);
+      if (distance < nearestDistance) {
+        nearest = item;
+        nearestIndex = index;
+        nearestTimestamp = itemTimestamp;
+        nearestDistance = distance;
+      }
+    }
+    return nearest && Number.isFinite(nearestTimestamp)
+      ? { candle: nearest, dataIndex: nearestIndex }
+      : null;
+  };
+
+  const resolveTimeNavigationTooltipTarget = (timestamp: number) => {
+    if (!widget || !widgetRef) {
+      return null;
+    }
+    const target = resolveNearestLoadedCandle(timestamp);
+    const candle = target?.candle;
+    const targetTimestamp = Number(candle?.timestamp ?? timestamp);
+    const targetValue = Number(candle?.high ?? candle?.close ?? candle?.open);
+    const dataList = widget?.getDataList?.() ?? [];
+    const displayDataIndex =
+      target && target.dataIndex < dataList.length - 1
+        ? target.dataIndex + 1
+        : target?.dataIndex;
+    const point =
+      target && Number.isFinite(targetValue)
+        ? { dataIndex: displayDataIndex, value: targetValue }
+        : { timestamp: targetTimestamp };
+    const pixel = widget.convertToPixel?.(
+      [point],
+      { paneId: "candle_pane", absolute: true } as any,
+    ) as Array<Partial<Coordinate>> | undefined;
+    const x = Number(pixel?.[0]?.x);
+    const y = Number(pixel?.[0]?.y);
+    const width = widgetRef.clientWidth;
+    const height = widgetRef.clientHeight;
+    if (!Number.isFinite(x) || x < -80 || x > width + 80) {
+      return null;
+    }
+    return {
+      timestamp: targetTimestamp,
+      text: formatTimeNavigationTooltip(targetTimestamp),
+      left: Math.max(58, Math.min(x, width - 58)),
+      top: Number.isFinite(y)
+        ? Math.max(8, Math.min(y - 42, height - 38))
+        : 10,
+    };
+  };
+
+  const updateTimeNavigationTooltip = () => {
+    const tooltip = timeNavigationTooltip();
+    if (!tooltip || !widget || !widgetRef) {
+      return;
+    }
+    const target = resolveTimeNavigationTooltipTarget(tooltip.timestamp);
+    if (!target) {
+      return;
+    }
+    setTimeNavigationTooltip(target);
+  };
+
+  const showTimeNavigationTooltip = (timestamp: number) => {
+    if (!widget || !widgetRef) {
+      return;
+    }
+    if (timeNavigationTooltipRetryTimer) {
+      window.clearTimeout(timeNavigationTooltipRetryTimer);
+      timeNavigationTooltipRetryTimer = undefined;
+    }
+    const target = resolveTimeNavigationTooltipTarget(timestamp);
+    if (target) {
+      setTimeNavigationTooltip(target);
+    }
+  };
+
+  const showTimeNavigationTooltipWhenReady = (
+    timestamp: number,
+    attempt = 0,
+  ) => {
+    if (!widget || !widgetRef) {
+      return;
+    }
+    const target = resolveTimeNavigationTooltipTarget(timestamp);
+    if (target) {
+      setTimeNavigationTooltip(target);
+      return;
+    }
+    if (attempt < 6) {
+      timeNavigationTooltipRetryTimer = window.setTimeout(
+        () => showTimeNavigationTooltipWhenReady(timestamp, attempt + 1),
+        80,
+      );
+    }
+  };
 
   const adjustFromTo = (period: Period, toTimestamp: number, count: number) => {
     let to = toTimestamp;
@@ -2011,6 +2142,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       return;
     }
     widget.scrollToTimestamp?.(timestamp, 250);
+    requestAnimationFrame(() => showTimeNavigationTooltipWhenReady(timestamp));
     updateCountdownPriceMark();
   };
 
@@ -2466,6 +2598,10 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       window.clearInterval(countdownPriceMarkTimer);
       countdownPriceMarkTimer = undefined;
     }
+    if (timeNavigationTooltipRetryTimer) {
+      window.clearTimeout(timeNavigationTooltipRetryTimer);
+      timeNavigationTooltipRetryTimer = undefined;
+    }
     document.removeEventListener("mousedown", handleQuickOrderDocumentPointerDown);
 
     // Cleanup all monitoring intervals
@@ -2803,9 +2939,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
           );
           const fromTimestamp = dataList[fromIndex]?.timestamp;
           const toTimestamp = dataList[toIndex]?.timestamp;
-          const currentTimestamp =
-            toTimestamp ?? dataList[dataList.length - 1]?.timestamp ?? Date.now();
-          setTimeToolsTimestamp(currentTimestamp);
+          setTimeToolsTimestamp(Date.now());
           if (Number.isFinite(fromTimestamp) && Number.isFinite(toTimestamp)) {
             setTimeToolsRange({
               from: fromTimestamp as number,
@@ -2872,6 +3006,19 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
           class="klinecharts-pro-widget"
           data-drawing-bar-visible={drawingBarVisible()}
         />
+        <Show when={timeNavigationTooltip()} keyed>
+          {(tooltip) => (
+            <div
+              class="klinecharts-pro-time-navigation-tooltip"
+              style={{
+                left: `${tooltip.left}px`,
+                top: `${tooltip.top}px`,
+              }}
+            >
+              {tooltip.text}
+            </div>
+          )}
+        </Show>
         <Show when={countdownPriceMark()} keyed>
           {(mark) => (
             <div

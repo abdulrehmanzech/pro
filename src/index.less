@@ -162,6 +162,33 @@
   &-quick-order-menu button:hover {
     background: rgba(255, 255, 255, 0.06);
   }
+  &-time-navigation-tooltip {
+    position: absolute;
+    z-index: 28;
+    transform: translateX(-50%);
+    height: 28px;
+    padding: 0 11px;
+    border-radius: 4px;
+    background: #212334;
+    color: #f5f7fb;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 28px;
+    white-space: nowrap;
+    pointer-events: none;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.32);
+
+    &::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: -5px;
+      width: 10px;
+      height: 10px;
+      background: #212334;
+      transform: translateX(-50%) rotate(45deg);
+    }
+  }
   &-countdown-price-mark {
     position: absolute;
     z-index: 24;
