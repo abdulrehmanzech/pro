@@ -3948,6 +3948,10 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
           onSettingClick={() => {
             setSettingModalVisible(true);
           }}
+          onTimeToolsClick={() => {
+            setTimeToolsTimestamp(Date.now());
+            setTimeToolsModalVisible(true);
+          }}
           onClose={() => {
             setMobileMoreModalVisible(false);
           }}
