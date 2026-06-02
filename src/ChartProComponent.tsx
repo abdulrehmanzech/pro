@@ -108,6 +108,62 @@ interface PrevSymbolPeriod {
   period: Period;
 }
 
+const TIME_ANCHOR_SETTINGS_STORAGE_KEY = "klinecharts_pro_time_anchor_settings";
+
+function createDefaultTimeAnchorSettings(): TimeAnchorSettings {
+  return {
+    enabled: false,
+    timestamp: Date.now(),
+    anchorPoint: "date",
+    anchorLine: true,
+    acrossTokens: true,
+  };
+}
+
+function loadPersistedTimeAnchorSettings(): TimeAnchorSettings | null {
+  try {
+    const value = window.localStorage.getItem(TIME_ANCHOR_SETTINGS_STORAGE_KEY);
+    if (!value) {
+      return null;
+    }
+    const parsed = JSON.parse(value) as Partial<TimeAnchorSettings>;
+    if (
+      parsed.enabled !== true ||
+      parsed.acrossTokens !== true ||
+      !Number.isFinite(parsed.timestamp)
+    ) {
+      return null;
+    }
+    const defaultSettings = createDefaultTimeAnchorSettings();
+    return {
+      ...defaultSettings,
+      ...parsed,
+      timestamp: Number(parsed.timestamp),
+      anchorPoint: parsed.anchorPoint ?? defaultSettings.anchorPoint,
+      anchorLine: parsed.anchorLine ?? defaultSettings.anchorLine,
+      acrossTokens: true,
+      enabled: true,
+    };
+  } catch {
+    return null;
+  }
+}
+
+function persistTimeAnchorSettings(settings: TimeAnchorSettings): void {
+  try {
+    if (!settings.enabled || !settings.acrossTokens) {
+      window.localStorage.removeItem(TIME_ANCHOR_SETTINGS_STORAGE_KEY);
+      return;
+    }
+    window.localStorage.setItem(
+      TIME_ANCHOR_SETTINGS_STORAGE_KEY,
+      JSON.stringify(settings),
+    );
+  } catch {
+    // Ignore storage errors; the in-memory anchor still works for this chart.
+  }
+}
+
 function createIndicator(
   widget: Nullable<Chart>,
   indicatorName: string,
@@ -229,13 +285,9 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     to: Date.now(),
   });
   const [timeAnchorSettings, setTimeAnchorSettings] =
-    createSignal<TimeAnchorSettings>({
-      enabled: false,
-      timestamp: Date.now(),
-      anchorPoint: "date",
-      anchorLine: true,
-      acrossTokens: true,
-    });
+    createSignal<TimeAnchorSettings>(
+      loadPersistedTimeAnchorSettings() ?? createDefaultTimeAnchorSettings(),
+    );
   let timeAnchorLineOverlayId: string | null = null;
 
   const [drawingBarVisible, setDrawingBarVisible] = createSignal(
@@ -1966,7 +2018,9 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     }
     const timestamp = resolveTimestampAtAnchorSlot(anchor.anchorPoint, anchor.timestamp);
     if (Number.isFinite(timestamp) && timestamp !== anchor.timestamp) {
-      setTimeAnchorSettings({ ...anchor, timestamp });
+      const nextSettings = { ...anchor, timestamp };
+      setTimeAnchorSettings(nextSettings);
+      persistTimeAnchorSettings(nextSettings);
     }
   };
 
@@ -2608,6 +2662,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       timestamp: resolveViewportAnchorTimestamp(),
     };
     setTimeAnchorSettings(nextSettings);
+    persistTimeAnchorSettings(nextSettings);
     if (nextSettings.enabled) {
       setTimeToolsTimestamp(nextSettings.timestamp);
       requestAnimationFrame(() => {
