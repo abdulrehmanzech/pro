@@ -2576,15 +2576,23 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       return;
     }
     const x = resolveAnchorLineX(anchor);
+    const mainDom = widget.getDom?.("candle_pane", DomPosition.Main);
+    const mainRect = mainDom?.getBoundingClientRect?.();
+    const contentRect = contentRef?.getBoundingClientRect?.();
+    const widgetRect = widgetRef?.getBoundingClientRect?.();
     const mainSize = widget.getSize("candle_pane", DomPosition.Main);
-    const height = Math.max(1, widgetRef?.clientHeight ?? mainSize?.height ?? 0);
+    const top =
+      mainRect && Number.isFinite(mainRect.top)
+        ? mainRect.top - (contentRect?.top ?? widgetRect?.top ?? 0)
+        : 0;
+    const height = Math.max(1, mainRect?.height ?? mainSize?.height ?? 0);
     if (x === null) {
       setTimeAnchorLine(null);
       return;
     }
     setTimeAnchorLine({
       left: x,
-      top: 0,
+      top,
       height,
     });
   };
