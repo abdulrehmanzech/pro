@@ -280,6 +280,10 @@ export default class KLineChartPro implements ChartPro {
     this._chartApi?.setSettingModalVisible?.(visible);
   }
 
+  setTimeToolsModalVisible(visible: boolean): void {
+    this._chartApi?.setTimeToolsModalVisible?.(visible);
+  }
+
   getOrderToolsState() {
     return this._chartApi?.getOrderToolsState?.() ?? {
       quickOrder: true,

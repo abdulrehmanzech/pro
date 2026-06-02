@@ -1626,6 +1626,12 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     setIndicatorModalVisible,
     setTimezoneModalVisible,
     setSettingModalVisible,
+    setTimeToolsModalVisible: (visible: boolean) => {
+      if (visible) {
+        setTimeToolsTimestamp(Date.now());
+      }
+      setTimeToolsModalVisible(visible);
+    },
     getOrderToolsState: () => orderToolsState(),
     setOrderToolsState: (state: Partial<OrderToolsState>) => {
       applyOrderToolsState(state);

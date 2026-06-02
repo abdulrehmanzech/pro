@@ -289,6 +289,7 @@ export interface ChartPro {
   setIndicatorModalVisible(visible: boolean): void;
   setTimezoneModalVisible(visible: boolean): void;
   setSettingModalVisible(visible: boolean): void;
+  setTimeToolsModalVisible(visible: boolean): void;
   getOrderToolsState(): OrderToolsState;
   setOrderToolsState(state: Partial<OrderToolsState>): void;
 

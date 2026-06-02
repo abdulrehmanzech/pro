@@ -2658,7 +2658,7 @@ const c = (e, t) => {
   }), N1(() => {
     window.removeEventListener("resize", Y), document.removeEventListener("fullscreenchange", Q), document.removeEventListener("mousedown", ke), window.removeEventListener("scroll", ve, !0), document.removeEventListener("mozfullscreenchange", Q), document.removeEventListener("webkitfullscreenchange", Q), document.removeEventListener("msfullscreenchange", Q), t && t.removeEventListener("scroll", oe);
   });
-  const ue = j(() => {
+  const ce = j(() => {
     const O = e.periods.filter((E) => {
       if (!s() || V())
         return !0;
@@ -2716,7 +2716,7 @@ const c = (e, t) => {
           }
         }), le), C(le, () => e.symbol.shortName ?? e.symbol.name ?? e.symbol.ticker), _;
       }
-    }), de), C(E, () => ue().map((_, le) => {
+    }), de), C(E, () => ce().map((_, le) => {
       const Pe = _.text === e.period.text;
       return (() => {
         const a1 = ah.cloneNode(!0);
@@ -2726,7 +2726,7 @@ const c = (e, t) => {
       })();
     }), de), C(E, w(J, {
       get when() {
-        return j(() => !!(s() && !V()))() && ue().length > 1;
+        return j(() => !!(s() && !V()))() && ce().length > 1;
       },
       get children() {
         const _ = Hd.cloneNode(!0);
@@ -3132,7 +3132,7 @@ const qe = (e) => Nf[e.name](e.class), Kf = /* @__PURE__ */ b('<div class="kline
     setter: v
   }]), me = j(() => zf(e.locale));
   return (() => {
-    const U = Kf.cloneNode(!0), Q = U.firstChild, H = Q.nextSibling, te = H.firstChild, se = te.nextSibling, Le = se.firstChild, $e = H.nextSibling, ie = $e.firstChild, Ue = $e.nextSibling, ke = Ue.firstChild, ve = Ue.nextSibling, oe = ve.nextSibling, ue = oe.firstChild;
+    const U = Kf.cloneNode(!0), Q = U.firstChild, H = Q.nextSibling, te = H.firstChild, se = te.nextSibling, Le = se.firstChild, $e = H.nextSibling, ie = $e.firstChild, Ue = $e.nextSibling, ke = Ue.firstChild, ve = Ue.nextSibling, oe = ve.nextSibling, ce = oe.firstChild;
     return C(U, () => V().map((Z) => (() => {
       const O = Rf.cloneNode(!0), E = O.firstChild, be = E.nextSibling, we = be.firstChild;
       return O.addEventListener("blur", () => {
@@ -3236,9 +3236,9 @@ const qe = (e) => Nf[e.name](e.class), Kf = /* @__PURE__ */ b('<div class="kline
       }) : w(qe, {
         name: "invisible"
       });
-    })()), ue.$$click = () => {
+    })()), ce.$$click = () => {
       e.onRemoveClick(Or);
-    }, C(ue, w(qe, {
+    }, C(ce, w(qe, {
       name: "remove"
     })), B(() => Oe(Le, "class", R() === "mode" ? "rotate" : "")), U;
   })();
@@ -4202,11 +4202,11 @@ const lm = /* @__PURE__ */ b('<div class="klinecharts-pro-time-tools-picker"></d
           return () => ke() && (() => {
             const ve = hm.cloneNode(!0);
             return C(ve, () => km.map((oe) => (() => {
-              const ue = fm.cloneNode(!0);
-              return C(ue, oe), ue;
+              const ce = fm.cloneNode(!0);
+              return C(ce, oe), ce;
             })()), null), C(ve, () => x().map(({
               date: oe,
-              current: ue
+              current: ce
             }) => {
               const Z = _n({
                 year: oe.getFullYear(),
@@ -4215,7 +4215,7 @@ const lm = /* @__PURE__ */ b('<div class="klinecharts-pro-time-tools-picker"></d
               }), O = e.range ? _n(e.range.from) : NaN, E = e.range ? _n(e.range.to) : NaN, be = Math.min(O, E), we = Math.max(O, E), de = Number.isFinite(be) && Z >= be && Z <= we, Ae = Number.isFinite(be) && (Z === be || Z === we), _ = oe.getFullYear() === e.value.year && oe.getMonth() === e.value.month && oe.getDate() === e.value.day;
               return (() => {
                 const le = D1.cloneNode(!0);
-                return le.$$click = () => re(oe), ne(le, `${ue ? "" : "muted"} ${de ? "in-range" : ""} ${Ae || _ ? "selected" : ""}`), C(le, () => oe.getDate()), le;
+                return le.$$click = () => re(oe), ne(le, `${ce ? "" : "muted"} ${de ? "in-range" : ""} ${Ae || _ ? "selected" : ""}`), C(le, () => oe.getDate()), le;
               })();
             }), null), ve;
           })();
@@ -4223,9 +4223,9 @@ const lm = /* @__PURE__ */ b('<div class="klinecharts-pro-time-tools-picker"></d
           const ke = j(() => n() === "month");
           return () => ke() && (() => {
             const ve = mm.cloneNode(!0);
-            return C(ve, () => Fr.map((oe, ue) => (() => {
+            return C(ve, () => Fr.map((oe, ce) => (() => {
               const Z = D1.cloneNode(!0);
-              return Z.$$click = () => R(ue), C(Z, oe), B(() => ne(Z, ue === e.value.month && l() === e.value.year ? "selected" : "")), Z;
+              return Z.$$click = () => R(ce), C(Z, oe), B(() => ne(Z, ce === e.value.month && l() === e.value.year ? "selected" : "")), Z;
             })())), ve;
           })();
         })(), null), C(H, (() => {
@@ -4233,18 +4233,18 @@ const lm = /* @__PURE__ */ b('<div class="klinecharts-pro-time-tools-picker"></d
           return () => ke() && (() => {
             const ve = gm.cloneNode(!0);
             return C(ve, () => L().map((oe) => (() => {
-              const ue = D1.cloneNode(!0);
-              return ue.$$click = () => Y(oe), C(ue, oe), B(() => ne(ue, `${oe < v() || oe > v() + 9 ? "muted" : ""} ${oe === e.value.year ? "selected" : ""}`)), ue;
+              const ce = D1.cloneNode(!0);
+              return ce.$$click = () => Y(oe), C(ce, oe), B(() => ne(ce, `${oe < v() || oe > v() + 9 ? "muted" : ""} ${oe === e.value.year ? "selected" : ""}`)), ce;
             })())), ve;
           })();
         })(), null), C(H, (() => {
           const ke = j(() => n() === "date");
           return () => ke() && (() => {
-            const ve = ym.cloneNode(!0), oe = ve.firstChild, ue = oe.nextSibling, Z = ue.nextSibling;
+            const ve = ym.cloneNode(!0), oe = ve.firstChild, ce = oe.nextSibling, Z = ce.nextSibling;
             return C(oe, () => q.map((O) => (() => {
               const E = D1.cloneNode(!0);
               return E.$$click = () => V(O), C(E, () => R1(O)), B(() => ne(E, O === D() ? "selected" : "")), E;
-            })())), C(ue, () => N.map((O) => (() => {
+            })())), C(ce, () => N.map((O) => (() => {
               const E = D1.cloneNode(!0);
               return E.$$click = () => e.onChange({
                 ...e.value,
@@ -4394,8 +4394,8 @@ const lm = /* @__PURE__ */ b('<div class="klinecharts-pro-time-tools-picker"></d
           }), $e.$$click = () => M({
             acrossTokens: !L().acrossTokens
           }), B((ie) => {
-            const Ue = `klinecharts-pro-time-tools-switch${L().enabled ? " on" : ""}`, ke = `klinecharts-pro-time-tools-row${L().enabled ? "" : " disabled"}`, ve = !L().enabled, oe = `klinecharts-pro-time-tools-row with-divider${L().enabled ? "" : " disabled"}`, ue = `klinecharts-pro-time-tools-switch${L().anchorLine ? " on" : ""}`, Z = !L().enabled, O = `klinecharts-pro-time-tools-row with-divider${L().enabled ? "" : " disabled"}`, E = `klinecharts-pro-time-tools-switch${L().acrossTokens ? " on" : ""}`, be = !L().enabled;
-            return Ue !== ie._v$3 && ne(Y, ie._v$3 = Ue), ke !== ie._v$4 && ne(V, ie._v$4 = ke), ve !== ie._v$5 && (U.disabled = ie._v$5 = ve), oe !== ie._v$6 && ne(Q, ie._v$6 = oe), ue !== ie._v$7 && ne(te, ie._v$7 = ue), Z !== ie._v$8 && (te.disabled = ie._v$8 = Z), O !== ie._v$9 && ne(se, ie._v$9 = O), E !== ie._v$10 && ne($e, ie._v$10 = E), be !== ie._v$11 && ($e.disabled = ie._v$11 = be), ie;
+            const Ue = `klinecharts-pro-time-tools-switch${L().enabled ? " on" : ""}`, ke = `klinecharts-pro-time-tools-row${L().enabled ? "" : " disabled"}`, ve = !L().enabled, oe = `klinecharts-pro-time-tools-row with-divider${L().enabled ? "" : " disabled"}`, ce = `klinecharts-pro-time-tools-switch${L().anchorLine ? " on" : ""}`, Z = !L().enabled, O = `klinecharts-pro-time-tools-row with-divider${L().enabled ? "" : " disabled"}`, E = `klinecharts-pro-time-tools-switch${L().acrossTokens ? " on" : ""}`, be = !L().enabled;
+            return Ue !== ie._v$3 && ne(Y, ie._v$3 = Ue), ke !== ie._v$4 && ne(V, ie._v$4 = ke), ve !== ie._v$5 && (U.disabled = ie._v$5 = ve), oe !== ie._v$6 && ne(Q, ie._v$6 = oe), ce !== ie._v$7 && ne(te, ie._v$7 = ce), Z !== ie._v$8 && (te.disabled = ie._v$8 = Z), O !== ie._v$9 && ne(se, ie._v$9 = O), E !== ie._v$10 && ne($e, ie._v$10 = E), be !== ie._v$11 && ($e.disabled = ie._v$11 = be), ie;
           }, {
             _v$3: void 0,
             _v$4: void 0,
@@ -4481,7 +4481,7 @@ const Rm = (e) => {
   }, [re, R] = T(!1), [Y, V] = T([...e.mainIndicators]), [me, U] = T({}), [Q, H] = T(!1), [te, se] = T({
     key: e.timezone,
     text: Er(e.timezone, e.locale)
-  }), [Le, $e] = T(!1), [ie, Ue] = T(), [ke, ve] = T(""), [oe, ue] = T(!1), [Z, O] = T(Date.now()), [E, be] = T({
+  }), [Le, $e] = T(!1), [ie, Ue] = T(), [ke, ve] = T(""), [oe, ce] = T(!1), [Z, O] = T(Date.now()), [E, be] = T({
     from: Date.now() - 30 * 24 * 60 * 60 * 1e3,
     to: Date.now()
   }), [we, de] = T({
@@ -4810,14 +4810,14 @@ const Rm = (e) => {
     const k = Math.min(Math.max(((q0 = M()) == null ? void 0 : q0.pricePrecision) ?? 2, 0), 8), A = u.toLocaleString(void 0, {
       minimumFractionDigits: k,
       maximumFractionDigits: k
-    }), P = (Y0 = n.getSize) == null ? void 0 : Y0.call(n, "candle_pane", h1.YAxis), W = P != null && P.width && Number.isFinite(P.width) ? Math.max(74, Math.floor(P.width) - 2) : 96, X = Vt(N()), G = o % X, K = G === 0 ? X : X - G, ee = Number(a.close), he = Number(a.open), Me = n.getStyles().candle.priceMark.last, z = Me.text, ce = Number(z.size) || 12, ae = Number(z.paddingTop) || 2, _e = Number(z.paddingBottom) || 2, Te = Math.min(Number(z.paddingLeft) || 4, 3), We = Math.min(Number(z.paddingRight) || 4, 3), Ge = Math.max(34, ce * 2 + ae + _e + 6), n1 = Math.max(0, Math.min(g - Ge / 2, y - Ge));
+    }), P = (Y0 = n.getSize) == null ? void 0 : Y0.call(n, "candle_pane", h1.YAxis), W = P != null && P.width && Number.isFinite(P.width) ? Math.max(74, Math.floor(P.width) - 2) : 96, X = Vt(N()), G = o % X, K = G === 0 ? X : X - G, ee = Number(a.close), he = Number(a.open), Me = n.getStyles().candle.priceMark.last, z = Me.text, ue = Number(z.size) || 12, ae = Number(z.paddingTop) || 2, _e = Number(z.paddingBottom) || 2, Te = Math.min(Number(z.paddingLeft) || 4, 3), We = Math.min(Number(z.paddingRight) || 4, 3), Ge = Math.max(34, ue * 2 + ae + _e + 6), n1 = Math.max(0, Math.min(g - Ge / 2, y - Ge));
     F1({
       top: n1,
-      width: Math.min(W, Math.max(62, A.length * (ce * 0.56) + Te + We + 4)),
+      width: Math.min(W, Math.max(62, A.length * (ue * 0.56) + Te + We + 4)),
       priceText: A,
       text: Km(K),
       color: Number.isFinite(ee) && Number.isFinite(he) && ee < he ? Me.downColor : Me.upColor,
-      textSize: ce,
+      textSize: ue,
       textFamily: z.family,
       textWeight: z.weight,
       paddingLeft: Te,
@@ -5109,8 +5109,8 @@ const Rm = (e) => {
   };
   let Yn = (O0 = e.orderTools) == null ? void 0 : O0.quickOrder, Wn = (N0 = e.orderTools) == null ? void 0 : N0.quickOrderFloatingWindow, Gn = (I0 = e.orderTools) == null ? void 0 : I0.quickOrderPlusButton, Xn = (E0 = e.orderTools) == null ? void 0 : E0.openOrders, Jn = (B0 = e.orderTools) == null ? void 0 : B0.openOrdersExtendedPriceLine, e0 = (F0 = e.orderTools) == null ? void 0 : F0.openOrdersDisplay, t0 = (U0 = e.orderTools) == null ? void 0 : U0.positions, n0 = (z0 = e.orderTools) == null ? void 0 : z0.breakevenPrice, r0 = (K0 = e.orderTools) == null ? void 0 : K0.liquidationPrice, o0 = (R0 = e.orderTools) == null ? void 0 : R0.priceLine, i0 = (j0 = e.orderTools) == null ? void 0 : j0.marketPriceLine, a0 = (Q0 = e.orderTools) == null ? void 0 : Q0.countDown, s0 = (Z0 = e.orderTools) == null ? void 0 : Z0.bidAskPrice, l0 = (V0 = e.orderTools) == null ? void 0 : V0.orderHistory;
   Ke(() => {
-    var ee, he, Me, z, ce, ae, _e, Te, We, Ge, n1, Xe, Je, ut;
-    const o = (ee = e.orderTools) == null ? void 0 : ee.quickOrder, i = (he = e.orderTools) == null ? void 0 : he.quickOrderFloatingWindow, a = (Me = e.orderTools) == null ? void 0 : Me.quickOrderPlusButton, u = (z = e.orderTools) == null ? void 0 : z.openOrders, m = (ce = e.orderTools) == null ? void 0 : ce.openOrdersExtendedPriceLine, g = (ae = e.orderTools) == null ? void 0 : ae.openOrdersDisplay, f = (_e = e.orderTools) == null ? void 0 : _e.positions, y = (Te = e.orderTools) == null ? void 0 : Te.breakevenPrice, k = (We = e.orderTools) == null ? void 0 : We.liquidationPrice, A = (Ge = e.orderTools) == null ? void 0 : Ge.priceLine, P = (n1 = e.orderTools) == null ? void 0 : n1.marketPriceLine, W = (Xe = e.orderTools) == null ? void 0 : Xe.countDown, X = (Je = e.orderTools) == null ? void 0 : Je.bidAskPrice, G = (ut = e.orderTools) == null ? void 0 : ut.orderHistory, K = {};
+    var ee, he, Me, z, ue, ae, _e, Te, We, Ge, n1, Xe, Je, ut;
+    const o = (ee = e.orderTools) == null ? void 0 : ee.quickOrder, i = (he = e.orderTools) == null ? void 0 : he.quickOrderFloatingWindow, a = (Me = e.orderTools) == null ? void 0 : Me.quickOrderPlusButton, u = (z = e.orderTools) == null ? void 0 : z.openOrders, m = (ue = e.orderTools) == null ? void 0 : ue.openOrdersExtendedPriceLine, g = (ae = e.orderTools) == null ? void 0 : ae.openOrdersDisplay, f = (_e = e.orderTools) == null ? void 0 : _e.positions, y = (Te = e.orderTools) == null ? void 0 : Te.breakevenPrice, k = (We = e.orderTools) == null ? void 0 : We.liquidationPrice, A = (Ge = e.orderTools) == null ? void 0 : Ge.priceLine, P = (n1 = e.orderTools) == null ? void 0 : n1.marketPriceLine, W = (Xe = e.orderTools) == null ? void 0 : Xe.countDown, X = (Je = e.orderTools) == null ? void 0 : Je.bidAskPrice, G = (ut = e.orderTools) == null ? void 0 : ut.orderHistory, K = {};
     typeof o == "boolean" && o !== Yn && (Yn = o, K.quickOrder = o, typeof i != "boolean" && (K.quickOrderFloatingWindow = o), typeof a != "boolean" && (K.quickOrderPlusButton = o)), typeof i == "boolean" && i !== Wn && (Wn = i, K.quickOrderFloatingWindow = i), typeof a == "boolean" && a !== Gn && (Gn = a, K.quickOrderPlusButton = a), typeof u == "boolean" && u !== Xn && (Xn = u, K.openOrders = u), typeof m == "boolean" && m !== Jn && (Jn = m, K.openOrdersExtendedPriceLine = m), g !== void 0 && g !== e0 && (e0 = g, K.openOrdersDisplay = g), typeof f == "boolean" && f !== t0 && (t0 = f, K.positions = f), typeof y == "boolean" && y !== n0 && (n0 = y, K.breakevenPrice = y), typeof k == "boolean" && k !== r0 && (r0 = k, K.liquidationPrice = k), typeof A == "boolean" && A !== o0 && (o0 = A, K.priceLine = A, typeof P != "boolean" && (K.marketPriceLine = A), typeof W != "boolean" && (K.countDown = A), typeof X != "boolean" && (K.bidAskPrice = A)), typeof P == "boolean" && P !== i0 && (i0 = P, K.marketPriceLine = P), typeof W == "boolean" && W !== a0 && (a0 = W, K.countDown = W), typeof X == "boolean" && X !== s0 && (s0 = X, K.bidAskPrice = X), typeof G == "boolean" && G !== l0 && (l0 = G, K.orderHistory = G), Object.keys(K).length > 0 && at(K);
   }), Ke(() => {
     Ie().marketPriceLine, Ie().countDown, N(), M(), n == null || n.setStyles({
@@ -5199,6 +5199,9 @@ const Rm = (e) => {
     setIndicatorModalVisible: R,
     setTimezoneModalVisible: H,
     setSettingModalVisible: $e,
+    setTimeToolsModalVisible: (o) => {
+      o && O(Date.now()), ce(o);
+    },
     getOrderToolsState: () => Ie(),
     setOrderToolsState: (o) => {
       at(o);
@@ -5643,7 +5646,7 @@ const Rm = (e) => {
       }], {
         paneId: "candle_pane",
         absolute: !0
-      }), Me = Number((G = he == null ? void 0 : he[0]) == null ? void 0 : G.x), z = n.getBarSpace, ce = typeof z == "function" ? z.call(n) : void 0, ae = Number(typeof ce == "object" ? ce == null ? void 0 : ce.bar : ce), _e = Number.isFinite(ae) ? Math.max(2, ae / 2) : 8;
+      }), Me = Number((G = he == null ? void 0 : he[0]) == null ? void 0 : G.x), z = n.getBarSpace, ue = typeof z == "function" ? z.call(n) : void 0, ae = Number(typeof ue == "object" ? ue == null ? void 0 : ue.bar : ue), _e = Number.isFinite(ae) ? Math.max(2, ae / 2) : 8;
       if (Number.isFinite(Me) && Math.abs(Me - a) <= _e)
         return i;
     }
@@ -6083,7 +6086,7 @@ const Rm = (e) => {
     },
     onPeriodChange: F,
     onTimeToolsClick: () => {
-      O(Date.now()), ue(!0);
+      O(Date.now()), ce(!0);
     },
     onIndicatorClick: () => {
       R((o) => !o);
@@ -6228,8 +6231,8 @@ const Rm = (e) => {
             return je() === "color";
           },
           get children() {
-            const z = Pm.cloneNode(!0), ce = z.firstChild;
-            return C(ce, w(Ln, {
+            const z = Pm.cloneNode(!0), ue = z.firstChild;
+            return C(ue, w(Ln, {
               each: $t,
               children: (ae) => (() => {
                 const _e = Im.cloneNode(!0);
@@ -6245,9 +6248,9 @@ const Rm = (e) => {
             const z = Dm.cloneNode(!0);
             return C(z, w(Ln, {
               each: [1, 2, 3, 4],
-              children: (ce) => (() => {
+              children: (ue) => (() => {
                 const ae = Em.cloneNode(!0), _e = ae.firstChild;
-                return ae.$$click = () => t1(ce), _e.style.setProperty("height", `${ce}px`), B(() => ne(ae, a.lineSize === ce ? "selected" : "")), ae;
+                return ae.$$click = () => t1(ue), _e.style.setProperty("height", `${ue}px`), B(() => ne(ae, a.lineSize === ue ? "selected" : "")), ae;
               })()
             })), z;
           }
@@ -6256,11 +6259,11 @@ const Rm = (e) => {
             return je() === "style";
           },
           get children() {
-            const z = Om.cloneNode(!0), ce = z.firstChild, ae = ce.nextSibling, _e = ae.nextSibling;
-            return ce.$$click = () => u1(d1.Solid, []), ae.$$click = () => u1(d1.Dashed, [6, 4]), _e.$$click = () => u1(d1.Dashed, [2, 4]), B((Te) => {
+            const z = Om.cloneNode(!0), ue = z.firstChild, ae = ue.nextSibling, _e = ae.nextSibling;
+            return ue.$$click = () => u1(d1.Solid, []), ae.$$click = () => u1(d1.Dashed, [6, 4]), _e.$$click = () => u1(d1.Dashed, [2, 4]), B((Te) => {
               var Xe, Je;
               const We = a.lineStyle === d1.Solid ? "selected" : "", Ge = a.lineStyle === d1.Dashed && ((Xe = a.dashedValue) == null ? void 0 : Xe[0]) === 6 ? "selected" : "", n1 = a.lineStyle === d1.Dashed && ((Je = a.dashedValue) == null ? void 0 : Je[0]) === 2 ? "selected" : "";
-              return We !== Te._v$18 && ne(ce, Te._v$18 = We), Ge !== Te._v$19 && ne(ae, Te._v$19 = Ge), n1 !== Te._v$20 && ne(_e, Te._v$20 = n1), Te;
+              return We !== Te._v$18 && ne(ue, Te._v$18 = We), Ge !== Te._v$19 && ne(ae, Te._v$19 = Ge), n1 !== Te._v$20 && ne(_e, Te._v$20 = n1), Te;
             }, {
               _v$18: void 0,
               _v$19: void 0,
@@ -6268,8 +6271,8 @@ const Rm = (e) => {
             }), z;
           }
         }), null), ee.$$click = Be, he.$$click = De, Me.$$click = $, B((z) => {
-          const ce = `${a.x}px`, ae = `${a.y}px`, _e = `overlay-toolbar-icon edit ${je() === "color" ? "active" : ""}`, Te = `overlay-toolbar-line-size ${je() === "width" ? "active" : ""}`, We = `overlay-toolbar-icon minus ${je() === "style" ? "active" : ""}`, Ge = `overlay-toolbar-icon visibility ${a.visible ? "" : "muted"}`, n1 = a.visible ? "Hide" : "Show", Xe = `overlay-toolbar-icon lock ${a.locked ? "active" : ""}`, Je = a.locked ? "Unlock" : "Lock";
-          return ce !== z._v$21 && u.style.setProperty("left", z._v$21 = ce), ae !== z._v$22 && u.style.setProperty("top", z._v$22 = ae), _e !== z._v$23 && ne(y, z._v$23 = _e), Te !== z._v$24 && ne(A, z._v$24 = Te), We !== z._v$25 && ne(K, z._v$25 = We), Ge !== z._v$26 && ne(ee, z._v$26 = Ge), n1 !== z._v$27 && Oe(ee, "title", z._v$27 = n1), Xe !== z._v$28 && ne(he, z._v$28 = Xe), Je !== z._v$29 && Oe(he, "title", z._v$29 = Je), z;
+          const ue = `${a.x}px`, ae = `${a.y}px`, _e = `overlay-toolbar-icon edit ${je() === "color" ? "active" : ""}`, Te = `overlay-toolbar-line-size ${je() === "width" ? "active" : ""}`, We = `overlay-toolbar-icon minus ${je() === "style" ? "active" : ""}`, Ge = `overlay-toolbar-icon visibility ${a.visible ? "" : "muted"}`, n1 = a.visible ? "Hide" : "Show", Xe = `overlay-toolbar-icon lock ${a.locked ? "active" : ""}`, Je = a.locked ? "Unlock" : "Lock";
+          return ue !== z._v$21 && u.style.setProperty("left", z._v$21 = ue), ae !== z._v$22 && u.style.setProperty("top", z._v$22 = ae), _e !== z._v$23 && ne(y, z._v$23 = _e), Te !== z._v$24 && ne(A, z._v$24 = Te), We !== z._v$25 && ne(K, z._v$25 = We), Ge !== z._v$26 && ne(ee, z._v$26 = Ge), n1 !== z._v$27 && Oe(ee, "title", z._v$27 = n1), Xe !== z._v$28 && ne(he, z._v$28 = Xe), Je !== z._v$29 && Oe(he, "title", z._v$29 = Je), z;
         }, {
           _v$21: void 0,
           _v$22: void 0,
@@ -6333,12 +6336,12 @@ const Rm = (e) => {
         K.nextSibling;
         const ee = P.nextSibling, he = ee.nextSibling, Me = he.firstChild, z = Me.nextSibling;
         z.nextSibling;
-        const ce = he.nextSibling;
-        return ce.firstChild, u.addEventListener("mouseleave", () => Ve(!1)), u.addEventListener("mouseenter", () => Ve(!0)), m.$$mousemove = () => {
+        const ue = he.nextSibling;
+        return ue.firstChild, u.addEventListener("mouseleave", () => Ve(!1)), u.addEventListener("mouseenter", () => Ve(!0)), m.$$mousemove = () => {
           C1();
         }, m.$$mousedown = (ae) => {
           ae.preventDefault(), ae.stopPropagation(), C1();
-        }, g.$$click = () => z1("limit"), C(g, () => M().shortName ?? M().name ?? M().ticker, y), C(g, () => T1(a.price), A), P.$$click = () => z1("stop"), C(P, () => M().shortName ?? M().name ?? M().ticker, X), C(P, () => T1(a.price), K), ee.$$click = () => z1("create"), he.$$click = hn, C(he, () => T1(a.price), z), ce.$$click = fn, C(ce, () => T1(a.price), null), B((ae) => {
+        }, g.$$click = () => z1("limit"), C(g, () => M().shortName ?? M().name ?? M().ticker, y), C(g, () => T1(a.price), A), P.$$click = () => z1("stop"), C(P, () => M().shortName ?? M().name ?? M().ticker, X), C(P, () => T1(a.price), K), ee.$$click = () => z1("create"), he.$$click = hn, C(he, () => T1(a.price), z), ue.$$click = fn, C(ue, () => T1(a.price), null), B((ae) => {
           const _e = `${Math.max(0, a.y + 24)}px`, Te = `${a.yAxisWidth + tt}px`;
           return _e !== ae._v$33 && u.style.setProperty("top", ae._v$33 = _e), Te !== ae._v$34 && u.style.setProperty("right", ae._v$34 = Te), ae;
         }, {
@@ -6482,7 +6485,7 @@ const Rm = (e) => {
           return we();
         },
         onClose: () => {
-          ue(!1);
+          ce(!1);
         },
         onGoToDate: z9,
         onTimeRange: (o) => {
@@ -6541,7 +6544,7 @@ const Rm = (e) => {
           $e(!0);
         },
         onTimeToolsClick: () => {
-          O(Date.now()), ue(!0);
+          O(Date.now()), ce(!0);
         },
         onClose: () => {
           s1(!1);
@@ -6808,6 +6811,10 @@ class Ym {
   setSettingModalVisible(t) {
     var r, n;
     (n = (r = this._chartApi) == null ? void 0 : r.setSettingModalVisible) == null || n.call(r, t);
+  }
+  setTimeToolsModalVisible(t) {
+    var r, n;
+    (n = (r = this._chartApi) == null ? void 0 : r.setTimeToolsModalVisible) == null || n.call(r, t);
   }
   getOrderToolsState() {
     var t, r;
