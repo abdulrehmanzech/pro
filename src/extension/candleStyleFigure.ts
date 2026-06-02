@@ -27,6 +27,8 @@ type ExtendedCandleBarStyle = Styles["candle"]["bar"] & {
   wickNoChangeColor?: string;
 };
 
+type CandleDirection = "up" | "down" | "noChange";
+
 let activeCandleBarStyle: ExtendedCandleBarStyle | null = null;
 let candleStyleFigureRegistered = false;
 
@@ -43,55 +45,58 @@ function checkCoordinateOnRect(coordinate: { x: number; y: number }, rect: RectA
   );
 }
 
+function resolveDirectionFromColor(sourceColor?: string): CandleDirection | null {
+  const bar = activeCandleBarStyle;
+  if (!bar || !sourceColor) {
+    return null;
+  }
+
+  const normalized = normalizeColor(sourceColor);
+  if (normalized === normalizeColor(bar.upColor)) {
+    return "up";
+  }
+  if (normalized === normalizeColor(bar.downColor)) {
+    return "down";
+  }
+  if (normalized === normalizeColor(bar.noChangeColor)) {
+    return "noChange";
+  }
+  return null;
+}
+
 function resolveDirectionColor(
-  sourceColor?: string,
-  colorType: "body" | "border" | "wick" = "body"
+  sourceColor: string | undefined,
+  colorType: "body" | "border" | "wick",
+  direction: CandleDirection | null
 ): string | undefined {
   const bar = activeCandleBarStyle;
   if (!bar || !sourceColor) {
     return sourceColor;
   }
 
-  const normalized = normalizeColor(sourceColor);
-  const up = normalizeColor(bar.upColor);
-  const down = normalizeColor(bar.downColor);
-  const noChange = normalizeColor(bar.noChangeColor);
-
-  if (normalized === up) {
+  const resolvedDirection = direction ?? resolveDirectionFromColor(sourceColor);
+  if (resolvedDirection === "up") {
     return colorType === "border"
       ? bar.borderUpColor ?? sourceColor
       : colorType === "wick"
         ? bar.wickUpColor ?? sourceColor
-        : sourceColor;
+        : bar.upColor ?? sourceColor;
   }
-  if (normalized === down) {
+  if (resolvedDirection === "down") {
     return colorType === "border"
       ? bar.borderDownColor ?? sourceColor
       : colorType === "wick"
         ? bar.wickDownColor ?? sourceColor
-        : sourceColor;
+        : bar.downColor ?? sourceColor;
   }
-  if (normalized === noChange) {
+  if (resolvedDirection === "noChange") {
     return colorType === "border"
       ? bar.borderNoChangeColor ?? sourceColor
       : colorType === "wick"
         ? bar.wickNoChangeColor ?? sourceColor
-        : sourceColor;
+        : bar.noChangeColor ?? sourceColor;
   }
   return sourceColor;
-}
-
-function isDirectionColor(sourceColor?: string): boolean {
-  const bar = activeCandleBarStyle;
-  if (!bar || !sourceColor) {
-    return false;
-  }
-  const normalized = normalizeColor(sourceColor);
-  return (
-    normalized === normalizeColor(bar.upColor) ||
-    normalized === normalizeColor(bar.downColor) ||
-    normalized === normalizeColor(bar.noChangeColor)
-  );
 }
 
 function drawRoundedRectPath(ctx: CanvasRenderingContext2D, attrs: RectAttrs, radius: number): void {
@@ -111,9 +116,10 @@ function drawRect(ctx: CanvasRenderingContext2D, attrs: RectAttrs, styles: RectS
   const style = styles.style ?? PolygonType.Fill;
   const isWickLike = attrs.width <= 1.5 && attrs.height > 1;
   const rawColor = styles.color ?? "currentColor";
-  const color = resolveDirectionColor(rawColor, isWickLike ? "wick" : "body")!;
+  const direction = resolveDirectionFromColor(styles.color) ?? resolveDirectionFromColor(styles.borderColor);
+  const color = resolveDirectionColor(rawColor, isWickLike ? "wick" : "body", direction)!;
   const borderSize = styles.borderSize ?? 1;
-  const borderColor = resolveDirectionColor(styles.borderColor ?? "currentColor", "border")!;
+  const borderColor = resolveDirectionColor(styles.borderColor ?? rawColor, "border", direction)!;
   const borderStyle = styles.borderStyle ?? LineType.Solid;
   const r = styles.borderRadius ?? 0;
   const borderDashedValue = styles.borderDashedValue ?? [2, 2];
@@ -125,8 +131,8 @@ function drawRect(ctx: CanvasRenderingContext2D, attrs: RectAttrs, styles: RectS
     drawRoundedRectPath(ctx, attrs, r);
     ctx.fill();
 
-    const bodyBorderColor = resolveDirectionColor(rawColor, "border");
-    if (!isWickLike && isDirectionColor(rawColor) && bodyBorderColor) {
+    const bodyBorderColor = resolveDirectionColor(rawColor, "border", direction);
+    if (!isWickLike && direction && bodyBorderColor) {
       ctx.strokeStyle = bodyBorderColor;
       ctx.lineWidth = Math.max(1, borderSize);
       ctx.setLineDash([]);
