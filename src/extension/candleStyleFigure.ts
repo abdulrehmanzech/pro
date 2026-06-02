@@ -28,11 +28,10 @@ type ExtendedCandleBarStyle = Styles["candle"]["bar"] & {
 };
 
 type CandleDirection = "up" | "down" | "noChange";
-type CandleColorRole = "body" | "border" | "wick";
 
 let activeCandleBarStyle: ExtendedCandleBarStyle | null = null;
 let candleStyleFigureRegistered = false;
-let activeCandleDirection: CandleDirection | null = null;
+let activeCandleCenter: number | null = null;
 let activeCandleRectPhase = 0;
 
 function normalizeColor(color?: string): string | undefined {
@@ -69,7 +68,7 @@ function resolveDirectionFromColor(sourceColor?: string): CandleDirection | null
 
 function resolveDirectionColor(
   sourceColor: string | undefined,
-  colorType: CandleColorRole,
+  colorType: "body" | "border" | "wick",
   direction: CandleDirection | null
 ): string | undefined {
   const bar = activeCandleBarStyle;
@@ -102,18 +101,18 @@ function resolveDirectionColor(
   return sourceColor;
 }
 
-function getCandleRectRole(direction: CandleDirection | null): CandleColorRole {
-  if (!direction) {
-    return "body";
-  }
+function getCandleRectCenter(attrs: RectAttrs): number {
+  return Math.round((attrs.x + attrs.width / 2) * 1000) / 1000;
+}
 
-  if (activeCandleDirection !== direction || activeCandleRectPhase >= 3) {
-    activeCandleDirection = direction;
+function getCandleRectPhase(attrs: RectAttrs): number {
+  const center = getCandleRectCenter(attrs);
+  if (activeCandleCenter !== center || activeCandleRectPhase >= 3) {
+    activeCandleCenter = center;
     activeCandleRectPhase = 0;
   }
-
   activeCandleRectPhase += 1;
-  return activeCandleRectPhase === 2 ? "body" : "wick";
+  return activeCandleRectPhase;
 }
 
 function drawRoundedRectPath(ctx: CanvasRenderingContext2D, attrs: RectAttrs, radius: number): void {
@@ -133,8 +132,11 @@ function drawRect(ctx: CanvasRenderingContext2D, attrs: RectAttrs, styles: RectS
   const style = styles.style ?? PolygonType.Fill;
   const rawColor = styles.color ?? "currentColor";
   const direction = resolveDirectionFromColor(styles.color) ?? resolveDirectionFromColor(styles.borderColor);
-  const rectRole = getCandleRectRole(direction);
-  const color = resolveDirectionColor(rawColor, rectRole, direction)!;
+  const isStrokeOnlyBody = style === PolygonType.Stroke;
+  const isThinCandlePart = Math.abs(attrs.width) <= 1.5;
+  const rectPhase = direction ? getCandleRectPhase(attrs) : 0;
+  const isWickLike = !isStrokeOnlyBody && isThinCandlePart && rectPhase !== 2;
+  const color = resolveDirectionColor(rawColor, isWickLike ? "wick" : "body", direction)!;
   const borderSize = styles.borderSize ?? 1;
   const borderColor = resolveDirectionColor(styles.borderColor ?? rawColor, "border", direction)!;
   const borderStyle = styles.borderStyle ?? LineType.Solid;
@@ -149,7 +151,7 @@ function drawRect(ctx: CanvasRenderingContext2D, attrs: RectAttrs, styles: RectS
     ctx.fill();
 
     const bodyBorderColor = resolveDirectionColor(rawColor, "border", direction);
-    if (rectRole === "body" && direction && bodyBorderColor) {
+    if (!isWickLike && direction && bodyBorderColor) {
       ctx.strokeStyle = bodyBorderColor;
       ctx.lineWidth = Math.max(1, borderSize);
       ctx.setLineDash([]);
