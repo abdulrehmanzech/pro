@@ -1947,9 +1947,10 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
   let timeNavigationTooltipRetryTimer: number | undefined;
   let timeAnchorSlotCaptureTimer: number | undefined;
   let isRestoringTimeAnchor = false;
+  let timeAnchorRestoreLockedUntil = 0;
 
   const syncTimeAnchorTimestampFromSlot = () => {
-    if (isRestoringTimeAnchor) {
+    if (isRestoringTimeAnchor || Date.now() < timeAnchorRestoreLockedUntil) {
       return;
     }
     const anchor = timeAnchorSettings();
@@ -2330,7 +2331,10 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
         continue;
       }
       const distance = Math.abs(itemTimestamp - timestamp);
-      if (distance < nearestDistance) {
+      if (
+        distance < nearestDistance ||
+        (distance === nearestDistance && itemTimestamp > timestamp)
+      ) {
         nearestDistance = distance;
         nearestIndex = index;
       }
@@ -2384,11 +2388,12 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     }
 
     isRestoringTimeAnchor = true;
+    timeAnchorRestoreLockedUntil = Date.now() + 1000;
     if (anchor.anchorPoint === "date") {
       scrollToChartTimestamp(anchor.timestamp);
       window.setTimeout(() => {
         isRestoringTimeAnchor = false;
-      }, 220);
+      }, 1000);
       return;
     }
 
@@ -2398,7 +2403,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       scrollToChartTimestamp(anchor.timestamp);
       window.setTimeout(() => {
         isRestoringTimeAnchor = false;
-      }, 220);
+      }, 1000);
       return;
     }
 
@@ -2417,7 +2422,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
         showTimeNavigationTooltipWhenReady(anchor.timestamp);
         window.setTimeout(() => {
           isRestoringTimeAnchor = false;
-        }, 120);
+        }, 1000);
       });
     });
     updateCountdownPriceMark();
