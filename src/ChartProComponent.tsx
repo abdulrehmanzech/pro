@@ -2023,12 +2023,26 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       : null;
   };
 
+  const resolveExactLoadedCandle = (timestamp: number) => {
+    const dataList = widget?.getDataList?.() ?? [];
+    if (dataList.length === 0 || !Number.isFinite(timestamp)) {
+      return null;
+    }
+    for (let index = 0; index < dataList.length; index += 1) {
+      const candle = dataList[index] as KLineData | undefined;
+      if (Number(candle?.timestamp) === timestamp) {
+        return { candle, dataIndex: index };
+      }
+    }
+    return null;
+  };
+
   const resolveDisplayDataIndex = (dataIndex: number) => {
     const dataList = widget?.getDataList?.() ?? [];
     if (dataList.length === 0 || !Number.isFinite(dataIndex) || dataIndex < 0) {
       return -1;
     }
-    return Math.max(0, Math.min(dataList.length - 1, dataIndex));
+    return Math.max(0, Math.min(dataList.length - 1, dataIndex + 1));
   };
 
   const resolveTimeNavigationTooltipTarget = (timestamp: number) => {
@@ -2384,6 +2398,25 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       0,
       Math.min(dataList.length - 1, Number.isFinite(dataIndex) ? Math.round(dataIndex) : -1),
     );
+    const exactAnchor = resolveExactLoadedCandle(fallbackTimestamp);
+    if (exactAnchor) {
+      const displayIndex = resolveDisplayDataIndex(exactAnchor.dataIndex);
+      const pixel = widget.convertToPixel?.(
+        [{ dataIndex: displayIndex }],
+        { paneId: "candle_pane", absolute: true } as any,
+      ) as Array<Partial<Coordinate>> | undefined;
+      const exactX = Number(pixel?.[0]?.x);
+      const getBarSpace = (widget as any).getBarSpace;
+      const barSpaceValue =
+        typeof getBarSpace === "function" ? getBarSpace.call(widget) : undefined;
+      const barSpace = Number(
+        typeof barSpaceValue === "object" ? barSpaceValue?.bar : barSpaceValue,
+      );
+      const tolerance = Number.isFinite(barSpace) ? Math.max(2, barSpace / 2) : 8;
+      if (Number.isFinite(exactX) && Math.abs(exactX - slotX) <= tolerance) {
+        return fallbackTimestamp;
+      }
+    }
     const timestamp = Number(dataList[boundedIndex]?.timestamp);
     return Number.isFinite(timestamp) ? timestamp : fallbackTimestamp;
   };
