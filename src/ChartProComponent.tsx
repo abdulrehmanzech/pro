@@ -2023,6 +2023,14 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       : null;
   };
 
+  const resolveDisplayDataIndex = (dataIndex: number) => {
+    const dataList = widget?.getDataList?.() ?? [];
+    if (dataList.length === 0 || !Number.isFinite(dataIndex) || dataIndex < 0) {
+      return -1;
+    }
+    return Math.max(0, Math.min(dataList.length - 1, dataIndex + 1));
+  };
+
   const resolveTimeNavigationTooltipTarget = (timestamp: number) => {
     if (!widget || !widgetRef) {
       return null;
@@ -2031,11 +2039,9 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     const candle = target?.candle;
     const targetTimestamp = Number(candle?.timestamp ?? timestamp);
     const targetValue = Number(candle?.high ?? candle?.close ?? candle?.open);
-    const dataList = widget?.getDataList?.() ?? [];
-    const displayDataIndex =
-      target && target.dataIndex < dataList.length - 1
-        ? target.dataIndex + 1
-        : target?.dataIndex;
+    const displayDataIndex = target
+      ? resolveDisplayDataIndex(target.dataIndex)
+      : undefined;
     const point =
       target && Number.isFinite(targetValue)
         ? { dataIndex: displayDataIndex, value: targetValue }
@@ -2397,7 +2403,8 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       return;
     }
 
-    const anchorIndex = resolveLoadedDataIndexByTimestamp(anchor.timestamp, "nearest");
+    const dataIndex = resolveLoadedDataIndexByTimestamp(anchor.timestamp, "nearest");
+    const anchorIndex = resolveDisplayDataIndex(dataIndex);
     const slotX = resolveAnchorSlotX(anchor.anchorPoint);
     if (anchorIndex < 0 || slotX === null) {
       scrollToChartTimestamp(anchor.timestamp);
@@ -2438,7 +2445,9 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       return slotX;
     }
 
-    const dataIndex = resolveLoadedDataIndexByTimestamp(anchor.timestamp);
+    const dataIndex = resolveDisplayDataIndex(
+      resolveLoadedDataIndexByTimestamp(anchor.timestamp, "nearest"),
+    );
     const point =
       dataIndex >= 0
         ? { dataIndex }
