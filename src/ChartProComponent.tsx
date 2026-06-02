@@ -56,6 +56,10 @@ import lodashSet from "lodash/set";
 import lodashClone from "lodash/cloneDeep";
 
 import { SelectDataSourceItem, Loading } from "./component";
+import {
+  registerCandleStyleFigure,
+  syncExtendedCandleBarStyle,
+} from "./extension/candleStyleFigure";
 
 import {
   PeriodBar,
@@ -91,6 +95,8 @@ import {
   IndicatorTooltipIconStyles,
   ChartViewToggleOptions,
 } from "./types";
+
+registerCandleStyleFigure();
 
 export interface ChartProComponentProps
   extends Required<Omit<ChartProOptions, "container" | "onIndicatorChange" | "onMobilePeriodClick" | "onMobileMoreClick" | "screenshotBackgroundColor" | "chartViewToggle">> {
@@ -1841,6 +1847,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       }
 
       // Apply the style updates
+      syncExtendedCandleBarStyle(styleUpdates);
       widget.setStyles(styleUpdates);
     },
 
@@ -1897,9 +1904,11 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
         };
 
         // Apply styles from saved defaults
+        syncExtendedCandleBarStyle(resetFromDefault);
         widget.setStyles(resetFromDefault);
       } else {
         // Apply hardcoded defaults
+        syncExtendedCandleBarStyle(resetStyles);
         widget.setStyles(resetStyles);
       }
     },
@@ -3360,6 +3369,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
 
   createEffect(() => {
     if (styles()) {
+      syncExtendedCandleBarStyle(styles());
       widget?.setStyles(styles());
       applyCandleTooltipStyles();
       setWidgetDefaultStyles(lodashClone(widget!.getStyles()));
@@ -3936,7 +3946,9 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
             setSettingModalVisible(false);
           }}
           onChange={(style) => {
+            syncExtendedCandleBarStyle(style);
             widget?.setStyles(style);
+            widget?.resize();
             applyCandleTooltipStyles();
           }}
           onRestoreDefault={(options: SelectDataSourceItem[]) => {
@@ -3949,7 +3961,9 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
                 utils.formatValue(widgetDefaultStyles(), key)
               );
             });
+            syncExtendedCandleBarStyle(style);
             widget?.setStyles(style);
+            widget?.resize();
             applyCandleTooltipStyles();
           }}
         />

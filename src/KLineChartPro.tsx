@@ -29,6 +29,7 @@ import {
 } from "klinecharts";
 
 import ChartProComponent from "./ChartProComponent";
+import { syncExtendedCandleBarStyle } from "./extension/candleStyleFigure";
 
 import {
   SymbolInfo,
@@ -197,7 +198,9 @@ export default class KLineChartPro implements ChartPro {
   }
 
   setStyles(styles: DeepPartial<Styles>): void {
+    syncExtendedCandleBarStyle(styles);
     this._chartApi!.setStyles(styles);
+    this._chartApi!.resize?.();
   }
 
   getStyles(): Styles {

@@ -60,11 +60,19 @@ const lineStyleOptions: SelectDataSourceItem[] = [
   { key: LineType.Dashed, text: 'Dashed' }
 ]
 
+const lineWidthOptions = [1, 2, 3, 4]
+
 const chartStyleRestoreOptions: SelectDataSourceItem[] = [
   { key: 'candle.type', text: 'Candle Type' },
   { key: 'candle.bar.upColor', text: 'Up Color' },
   { key: 'candle.bar.downColor', text: 'Down Color' },
   { key: 'candle.bar.noChangeColor', text: 'No Change Color' },
+  { key: 'candle.bar.borderUpColor', text: 'Border Up Color' },
+  { key: 'candle.bar.borderDownColor', text: 'Border Down Color' },
+  { key: 'candle.bar.borderNoChangeColor', text: 'Border No Change Color' },
+  { key: 'candle.bar.wickUpColor', text: 'Wick Up Color' },
+  { key: 'candle.bar.wickDownColor', text: 'Wick Down Color' },
+  { key: 'candle.bar.wickNoChangeColor', text: 'Wick No Change Color' },
   { key: 'grid.horizontal.show', text: 'Horizontal Grids' },
   { key: 'grid.horizontal.color', text: 'Horizontal Grid Color' },
   { key: 'grid.horizontal.style', text: 'Horizontal Grid Style' },
@@ -77,21 +85,31 @@ const chartStyleRestoreOptions: SelectDataSourceItem[] = [
   { key: 'grid.vertical.dashedValue', text: 'Vertical Grid Dash' }
 ]
 
-const chartStyleUiRestoreOptions: SelectDataSourceItem[] = [
-  { key: 'chartStyleUi.border.upColor', text: 'Border Up Color' },
-  { key: 'chartStyleUi.border.downColor', text: 'Border Down Color' },
-  { key: 'chartStyleUi.wick.upColor', text: 'Wick Up Color' },
-  { key: 'chartStyleUi.wick.downColor', text: 'Wick Down Color' }
-]
+const createChartStyleDraft = (styles: Styles): Styles => {
+  const draft = utils.clone(styles)
+  const upColor = utils.formatValue(draft, 'candle.bar.upColor') as string
+  const downColor = utils.formatValue(draft, 'candle.bar.downColor') as string
+  const noChangeColor = utils.formatValue(draft, 'candle.bar.noChangeColor') as string
+
+  lodashSet(draft, 'candle.bar.borderUpColor', utils.formatValue(draft, 'candle.bar.borderUpColor', upColor))
+  lodashSet(draft, 'candle.bar.borderDownColor', utils.formatValue(draft, 'candle.bar.borderDownColor', downColor))
+  lodashSet(draft, 'candle.bar.borderNoChangeColor', utils.formatValue(draft, 'candle.bar.borderNoChangeColor', noChangeColor))
+  lodashSet(draft, 'candle.bar.wickUpColor', utils.formatValue(draft, 'candle.bar.wickUpColor', upColor))
+  lodashSet(draft, 'candle.bar.wickDownColor', utils.formatValue(draft, 'candle.bar.wickDownColor', downColor))
+  lodashSet(draft, 'candle.bar.wickNoChangeColor', utils.formatValue(draft, 'candle.bar.wickNoChangeColor', noChangeColor))
+
+  return draft
+}
 
 const SettingModal: Component<SettingModalProps> = props => {
   const [styles, setStyles] = createSignal(props.currentStyles)
-  const [draftStyles, setDraftStyles] = createSignal(utils.clone(props.currentStyles))
+  const [draftStyles, setDraftStyles] = createSignal(createChartStyleDraft(props.currentStyles))
   const [options, setOptions] = createSignal(getOptions(props.locale))
   const [isMobile, setIsMobile] = createSignal(false)
   const [activeTab, setActiveTab] = createSignal<ModalTab>('settings')
   const [activeChartStyleTab, setActiveChartStyleTab] = createSignal<ChartStyleTab>('symbol')
   const [activeColorKey, setActiveColorKey] = createSignal<string | null>(null)
+  const [activeLineWidthKey, setActiveLineWidthKey] = createSignal<string | null>(null)
 
   // Check if device is mobile
   const checkMobile = () => {
@@ -99,8 +117,29 @@ const SettingModal: Component<SettingModalProps> = props => {
   }
 
   onMount(() => {
+    const handleDocumentMouseDown = (event: MouseEvent) => {
+      const target = event.target
+      if (!(target instanceof Element)) {
+        return
+      }
+      if (
+        target.closest('.chart-style-color-picker') ||
+        target.closest('.chart-style-width-picker') ||
+        target.closest('.klinecharts-pro-select')
+      ) {
+        return
+      }
+      setActiveColorKey(null)
+      setActiveLineWidthKey(null)
+    }
+
     checkMobile()
     window.addEventListener('resize', checkMobile)
+    document.addEventListener('mousedown', handleDocumentMouseDown)
+
+    onCleanup(() => {
+      document.removeEventListener('mousedown', handleDocumentMouseDown)
+    })
   })
 
   onCleanup(() => {
@@ -139,8 +178,14 @@ const SettingModal: Component<SettingModalProps> = props => {
         bar: {
           upColor: utils.formatValue(source, 'candle.bar.upColor') as string,
           downColor: utils.formatValue(source, 'candle.bar.downColor') as string,
-          noChangeColor: utils.formatValue(source, 'candle.bar.noChangeColor') as string
-        }
+          noChangeColor: utils.formatValue(source, 'candle.bar.noChangeColor') as string,
+          borderUpColor: utils.formatValue(source, 'candle.bar.borderUpColor', utils.formatValue(source, 'candle.bar.upColor')) as string,
+          borderDownColor: utils.formatValue(source, 'candle.bar.borderDownColor', utils.formatValue(source, 'candle.bar.downColor')) as string,
+          borderNoChangeColor: utils.formatValue(source, 'candle.bar.borderNoChangeColor', utils.formatValue(source, 'candle.bar.noChangeColor')) as string,
+          wickUpColor: utils.formatValue(source, 'candle.bar.wickUpColor', utils.formatValue(source, 'candle.bar.upColor')) as string,
+          wickDownColor: utils.formatValue(source, 'candle.bar.wickDownColor', utils.formatValue(source, 'candle.bar.downColor')) as string,
+          wickNoChangeColor: utils.formatValue(source, 'candle.bar.wickNoChangeColor', utils.formatValue(source, 'candle.bar.noChangeColor')) as string
+        } as any
       },
       grid: {
         horizontal: {
@@ -173,11 +218,12 @@ const SettingModal: Component<SettingModalProps> = props => {
     if (defaultStyles) {
       const nextDraft = utils.clone(draftStyles())
       chartStyleRestoreOptions.forEach(option => {
-        lodashSet(nextDraft, option.key, utils.formatValue(defaultStyles, option.key))
-      })
-      chartStyleUiRestoreOptions.forEach(option => {
-        const fallbackKey = option.key.includes('downColor') ? 'candle.bar.downColor' : 'candle.bar.upColor'
-        lodashSet(nextDraft, option.key, utils.formatValue(defaultStyles, fallbackKey))
+        const fallbackKey = option.key.includes('downColor')
+          ? 'candle.bar.downColor'
+          : option.key.includes('NoChangeColor')
+            ? 'candle.bar.noChangeColor'
+            : 'candle.bar.upColor'
+        lodashSet(nextDraft, option.key, utils.formatValue(defaultStyles, option.key, utils.formatValue(defaultStyles, fallbackKey)))
       })
       setDraftStyles(nextDraft)
       setStyles(utils.clone(nextDraft))
@@ -188,9 +234,8 @@ const SettingModal: Component<SettingModalProps> = props => {
     }
   }
 
-  const renderColorPicker = (key: string, pickerId = key, fallbackKey?: string) => {
-    const fallbackValue = fallbackKey ? formatDraftValue(fallbackKey, '#ffffff') : '#ffffff'
-    const value = formatDraftValue(key, fallbackValue) as string
+  const renderColorPicker = (key: string, pickerId = key) => {
+    const value = formatDraftValue(key, '#ffffff') as string
     return (
       <div class="chart-style-color-picker">
         <button
@@ -228,6 +273,7 @@ const SettingModal: Component<SettingModalProps> = props => {
     const colorKey = `${prefix}.color`
     const sizeKey = `${prefix}.size`
     const lineStyle = formatDraftValue(styleKey, LineType.Dashed) as string
+    const lineSize = Math.max(1, Number(formatDraftValue(sizeKey, 1)))
     return (
       <div class="chart-style-line-control">
         <Select
@@ -239,15 +285,33 @@ const SettingModal: Component<SettingModalProps> = props => {
             updateDraft(styleKey, newValue)
             updateDraft(`${prefix}.dashedValue`, newValue === LineType.Solid ? [] : [2, 2])
           }}/>
-        <button
-          type="button"
-          class="chart-style-size-button"
-          onClick={() => {
-            const size = Number(formatDraftValue(sizeKey, 1))
-            updateDraft(sizeKey, size >= 3 ? 1 : size + 1)
-          }}>
-          <span style={{ height: `${Math.max(1, Number(formatDraftValue(sizeKey, 1)))}px` }}/>
-        </button>
+        <div class="chart-style-width-picker">
+          <button
+            type="button"
+            class="chart-style-size-button"
+            onClick={() => {
+              setActiveLineWidthKey(activeLineWidthKey() === sizeKey ? null : sizeKey)
+            }}>
+            <span style={{ height: `${lineSize}px` }}/>
+          </button>
+          {activeLineWidthKey() === sizeKey && (
+            <div class="chart-style-width-popover">
+              <For each={lineWidthOptions}>
+                {width => (
+                  <button
+                    type="button"
+                    classList={{ selected: lineSize === width }}
+                    onClick={() => {
+                      updateDraft(sizeKey, width)
+                      setActiveLineWidthKey(null)
+                    }}>
+                    <span style={{ height: `${width}px` }}/>
+                  </button>
+                )}
+              </For>
+            </div>
+          )}
+        </div>
         {renderColorPicker(colorKey)}
       </div>
     )
@@ -402,15 +466,15 @@ const SettingModal: Component<SettingModalProps> = props => {
                     <div class="chart-style-row">
                       <span>Borders</span>
                       <div class="chart-style-color-pair">
-                        {renderColorPicker('chartStyleUi.border.upColor', 'border-up', 'candle.bar.upColor')}
-                        {renderColorPicker('chartStyleUi.border.downColor', 'border-down', 'candle.bar.downColor')}
+                        {renderColorPicker('candle.bar.borderUpColor', 'border-up')}
+                        {renderColorPicker('candle.bar.borderDownColor', 'border-down')}
                       </div>
                     </div>
                     <div class="chart-style-row">
                       <span>Wick</span>
                       <div class="chart-style-color-pair">
-                        {renderColorPicker('chartStyleUi.wick.upColor', 'wick-up', 'candle.bar.upColor')}
-                        {renderColorPicker('chartStyleUi.wick.downColor', 'wick-down', 'candle.bar.downColor')}
+                        {renderColorPicker('candle.bar.wickUpColor', 'wick-up')}
+                        {renderColorPicker('candle.bar.wickDownColor', 'wick-down')}
                       </div>
                     </div>
                   </>
@@ -432,6 +496,7 @@ const SettingModal: Component<SettingModalProps> = props => {
                           type="checkbox"
                           checked={!!formatDraftValue('grid.vertical.show')}
                           onChange={(event) => updateDraft('grid.vertical.show', event.currentTarget.checked)}/>
+                        <span class="chart-style-check-box" aria-hidden="true"/>
                         <span>Vert Grid Lines</span>
                       </label>
                       {renderLineControl('grid.vertical')}
@@ -442,6 +507,7 @@ const SettingModal: Component<SettingModalProps> = props => {
                           type="checkbox"
                           checked={!!formatDraftValue('grid.horizontal.show')}
                           onChange={(event) => updateDraft('grid.horizontal.show', event.currentTarget.checked)}/>
+                        <span class="chart-style-check-box" aria-hidden="true"/>
                         <span>Horz Grid Lines</span>
                       </label>
                       {renderLineControl('grid.horizontal')}

@@ -1,12 +1,12 @@
-var n9 = Object.defineProperty;
-var r9 = (e, t, r) => t in e ? n9(e, t, { enumerable: !0, configurable: !0, writable: !0, value: r }) : e[t] = r;
-var m1 = (e, t, r) => (r9(e, typeof t != "symbol" ? t + "" : t, r), r);
-import { utils as E, registerFigure as o9, PolygonType as g1, LineType as ze, OverlayMode as kn, ActionType as Nt, init as i9, FormatDateType as Q1, DomPosition as at, dispose as n0, TooltipIconPosition as Z1, CandleType as a9, YAxisType as s9, registerOverlay as l9 } from "klinecharts";
-function p1(e, t, r) {
+var o9 = Object.defineProperty;
+var i9 = (e, t, r) => t in e ? o9(e, t, { enumerable: !0, configurable: !0, writable: !0, value: r }) : e[t] = r;
+var g1 = (e, t, r) => (i9(e, typeof t != "symbol" ? t + "" : t, r), r);
+import { utils as E, registerFigure as a9, PolygonType as y1, LineType as ze, OverlayMode as xn, ActionType as Ot, init as s9, FormatDateType as Z1, DomPosition as at, dispose as o0, TooltipIconPosition as H1, CandleType as l9, YAxisType as c9, registerOverlay as u9 } from "klinecharts";
+function v1(e, t, r) {
   const n = (e.x - t.x) * Math.cos(r) - (e.y - t.y) * Math.sin(r) + t.x, a = (e.x - t.x) * Math.sin(r) + (e.y - t.y) * Math.cos(r) + t.y;
   return { x: n, y: a };
 }
-function Sn(e, t) {
+function Dn(e, t) {
   if (e.length > 1) {
     let r;
     return e[0].x === e[1].x && e[0].y !== e[1].y ? e[0].y < e[1].y ? r = {
@@ -25,11 +25,11 @@ function Sn(e, t) {
   }
   return [];
 }
-function G0(e, t) {
+function J0(e, t) {
   const r = Math.abs(e.x - t.x), n = Math.abs(e.y - t.y);
   return Math.sqrt(r * r + n * n);
 }
-const c9 = {
+const d9 = {
   name: "arrow",
   totalStep: 3,
   needDefaultPointFigure: !0,
@@ -40,7 +40,7 @@ const c9 = {
       const t = e[1].x > e[0].x ? 0 : 1, r = E.getLinearSlopeIntercept(e[0], e[1]);
       let n;
       r ? n = Math.atan(r[0]) + Math.PI * t : e[1].y > e[0].y ? n = Math.PI / 2 : n = Math.PI / 2 * 3;
-      const a = p1({ x: e[1].x - 8, y: e[1].y + 4 }, e[1], n), l = p1({ x: e[1].x - 8, y: e[1].y - 4 }, e[1], n);
+      const a = v1({ x: e[1].x - 8, y: e[1].y + 4 }, e[1], n), l = v1({ x: e[1].x - 8, y: e[1].y - 4 }, e[1], n);
       return [
         {
           type: "line",
@@ -55,7 +55,7 @@ const c9 = {
     }
     return [];
   }
-}, u9 = {
+}, h9 = {
   name: "circle",
   totalStep: 3,
   needDefaultPointFigure: !0,
@@ -68,7 +68,7 @@ const c9 = {
   },
   createPointFigures: ({ coordinates: e }) => {
     if (e.length > 1) {
-      const t = G0(e[0], e[1]);
+      const t = J0(e[0], e[1]);
       return {
         type: "circle",
         attrs: {
@@ -80,7 +80,7 @@ const c9 = {
     }
     return [];
   }
-}, d9 = {
+}, f9 = {
   name: "rect",
   totalStep: 3,
   needDefaultPointFigure: !0,
@@ -105,7 +105,7 @@ const c9 = {
       styles: { style: "stroke_fill" }
     }
   ] : []
-}, h9 = {
+}, m9 = {
   name: "parallelogram",
   totalStep: 4,
   needDefaultPointFigure: !0,
@@ -143,7 +143,7 @@ const c9 = {
   performEventMoveForDrawing: ({ currentStep: e, points: t, performPoint: r }) => {
     e === 2 && (t[0].price = r.price);
   }
-}, f9 = {
+}, g9 = {
   name: "triangle",
   totalStep: 4,
   needDefaultPointFigure: !0,
@@ -161,7 +161,7 @@ const c9 = {
       styles: { style: "stroke_fill" }
     }
   ]
-}, m9 = {
+}, y9 = {
   name: "fibonacciCircle",
   totalStep: 3,
   needDefaultPointFigure: !0,
@@ -169,15 +169,15 @@ const c9 = {
   needDefaultYAxisFigure: !0,
   createPointFigures: ({ coordinates: e }) => {
     if (e.length > 1) {
-      const t = Math.abs(e[0].x - e[1].x), r = Math.abs(e[0].y - e[1].y), n = Math.sqrt(t * t + r * r), a = [0.236, 0.382, 0.5, 0.618, 0.786, 1], l = [], d = [];
-      return a.forEach((h) => {
-        const v = n * h;
+      const t = Math.abs(e[0].x - e[1].x), r = Math.abs(e[0].y - e[1].y), n = Math.sqrt(t * t + r * r), a = [0.236, 0.382, 0.5, 0.618, 0.786, 1], l = [], h = [];
+      return a.forEach((d) => {
+        const b = n * d;
         l.push(
-          { ...e[0], r: v }
-        ), d.push({
+          { ...e[0], r: b }
+        ), h.push({
           x: e[0].x,
-          y: e[0].y + v + 6,
-          text: `${(h * 100).toFixed(1)}%`
+          y: e[0].y + b + 6,
+          text: `${(d * 100).toFixed(1)}%`
         });
       }), [
         {
@@ -188,13 +188,13 @@ const c9 = {
         {
           type: "text",
           ignoreEvent: !0,
-          attrs: d
+          attrs: h
         }
       ];
     }
     return [];
   }
-}, g9 = {
+}, C9 = {
   name: "fibonacciSegment",
   totalStep: 3,
   needDefaultPointFigure: !0,
@@ -203,13 +203,13 @@ const c9 = {
   createPointFigures: ({ coordinates: e, overlay: t, precision: r }) => {
     const n = [], a = [];
     if (e.length > 1) {
-      const l = e[1].x > e[0].x ? e[0].x : e[1].x, d = [1, 0.786, 0.618, 0.5, 0.382, 0.236, 0], h = e[0].y - e[1].y, v = t.points, x = v[0].value - v[1].value;
-      d.forEach((b) => {
-        const L = e[1].y + h * b, B = (v[1].value + x * b).toFixed(r.price);
+      const l = e[1].x > e[0].x ? e[0].x : e[1].x, h = [1, 0.786, 0.618, 0.5, 0.382, 0.236, 0], d = e[0].y - e[1].y, b = t.points, x = b[0].value - b[1].value;
+      h.forEach((v) => {
+        const L = e[1].y + d * v, B = (b[1].value + x * v).toFixed(r.price);
         n.push({ coordinates: [{ x: e[0].x, y: L }, { x: e[1].x, y: L }] }), a.push({
           x: l,
           y: L,
-          text: `${B} (${(b * 100).toFixed(1)}%)`,
+          text: `${B} (${(v * 100).toFixed(1)}%)`,
           baseline: "bottom"
         });
       });
@@ -226,7 +226,7 @@ const c9 = {
       }
     ];
   }
-}, y9 = {
+}, p9 = {
   name: "fibonacciSpiral",
   totalStep: 3,
   needDefaultPointFigure: !0,
@@ -234,72 +234,72 @@ const c9 = {
   needDefaultYAxisFigure: !0,
   createPointFigures: ({ coordinates: e, bounding: t }) => {
     if (e.length > 1) {
-      const r = G0(e[0], e[1]) / Math.sqrt(24), n = e[1].x > e[0].x ? 0 : 1, a = E.getLinearSlopeIntercept(e[0], e[1]);
+      const r = J0(e[0], e[1]) / Math.sqrt(24), n = e[1].x > e[0].x ? 0 : 1, a = E.getLinearSlopeIntercept(e[0], e[1]);
       let l;
       a ? l = Math.atan(a[0]) + Math.PI * n : e[1].y > e[0].y ? l = Math.PI / 2 : l = Math.PI / 2 * 3;
-      const d = p1(
+      const h = v1(
         { x: e[0].x - r, y: e[0].y },
         e[0],
         l
-      ), h = p1(
+      ), d = v1(
         { x: e[0].x - r, y: e[0].y - r },
         e[0],
         l
-      ), v = [{
-        ...d,
+      ), b = [{
+        ...h,
         r,
         startAngle: l,
         endAngle: l + Math.PI / 2
       }, {
-        ...h,
+        ...d,
         r: r * 2,
         startAngle: l + Math.PI / 2,
         endAngle: l + Math.PI
       }];
-      let x = e[0].x - r, b = e[0].y - r;
+      let x = e[0].x - r, v = e[0].y - r;
       for (let L = 2; L < 9; L++) {
-        const B = v[L - 2].r + v[L - 1].r;
+        const B = b[L - 2].r + b[L - 1].r;
         let N = 0;
         switch (L % 4) {
           case 0: {
-            N = l, x -= v[L - 2].r;
+            N = l, x -= b[L - 2].r;
             break;
           }
           case 1: {
-            N = l + Math.PI / 2, b -= v[L - 2].r;
+            N = l + Math.PI / 2, v -= b[L - 2].r;
             break;
           }
           case 2: {
-            N = l + Math.PI, x += v[L - 2].r;
+            N = l + Math.PI, x += b[L - 2].r;
             break;
           }
           case 3: {
-            N = l + Math.PI / 2 * 3, b += v[L - 2].r;
+            N = l + Math.PI / 2 * 3, v += b[L - 2].r;
             break;
           }
         }
-        const Z = N + Math.PI / 2, U = p1({ x, y: b }, e[0], l);
-        v.push({
-          ...U,
+        const oe = N + Math.PI / 2, V = v1({ x, y: v }, e[0], l);
+        b.push({
+          ...V,
           r: B,
           startAngle: N,
-          endAngle: Z
+          endAngle: oe
         });
       }
       return [
         {
           type: "arc",
-          attrs: v
+          attrs: b
         },
         {
           type: "line",
-          attrs: Sn(e, t)
+          attrs: Dn(e, t)
         }
       ];
     }
     return [];
   }
-}, C9 = {
+}, v9 = {
   name: "fibonacciSpeedResistanceFan",
   totalStep: 3,
   needDefaultPointFigure: !0,
@@ -310,17 +310,17 @@ const c9 = {
     let n = [];
     const a = [];
     if (e.length > 1) {
-      const l = e[1].x > e[0].x ? -38 : 4, d = e[1].y > e[0].y ? -2 : 20, h = e[1].x - e[0].x, v = e[1].y - e[0].y;
-      [1, 0.75, 0.618, 0.5, 0.382, 0.25, 0].forEach((b) => {
-        const L = e[1].x - h * b, B = e[1].y - v * b;
-        r.push({ coordinates: [{ x: L, y: e[0].y }, { x: L, y: e[1].y }] }), r.push({ coordinates: [{ x: e[0].x, y: B }, { x: e[1].x, y: B }] }), n = n.concat(Sn([e[0], { x: L, y: e[1].y }], t)), n = n.concat(Sn([e[0], { x: e[1].x, y: B }], t)), a.unshift({
+      const l = e[1].x > e[0].x ? -38 : 4, h = e[1].y > e[0].y ? -2 : 20, d = e[1].x - e[0].x, b = e[1].y - e[0].y;
+      [1, 0.75, 0.618, 0.5, 0.382, 0.25, 0].forEach((v) => {
+        const L = e[1].x - d * v, B = e[1].y - b * v;
+        r.push({ coordinates: [{ x: L, y: e[0].y }, { x: L, y: e[1].y }] }), r.push({ coordinates: [{ x: e[0].x, y: B }, { x: e[1].x, y: B }] }), n = n.concat(Dn([e[0], { x: L, y: e[1].y }], t)), n = n.concat(Dn([e[0], { x: e[1].x, y: B }], t)), a.unshift({
           x: e[0].x + l,
           y: B + 10,
-          text: `${b.toFixed(3)}`
+          text: `${v.toFixed(3)}`
         }), a.unshift({
           x: L - 18,
-          y: e[0].y + d,
-          text: `${b.toFixed(3)}`
+          y: e[0].y + h,
+          text: `${v.toFixed(3)}`
         });
       });
     }
@@ -340,7 +340,7 @@ const c9 = {
       }
     ];
   }
-}, p9 = {
+}, b9 = {
   name: "fibonacciExtension",
   totalStep: 4,
   needDefaultPointFigure: !0,
@@ -349,13 +349,13 @@ const c9 = {
   createPointFigures: ({ coordinates: e, overlay: t, precision: r }) => {
     const n = [], a = [];
     if (e.length > 2) {
-      const l = t.points, d = l[1].value - l[0].value, h = e[1].y - e[0].y, v = [0, 0.236, 0.382, 0.5, 0.618, 0.786, 1], x = e[2].x > e[1].x ? e[1].x : e[2].x;
-      v.forEach((b) => {
-        const L = e[2].y + h * b, B = (l[2].value + d * b).toFixed(r.price);
+      const l = t.points, h = l[1].value - l[0].value, d = e[1].y - e[0].y, b = [0, 0.236, 0.382, 0.5, 0.618, 0.786, 1], x = e[2].x > e[1].x ? e[1].x : e[2].x;
+      b.forEach((v) => {
+        const L = e[2].y + d * v, B = (l[2].value + h * v).toFixed(r.price);
         n.push({ coordinates: [{ x: e[1].x, y: L }, { x: e[2].x, y: L }] }), a.push({
           x,
           y: L,
-          text: `${B} (${(b * 100).toFixed(1)}%)`,
+          text: `${B} (${(v * 100).toFixed(1)}%)`,
           baseline: "bottom"
         });
       });
@@ -377,7 +377,7 @@ const c9 = {
       }
     ];
   }
-}, v9 = {
+}, $9 = {
   name: "gannBox",
   totalStep: 3,
   needDefaultPointFigure: !0,
@@ -439,7 +439,7 @@ const c9 = {
     }
     return [];
   }
-}, b9 = {
+}, _9 = {
   name: "threeWaves",
   totalStep: 5,
   needDefaultPointFigure: !0,
@@ -463,7 +463,7 @@ const c9 = {
       }
     ];
   }
-}, $9 = {
+}, k9 = {
   name: "fiveWaves",
   totalStep: 7,
   needDefaultPointFigure: !0,
@@ -487,7 +487,7 @@ const c9 = {
       }
     ];
   }
-}, _9 = {
+}, x9 = {
   name: "eightWaves",
   totalStep: 10,
   needDefaultPointFigure: !0,
@@ -511,7 +511,7 @@ const c9 = {
       }
     ];
   }
-}, k9 = {
+}, L9 = {
   name: "anyWaves",
   totalStep: Number.MAX_SAFE_INTEGER,
   needDefaultPointFigure: !0,
@@ -535,7 +535,7 @@ const c9 = {
       }
     ];
   }
-}, x9 = {
+}, w9 = {
   name: "abcd",
   totalStep: 5,
   needDefaultPointFigure: !0,
@@ -543,10 +543,10 @@ const c9 = {
   needDefaultYAxisFigure: !0,
   createPointFigures: ({ coordinates: e }) => {
     let t = [], r = [];
-    const n = ["A", "B", "C", "D"], a = e.map((l, d) => ({
+    const n = ["A", "B", "C", "D"], a = e.map((l, h) => ({
       ...l,
       baseline: "bottom",
-      text: `(${n[d]})`
+      text: `(${n[h]})`
     }));
     return e.length > 2 && (t = [e[0], e[2]], e.length > 3 && (r = [e[1], e[3]])), [
       {
@@ -565,7 +565,7 @@ const c9 = {
       }
     ];
   }
-}, L9 = {
+}, A9 = {
   name: "xabcd",
   totalStep: 6,
   needDefaultPointFigure: !0,
@@ -577,10 +577,10 @@ const c9 = {
     }
   },
   createPointFigures: ({ coordinates: e, overlay: t }) => {
-    const r = [], n = [], a = ["X", "A", "B", "C", "D"], l = e.map((d, h) => ({
-      ...d,
+    const r = [], n = [], a = ["X", "A", "B", "C", "D"], l = e.map((h, d) => ({
+      ...h,
       baseline: "bottom",
-      text: `(${a[h]})`
+      text: `(${a[d]})`
     }));
     return e.length > 2 && (r.push({ coordinates: [e[0], e[2]] }), n.push({ coordinates: [e[0], e[1], e[2]] }), e.length > 3 && (r.push({ coordinates: [e[1], e[3]] }), e.length > 4 && (r.push({ coordinates: [e[2], e[4]] }), n.push({ coordinates: [e[2], e[3], e[4]] })))), [
       {
@@ -604,14 +604,12 @@ const c9 = {
       }
     ];
   }
-}, w9 = [
-  c9,
-  u9,
+}, M9 = [
   d9,
-  f9,
   h9,
-  m9,
+  f9,
   g9,
+  m9,
   y9,
   C9,
   p9,
@@ -621,13 +619,15 @@ const c9 = {
   _9,
   k9,
   x9,
-  L9
+  L9,
+  w9,
+  A9
 ];
-class Dg {
+class Og {
   constructor(t) {
-    m1(this, "_apiKey");
-    m1(this, "_prevSymbolMarket");
-    m1(this, "_ws");
+    g1(this, "_apiKey");
+    g1(this, "_prevSymbolMarket");
+    g1(this, "_ws");
     this._apiKey = t;
   }
   async searchSymbols(t) {
@@ -643,32 +643,32 @@ class Dg {
     }));
   }
   async getHistoryKLineData(t, r, n, a) {
-    return await ((await (await fetch(`https://api.polygon.io/v2/aggs/ticker/${t.ticker}/range/${r.multiplier}/${r.timespan}/${n}/${a}?apiKey=${this._apiKey}`)).json()).results || []).map((h) => ({
-      timestamp: h.t,
-      open: h.o,
-      high: h.h,
-      low: h.l,
-      close: h.c,
-      volume: h.v,
-      turnover: h.vw
+    return await ((await (await fetch(`https://api.polygon.io/v2/aggs/ticker/${t.ticker}/range/${r.multiplier}/${r.timespan}/${n}/${a}?apiKey=${this._apiKey}`)).json()).results || []).map((d) => ({
+      timestamp: d.t,
+      open: d.o,
+      high: d.h,
+      low: d.l,
+      close: d.c,
+      volume: d.v,
+      turnover: d.vw
     }));
   }
   subscribe(t, r, n) {
     var a, l;
     this._prevSymbolMarket !== t.market ? ((a = this._ws) == null || a.close(), this._ws = new WebSocket(`wss://delayed.polygon.io/${t.market}`), this._ws.onopen = () => {
-      var d;
-      (d = this._ws) == null || d.send(JSON.stringify({ action: "auth", params: this._apiKey }));
-    }, this._ws.onmessage = (d) => {
-      var v;
-      const h = JSON.parse(d.data);
-      h[0].ev === "status" ? h[0].status === "auth_success" && ((v = this._ws) == null || v.send(JSON.stringify({ action: "subscribe", params: `T.${t.ticker}` }))) : "sym" in h && n({
-        timestamp: h.s,
-        open: h.o,
-        high: h.h,
-        low: h.l,
-        close: h.c,
-        volume: h.v,
-        turnover: h.vw
+      var h;
+      (h = this._ws) == null || h.send(JSON.stringify({ action: "auth", params: this._apiKey }));
+    }, this._ws.onmessage = (h) => {
+      var b;
+      const d = JSON.parse(h.data);
+      d[0].ev === "status" ? d[0].status === "auth_success" && ((b = this._ws) == null || b.send(JSON.stringify({ action: "subscribe", params: `T.${t.ticker}` }))) : "sym" in d && n({
+        timestamp: d.s,
+        open: d.o,
+        high: d.h,
+        low: d.l,
+        close: d.c,
+        volume: d.v,
+        turnover: d.vw
       });
     }) : (l = this._ws) == null || l.send(JSON.stringify({ action: "subscribe", params: `T.${t.ticker}` })), this._prevSymbolMarket = t.market;
   }
@@ -679,136 +679,136 @@ const Ee = {};
 function T9(e) {
   Ee.context = e;
 }
-const A9 = (e, t) => e === t, Pn = Symbol("solid-proxy"), M9 = Symbol("solid-track"), en = {
-  equals: A9
+const S9 = (e, t) => e === t, Nn = Symbol("solid-proxy"), P9 = Symbol("solid-track"), tn = {
+  equals: S9
 };
-let X0 = no;
-const yt = 1, tn = 2, J0 = {
+let eo = oo;
+const yt = 1, nn = 2, to = {
   owned: null,
   cleanups: null,
   context: null,
   owner: null
-}, xn = {};
+}, Ln = {};
 var De = null;
-let Bt = null, xe = null, Ve = null, gt = null, zn = 0;
-function v1(e, t) {
-  const r = xe, n = De, a = e.length === 0, l = a ? J0 : {
+let Ft = null, xe = null, Ve = null, gt = null, Kn = 0;
+function b1(e, t) {
+  const r = xe, n = De, a = e.length === 0, l = a ? to : {
     owned: null,
     cleanups: null,
     context: null,
     owner: t === void 0 ? n : t
-  }, d = a ? e : () => e(() => lt(() => dn(l)));
+  }, h = a ? e : () => e(() => lt(() => hn(l)));
   De = l, xe = null;
   try {
-    return wt(d, !0);
+    return At(h, !0);
   } finally {
     xe = r, De = n;
   }
 }
-function M(e, t) {
-  t = t ? Object.assign({}, en, t) : en;
+function T(e, t) {
+  t = t ? Object.assign({}, tn, t) : tn;
   const r = {
     value: e,
     observers: null,
     observerSlots: null,
     comparator: t.equals || void 0
-  }, n = (a) => (typeof a == "function" && (a = a(r.value)), to(r, a));
-  return [eo.bind(r), n];
+  }, n = (a) => (typeof a == "function" && (a = a(r.value)), ro(r, a));
+  return [no.bind(r), n];
 }
-function r0(e, t, r) {
-  const n = un(e, t, !0, yt);
-  Zt(n);
+function i0(e, t, r) {
+  const n = dn(e, t, !0, yt);
+  Ht(n);
 }
-function V(e, t, r) {
-  const n = un(e, t, !1, yt);
-  Zt(n);
+function z(e, t, r) {
+  const n = dn(e, t, !1, yt);
+  Ht(n);
 }
 function Re(e, t, r) {
-  X0 = I9;
-  const n = un(e, t, !1, yt);
-  n.user = !0, gt ? gt.push(n) : Zt(n);
+  eo = B9;
+  const n = dn(e, t, !1, yt);
+  n.user = !0, gt ? gt.push(n) : Ht(n);
 }
-function G(e, t, r) {
-  r = r ? Object.assign({}, en, r) : en;
-  const n = un(e, t, !0, 0);
-  return n.observers = null, n.observerSlots = null, n.comparator = r.equals || void 0, Zt(n), eo.bind(n);
+function W(e, t, r) {
+  r = r ? Object.assign({}, tn, r) : tn;
+  const n = dn(e, t, !0, 0);
+  return n.observers = null, n.observerSlots = null, n.comparator = r.equals || void 0, Ht(n), no.bind(n);
 }
-function S9(e, t, r) {
+function D9(e, t, r) {
   let n, a, l;
   arguments.length === 2 && typeof t == "object" || arguments.length === 1 ? (n = !0, a = e, l = t || {}) : (n = e, a = t, l = r || {});
-  let d = null, h = xn, v = null, x = !1, b = "initialValue" in l, L = typeof n == "function" && G(n);
-  const B = /* @__PURE__ */ new Set(), [N, Z] = (l.storage || M)(l.initialValue), [U, K] = M(void 0), [z, ce] = M(void 0, {
+  let h = null, d = Ln, b = null, x = !1, v = "initialValue" in l, L = typeof n == "function" && W(n);
+  const B = /* @__PURE__ */ new Set(), [N, oe] = (l.storage || T)(l.initialValue), [V, R] = T(void 0), [U, ce] = T(void 0, {
     equals: !1
-  }), [j, J] = M(b ? "ready" : "unresolved");
+  }), [j, X] = T(v ? "ready" : "unresolved");
   if (Ee.context) {
-    v = `${Ee.context.id}${Ee.context.count++}`;
-    let ne;
-    l.ssrLoadFrom === "initial" ? h = l.initialValue : Ee.load && (ne = Ee.load(v)) && (h = ne[0]);
+    b = `${Ee.context.id}${Ee.context.count++}`;
+    let te;
+    l.ssrLoadFrom === "initial" ? d = l.initialValue : Ee.load && (te = Ee.load(b)) && (d = te[0]);
   }
-  function te(ne, se, A, Y) {
-    return d === ne && (d = null, b = !0, (ne === h || se === h) && l.onHydrated && queueMicrotask(() => l.onHydrated(Y, {
+  function ee(te, se, M, q) {
+    return h === te && (h = null, v = !0, (te === d || se === d) && l.onHydrated && queueMicrotask(() => l.onHydrated(q, {
       value: se
-    })), h = xn, pe(se, A)), se;
+    })), d = Ln, pe(se, M)), se;
   }
-  function pe(ne, se) {
-    wt(() => {
-      se === void 0 && Z(() => ne), J(se !== void 0 ? "errored" : "ready"), K(se);
-      for (const A of B.keys())
-        A.decrement();
+  function pe(te, se) {
+    At(() => {
+      se === void 0 && oe(() => te), X(se !== void 0 ? "errored" : "ready"), R(se);
+      for (const M of B.keys())
+        M.decrement();
       B.clear();
     }, !1);
   }
-  function H() {
-    const ne = D9, se = N(), A = U();
-    if (A !== void 0 && !d)
-      throw A;
-    return xe && !xe.user && ne && r0(() => {
-      z(), d && (ne.resolved || B.has(ne) || (ne.increment(), B.add(ne)));
+  function Z() {
+    const te = O9, se = N(), M = V();
+    if (M !== void 0 && !h)
+      throw M;
+    return xe && !xe.user && te && i0(() => {
+      U(), h && (te.resolved || B.has(te) || (te.increment(), B.add(te)));
     }), se;
   }
-  function q(ne = !0) {
-    if (ne !== !1 && x)
+  function H(te = !0) {
+    if (te !== !1 && x)
       return;
     x = !1;
     const se = L ? L() : n;
     if (se == null || se === !1) {
-      te(d, lt(N));
+      ee(h, lt(N));
       return;
     }
-    const A = h !== xn ? h : lt(() => a(se, {
+    const M = d !== Ln ? d : lt(() => a(se, {
       value: N(),
-      refetching: ne
+      refetching: te
     }));
-    return typeof A != "object" || !(A && "then" in A) ? (te(d, A, void 0, se), A) : (d = A, x = !0, queueMicrotask(() => x = !1), wt(() => {
-      J(b ? "refreshing" : "pending"), ce();
-    }, !1), A.then((Y) => te(A, Y, void 0, se), (Y) => te(A, void 0, oo(Y), se)));
+    return typeof M != "object" || !(M && "then" in M) ? (ee(h, M, void 0, se), M) : (h = M, x = !0, queueMicrotask(() => x = !1), At(() => {
+      X(v ? "refreshing" : "pending"), ce();
+    }, !1), M.then((q) => ee(M, q, void 0, se), (q) => ee(M, void 0, ao(q), se)));
   }
-  return Object.defineProperties(H, {
+  return Object.defineProperties(Z, {
     state: {
       get: () => j()
     },
     error: {
-      get: () => U()
+      get: () => V()
     },
     loading: {
       get() {
-        const ne = j();
-        return ne === "pending" || ne === "refreshing";
+        const te = j();
+        return te === "pending" || te === "refreshing";
       }
     },
     latest: {
       get() {
-        if (!b)
-          return H();
-        const ne = U();
-        if (ne && !d)
-          throw ne;
+        if (!v)
+          return Z();
+        const te = V();
+        if (te && !h)
+          throw te;
         return N();
       }
     }
-  }), L ? r0(() => q(!1)) : q(!1), [H, {
-    refetch: q,
-    mutate: Z
+  }), L ? i0(() => H(!1)) : H(!1), [Z, {
+    refetch: H,
+    mutate: oe
   }];
 }
 function lt(e) {
@@ -822,29 +822,29 @@ function lt(e) {
     xe = t;
   }
 }
-function Vn(e) {
+function Rn(e) {
   Re(() => lt(e));
 }
-function Lt(e) {
+function wt(e) {
   return De === null || (De.cleanups === null ? De.cleanups = [e] : De.cleanups.push(e)), e;
 }
-function P9(e) {
+function N9(e) {
   const t = xe, r = De;
   return Promise.resolve().then(() => {
     xe = t, De = r;
     let n;
-    return wt(e, !1), xe = De = null, n ? n.done : void 0;
+    return At(e, !1), xe = De = null, n ? n.done : void 0;
   });
 }
-let D9;
-function eo() {
-  const e = Bt;
+let O9;
+function no() {
+  const e = Ft;
   if (this.sources && (this.state || e))
     if (this.state === yt || e)
-      Zt(this);
+      Ht(this);
     else {
       const t = Ve;
-      Ve = null, wt(() => rn(this), !1), Ve = t;
+      Ve = null, At(() => on(this), !1), Ve = t;
     }
   if (xe) {
     const t = this.observers ? this.observers.length : 0;
@@ -852,34 +852,34 @@ function eo() {
   }
   return this.value;
 }
-function to(e, t, r) {
+function ro(e, t, r) {
   let n = e.value;
-  return (!e.comparator || !e.comparator(n, t)) && (e.value = t, e.observers && e.observers.length && wt(() => {
+  return (!e.comparator || !e.comparator(n, t)) && (e.value = t, e.observers && e.observers.length && At(() => {
     for (let a = 0; a < e.observers.length; a += 1) {
-      const l = e.observers[a], d = Bt && Bt.running;
-      d && Bt.disposed.has(l), (d && !l.tState || !d && !l.state) && (l.pure ? Ve.push(l) : gt.push(l), l.observers && ro(l)), d || (l.state = yt);
+      const l = e.observers[a], h = Ft && Ft.running;
+      h && Ft.disposed.has(l), (h && !l.tState || !h && !l.state) && (l.pure ? Ve.push(l) : gt.push(l), l.observers && io(l)), h || (l.state = yt);
     }
     if (Ve.length > 1e6)
       throw Ve = [], new Error();
   }, !1)), t;
 }
-function Zt(e) {
+function Ht(e) {
   if (!e.fn)
     return;
-  dn(e);
-  const t = De, r = xe, n = zn;
-  xe = De = e, N9(e, e.value, n), xe = r, De = t;
+  hn(e);
+  const t = De, r = xe, n = Kn;
+  xe = De = e, I9(e, e.value, n), xe = r, De = t;
 }
-function N9(e, t, r) {
+function I9(e, t, r) {
   let n;
   try {
     n = e.fn(t);
   } catch (a) {
-    e.pure && (e.state = yt, e.owned && e.owned.forEach(dn), e.owned = null), io(a);
+    e.pure && (e.state = yt, e.owned && e.owned.forEach(hn), e.owned = null), so(a);
   }
-  (!e.updatedAt || e.updatedAt <= r) && (e.updatedAt != null && "observers" in e ? to(e, n) : e.value = n, e.updatedAt = r);
+  (!e.updatedAt || e.updatedAt <= r) && (e.updatedAt != null && "observers" in e ? ro(e, n) : e.value = n, e.updatedAt = r);
 }
-function un(e, t, r, n = yt, a) {
+function dn(e, t, r, n = yt, a) {
   const l = {
     fn: e,
     state: n,
@@ -893,86 +893,86 @@ function un(e, t, r, n = yt, a) {
     context: null,
     pure: r
   };
-  return De === null || De !== J0 && (De.owned ? De.owned.push(l) : De.owned = [l]), l;
+  return De === null || De !== to && (De.owned ? De.owned.push(l) : De.owned = [l]), l;
 }
-function nn(e) {
-  const t = Bt;
+function rn(e) {
+  const t = Ft;
   if (e.state === 0 || t)
     return;
-  if (e.state === tn || t)
-    return rn(e);
+  if (e.state === nn || t)
+    return on(e);
   if (e.suspense && lt(e.suspense.inFallback))
     return e.suspense.effects.push(e);
   const r = [e];
-  for (; (e = e.owner) && (!e.updatedAt || e.updatedAt < zn); )
+  for (; (e = e.owner) && (!e.updatedAt || e.updatedAt < Kn); )
     (e.state || t) && r.push(e);
   for (let n = r.length - 1; n >= 0; n--)
     if (e = r[n], e.state === yt || t)
-      Zt(e);
-    else if (e.state === tn || t) {
+      Ht(e);
+    else if (e.state === nn || t) {
       const a = Ve;
-      Ve = null, wt(() => rn(e, r[0]), !1), Ve = a;
+      Ve = null, At(() => on(e, r[0]), !1), Ve = a;
     }
 }
-function wt(e, t) {
+function At(e, t) {
   if (Ve)
     return e();
   let r = !1;
-  t || (Ve = []), gt ? r = !0 : gt = [], zn++;
+  t || (Ve = []), gt ? r = !0 : gt = [], Kn++;
   try {
     const n = e();
-    return O9(r), n;
+    return E9(r), n;
   } catch (n) {
-    r || (gt = null), Ve = null, io(n);
+    r || (gt = null), Ve = null, so(n);
   }
 }
-function O9(e) {
-  if (Ve && (no(Ve), Ve = null), e)
+function E9(e) {
+  if (Ve && (oo(Ve), Ve = null), e)
     return;
   const t = gt;
-  gt = null, t.length && wt(() => X0(t), !1);
+  gt = null, t.length && At(() => eo(t), !1);
 }
-function no(e) {
+function oo(e) {
   for (let t = 0; t < e.length; t++)
-    nn(e[t]);
+    rn(e[t]);
 }
-function I9(e) {
+function B9(e) {
   let t, r = 0;
   for (t = 0; t < e.length; t++) {
     const n = e[t];
-    n.user ? e[r++] = n : nn(n);
+    n.user ? e[r++] = n : rn(n);
   }
   for (Ee.context && T9(), t = 0; t < r; t++)
-    nn(e[t]);
+    rn(e[t]);
 }
-function rn(e, t) {
-  const r = Bt;
+function on(e, t) {
+  const r = Ft;
   e.state = 0;
   for (let n = 0; n < e.sources.length; n += 1) {
     const a = e.sources[n];
-    a.sources && (a.state === yt || r ? a !== t && nn(a) : (a.state === tn || r) && rn(a, t));
+    a.sources && (a.state === yt || r ? a !== t && rn(a) : (a.state === nn || r) && on(a, t));
   }
 }
-function ro(e) {
-  const t = Bt;
+function io(e) {
+  const t = Ft;
   for (let r = 0; r < e.observers.length; r += 1) {
     const n = e.observers[r];
-    (!n.state || t) && (n.state = tn, n.pure ? Ve.push(n) : gt.push(n), n.observers && ro(n));
+    (!n.state || t) && (n.state = nn, n.pure ? Ve.push(n) : gt.push(n), n.observers && io(n));
   }
 }
-function dn(e) {
+function hn(e) {
   let t;
   if (e.sources)
     for (; e.sources.length; ) {
       const r = e.sources.pop(), n = e.sourceSlots.pop(), a = r.observers;
       if (a && a.length) {
-        const l = a.pop(), d = r.observerSlots.pop();
-        n < a.length && (l.sourceSlots[d] = n, a[n] = l, r.observerSlots[n] = d);
+        const l = a.pop(), h = r.observerSlots.pop();
+        n < a.length && (l.sourceSlots[h] = n, a[n] = l, r.observerSlots[n] = h);
       }
     }
   if (e.owned) {
     for (t = 0; t < e.owned.length; t++)
-      dn(e.owned[t]);
+      hn(e.owned[t]);
     e.owned = null;
   }
   if (e.cleanups) {
@@ -982,68 +982,68 @@ function dn(e) {
   }
   e.state = 0, e.context = null;
 }
-function oo(e) {
+function ao(e) {
   return e instanceof Error || typeof e == "string" ? e : new Error("Unknown error");
 }
-function io(e) {
-  throw e = oo(e), e;
+function so(e) {
+  throw e = ao(e), e;
 }
-const E9 = Symbol("fallback");
-function o0(e) {
+const F9 = Symbol("fallback");
+function a0(e) {
   for (let t = 0; t < e.length; t++)
     e[t]();
 }
-function B9(e, t, r = {}) {
-  let n = [], a = [], l = [], d = 0, h = t.length > 1 ? [] : null;
-  return Lt(() => o0(l)), () => {
-    let v = e() || [], x, b;
-    return v[M9], lt(() => {
-      let B = v.length, N, Z, U, K, z, ce, j, J, te;
+function U9(e, t, r = {}) {
+  let n = [], a = [], l = [], h = 0, d = t.length > 1 ? [] : null;
+  return wt(() => a0(l)), () => {
+    let b = e() || [], x, v;
+    return b[P9], lt(() => {
+      let B = b.length, N, oe, V, R, U, ce, j, X, ee;
       if (B === 0)
-        d !== 0 && (o0(l), l = [], n = [], a = [], d = 0, h && (h = [])), r.fallback && (n = [E9], a[0] = v1((pe) => (l[0] = pe, r.fallback())), d = 1);
-      else if (d === 0) {
-        for (a = new Array(B), b = 0; b < B; b++)
-          n[b] = v[b], a[b] = v1(L);
-        d = B;
+        h !== 0 && (a0(l), l = [], n = [], a = [], h = 0, d && (d = [])), r.fallback && (n = [F9], a[0] = b1((pe) => (l[0] = pe, r.fallback())), h = 1);
+      else if (h === 0) {
+        for (a = new Array(B), v = 0; v < B; v++)
+          n[v] = b[v], a[v] = b1(L);
+        h = B;
       } else {
-        for (U = new Array(B), K = new Array(B), h && (z = new Array(B)), ce = 0, j = Math.min(d, B); ce < j && n[ce] === v[ce]; ce++)
+        for (V = new Array(B), R = new Array(B), d && (U = new Array(B)), ce = 0, j = Math.min(h, B); ce < j && n[ce] === b[ce]; ce++)
           ;
-        for (j = d - 1, J = B - 1; j >= ce && J >= ce && n[j] === v[J]; j--, J--)
-          U[J] = a[j], K[J] = l[j], h && (z[J] = h[j]);
-        for (N = /* @__PURE__ */ new Map(), Z = new Array(J + 1), b = J; b >= ce; b--)
-          te = v[b], x = N.get(te), Z[b] = x === void 0 ? -1 : x, N.set(te, b);
+        for (j = h - 1, X = B - 1; j >= ce && X >= ce && n[j] === b[X]; j--, X--)
+          V[X] = a[j], R[X] = l[j], d && (U[X] = d[j]);
+        for (N = /* @__PURE__ */ new Map(), oe = new Array(X + 1), v = X; v >= ce; v--)
+          ee = b[v], x = N.get(ee), oe[v] = x === void 0 ? -1 : x, N.set(ee, v);
         for (x = ce; x <= j; x++)
-          te = n[x], b = N.get(te), b !== void 0 && b !== -1 ? (U[b] = a[x], K[b] = l[x], h && (z[b] = h[x]), b = Z[b], N.set(te, b)) : l[x]();
-        for (b = ce; b < B; b++)
-          b in U ? (a[b] = U[b], l[b] = K[b], h && (h[b] = z[b], h[b](b))) : a[b] = v1(L);
-        a = a.slice(0, d = B), n = v.slice(0);
+          ee = n[x], v = N.get(ee), v !== void 0 && v !== -1 ? (V[v] = a[x], R[v] = l[x], d && (U[v] = d[x]), v = oe[v], N.set(ee, v)) : l[x]();
+        for (v = ce; v < B; v++)
+          v in V ? (a[v] = V[v], l[v] = R[v], d && (d[v] = U[v], d[v](v))) : a[v] = b1(L);
+        a = a.slice(0, h = B), n = b.slice(0);
       }
       return a;
     });
     function L(B) {
-      if (l[b] = B, h) {
-        const [N, Z] = M(b);
-        return h[b] = Z, t(v[b], N);
+      if (l[v] = B, d) {
+        const [N, oe] = T(v);
+        return d[v] = oe, t(b[v], N);
       }
-      return t(v[b]);
+      return t(b[v]);
     }
   };
 }
 function w(e, t) {
   return lt(() => e(t || {}));
 }
-function H1() {
+function q1() {
   return !0;
 }
-const F9 = {
+const z9 = {
   get(e, t, r) {
-    return t === Pn ? r : e.get(t);
+    return t === Nn ? r : e.get(t);
   },
   has(e, t) {
-    return t === Pn ? !0 : e.has(t);
+    return t === Nn ? !0 : e.has(t);
   },
-  set: H1,
-  deleteProperty: H1,
+  set: q1,
+  deleteProperty: q1,
   getOwnPropertyDescriptor(e, t) {
     return {
       configurable: !0,
@@ -1051,45 +1051,45 @@ const F9 = {
       get() {
         return e.get(t);
       },
-      set: H1,
-      deleteProperty: H1
+      set: q1,
+      deleteProperty: q1
     };
   },
   ownKeys(e) {
     return e.keys();
   }
 };
-function Ln(e) {
+function wn(e) {
   return (e = typeof e == "function" ? e() : e) ? e : {};
 }
-function ao(...e) {
+function lo(...e) {
   let t = !1;
   for (let n = 0; n < e.length; n++) {
     const a = e[n];
-    t = t || !!a && Pn in a, e[n] = typeof a == "function" ? (t = !0, G(a)) : a;
+    t = t || !!a && Nn in a, e[n] = typeof a == "function" ? (t = !0, W(a)) : a;
   }
   if (t)
     return new Proxy({
       get(n) {
         for (let a = e.length - 1; a >= 0; a--) {
-          const l = Ln(e[a])[n];
+          const l = wn(e[a])[n];
           if (l !== void 0)
             return l;
         }
       },
       has(n) {
         for (let a = e.length - 1; a >= 0; a--)
-          if (n in Ln(e[a]))
+          if (n in wn(e[a]))
             return !0;
         return !1;
       },
       keys() {
         const n = [];
         for (let a = 0; a < e.length; a++)
-          n.push(...Object.keys(Ln(e[a])));
+          n.push(...Object.keys(wn(e[a])));
         return [...new Set(n)];
       }
-    }, F9);
+    }, z9);
   const r = {};
   for (let n = e.length - 1; n >= 0; n--)
     if (e[n]) {
@@ -1098,85 +1098,85 @@ function ao(...e) {
         l in r || Object.defineProperty(r, l, {
           enumerable: !0,
           get() {
-            for (let d = e.length - 1; d >= 0; d--) {
-              const h = (e[d] || {})[l];
-              if (h !== void 0)
-                return h;
+            for (let h = e.length - 1; h >= 0; h--) {
+              const d = (e[h] || {})[l];
+              if (d !== void 0)
+                return d;
             }
           }
         });
     }
   return r;
 }
-function b1(e) {
+function $1(e) {
   const t = "fallback" in e && {
     fallback: () => e.fallback
   };
-  return G(B9(() => e.each, e.children, t || void 0));
+  return W(U9(() => e.each, e.children, t || void 0));
 }
 function le(e) {
   let t = !1;
-  const r = e.keyed, n = G(() => e.when, void 0, {
+  const r = e.keyed, n = W(() => e.when, void 0, {
     equals: (a, l) => t ? a === l : !a == !l
   });
-  return G(() => {
+  return W(() => {
     const a = n();
     if (a) {
-      const l = e.children, d = typeof l == "function" && l.length > 0;
-      return t = r || d, d ? lt(() => l(a)) : l;
+      const l = e.children, h = typeof l == "function" && l.length > 0;
+      return t = r || h, h ? lt(() => l(a)) : l;
     }
     return e.fallback;
   }, void 0, void 0);
 }
-function U9(e, t, r) {
-  let n = r.length, a = t.length, l = n, d = 0, h = 0, v = t[a - 1].nextSibling, x = null;
-  for (; d < a || h < l; ) {
-    if (t[d] === r[h]) {
-      d++, h++;
+function V9(e, t, r) {
+  let n = r.length, a = t.length, l = n, h = 0, d = 0, b = t[a - 1].nextSibling, x = null;
+  for (; h < a || d < l; ) {
+    if (t[h] === r[d]) {
+      h++, d++;
       continue;
     }
     for (; t[a - 1] === r[l - 1]; )
       a--, l--;
-    if (a === d) {
-      const b = l < n ? h ? r[h - 1].nextSibling : r[l - h] : v;
-      for (; h < l; )
-        e.insertBefore(r[h++], b);
-    } else if (l === h)
-      for (; d < a; )
-        (!x || !x.has(t[d])) && t[d].remove(), d++;
-    else if (t[d] === r[l - 1] && r[h] === t[a - 1]) {
-      const b = t[--a].nextSibling;
-      e.insertBefore(r[h++], t[d++].nextSibling), e.insertBefore(r[--l], b), t[a] = r[l];
+    if (a === h) {
+      const v = l < n ? d ? r[d - 1].nextSibling : r[l - d] : b;
+      for (; d < l; )
+        e.insertBefore(r[d++], v);
+    } else if (l === d)
+      for (; h < a; )
+        (!x || !x.has(t[h])) && t[h].remove(), h++;
+    else if (t[h] === r[l - 1] && r[d] === t[a - 1]) {
+      const v = t[--a].nextSibling;
+      e.insertBefore(r[d++], t[h++].nextSibling), e.insertBefore(r[--l], v), t[a] = r[l];
     } else {
       if (!x) {
         x = /* @__PURE__ */ new Map();
-        let L = h;
+        let L = d;
         for (; L < l; )
           x.set(r[L], L++);
       }
-      const b = x.get(t[d]);
-      if (b != null)
-        if (h < b && b < l) {
-          let L = d, B = 1, N;
-          for (; ++L < a && L < l && !((N = x.get(t[L])) == null || N !== b + B); )
+      const v = x.get(t[h]);
+      if (v != null)
+        if (d < v && v < l) {
+          let L = h, B = 1, N;
+          for (; ++L < a && L < l && !((N = x.get(t[L])) == null || N !== v + B); )
             B++;
-          if (B > b - h) {
-            const Z = t[d];
-            for (; h < b; )
-              e.insertBefore(r[h++], Z);
+          if (B > v - d) {
+            const oe = t[h];
+            for (; d < v; )
+              e.insertBefore(r[d++], oe);
           } else
-            e.replaceChild(r[h++], t[d++]);
+            e.replaceChild(r[d++], t[h++]);
         } else
-          d++;
+          h++;
       else
-        t[d++].remove();
+        t[h++].remove();
     }
   }
 }
-const i0 = "_$DX_DELEGATE";
-function z9(e, t, r, n = {}) {
+const s0 = "_$DX_DELEGATE";
+function K9(e, t, r, n = {}) {
   let a;
-  return v1((l) => {
+  return b1((l) => {
     a = l, t === document ? e() : C(t, e(), t.firstChild ? null : void 0, r);
   }, n.owner), () => {
     a(), t.textContent = "";
@@ -1189,10 +1189,10 @@ function p(e, t, r) {
   return r && (a = a.firstChild), a;
 }
 function je(e, t = window.document) {
-  const r = t[i0] || (t[i0] = /* @__PURE__ */ new Set());
+  const r = t[s0] || (t[s0] = /* @__PURE__ */ new Set());
   for (let n = 0, a = e.length; n < a; n++) {
     const l = e[n];
-    r.has(l) || (r.add(l), t.addEventListener(l, V9));
+    r.has(l) || (r.add(l), t.addEventListener(l, R9));
   }
 }
 function Ie(e, t, r) {
@@ -1210,7 +1210,7 @@ function st(e, t, r, n) {
   } else
     e.addEventListener(t, r);
 }
-function Ft(e, t, r) {
+function Ut(e, t, r) {
   if (!t)
     return r ? Ie(e, "style") : t;
   const n = e.style;
@@ -1224,15 +1224,15 @@ function Ft(e, t, r) {
     a = t[l], a !== r[l] && (n.setProperty(l, a), r[l] = a);
   return r;
 }
-function xt(e, t, r) {
+function Lt(e, t, r) {
   return lt(() => e(t, r));
 }
 function C(e, t, r, n) {
   if (r !== void 0 && !n && (n = []), typeof t != "function")
-    return on(e, t, n, r);
-  V((a) => on(e, t(), a, r), n);
+    return an(e, t, n, r);
+  z((a) => an(e, t(), a, r), n);
 }
-function V9(e) {
+function R9(e) {
   const t = `$$${e.type}`;
   let r = e.composedPath && e.composedPath()[0] || e.target;
   for (e.target !== r && Object.defineProperty(e, "target", {
@@ -1259,56 +1259,56 @@ function V9(e) {
     r = r._$host || r.parentNode || r.host;
   }
 }
-function on(e, t, r, n, a) {
+function an(e, t, r, n, a) {
   for (Ee.context && !r && (r = [...e.childNodes]); typeof r == "function"; )
     r = r();
   if (t === r)
     return r;
-  const l = typeof t, d = n !== void 0;
-  if (e = d && r[0] && r[0].parentNode || e, l === "string" || l === "number") {
+  const l = typeof t, h = n !== void 0;
+  if (e = h && r[0] && r[0].parentNode || e, l === "string" || l === "number") {
     if (Ee.context)
       return r;
-    if (l === "number" && (t = t.toString()), d) {
-      let h = r[0];
-      h && h.nodeType === 3 ? h.data = t : h = document.createTextNode(t), r = jt(e, r, n, h);
+    if (l === "number" && (t = t.toString()), h) {
+      let d = r[0];
+      d && d.nodeType === 3 ? d.data = t : d = document.createTextNode(t), r = Qt(e, r, n, d);
     } else
       r !== "" && typeof r == "string" ? r = e.firstChild.data = t : r = e.textContent = t;
   } else if (t == null || l === "boolean") {
     if (Ee.context)
       return r;
-    r = jt(e, r, n);
+    r = Qt(e, r, n);
   } else {
     if (l === "function")
-      return V(() => {
-        let h = t();
-        for (; typeof h == "function"; )
-          h = h();
-        r = on(e, h, r, n);
+      return z(() => {
+        let d = t();
+        for (; typeof d == "function"; )
+          d = d();
+        r = an(e, d, r, n);
       }), () => r;
     if (Array.isArray(t)) {
-      const h = [], v = r && Array.isArray(r);
-      if (Dn(h, t, r, a))
-        return V(() => r = on(e, h, r, n, !0)), () => r;
+      const d = [], b = r && Array.isArray(r);
+      if (On(d, t, r, a))
+        return z(() => r = an(e, d, r, n, !0)), () => r;
       if (Ee.context) {
-        if (!h.length)
+        if (!d.length)
           return r;
-        for (let x = 0; x < h.length; x++)
-          if (h[x].parentNode)
-            return r = h;
+        for (let x = 0; x < d.length; x++)
+          if (d[x].parentNode)
+            return r = d;
       }
-      if (h.length === 0) {
-        if (r = jt(e, r, n), d)
+      if (d.length === 0) {
+        if (r = Qt(e, r, n), h)
           return r;
       } else
-        v ? r.length === 0 ? a0(e, h, n) : U9(e, r, h) : (r && jt(e), a0(e, h));
-      r = h;
+        b ? r.length === 0 ? l0(e, d, n) : V9(e, r, d) : (r && Qt(e), l0(e, d));
+      r = d;
     } else if (t instanceof Node) {
       if (Ee.context && t.parentNode)
-        return r = d ? [t] : t;
+        return r = h ? [t] : t;
       if (Array.isArray(r)) {
-        if (d)
-          return r = jt(e, r, n, t);
-        jt(e, r, null, t);
+        if (h)
+          return r = Qt(e, r, n, t);
+        Qt(e, r, null, t);
       } else
         r == null || r === "" || !e.firstChild ? e.appendChild(t) : e.replaceChild(t, e.firstChild);
       r = t;
@@ -1316,44 +1316,44 @@ function on(e, t, r, n, a) {
   }
   return r;
 }
-function Dn(e, t, r, n) {
+function On(e, t, r, n) {
   let a = !1;
-  for (let l = 0, d = t.length; l < d; l++) {
-    let h = t[l], v = r && r[l];
-    if (h instanceof Node)
-      e.push(h);
-    else if (!(h == null || h === !0 || h === !1))
-      if (Array.isArray(h))
-        a = Dn(e, h, v) || a;
-      else if (typeof h == "function")
+  for (let l = 0, h = t.length; l < h; l++) {
+    let d = t[l], b = r && r[l];
+    if (d instanceof Node)
+      e.push(d);
+    else if (!(d == null || d === !0 || d === !1))
+      if (Array.isArray(d))
+        a = On(e, d, b) || a;
+      else if (typeof d == "function")
         if (n) {
-          for (; typeof h == "function"; )
-            h = h();
-          a = Dn(e, Array.isArray(h) ? h : [h], Array.isArray(v) ? v : [v]) || a;
+          for (; typeof d == "function"; )
+            d = d();
+          a = On(e, Array.isArray(d) ? d : [d], Array.isArray(b) ? b : [b]) || a;
         } else
-          e.push(h), a = !0;
+          e.push(d), a = !0;
       else {
-        const x = String(h);
-        v && v.nodeType === 3 && v.data === x ? e.push(v) : e.push(document.createTextNode(x));
+        const x = String(d);
+        b && b.nodeType === 3 && b.data === x ? e.push(b) : e.push(document.createTextNode(x));
       }
   }
   return a;
 }
-function a0(e, t, r = null) {
+function l0(e, t, r = null) {
   for (let n = 0, a = t.length; n < a; n++)
     e.insertBefore(t[n], r);
 }
-function jt(e, t, r, n) {
+function Qt(e, t, r, n) {
   if (r === void 0)
     return e.textContent = "";
   const a = n || document.createTextNode("");
   if (t.length) {
     let l = !1;
-    for (let d = t.length - 1; d >= 0; d--) {
-      const h = t[d];
-      if (a !== h) {
-        const v = h.parentNode === e;
-        !l && !d ? v ? e.replaceChild(a, h) : e.insertBefore(a, r) : v && h.remove();
+    for (let h = t.length - 1; h >= 0; h--) {
+      const d = t[h];
+      if (a !== d) {
+        const b = d.parentNode === e;
+        !l && !h ? b ? e.replaceChild(a, d) : e.insertBefore(a, r) : b && d.remove();
       } else
         l = !0;
     }
@@ -1361,28 +1361,28 @@ function jt(e, t, r, n) {
     e.insertBefore(a, r);
   return [a];
 }
-const K9 = "http://www.w3.org/2000/svg";
-function R9(e, t = !1) {
-  return t ? document.createElementNS(K9, e) : document.createElement(e);
+const j9 = "http://www.w3.org/2000/svg";
+function Q9(e, t = !1) {
+  return t ? document.createElementNS(j9, e) : document.createElement(e);
 }
-function j9(e) {
+function Z9(e) {
   const {
     useShadow: t
   } = e, r = document.createTextNode(""), n = e.mount || document.body;
   function a() {
     if (Ee.context) {
-      const [l, d] = M(!1);
-      return queueMicrotask(() => d(!0)), () => l() && e.children;
+      const [l, h] = T(!1);
+      return queueMicrotask(() => h(!0)), () => l() && e.children;
     } else
       return () => e.children;
   }
   if (n instanceof HTMLHeadElement) {
-    const [l, d] = M(!1), h = () => d(!0);
-    v1((v) => C(n, () => l() ? v() : a()(), null)), Lt(() => {
-      Ee.context ? queueMicrotask(h) : h();
+    const [l, h] = T(!1), d = () => h(!0);
+    b1((b) => C(n, () => l() ? b() : a()(), null)), wt(() => {
+      Ee.context ? queueMicrotask(d) : d();
     });
   } else {
-    const l = R9(e.isSVG ? "g" : "div", e.isSVG), d = t && l.attachShadow ? l.attachShadow({
+    const l = Q9(e.isSVG ? "g" : "div", e.isSVG), h = t && l.attachShadow ? l.attachShadow({
       mode: "open"
     }) : l;
     Object.defineProperty(l, "_$host", {
@@ -1390,57 +1390,57 @@ function j9(e) {
         return r.parentNode;
       },
       configurable: !0
-    }), C(d, a()), n.appendChild(l), e.ref && e.ref(l), Lt(() => n.removeChild(l));
+    }), C(h, a()), n.appendChild(l), e.ref && e.ref(l), wt(() => n.removeChild(l));
   }
   return r;
 }
-var q1 = typeof globalThis < "u" ? globalThis : typeof window < "u" ? window : typeof global < "u" ? global : typeof self < "u" ? self : {};
-function so(e) {
+var Y1 = typeof globalThis < "u" ? globalThis : typeof window < "u" ? window : typeof global < "u" ? global : typeof self < "u" ? self : {};
+function co(e) {
   return e && e.__esModule && Object.prototype.hasOwnProperty.call(e, "default") ? e.default : e;
 }
-var Q9 = typeof q1 == "object" && q1 && q1.Object === Object && q1, lo = Q9, Z9 = lo, H9 = typeof self == "object" && self && self.Object === Object && self, q9 = Z9 || H9 || Function("return this")(), ct = q9, Y9 = ct, W9 = Y9.Symbol, hn = W9, s0 = hn, co = Object.prototype, G9 = co.hasOwnProperty, X9 = co.toString, y1 = s0 ? s0.toStringTag : void 0;
-function J9(e) {
-  var t = G9.call(e, y1), r = e[y1];
+var H9 = typeof Y1 == "object" && Y1 && Y1.Object === Object && Y1, uo = H9, q9 = uo, Y9 = typeof self == "object" && self && self.Object === Object && self, W9 = q9 || Y9 || Function("return this")(), ct = W9, G9 = ct, X9 = G9.Symbol, fn = X9, c0 = fn, ho = Object.prototype, J9 = ho.hasOwnProperty, ei = ho.toString, C1 = c0 ? c0.toStringTag : void 0;
+function ti(e) {
+  var t = J9.call(e, C1), r = e[C1];
   try {
-    e[y1] = void 0;
+    e[C1] = void 0;
     var n = !0;
   } catch {
   }
-  var a = X9.call(e);
-  return n && (t ? e[y1] = r : delete e[y1]), a;
+  var a = ei.call(e);
+  return n && (t ? e[C1] = r : delete e[C1]), a;
 }
-var ei = J9, ti = Object.prototype, ni = ti.toString;
-function ri(e) {
-  return ni.call(e);
+var ni = ti, ri = Object.prototype, oi = ri.toString;
+function ii(e) {
+  return oi.call(e);
 }
-var oi = ri, l0 = hn, ii = ei, ai = oi, si = "[object Null]", li = "[object Undefined]", c0 = l0 ? l0.toStringTag : void 0;
-function ci(e) {
-  return e == null ? e === void 0 ? li : si : c0 && c0 in Object(e) ? ii(e) : ai(e);
+var ai = ii, u0 = fn, si = ni, li = ai, ci = "[object Null]", ui = "[object Undefined]", d0 = u0 ? u0.toStringTag : void 0;
+function di(e) {
+  return e == null ? e === void 0 ? ui : ci : d0 && d0 in Object(e) ? si(e) : li(e);
 }
-var $1 = ci;
-function ui(e) {
+var _1 = di;
+function hi(e) {
   var t = typeof e;
   return e != null && (t == "object" || t == "function");
 }
-var Ht = ui, di = $1, hi = Ht, fi = "[object AsyncFunction]", mi = "[object Function]", gi = "[object GeneratorFunction]", yi = "[object Proxy]";
-function Ci(e) {
-  if (!hi(e))
+var qt = hi, fi = _1, mi = qt, gi = "[object AsyncFunction]", yi = "[object Function]", Ci = "[object GeneratorFunction]", pi = "[object Proxy]";
+function vi(e) {
+  if (!mi(e))
     return !1;
-  var t = di(e);
-  return t == mi || t == gi || t == fi || t == yi;
+  var t = fi(e);
+  return t == yi || t == Ci || t == gi || t == pi;
 }
-var uo = Ci, pi = ct, vi = pi["__core-js_shared__"], bi = vi, wn = bi, u0 = function() {
-  var e = /[^.]+$/.exec(wn && wn.keys && wn.keys.IE_PROTO || "");
+var fo = vi, bi = ct, $i = bi["__core-js_shared__"], _i = $i, An = _i, h0 = function() {
+  var e = /[^.]+$/.exec(An && An.keys && An.keys.IE_PROTO || "");
   return e ? "Symbol(src)_1." + e : "";
 }();
-function $i(e) {
-  return !!u0 && u0 in e;
+function ki(e) {
+  return !!h0 && h0 in e;
 }
-var _i = $i, ki = Function.prototype, xi = ki.toString;
-function Li(e) {
+var xi = ki, Li = Function.prototype, wi = Li.toString;
+function Ai(e) {
   if (e != null) {
     try {
-      return xi.call(e);
+      return wi.call(e);
     } catch {
     }
     try {
@@ -1450,138 +1450,92 @@ function Li(e) {
   }
   return "";
 }
-var ho = Li, wi = uo, Ti = _i, Ai = Ht, Mi = ho, Si = /[\\^$.*+?()[\]{}|]/g, Pi = /^\[object .+?Constructor\]$/, Di = Function.prototype, Ni = Object.prototype, Oi = Di.toString, Ii = Ni.hasOwnProperty, Ei = RegExp(
-  "^" + Oi.call(Ii).replace(Si, "\\$&").replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, "$1.*?") + "$"
+var mo = Ai, Mi = fo, Ti = xi, Si = qt, Pi = mo, Di = /[\\^$.*+?()[\]{}|]/g, Ni = /^\[object .+?Constructor\]$/, Oi = Function.prototype, Ii = Object.prototype, Ei = Oi.toString, Bi = Ii.hasOwnProperty, Fi = RegExp(
+  "^" + Ei.call(Bi).replace(Di, "\\$&").replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, "$1.*?") + "$"
 );
-function Bi(e) {
-  if (!Ai(e) || Ti(e))
+function Ui(e) {
+  if (!Si(e) || Ti(e))
     return !1;
-  var t = wi(e) ? Ei : Pi;
-  return t.test(Mi(e));
+  var t = Mi(e) ? Fi : Ni;
+  return t.test(Pi(e));
 }
-var Fi = Bi;
-function Ui(e, t) {
+var zi = Ui;
+function Vi(e, t) {
   return e == null ? void 0 : e[t];
 }
-var zi = Ui, Vi = Fi, Ki = zi;
-function Ri(e, t) {
-  var r = Ki(e, t);
-  return Vi(r) ? r : void 0;
+var Ki = Vi, Ri = zi, ji = Ki;
+function Qi(e, t) {
+  var r = ji(e, t);
+  return Ri(r) ? r : void 0;
 }
-var Ut = Ri, ji = Ut, Qi = function() {
+var zt = Qi, Zi = zt, Hi = function() {
   try {
-    var e = ji(Object, "defineProperty");
+    var e = Zi(Object, "defineProperty");
     return e({}, "", {}), e;
   } catch {
   }
-}(), Zi = Qi, d0 = Zi;
-function Hi(e, t, r) {
-  t == "__proto__" && d0 ? d0(e, t, {
+}(), qi = Hi, f0 = qi;
+function Yi(e, t, r) {
+  t == "__proto__" && f0 ? f0(e, t, {
     configurable: !0,
     enumerable: !0,
     value: r,
     writable: !0
   }) : e[t] = r;
 }
-var fo = Hi;
-function qi(e, t) {
+var go = Yi;
+function Wi(e, t) {
   return e === t || e !== e && t !== t;
 }
-var mo = qi, Yi = fo, Wi = mo, Gi = Object.prototype, Xi = Gi.hasOwnProperty;
-function Ji(e, t, r) {
+var yo = Wi, Gi = go, Xi = yo, Ji = Object.prototype, e5 = Ji.hasOwnProperty;
+function t5(e, t, r) {
   var n = e[t];
-  (!(Xi.call(e, t) && Wi(n, r)) || r === void 0 && !(t in e)) && Yi(e, t, r);
+  (!(e5.call(e, t) && Xi(n, r)) || r === void 0 && !(t in e)) && Gi(e, t, r);
 }
-var Kn = Ji, e5 = Array.isArray, qt = e5;
-function t5(e) {
+var jn = t5, n5 = Array.isArray, Yt = n5;
+function r5(e) {
   return e != null && typeof e == "object";
 }
-var Yt = t5, n5 = $1, r5 = Yt, o5 = "[object Symbol]";
-function i5(e) {
-  return typeof e == "symbol" || r5(e) && n5(e) == o5;
+var Wt = r5, o5 = _1, i5 = Wt, a5 = "[object Symbol]";
+function s5(e) {
+  return typeof e == "symbol" || i5(e) && o5(e) == a5;
 }
-var Rn = i5, a5 = qt, s5 = Rn, l5 = /\.|\[(?:[^[\]]*|(["'])(?:(?!\1)[^\\]|\\.)*?\1)\]/, c5 = /^\w*$/;
-function u5(e, t) {
-  if (a5(e))
+var Qn = s5, l5 = Yt, c5 = Qn, u5 = /\.|\[(?:[^[\]]*|(["'])(?:(?!\1)[^\\]|\\.)*?\1)\]/, d5 = /^\w*$/;
+function h5(e, t) {
+  if (l5(e))
     return !1;
   var r = typeof e;
-  return r == "number" || r == "symbol" || r == "boolean" || e == null || s5(e) ? !0 : c5.test(e) || !l5.test(e) || t != null && e in Object(t);
+  return r == "number" || r == "symbol" || r == "boolean" || e == null || c5(e) ? !0 : d5.test(e) || !u5.test(e) || t != null && e in Object(t);
 }
-var d5 = u5, h5 = Ut, f5 = h5(Object, "create"), fn = f5, h0 = fn;
-function m5() {
-  this.__data__ = h0 ? h0(null) : {}, this.size = 0;
+var f5 = h5, m5 = zt, g5 = m5(Object, "create"), mn = g5, m0 = mn;
+function y5() {
+  this.__data__ = m0 ? m0(null) : {}, this.size = 0;
 }
-var g5 = m5;
-function y5(e) {
+var C5 = y5;
+function p5(e) {
   var t = this.has(e) && delete this.__data__[e];
   return this.size -= t ? 1 : 0, t;
 }
-var C5 = y5, p5 = fn, v5 = "__lodash_hash_undefined__", b5 = Object.prototype, $5 = b5.hasOwnProperty;
-function _5(e) {
+var v5 = p5, b5 = mn, $5 = "__lodash_hash_undefined__", _5 = Object.prototype, k5 = _5.hasOwnProperty;
+function x5(e) {
   var t = this.__data__;
-  if (p5) {
+  if (b5) {
     var r = t[e];
-    return r === v5 ? void 0 : r;
+    return r === $5 ? void 0 : r;
   }
-  return $5.call(t, e) ? t[e] : void 0;
+  return k5.call(t, e) ? t[e] : void 0;
 }
-var k5 = _5, x5 = fn, L5 = Object.prototype, w5 = L5.hasOwnProperty;
+var L5 = x5, w5 = mn, A5 = Object.prototype, M5 = A5.hasOwnProperty;
 function T5(e) {
   var t = this.__data__;
-  return x5 ? t[e] !== void 0 : w5.call(t, e);
+  return w5 ? t[e] !== void 0 : M5.call(t, e);
 }
-var A5 = T5, M5 = fn, S5 = "__lodash_hash_undefined__";
-function P5(e, t) {
+var S5 = T5, P5 = mn, D5 = "__lodash_hash_undefined__";
+function N5(e, t) {
   var r = this.__data__;
-  return this.size += this.has(e) ? 0 : 1, r[e] = M5 && t === void 0 ? S5 : t, this;
+  return this.size += this.has(e) ? 0 : 1, r[e] = P5 && t === void 0 ? D5 : t, this;
 }
-var D5 = P5, N5 = g5, O5 = C5, I5 = k5, E5 = A5, B5 = D5;
-function Wt(e) {
-  var t = -1, r = e == null ? 0 : e.length;
-  for (this.clear(); ++t < r; ) {
-    var n = e[t];
-    this.set(n[0], n[1]);
-  }
-}
-Wt.prototype.clear = N5;
-Wt.prototype.delete = O5;
-Wt.prototype.get = I5;
-Wt.prototype.has = E5;
-Wt.prototype.set = B5;
-var F5 = Wt;
-function U5() {
-  this.__data__ = [], this.size = 0;
-}
-var z5 = U5, V5 = mo;
-function K5(e, t) {
-  for (var r = e.length; r--; )
-    if (V5(e[r][0], t))
-      return r;
-  return -1;
-}
-var mn = K5, R5 = mn, j5 = Array.prototype, Q5 = j5.splice;
-function Z5(e) {
-  var t = this.__data__, r = R5(t, e);
-  if (r < 0)
-    return !1;
-  var n = t.length - 1;
-  return r == n ? t.pop() : Q5.call(t, r, 1), --this.size, !0;
-}
-var H5 = Z5, q5 = mn;
-function Y5(e) {
-  var t = this.__data__, r = q5(t, e);
-  return r < 0 ? void 0 : t[r][1];
-}
-var W5 = Y5, G5 = mn;
-function X5(e) {
-  return G5(this.__data__, e) > -1;
-}
-var J5 = X5, ea = mn;
-function ta(e, t) {
-  var r = this.__data__, n = ea(r, e);
-  return n < 0 ? (++this.size, r.push([e, t])) : r[n][1] = t, this;
-}
-var na = ta, ra = z5, oa = H5, ia = W5, aa = J5, sa = na;
+var O5 = N5, I5 = C5, E5 = v5, B5 = L5, F5 = S5, U5 = O5;
 function Gt(e) {
   var t = -1, r = e == null ? 0 : e.length;
   for (this.clear(); ++t < r; ) {
@@ -1589,48 +1543,45 @@ function Gt(e) {
     this.set(n[0], n[1]);
   }
 }
-Gt.prototype.clear = ra;
-Gt.prototype.delete = oa;
-Gt.prototype.get = ia;
-Gt.prototype.has = aa;
-Gt.prototype.set = sa;
-var gn = Gt, la = Ut, ca = ct, ua = la(ca, "Map"), jn = ua, f0 = F5, da = gn, ha = jn;
-function fa() {
-  this.size = 0, this.__data__ = {
-    hash: new f0(),
-    map: new (ha || da)(),
-    string: new f0()
-  };
+Gt.prototype.clear = I5;
+Gt.prototype.delete = E5;
+Gt.prototype.get = B5;
+Gt.prototype.has = F5;
+Gt.prototype.set = U5;
+var z5 = Gt;
+function V5() {
+  this.__data__ = [], this.size = 0;
 }
-var ma = fa;
-function ga(e) {
-  var t = typeof e;
-  return t == "string" || t == "number" || t == "symbol" || t == "boolean" ? e !== "__proto__" : e === null;
+var K5 = V5, R5 = yo;
+function j5(e, t) {
+  for (var r = e.length; r--; )
+    if (R5(e[r][0], t))
+      return r;
+  return -1;
 }
-var ya = ga, Ca = ya;
-function pa(e, t) {
-  var r = e.__data__;
-  return Ca(t) ? r[typeof t == "string" ? "string" : "hash"] : r.map;
+var gn = j5, Q5 = gn, Z5 = Array.prototype, H5 = Z5.splice;
+function q5(e) {
+  var t = this.__data__, r = Q5(t, e);
+  if (r < 0)
+    return !1;
+  var n = t.length - 1;
+  return r == n ? t.pop() : H5.call(t, r, 1), --this.size, !0;
 }
-var yn = pa, va = yn;
-function ba(e) {
-  var t = va(this, e).delete(e);
-  return this.size -= t ? 1 : 0, t;
+var Y5 = q5, W5 = gn;
+function G5(e) {
+  var t = this.__data__, r = W5(t, e);
+  return r < 0 ? void 0 : t[r][1];
 }
-var $a = ba, _a = yn;
-function ka(e) {
-  return _a(this, e).get(e);
+var X5 = G5, J5 = gn;
+function ea(e) {
+  return J5(this.__data__, e) > -1;
 }
-var xa = ka, La = yn;
-function wa(e) {
-  return La(this, e).has(e);
+var ta = ea, na = gn;
+function ra(e, t) {
+  var r = this.__data__, n = na(r, e);
+  return n < 0 ? (++this.size, r.push([e, t])) : r[n][1] = t, this;
 }
-var Ta = wa, Aa = yn;
-function Ma(e, t) {
-  var r = Aa(this, e), n = r.size;
-  return r.set(e, t), this.size += r.size == n ? 0 : 1, this;
-}
-var Sa = Ma, Pa = ma, Da = $a, Na = xa, Oa = Ta, Ia = Sa;
+var oa = ra, ia = K5, aa = Y5, sa = X5, la = ta, ca = oa;
 function Xt(e) {
   var t = -1, r = e == null ? 0 : e.length;
   for (this.clear(); ++t < r; ) {
@@ -1638,397 +1589,444 @@ function Xt(e) {
     this.set(n[0], n[1]);
   }
 }
-Xt.prototype.clear = Pa;
-Xt.prototype.delete = Da;
-Xt.prototype.get = Na;
-Xt.prototype.has = Oa;
-Xt.prototype.set = Ia;
-var go = Xt, yo = go, Ea = "Expected a function";
-function Qn(e, t) {
+Xt.prototype.clear = ia;
+Xt.prototype.delete = aa;
+Xt.prototype.get = sa;
+Xt.prototype.has = la;
+Xt.prototype.set = ca;
+var yn = Xt, ua = zt, da = ct, ha = ua(da, "Map"), Zn = ha, g0 = z5, fa = yn, ma = Zn;
+function ga() {
+  this.size = 0, this.__data__ = {
+    hash: new g0(),
+    map: new (ma || fa)(),
+    string: new g0()
+  };
+}
+var ya = ga;
+function Ca(e) {
+  var t = typeof e;
+  return t == "string" || t == "number" || t == "symbol" || t == "boolean" ? e !== "__proto__" : e === null;
+}
+var pa = Ca, va = pa;
+function ba(e, t) {
+  var r = e.__data__;
+  return va(t) ? r[typeof t == "string" ? "string" : "hash"] : r.map;
+}
+var Cn = ba, $a = Cn;
+function _a(e) {
+  var t = $a(this, e).delete(e);
+  return this.size -= t ? 1 : 0, t;
+}
+var ka = _a, xa = Cn;
+function La(e) {
+  return xa(this, e).get(e);
+}
+var wa = La, Aa = Cn;
+function Ma(e) {
+  return Aa(this, e).has(e);
+}
+var Ta = Ma, Sa = Cn;
+function Pa(e, t) {
+  var r = Sa(this, e), n = r.size;
+  return r.set(e, t), this.size += r.size == n ? 0 : 1, this;
+}
+var Da = Pa, Na = ya, Oa = ka, Ia = wa, Ea = Ta, Ba = Da;
+function Jt(e) {
+  var t = -1, r = e == null ? 0 : e.length;
+  for (this.clear(); ++t < r; ) {
+    var n = e[t];
+    this.set(n[0], n[1]);
+  }
+}
+Jt.prototype.clear = Na;
+Jt.prototype.delete = Oa;
+Jt.prototype.get = Ia;
+Jt.prototype.has = Ea;
+Jt.prototype.set = Ba;
+var Co = Jt, po = Co, Fa = "Expected a function";
+function Hn(e, t) {
   if (typeof e != "function" || t != null && typeof t != "function")
-    throw new TypeError(Ea);
+    throw new TypeError(Fa);
   var r = function() {
     var n = arguments, a = t ? t.apply(this, n) : n[0], l = r.cache;
     if (l.has(a))
       return l.get(a);
-    var d = e.apply(this, n);
-    return r.cache = l.set(a, d) || l, d;
+    var h = e.apply(this, n);
+    return r.cache = l.set(a, h) || l, h;
   };
-  return r.cache = new (Qn.Cache || yo)(), r;
+  return r.cache = new (Hn.Cache || po)(), r;
 }
-Qn.Cache = yo;
-var Ba = Qn, Fa = Ba, Ua = 500;
-function za(e) {
-  var t = Fa(e, function(n) {
-    return r.size === Ua && r.clear(), n;
+Hn.Cache = po;
+var Ua = Hn, za = Ua, Va = 500;
+function Ka(e) {
+  var t = za(e, function(n) {
+    return r.size === Va && r.clear(), n;
   }), r = t.cache;
   return t;
 }
-var Va = za, Ka = Va, Ra = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|$))/g, ja = /\\(\\)?/g, Qa = Ka(function(e) {
+var Ra = Ka, ja = Ra, Qa = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|$))/g, Za = /\\(\\)?/g, Ha = ja(function(e) {
   var t = [];
-  return e.charCodeAt(0) === 46 && t.push(""), e.replace(Ra, function(r, n, a, l) {
-    t.push(a ? l.replace(ja, "$1") : n || r);
+  return e.charCodeAt(0) === 46 && t.push(""), e.replace(Qa, function(r, n, a, l) {
+    t.push(a ? l.replace(Za, "$1") : n || r);
   }), t;
-}), Za = Qa;
-function Ha(e, t) {
+}), qa = Ha;
+function Ya(e, t) {
   for (var r = -1, n = e == null ? 0 : e.length, a = Array(n); ++r < n; )
     a[r] = t(e[r], r, e);
   return a;
 }
-var qa = Ha, m0 = hn, Ya = qa, Wa = qt, Ga = Rn, Xa = 1 / 0, g0 = m0 ? m0.prototype : void 0, y0 = g0 ? g0.toString : void 0;
-function Co(e) {
+var Wa = Ya, y0 = fn, Ga = Wa, Xa = Yt, Ja = Qn, e6 = 1 / 0, C0 = y0 ? y0.prototype : void 0, p0 = C0 ? C0.toString : void 0;
+function vo(e) {
   if (typeof e == "string")
     return e;
-  if (Wa(e))
-    return Ya(e, Co) + "";
-  if (Ga(e))
-    return y0 ? y0.call(e) : "";
+  if (Xa(e))
+    return Ga(e, vo) + "";
+  if (Ja(e))
+    return p0 ? p0.call(e) : "";
   var t = e + "";
-  return t == "0" && 1 / e == -Xa ? "-0" : t;
+  return t == "0" && 1 / e == -e6 ? "-0" : t;
 }
-var Ja = Co, e6 = Ja;
-function t6(e) {
-  return e == null ? "" : e6(e);
+var t6 = vo, n6 = t6;
+function r6(e) {
+  return e == null ? "" : n6(e);
 }
-var n6 = t6, r6 = qt, o6 = d5, i6 = Za, a6 = n6;
-function s6(e, t) {
-  return r6(e) ? e : o6(e, t) ? [e] : i6(a6(e));
+var o6 = r6, i6 = Yt, a6 = f5, s6 = qa, l6 = o6;
+function c6(e, t) {
+  return i6(e) ? e : a6(e, t) ? [e] : s6(l6(e));
 }
-var l6 = s6, c6 = 9007199254740991, u6 = /^(?:0|[1-9]\d*)$/;
-function d6(e, t) {
+var u6 = c6, d6 = 9007199254740991, h6 = /^(?:0|[1-9]\d*)$/;
+function f6(e, t) {
   var r = typeof e;
-  return t = t ?? c6, !!t && (r == "number" || r != "symbol" && u6.test(e)) && e > -1 && e % 1 == 0 && e < t;
+  return t = t ?? d6, !!t && (r == "number" || r != "symbol" && h6.test(e)) && e > -1 && e % 1 == 0 && e < t;
 }
-var po = d6, h6 = Rn, f6 = 1 / 0;
-function m6(e) {
-  if (typeof e == "string" || h6(e))
+var bo = f6, m6 = Qn, g6 = 1 / 0;
+function y6(e) {
+  if (typeof e == "string" || m6(e))
     return e;
   var t = e + "";
-  return t == "0" && 1 / e == -f6 ? "-0" : t;
+  return t == "0" && 1 / e == -g6 ? "-0" : t;
 }
-var g6 = m6, y6 = Kn, C6 = l6, p6 = po, C0 = Ht, v6 = g6;
-function b6(e, t, r, n) {
-  if (!C0(e))
+var C6 = y6, p6 = jn, v6 = u6, b6 = bo, v0 = qt, $6 = C6;
+function _6(e, t, r, n) {
+  if (!v0(e))
     return e;
-  t = C6(t, e);
-  for (var a = -1, l = t.length, d = l - 1, h = e; h != null && ++a < l; ) {
-    var v = v6(t[a]), x = r;
-    if (v === "__proto__" || v === "constructor" || v === "prototype")
+  t = v6(t, e);
+  for (var a = -1, l = t.length, h = l - 1, d = e; d != null && ++a < l; ) {
+    var b = $6(t[a]), x = r;
+    if (b === "__proto__" || b === "constructor" || b === "prototype")
       return e;
-    if (a != d) {
-      var b = h[v];
-      x = n ? n(b, v, h) : void 0, x === void 0 && (x = C0(b) ? b : p6(t[a + 1]) ? [] : {});
+    if (a != h) {
+      var v = d[b];
+      x = n ? n(v, b, d) : void 0, x === void 0 && (x = v0(v) ? v : b6(t[a + 1]) ? [] : {});
     }
-    y6(h, v, x), h = h[v];
+    p6(d, b, x), d = d[b];
   }
   return e;
 }
-var $6 = b6, _6 = $6;
-function k6(e, t, r) {
-  return e == null ? e : _6(e, t, r);
+var k6 = _6, x6 = k6;
+function L6(e, t, r) {
+  return e == null ? e : x6(e, t, r);
 }
-var x6 = k6;
-const nt = /* @__PURE__ */ so(x6);
-var L6 = gn;
-function w6() {
-  this.__data__ = new L6(), this.size = 0;
+var w6 = L6;
+const nt = /* @__PURE__ */ co(w6);
+var A6 = yn;
+function M6() {
+  this.__data__ = new A6(), this.size = 0;
 }
-var T6 = w6;
-function A6(e) {
+var T6 = M6;
+function S6(e) {
   var t = this.__data__, r = t.delete(e);
   return this.size = t.size, r;
 }
-var M6 = A6;
-function S6(e) {
-  return this.__data__.get(e);
-}
 var P6 = S6;
 function D6(e) {
+  return this.__data__.get(e);
+}
+var N6 = D6;
+function O6(e) {
   return this.__data__.has(e);
 }
-var N6 = D6, O6 = gn, I6 = jn, E6 = go, B6 = 200;
-function F6(e, t) {
+var I6 = O6, E6 = yn, B6 = Zn, F6 = Co, U6 = 200;
+function z6(e, t) {
   var r = this.__data__;
-  if (r instanceof O6) {
+  if (r instanceof E6) {
     var n = r.__data__;
-    if (!I6 || n.length < B6 - 1)
+    if (!B6 || n.length < U6 - 1)
       return n.push([e, t]), this.size = ++r.size, this;
-    r = this.__data__ = new E6(n);
+    r = this.__data__ = new F6(n);
   }
   return r.set(e, t), this.size = r.size, this;
 }
-var U6 = F6, z6 = gn, V6 = T6, K6 = M6, R6 = P6, j6 = N6, Q6 = U6;
-function Jt(e) {
-  var t = this.__data__ = new z6(e);
+var V6 = z6, K6 = yn, R6 = T6, j6 = P6, Q6 = N6, Z6 = I6, H6 = V6;
+function e1(e) {
+  var t = this.__data__ = new K6(e);
   this.size = t.size;
 }
-Jt.prototype.clear = V6;
-Jt.prototype.delete = K6;
-Jt.prototype.get = R6;
-Jt.prototype.has = j6;
-Jt.prototype.set = Q6;
-var Z6 = Jt;
-function H6(e, t) {
+e1.prototype.clear = R6;
+e1.prototype.delete = j6;
+e1.prototype.get = Q6;
+e1.prototype.has = Z6;
+e1.prototype.set = H6;
+var q6 = e1;
+function Y6(e, t) {
   for (var r = -1, n = e == null ? 0 : e.length; ++r < n && t(e[r], r, e) !== !1; )
     ;
   return e;
 }
-var q6 = H6, Y6 = Kn, W6 = fo;
-function G6(e, t, r, n) {
+var W6 = Y6, G6 = jn, X6 = go;
+function J6(e, t, r, n) {
   var a = !r;
   r || (r = {});
-  for (var l = -1, d = t.length; ++l < d; ) {
-    var h = t[l], v = n ? n(r[h], e[h], h, r, e) : void 0;
-    v === void 0 && (v = e[h]), a ? W6(r, h, v) : Y6(r, h, v);
+  for (var l = -1, h = t.length; ++l < h; ) {
+    var d = t[l], b = n ? n(r[d], e[d], d, r, e) : void 0;
+    b === void 0 && (b = e[d]), a ? X6(r, d, b) : G6(r, d, b);
   }
   return r;
 }
-var Cn = G6;
-function X6(e, t) {
+var pn = J6;
+function e2(e, t) {
   for (var r = -1, n = Array(e); ++r < e; )
     n[r] = t(r);
   return n;
 }
-var J6 = X6, e2 = $1, t2 = Yt, n2 = "[object Arguments]";
-function r2(e) {
-  return t2(e) && e2(e) == n2;
+var t2 = e2, n2 = _1, r2 = Wt, o2 = "[object Arguments]";
+function i2(e) {
+  return r2(e) && n2(e) == o2;
 }
-var o2 = r2, p0 = o2, i2 = Yt, vo = Object.prototype, a2 = vo.hasOwnProperty, s2 = vo.propertyIsEnumerable, l2 = p0(function() {
+var a2 = i2, b0 = a2, s2 = Wt, $o = Object.prototype, l2 = $o.hasOwnProperty, c2 = $o.propertyIsEnumerable, u2 = b0(function() {
   return arguments;
-}()) ? p0 : function(e) {
-  return i2(e) && a2.call(e, "callee") && !s2.call(e, "callee");
-}, c2 = l2, an = { exports: {} };
-function u2() {
+}()) ? b0 : function(e) {
+  return s2(e) && l2.call(e, "callee") && !c2.call(e, "callee");
+}, d2 = u2, sn = { exports: {} };
+function h2() {
   return !1;
 }
-var d2 = u2;
-an.exports;
+var f2 = h2;
+sn.exports;
 (function(e, t) {
-  var r = ct, n = d2, a = t && !t.nodeType && t, l = a && !0 && e && !e.nodeType && e, d = l && l.exports === a, h = d ? r.Buffer : void 0, v = h ? h.isBuffer : void 0, x = v || n;
+  var r = ct, n = f2, a = t && !t.nodeType && t, l = a && !0 && e && !e.nodeType && e, h = l && l.exports === a, d = h ? r.Buffer : void 0, b = d ? d.isBuffer : void 0, x = b || n;
   e.exports = x;
-})(an, an.exports);
-var bo = an.exports, h2 = 9007199254740991;
-function f2(e) {
-  return typeof e == "number" && e > -1 && e % 1 == 0 && e <= h2;
+})(sn, sn.exports);
+var _o = sn.exports, m2 = 9007199254740991;
+function g2(e) {
+  return typeof e == "number" && e > -1 && e % 1 == 0 && e <= m2;
 }
-var $o = f2, m2 = $1, g2 = $o, y2 = Yt, C2 = "[object Arguments]", p2 = "[object Array]", v2 = "[object Boolean]", b2 = "[object Date]", $2 = "[object Error]", _2 = "[object Function]", k2 = "[object Map]", x2 = "[object Number]", L2 = "[object Object]", w2 = "[object RegExp]", T2 = "[object Set]", A2 = "[object String]", M2 = "[object WeakMap]", S2 = "[object ArrayBuffer]", P2 = "[object DataView]", D2 = "[object Float32Array]", N2 = "[object Float64Array]", O2 = "[object Int8Array]", I2 = "[object Int16Array]", E2 = "[object Int32Array]", B2 = "[object Uint8Array]", F2 = "[object Uint8ClampedArray]", U2 = "[object Uint16Array]", z2 = "[object Uint32Array]", ke = {};
-ke[D2] = ke[N2] = ke[O2] = ke[I2] = ke[E2] = ke[B2] = ke[F2] = ke[U2] = ke[z2] = !0;
-ke[C2] = ke[p2] = ke[S2] = ke[v2] = ke[P2] = ke[b2] = ke[$2] = ke[_2] = ke[k2] = ke[x2] = ke[L2] = ke[w2] = ke[T2] = ke[A2] = ke[M2] = !1;
-function V2(e) {
-  return y2(e) && g2(e.length) && !!ke[m2(e)];
-}
-var K2 = V2;
+var ko = g2, y2 = _1, C2 = ko, p2 = Wt, v2 = "[object Arguments]", b2 = "[object Array]", $2 = "[object Boolean]", _2 = "[object Date]", k2 = "[object Error]", x2 = "[object Function]", L2 = "[object Map]", w2 = "[object Number]", A2 = "[object Object]", M2 = "[object RegExp]", T2 = "[object Set]", S2 = "[object String]", P2 = "[object WeakMap]", D2 = "[object ArrayBuffer]", N2 = "[object DataView]", O2 = "[object Float32Array]", I2 = "[object Float64Array]", E2 = "[object Int8Array]", B2 = "[object Int16Array]", F2 = "[object Int32Array]", U2 = "[object Uint8Array]", z2 = "[object Uint8ClampedArray]", V2 = "[object Uint16Array]", K2 = "[object Uint32Array]", ke = {};
+ke[O2] = ke[I2] = ke[E2] = ke[B2] = ke[F2] = ke[U2] = ke[z2] = ke[V2] = ke[K2] = !0;
+ke[v2] = ke[b2] = ke[D2] = ke[$2] = ke[N2] = ke[_2] = ke[k2] = ke[x2] = ke[L2] = ke[w2] = ke[A2] = ke[M2] = ke[T2] = ke[S2] = ke[P2] = !1;
 function R2(e) {
+  return p2(e) && C2(e.length) && !!ke[y2(e)];
+}
+var j2 = R2;
+function Q2(e) {
   return function(t) {
     return e(t);
   };
 }
-var Zn = R2, sn = { exports: {} };
-sn.exports;
+var qn = Q2, ln = { exports: {} };
+ln.exports;
 (function(e, t) {
-  var r = lo, n = t && !t.nodeType && t, a = n && !0 && e && !e.nodeType && e, l = a && a.exports === n, d = l && r.process, h = function() {
+  var r = uo, n = t && !t.nodeType && t, a = n && !0 && e && !e.nodeType && e, l = a && a.exports === n, h = l && r.process, d = function() {
     try {
-      var v = a && a.require && a.require("util").types;
-      return v || d && d.binding && d.binding("util");
+      var b = a && a.require && a.require("util").types;
+      return b || h && h.binding && h.binding("util");
     } catch {
     }
   }();
-  e.exports = h;
-})(sn, sn.exports);
-var Hn = sn.exports, j2 = K2, Q2 = Zn, v0 = Hn, b0 = v0 && v0.isTypedArray, Z2 = b0 ? Q2(b0) : j2, H2 = Z2, q2 = J6, Y2 = c2, W2 = qt, G2 = bo, X2 = po, J2 = H2, es = Object.prototype, ts = es.hasOwnProperty;
-function ns(e, t) {
-  var r = W2(e), n = !r && Y2(e), a = !r && !n && G2(e), l = !r && !n && !a && J2(e), d = r || n || a || l, h = d ? q2(e.length, String) : [], v = h.length;
+  e.exports = d;
+})(ln, ln.exports);
+var Yn = ln.exports, Z2 = j2, H2 = qn, $0 = Yn, _0 = $0 && $0.isTypedArray, q2 = _0 ? H2(_0) : Z2, Y2 = q2, W2 = t2, G2 = d2, X2 = Yt, J2 = _o, es = bo, ts = Y2, ns = Object.prototype, rs = ns.hasOwnProperty;
+function os(e, t) {
+  var r = X2(e), n = !r && G2(e), a = !r && !n && J2(e), l = !r && !n && !a && ts(e), h = r || n || a || l, d = h ? W2(e.length, String) : [], b = d.length;
   for (var x in e)
-    (t || ts.call(e, x)) && !(d && // Safari 9 has enumerable `arguments.length` in strict mode.
+    (t || rs.call(e, x)) && !(h && // Safari 9 has enumerable `arguments.length` in strict mode.
     (x == "length" || // Node.js 0.10 has enumerable non-index properties on buffers.
     a && (x == "offset" || x == "parent") || // PhantomJS 2 has enumerable non-index properties on typed arrays.
     l && (x == "buffer" || x == "byteLength" || x == "byteOffset") || // Skip index properties.
-    X2(x, v))) && h.push(x);
-  return h;
+    es(x, b))) && d.push(x);
+  return d;
 }
-var _o = ns, rs = Object.prototype;
-function os(e) {
-  var t = e && e.constructor, r = typeof t == "function" && t.prototype || rs;
+var xo = os, is = Object.prototype;
+function as(e) {
+  var t = e && e.constructor, r = typeof t == "function" && t.prototype || is;
   return e === r;
 }
-var qn = os;
-function is(e, t) {
+var Wn = as;
+function ss(e, t) {
   return function(r) {
     return e(t(r));
   };
 }
-var ko = is, as = ko, ss = as(Object.keys, Object), ls = ss, cs = qn, us = ls, ds = Object.prototype, hs = ds.hasOwnProperty;
-function fs(e) {
-  if (!cs(e))
-    return us(e);
+var Lo = ss, ls = Lo, cs = ls(Object.keys, Object), us = cs, ds = Wn, hs = us, fs = Object.prototype, ms = fs.hasOwnProperty;
+function gs(e) {
+  if (!ds(e))
+    return hs(e);
   var t = [];
   for (var r in Object(e))
-    hs.call(e, r) && r != "constructor" && t.push(r);
+    ms.call(e, r) && r != "constructor" && t.push(r);
   return t;
 }
-var ms = fs, gs = uo, ys = $o;
-function Cs(e) {
-  return e != null && ys(e.length) && !gs(e);
+var ys = gs, Cs = fo, ps = ko;
+function vs(e) {
+  return e != null && ps(e.length) && !Cs(e);
 }
-var xo = Cs, ps = _o, vs = ms, bs = xo;
-function $s(e) {
-  return bs(e) ? ps(e) : vs(e);
+var wo = vs, bs = xo, $s = ys, _s = wo;
+function ks(e) {
+  return _s(e) ? bs(e) : $s(e);
 }
-var Yn = $s, _s = Cn, ks = Yn;
-function xs(e, t) {
-  return e && _s(t, ks(t), e);
+var Gn = ks, xs = pn, Ls = Gn;
+function ws(e, t) {
+  return e && xs(t, Ls(t), e);
 }
-var Ls = xs;
-function ws(e) {
+var As = ws;
+function Ms(e) {
   var t = [];
   if (e != null)
     for (var r in Object(e))
       t.push(r);
   return t;
 }
-var Ts = ws, As = Ht, Ms = qn, Ss = Ts, Ps = Object.prototype, Ds = Ps.hasOwnProperty;
-function Ns(e) {
-  if (!As(e))
-    return Ss(e);
-  var t = Ms(e), r = [];
+var Ts = Ms, Ss = qt, Ps = Wn, Ds = Ts, Ns = Object.prototype, Os = Ns.hasOwnProperty;
+function Is(e) {
+  if (!Ss(e))
+    return Ds(e);
+  var t = Ps(e), r = [];
   for (var n in e)
-    n == "constructor" && (t || !Ds.call(e, n)) || r.push(n);
+    n == "constructor" && (t || !Os.call(e, n)) || r.push(n);
   return r;
 }
-var Os = Ns, Is = _o, Es = Os, Bs = xo;
-function Fs(e) {
-  return Bs(e) ? Is(e, !0) : Es(e);
+var Es = Is, Bs = xo, Fs = Es, Us = wo;
+function zs(e) {
+  return Us(e) ? Bs(e, !0) : Fs(e);
 }
-var Wn = Fs, Us = Cn, zs = Wn;
-function Vs(e, t) {
-  return e && Us(t, zs(t), e);
+var Xn = zs, Vs = pn, Ks = Xn;
+function Rs(e, t) {
+  return e && Vs(t, Ks(t), e);
 }
-var Ks = Vs, ln = { exports: {} };
-ln.exports;
+var js = Rs, cn = { exports: {} };
+cn.exports;
 (function(e, t) {
-  var r = ct, n = t && !t.nodeType && t, a = n && !0 && e && !e.nodeType && e, l = a && a.exports === n, d = l ? r.Buffer : void 0, h = d ? d.allocUnsafe : void 0;
-  function v(x, b) {
-    if (b)
+  var r = ct, n = t && !t.nodeType && t, a = n && !0 && e && !e.nodeType && e, l = a && a.exports === n, h = l ? r.Buffer : void 0, d = h ? h.allocUnsafe : void 0;
+  function b(x, v) {
+    if (v)
       return x.slice();
-    var L = x.length, B = h ? h(L) : new x.constructor(L);
+    var L = x.length, B = d ? d(L) : new x.constructor(L);
     return x.copy(B), B;
   }
-  e.exports = v;
-})(ln, ln.exports);
-var Rs = ln.exports;
-function js(e, t) {
+  e.exports = b;
+})(cn, cn.exports);
+var Qs = cn.exports;
+function Zs(e, t) {
   var r = -1, n = e.length;
   for (t || (t = Array(n)); ++r < n; )
     t[r] = e[r];
   return t;
 }
-var Qs = js;
-function Zs(e, t) {
+var Hs = Zs;
+function qs(e, t) {
   for (var r = -1, n = e == null ? 0 : e.length, a = 0, l = []; ++r < n; ) {
-    var d = e[r];
-    t(d, r, e) && (l[a++] = d);
+    var h = e[r];
+    t(h, r, e) && (l[a++] = h);
   }
   return l;
 }
-var Hs = Zs;
-function qs() {
+var Ys = qs;
+function Ws() {
   return [];
 }
-var Lo = qs, Ys = Hs, Ws = Lo, Gs = Object.prototype, Xs = Gs.propertyIsEnumerable, $0 = Object.getOwnPropertySymbols, Js = $0 ? function(e) {
-  return e == null ? [] : (e = Object(e), Ys($0(e), function(t) {
-    return Xs.call(e, t);
+var Ao = Ws, Gs = Ys, Xs = Ao, Js = Object.prototype, e3 = Js.propertyIsEnumerable, k0 = Object.getOwnPropertySymbols, t3 = k0 ? function(e) {
+  return e == null ? [] : (e = Object(e), Gs(k0(e), function(t) {
+    return e3.call(e, t);
   }));
-} : Ws, Gn = Js, e3 = Cn, t3 = Gn;
-function n3(e, t) {
-  return e3(e, t3(e), t);
-}
-var r3 = n3;
+} : Xs, Jn = t3, n3 = pn, r3 = Jn;
 function o3(e, t) {
+  return n3(e, r3(e), t);
+}
+var i3 = o3;
+function a3(e, t) {
   for (var r = -1, n = t.length, a = e.length; ++r < n; )
     e[a + r] = t[r];
   return e;
 }
-var wo = o3, i3 = ko, a3 = i3(Object.getPrototypeOf, Object), To = a3, s3 = wo, l3 = To, c3 = Gn, u3 = Lo, d3 = Object.getOwnPropertySymbols, h3 = d3 ? function(e) {
+var Mo = a3, s3 = Lo, l3 = s3(Object.getPrototypeOf, Object), To = l3, c3 = Mo, u3 = To, d3 = Jn, h3 = Ao, f3 = Object.getOwnPropertySymbols, m3 = f3 ? function(e) {
   for (var t = []; e; )
-    s3(t, c3(e)), e = l3(e);
+    c3(t, d3(e)), e = u3(e);
   return t;
-} : u3, Ao = h3, f3 = Cn, m3 = Ao;
-function g3(e, t) {
-  return f3(e, m3(e), t);
+} : h3, So = m3, g3 = pn, y3 = So;
+function C3(e, t) {
+  return g3(e, y3(e), t);
 }
-var y3 = g3, C3 = wo, p3 = qt;
-function v3(e, t, r) {
+var p3 = C3, v3 = Mo, b3 = Yt;
+function $3(e, t, r) {
   var n = t(e);
-  return p3(e) ? n : C3(n, r(e));
+  return b3(e) ? n : v3(n, r(e));
 }
-var Mo = v3, b3 = Mo, $3 = Gn, _3 = Yn;
-function k3(e) {
-  return b3(e, _3, $3);
+var Po = $3, _3 = Po, k3 = Jn, x3 = Gn;
+function L3(e) {
+  return _3(e, x3, k3);
 }
-var x3 = k3, L3 = Mo, w3 = Ao, T3 = Wn;
-function A3(e) {
-  return L3(e, T3, w3);
+var w3 = L3, A3 = Po, M3 = So, T3 = Xn;
+function S3(e) {
+  return A3(e, T3, M3);
 }
-var M3 = A3, S3 = Ut, P3 = ct, D3 = S3(P3, "DataView"), N3 = D3, O3 = Ut, I3 = ct, E3 = O3(I3, "Promise"), B3 = E3, F3 = Ut, U3 = ct, z3 = F3(U3, "Set"), V3 = z3, K3 = Ut, R3 = ct, j3 = K3(R3, "WeakMap"), Q3 = j3, Nn = N3, On = jn, In = B3, En = V3, Bn = Q3, So = $1, e1 = ho, _0 = "[object Map]", Z3 = "[object Object]", k0 = "[object Promise]", x0 = "[object Set]", L0 = "[object WeakMap]", w0 = "[object DataView]", H3 = e1(Nn), q3 = e1(On), Y3 = e1(In), W3 = e1(En), G3 = e1(Bn), Ot = So;
-(Nn && Ot(new Nn(new ArrayBuffer(1))) != w0 || On && Ot(new On()) != _0 || In && Ot(In.resolve()) != k0 || En && Ot(new En()) != x0 || Bn && Ot(new Bn()) != L0) && (Ot = function(e) {
-  var t = So(e), r = t == Z3 ? e.constructor : void 0, n = r ? e1(r) : "";
+var P3 = S3, D3 = zt, N3 = ct, O3 = D3(N3, "DataView"), I3 = O3, E3 = zt, B3 = ct, F3 = E3(B3, "Promise"), U3 = F3, z3 = zt, V3 = ct, K3 = z3(V3, "Set"), R3 = K3, j3 = zt, Q3 = ct, Z3 = j3(Q3, "WeakMap"), H3 = Z3, In = I3, En = Zn, Bn = U3, Fn = R3, Un = H3, Do = _1, t1 = mo, x0 = "[object Map]", q3 = "[object Object]", L0 = "[object Promise]", w0 = "[object Set]", A0 = "[object WeakMap]", M0 = "[object DataView]", Y3 = t1(In), W3 = t1(En), G3 = t1(Bn), X3 = t1(Fn), J3 = t1(Un), It = Do;
+(In && It(new In(new ArrayBuffer(1))) != M0 || En && It(new En()) != x0 || Bn && It(Bn.resolve()) != L0 || Fn && It(new Fn()) != w0 || Un && It(new Un()) != A0) && (It = function(e) {
+  var t = Do(e), r = t == q3 ? e.constructor : void 0, n = r ? t1(r) : "";
   if (n)
     switch (n) {
-      case H3:
-        return w0;
-      case q3:
-        return _0;
       case Y3:
-        return k0;
+        return M0;
       case W3:
         return x0;
       case G3:
         return L0;
+      case X3:
+        return w0;
+      case J3:
+        return A0;
     }
   return t;
 });
-var Xn = Ot, X3 = Object.prototype, J3 = X3.hasOwnProperty;
-function e8(e) {
+var er = It, e8 = Object.prototype, t8 = e8.hasOwnProperty;
+function n8(e) {
   var t = e.length, r = new e.constructor(t);
-  return t && typeof e[0] == "string" && J3.call(e, "index") && (r.index = e.index, r.input = e.input), r;
+  return t && typeof e[0] == "string" && t8.call(e, "index") && (r.index = e.index, r.input = e.input), r;
 }
-var t8 = e8, n8 = ct, r8 = n8.Uint8Array, o8 = r8, T0 = o8;
-function i8(e) {
+var r8 = n8, o8 = ct, i8 = o8.Uint8Array, a8 = i8, T0 = a8;
+function s8(e) {
   var t = new e.constructor(e.byteLength);
   return new T0(t).set(new T0(e)), t;
 }
-var Jn = i8, a8 = Jn;
-function s8(e, t) {
-  var r = t ? a8(e.buffer) : e.buffer;
+var tr = s8, l8 = tr;
+function c8(e, t) {
+  var r = t ? l8(e.buffer) : e.buffer;
   return new e.constructor(r, e.byteOffset, e.byteLength);
 }
-var l8 = s8, c8 = /\w*$/;
-function u8(e) {
-  var t = new e.constructor(e.source, c8.exec(e));
+var u8 = c8, d8 = /\w*$/;
+function h8(e) {
+  var t = new e.constructor(e.source, d8.exec(e));
   return t.lastIndex = e.lastIndex, t;
 }
-var d8 = u8, A0 = hn, M0 = A0 ? A0.prototype : void 0, S0 = M0 ? M0.valueOf : void 0;
-function h8(e) {
-  return S0 ? Object(S0.call(e)) : {};
+var f8 = h8, S0 = fn, P0 = S0 ? S0.prototype : void 0, D0 = P0 ? P0.valueOf : void 0;
+function m8(e) {
+  return D0 ? Object(D0.call(e)) : {};
 }
-var f8 = h8, m8 = Jn;
-function g8(e, t) {
-  var r = t ? m8(e.buffer) : e.buffer;
+var g8 = m8, y8 = tr;
+function C8(e, t) {
+  var r = t ? y8(e.buffer) : e.buffer;
   return new e.constructor(r, e.byteOffset, e.length);
 }
-var y8 = g8, C8 = Jn, p8 = l8, v8 = d8, b8 = f8, $8 = y8, _8 = "[object Boolean]", k8 = "[object Date]", x8 = "[object Map]", L8 = "[object Number]", w8 = "[object RegExp]", T8 = "[object Set]", A8 = "[object String]", M8 = "[object Symbol]", S8 = "[object ArrayBuffer]", P8 = "[object DataView]", D8 = "[object Float32Array]", N8 = "[object Float64Array]", O8 = "[object Int8Array]", I8 = "[object Int16Array]", E8 = "[object Int32Array]", B8 = "[object Uint8Array]", F8 = "[object Uint8ClampedArray]", U8 = "[object Uint16Array]", z8 = "[object Uint32Array]";
-function V8(e, t, r) {
+var p8 = C8, v8 = tr, b8 = u8, $8 = f8, _8 = g8, k8 = p8, x8 = "[object Boolean]", L8 = "[object Date]", w8 = "[object Map]", A8 = "[object Number]", M8 = "[object RegExp]", T8 = "[object Set]", S8 = "[object String]", P8 = "[object Symbol]", D8 = "[object ArrayBuffer]", N8 = "[object DataView]", O8 = "[object Float32Array]", I8 = "[object Float64Array]", E8 = "[object Int8Array]", B8 = "[object Int16Array]", F8 = "[object Int32Array]", U8 = "[object Uint8Array]", z8 = "[object Uint8ClampedArray]", V8 = "[object Uint16Array]", K8 = "[object Uint32Array]";
+function R8(e, t, r) {
   var n = e.constructor;
   switch (t) {
-    case S8:
-      return C8(e);
-    case _8:
-    case k8:
-      return new n(+e);
-    case P8:
-      return p8(e, r);
     case D8:
+      return v8(e);
+    case x8:
+    case L8:
+      return new n(+e);
     case N8:
+      return b8(e, r);
     case O8:
     case I8:
     case E8:
@@ -2036,121 +2034,123 @@ function V8(e, t, r) {
     case F8:
     case U8:
     case z8:
-      return $8(e, r);
-    case x8:
-      return new n();
-    case L8:
-    case A8:
-      return new n(e);
+    case V8:
+    case K8:
+      return k8(e, r);
     case w8:
-      return v8(e);
+      return new n();
+    case A8:
+    case S8:
+      return new n(e);
+    case M8:
+      return $8(e);
     case T8:
       return new n();
-    case M8:
-      return b8(e);
+    case P8:
+      return _8(e);
   }
 }
-var K8 = V8, R8 = Ht, P0 = Object.create, j8 = function() {
+var j8 = R8, Q8 = qt, N0 = Object.create, Z8 = function() {
   function e() {
   }
   return function(t) {
-    if (!R8(t))
+    if (!Q8(t))
       return {};
-    if (P0)
-      return P0(t);
+    if (N0)
+      return N0(t);
     e.prototype = t;
     var r = new e();
     return e.prototype = void 0, r;
   };
-}(), Q8 = j8, Z8 = Q8, H8 = To, q8 = qn;
-function Y8(e) {
-  return typeof e.constructor == "function" && !q8(e) ? Z8(H8(e)) : {};
+}(), H8 = Z8, q8 = H8, Y8 = To, W8 = Wn;
+function G8(e) {
+  return typeof e.constructor == "function" && !W8(e) ? q8(Y8(e)) : {};
 }
-var W8 = Y8, G8 = Xn, X8 = Yt, J8 = "[object Map]";
-function e7(e) {
-  return X8(e) && G8(e) == J8;
+var X8 = G8, J8 = er, e7 = Wt, t7 = "[object Map]";
+function n7(e) {
+  return e7(e) && J8(e) == t7;
 }
-var t7 = e7, n7 = t7, r7 = Zn, D0 = Hn, N0 = D0 && D0.isMap, o7 = N0 ? r7(N0) : n7, i7 = o7, a7 = Xn, s7 = Yt, l7 = "[object Set]";
-function c7(e) {
-  return s7(e) && a7(e) == l7;
+var r7 = n7, o7 = r7, i7 = qn, O0 = Yn, I0 = O0 && O0.isMap, a7 = I0 ? i7(I0) : o7, s7 = a7, l7 = er, c7 = Wt, u7 = "[object Set]";
+function d7(e) {
+  return c7(e) && l7(e) == u7;
 }
-var u7 = c7, d7 = u7, h7 = Zn, O0 = Hn, I0 = O0 && O0.isSet, f7 = I0 ? h7(I0) : d7, m7 = f7, g7 = Z6, y7 = q6, C7 = Kn, p7 = Ls, v7 = Ks, b7 = Rs, $7 = Qs, _7 = r3, k7 = y3, x7 = x3, L7 = M3, w7 = Xn, T7 = t8, A7 = K8, M7 = W8, S7 = qt, P7 = bo, D7 = i7, N7 = Ht, O7 = m7, I7 = Yn, E7 = Wn, B7 = 1, F7 = 2, U7 = 4, Po = "[object Arguments]", z7 = "[object Array]", V7 = "[object Boolean]", K7 = "[object Date]", R7 = "[object Error]", Do = "[object Function]", j7 = "[object GeneratorFunction]", Q7 = "[object Map]", Z7 = "[object Number]", No = "[object Object]", H7 = "[object RegExp]", q7 = "[object Set]", Y7 = "[object String]", W7 = "[object Symbol]", G7 = "[object WeakMap]", X7 = "[object ArrayBuffer]", J7 = "[object DataView]", el = "[object Float32Array]", tl = "[object Float64Array]", nl = "[object Int8Array]", rl = "[object Int16Array]", ol = "[object Int32Array]", il = "[object Uint8Array]", al = "[object Uint8ClampedArray]", sl = "[object Uint16Array]", ll = "[object Uint32Array]", _e = {};
-_e[Po] = _e[z7] = _e[X7] = _e[J7] = _e[V7] = _e[K7] = _e[el] = _e[tl] = _e[nl] = _e[rl] = _e[ol] = _e[Q7] = _e[Z7] = _e[No] = _e[H7] = _e[q7] = _e[Y7] = _e[W7] = _e[il] = _e[al] = _e[sl] = _e[ll] = !0;
-_e[R7] = _e[Do] = _e[G7] = !1;
-function J1(e, t, r, n, a, l) {
-  var d, h = t & B7, v = t & F7, x = t & U7;
-  if (r && (d = a ? r(e, n, a, l) : r(e)), d !== void 0)
-    return d;
-  if (!N7(e))
+var h7 = d7, f7 = h7, m7 = qn, E0 = Yn, B0 = E0 && E0.isSet, g7 = B0 ? m7(B0) : f7, y7 = g7, C7 = q6, p7 = W6, v7 = jn, b7 = As, $7 = js, _7 = Qs, k7 = Hs, x7 = i3, L7 = p3, w7 = w3, A7 = P3, M7 = er, T7 = r8, S7 = j8, P7 = X8, D7 = Yt, N7 = _o, O7 = s7, I7 = qt, E7 = y7, B7 = Gn, F7 = Xn, U7 = 1, z7 = 2, V7 = 4, No = "[object Arguments]", K7 = "[object Array]", R7 = "[object Boolean]", j7 = "[object Date]", Q7 = "[object Error]", Oo = "[object Function]", Z7 = "[object GeneratorFunction]", H7 = "[object Map]", q7 = "[object Number]", Io = "[object Object]", Y7 = "[object RegExp]", W7 = "[object Set]", G7 = "[object String]", X7 = "[object Symbol]", J7 = "[object WeakMap]", el = "[object ArrayBuffer]", tl = "[object DataView]", nl = "[object Float32Array]", rl = "[object Float64Array]", ol = "[object Int8Array]", il = "[object Int16Array]", al = "[object Int32Array]", sl = "[object Uint8Array]", ll = "[object Uint8ClampedArray]", cl = "[object Uint16Array]", ul = "[object Uint32Array]", _e = {};
+_e[No] = _e[K7] = _e[el] = _e[tl] = _e[R7] = _e[j7] = _e[nl] = _e[rl] = _e[ol] = _e[il] = _e[al] = _e[H7] = _e[q7] = _e[Io] = _e[Y7] = _e[W7] = _e[G7] = _e[X7] = _e[sl] = _e[ll] = _e[cl] = _e[ul] = !0;
+_e[Q7] = _e[Oo] = _e[J7] = !1;
+function en(e, t, r, n, a, l) {
+  var h, d = t & U7, b = t & z7, x = t & V7;
+  if (r && (h = a ? r(e, n, a, l) : r(e)), h !== void 0)
+    return h;
+  if (!I7(e))
     return e;
-  var b = S7(e);
-  if (b) {
-    if (d = T7(e), !h)
-      return $7(e, d);
+  var v = D7(e);
+  if (v) {
+    if (h = T7(e), !d)
+      return k7(e, h);
   } else {
-    var L = w7(e), B = L == Do || L == j7;
-    if (P7(e))
-      return b7(e, h);
-    if (L == No || L == Po || B && !a) {
-      if (d = v || B ? {} : M7(e), !h)
-        return v ? k7(e, v7(d, e)) : _7(e, p7(d, e));
+    var L = M7(e), B = L == Oo || L == Z7;
+    if (N7(e))
+      return _7(e, d);
+    if (L == Io || L == No || B && !a) {
+      if (h = b || B ? {} : P7(e), !d)
+        return b ? L7(e, $7(h, e)) : x7(e, b7(h, e));
     } else {
       if (!_e[L])
         return a ? e : {};
-      d = A7(e, L, h);
+      h = S7(e, L, d);
     }
   }
-  l || (l = new g7());
+  l || (l = new C7());
   var N = l.get(e);
   if (N)
     return N;
-  l.set(e, d), O7(e) ? e.forEach(function(K) {
-    d.add(J1(K, t, r, K, e, l));
-  }) : D7(e) && e.forEach(function(K, z) {
-    d.set(z, J1(K, t, r, z, e, l));
+  l.set(e, h), E7(e) ? e.forEach(function(R) {
+    h.add(en(R, t, r, R, e, l));
+  }) : O7(e) && e.forEach(function(R, U) {
+    h.set(U, en(R, t, r, U, e, l));
   });
-  var Z = x ? v ? L7 : x7 : v ? E7 : I7, U = b ? void 0 : Z(e);
-  return y7(U || e, function(K, z) {
-    U && (z = K, K = e[z]), C7(d, z, J1(K, t, r, z, e, l));
-  }), d;
+  var oe = x ? b ? A7 : w7 : b ? F7 : B7, V = v ? void 0 : oe(e);
+  return p7(V || e, function(R, U) {
+    V && (U = R, R = e[U]), v7(h, U, en(R, t, r, U, e, l));
+  }), h;
 }
-var cl = J1, ul = cl, dl = 1, hl = 4;
-function fl(e) {
-  return ul(e, dl | hl);
+var dl = en, hl = dl, fl = 1, ml = 4;
+function gl(e) {
+  return hl(e, fl | ml);
 }
-var ml = fl;
-const gl = /* @__PURE__ */ so(ml), yl = /* @__PURE__ */ p("<button></button>"), Cl = (e) => (() => {
-  const t = yl.cloneNode(!0);
-  return st(t, "click", e.onClick, !0), C(t, () => e.children), V((r) => {
+var yl = gl;
+const Cl = /* @__PURE__ */ co(yl), pl = /* @__PURE__ */ p("<button></button>"), vl = (e) => (() => {
+  const t = pl.cloneNode(!0);
+  return st(t, "click", e.onClick, !0), C(t, () => e.children), z((r) => {
     const n = e.style, a = `klinecharts-pro-button ${e.type ?? "confirm"} ${e.class ?? ""}`;
-    return r._v$ = Ft(t, n, r._v$), a !== r._v$2 && fe(t, r._v$2 = a), r;
+    return r._v$ = Ut(t, n, r._v$), a !== r._v$2 && fe(t, r._v$2 = a), r;
   }, {
     _v$: void 0,
     _v$2: void 0
   }), t;
 })();
 je(["click"]);
-const pl = /* @__PURE__ */ p('<svg viewBox="0 0 1024 1024" class="icon"><path d="M810.666667 128H213.333333c-46.933333 0-85.333333 38.4-85.333333 85.333333v597.333334c0 46.933333 38.4 85.333333 85.333333 85.333333h597.333334c46.933333 0 85.333333-38.4 85.333333-85.333333V213.333333c0-46.933333-38.4-85.333333-85.333333-85.333333z m-353.706667 567.04a42.496 42.496 0 0 1-60.16 0L243.626667 541.866667c-8.106667-8.106667-12.373333-18.773333-12.373334-29.866667s4.693333-22.186667 12.373334-29.866667a42.496 42.496 0 0 1 60.16 0L426.666667 604.586667l293.546666-293.546667a42.496 42.496 0 1 1 60.16 60.16l-323.413333 323.84z"></path></svg>'), vl = /* @__PURE__ */ p('<svg viewBox="0 0 1024 1024" class="icon"><path d="M245.333333 128h533.333334A117.333333 117.333333 0 0 1 896 245.333333v533.333334A117.333333 117.333333 0 0 1 778.666667 896H245.333333A117.333333 117.333333 0 0 1 128 778.666667V245.333333A117.333333 117.333333 0 0 1 245.333333 128z m0 64c-29.44 0-53.333333 23.893333-53.333333 53.333333v533.333334c0 29.44 23.893333 53.333333 53.333333 53.333333h533.333334c29.44 0 53.333333-23.893333 53.333333-53.333333V245.333333c0-29.44-23.893333-53.333333-53.333333-53.333333H245.333333z"></path></svg>'), bl = /* @__PURE__ */ p("<div></div>"), $l = /* @__PURE__ */ p('<span class="label"></span>'), _l = () => pl.cloneNode(!0), kl = () => vl.cloneNode(!0), E0 = (e) => {
-  const [t, r] = M(e.checked ?? !1);
+const bl = /* @__PURE__ */ p('<svg viewBox="0 0 1024 1024" class="icon"><path d="M810.666667 128H213.333333c-46.933333 0-85.333333 38.4-85.333333 85.333333v597.333334c0 46.933333 38.4 85.333333 85.333333 85.333333h597.333334c46.933333 0 85.333333-38.4 85.333333-85.333333V213.333333c0-46.933333-38.4-85.333333-85.333333-85.333333z m-353.706667 567.04a42.496 42.496 0 0 1-60.16 0L243.626667 541.866667c-8.106667-8.106667-12.373333-18.773333-12.373334-29.866667s4.693333-22.186667 12.373334-29.866667a42.496 42.496 0 0 1 60.16 0L426.666667 604.586667l293.546666-293.546667a42.496 42.496 0 1 1 60.16 60.16l-323.413333 323.84z"></path></svg>'), $l = /* @__PURE__ */ p('<svg viewBox="0 0 1024 1024" class="icon"><path d="M245.333333 128h533.333334A117.333333 117.333333 0 0 1 896 245.333333v533.333334A117.333333 117.333333 0 0 1 778.666667 896H245.333333A117.333333 117.333333 0 0 1 128 778.666667V245.333333A117.333333 117.333333 0 0 1 245.333333 128z m0 64c-29.44 0-53.333333 23.893333-53.333333 53.333333v533.333334c0 29.44 23.893333 53.333333 53.333333 53.333333h533.333334c29.44 0 53.333333-23.893333 53.333333-53.333333V245.333333c0-29.44-23.893333-53.333333-53.333333-53.333333H245.333333z"></path></svg>'), _l = /* @__PURE__ */ p("<div></div>"), kl = /* @__PURE__ */ p('<span class="label"></span>'), xl = () => bl.cloneNode(!0), Ll = () => $l.cloneNode(!0), F0 = (e) => {
+  const [t, r] = T(e.checked ?? !1);
   return Re(() => {
     "checked" in e && r(e.checked);
   }), (() => {
-    const n = bl.cloneNode(!0);
+    const n = _l.cloneNode(!0);
     return n.$$click = (a) => {
       const l = !t();
       e.onChange && e.onChange(l), r(l);
     }, C(n, (() => {
-      const a = G(() => !!t());
-      return () => a() ? w(_l, {}) : w(kl, {});
+      const a = W(() => !!t());
+      return () => a() ? w(xl, {}) : w(Ll, {});
     })(), null), C(n, (() => {
-      const a = G(() => !!e.label);
+      const a = W(() => !!e.label);
       return () => a() && (() => {
-        const l = $l.cloneNode(!0);
+        const l = kl.cloneNode(!0);
         return C(l, () => e.label), l;
       })();
-    })(), null), V((a) => {
-      const l = e.style, d = `klinecharts-pro-checkbox ${t() && "checked" || ""} ${e.class || ""}`;
-      return a._v$ = Ft(n, l, a._v$), d !== a._v$2 && fe(n, a._v$2 = d), a;
+    })(), null), z((a) => {
+      const l = e.style, h = `klinecharts-pro-checkbox ${t() && "checked" || ""} ${e.class || ""}`;
+      return a._v$ = Ut(n, l, a._v$), h !== a._v$2 && fe(n, a._v$2 = h), a;
     }, {
       _v$: void 0,
       _v$2: void 0
@@ -2158,14 +2158,14 @@ const pl = /* @__PURE__ */ p('<svg viewBox="0 0 1024 1024" class="icon"><path d=
   })();
 };
 je(["click"]);
-const xl = /* @__PURE__ */ p('<div class="klinecharts-pro-loading"><i class="circle1"></i><i class="circle2"></i><i class="circle3"></i></div>'), Oo = () => xl.cloneNode(!0), Ll = /* @__PURE__ */ p('<div class="klinecharts-pro-empty"><svg class="icon" viewBox="0 0 1024 1024"><path d="M855.6 427.2H168.5c-12.7 0-24.4 6.9-30.6 18L4.4 684.7C1.5 689.9 0 695.8 0 701.8v287.1c0 19.4 15.7 35.1 35.1 35.1H989c19.4 0 35.1-15.7 35.1-35.1V701.8c0-6-1.5-11.8-4.4-17.1L886.2 445.2c-6.2-11.1-17.9-18-30.6-18zM673.4 695.6c-16.5 0-30.8 11.5-34.3 27.7-12.7 58.5-64.8 102.3-127.2 102.3s-114.5-43.8-127.2-102.3c-3.5-16.1-17.8-27.7-34.3-27.7H119c-26.4 0-43.3-28-31.1-51.4l81.7-155.8c6.1-11.6 18-18.8 31.1-18.8h622.4c13 0 25 7.2 31.1 18.8l81.7 155.8c12.2 23.4-4.7 51.4-31.1 51.4H673.4zM819.9 209.5c-1-1.8-2.1-3.7-3.2-5.5-9.8-16.6-31.1-22.2-47.8-12.6L648.5 261c-17 9.8-22.7 31.6-12.6 48.4 0.9 1.4 1.7 2.9 2.5 4.4 9.5 17 31.2 22.8 48 13L807 257.3c16.7-9.7 22.4-31 12.9-47.8zM375.4 261.1L255 191.6c-16.7-9.6-38-4-47.8 12.6-1.1 1.8-2.1 3.6-3.2 5.5-9.5 16.8-3.8 38.1 12.9 47.8L337.3 327c16.9 9.7 38.6 4 48-13.1 0.8-1.5 1.7-2.9 2.5-4.4 10.2-16.8 4.5-38.6-12.4-48.4zM512 239.3h2.5c19.5 0.3 35.5-15.5 35.5-35.1v-139c0-19.3-15.6-34.9-34.8-35.1h-6.4C489.6 30.3 474 46 474 65.2v139c0 19.5 15.9 35.4 35.5 35.1h2.5z"></path></svg></div>'), wl = () => Ll.cloneNode(!0), Tl = /* @__PURE__ */ p("<ul></ul>"), Al = /* @__PURE__ */ p("<li></li>"), cn = (e) => (() => {
+const wl = /* @__PURE__ */ p('<div class="klinecharts-pro-loading"><i class="circle1"></i><i class="circle2"></i><i class="circle3"></i></div>'), Eo = () => wl.cloneNode(!0), Al = /* @__PURE__ */ p('<div class="klinecharts-pro-empty"><svg class="icon" viewBox="0 0 1024 1024"><path d="M855.6 427.2H168.5c-12.7 0-24.4 6.9-30.6 18L4.4 684.7C1.5 689.9 0 695.8 0 701.8v287.1c0 19.4 15.7 35.1 35.1 35.1H989c19.4 0 35.1-15.7 35.1-35.1V701.8c0-6-1.5-11.8-4.4-17.1L886.2 445.2c-6.2-11.1-17.9-18-30.6-18zM673.4 695.6c-16.5 0-30.8 11.5-34.3 27.7-12.7 58.5-64.8 102.3-127.2 102.3s-114.5-43.8-127.2-102.3c-3.5-16.1-17.8-27.7-34.3-27.7H119c-26.4 0-43.3-28-31.1-51.4l81.7-155.8c6.1-11.6 18-18.8 31.1-18.8h622.4c13 0 25 7.2 31.1 18.8l81.7 155.8c12.2 23.4-4.7 51.4-31.1 51.4H673.4zM819.9 209.5c-1-1.8-2.1-3.7-3.2-5.5-9.8-16.6-31.1-22.2-47.8-12.6L648.5 261c-17 9.8-22.7 31.6-12.6 48.4 0.9 1.4 1.7 2.9 2.5 4.4 9.5 17 31.2 22.8 48 13L807 257.3c16.7-9.7 22.4-31 12.9-47.8zM375.4 261.1L255 191.6c-16.7-9.6-38-4-47.8 12.6-1.1 1.8-2.1 3.6-3.2 5.5-9.5 16.8-3.8 38.1 12.9 47.8L337.3 327c16.9 9.7 38.6 4 48-13.1 0.8-1.5 1.7-2.9 2.5-4.4 10.2-16.8 4.5-38.6-12.4-48.4zM512 239.3h2.5c19.5 0.3 35.5-15.5 35.5-35.1v-139c0-19.3-15.6-34.9-34.8-35.1h-6.4C489.6 30.3 474 46 474 65.2v139c0 19.5 15.9 35.4 35.5 35.1h2.5z"></path></svg></div>'), Ml = () => Al.cloneNode(!0), Tl = /* @__PURE__ */ p("<ul></ul>"), Sl = /* @__PURE__ */ p("<li></li>"), un = (e) => (() => {
   const t = Tl.cloneNode(!0);
   return C(t, w(le, {
     get when() {
       return e.loading;
     },
     get children() {
-      return w(Oo, {});
+      return w(Eo, {});
     }
   }), null), C(t, w(le, {
     get when() {
@@ -2173,7 +2173,7 @@ const xl = /* @__PURE__ */ p('<div class="klinecharts-pro-loading"><i class="cir
       return !e.loading && !e.children && !((r = e.dataSource) != null && r.length);
     },
     get children() {
-      return w(wl, {});
+      return w(Ml, {});
     }
   }), null), C(t, w(le, {
     get when() {
@@ -2190,25 +2190,25 @@ const xl = /* @__PURE__ */ p('<div class="klinecharts-pro-loading"><i class="cir
       var r;
       return (r = e.dataSource) == null ? void 0 : r.map((n) => {
         var a;
-        return ((a = e.renderItem) == null ? void 0 : a.call(e, n)) ?? Al.cloneNode(!0);
+        return ((a = e.renderItem) == null ? void 0 : a.call(e, n)) ?? Sl.cloneNode(!0);
       });
     }
-  }), null), V((r) => {
+  }), null), z((r) => {
     const n = e.style, a = `klinecharts-pro-list ${e.class ?? ""}`;
-    return r._v$ = Ft(t, n, r._v$), a !== r._v$2 && fe(t, r._v$2 = a), r;
+    return r._v$ = Ut(t, n, r._v$), a !== r._v$2 && fe(t, r._v$2 = a), r;
   }, {
     _v$: void 0,
     _v$2: void 0
   }), t;
-})(), Ml = /* @__PURE__ */ p('<div class="klinecharts-pro-modal"><div class="inner"><div class="title-container"><svg class="close-icon" viewBox="0 0 1024 1024"><path d="M934.184927 199.723787 622.457206 511.452531l311.727721 311.703161c14.334473 14.229073 23.069415 33.951253 23.069415 55.743582 0 43.430138-35.178197 78.660524-78.735226 78.660524-21.664416 0-41.361013-8.865925-55.642275-23.069415L511.149121 622.838388 199.420377 934.490384c-14.204513 14.20349-33.901111 23.069415-55.642275 23.069415-43.482327 0-78.737272-35.230386-78.737272-78.660524 0-21.792329 8.864902-41.513486 23.094998-55.743582l311.677579-311.703161L88.135828 199.723787c-14.230096-14.255679-23.094998-33.92567-23.094998-55.642275 0-43.430138 35.254945-78.762855 78.737272-78.762855 21.741163 0 41.437761 8.813736 55.642275 23.069415l311.727721 311.727721L822.876842 88.389096c14.281261-14.255679 33.977859-23.069415 55.642275-23.069415 43.557028 0 78.735226 35.332716 78.735226 78.762855C957.254342 165.798117 948.5194 185.468109 934.184927 199.723787"></path></svg></div><div class="content-container"></div></div></div>'), Sl = /* @__PURE__ */ p('<div class="button-container"></div>'), Tt = (e) => (() => {
-  const t = Ml.cloneNode(!0), r = t.firstChild, n = r.firstChild, a = n.firstChild, l = n.nextSibling;
-  return t.$$click = (d) => {
-    d.target === d.currentTarget && e.onClose && e.onClose();
+})(), Pl = /* @__PURE__ */ p('<div class="klinecharts-pro-modal"><div class="inner"><div class="title-container"><svg class="close-icon" viewBox="0 0 1024 1024"><path d="M934.184927 199.723787 622.457206 511.452531l311.727721 311.703161c14.334473 14.229073 23.069415 33.951253 23.069415 55.743582 0 43.430138-35.178197 78.660524-78.735226 78.660524-21.664416 0-41.361013-8.865925-55.642275-23.069415L511.149121 622.838388 199.420377 934.490384c-14.204513 14.20349-33.901111 23.069415-55.642275 23.069415-43.482327 0-78.737272-35.230386-78.737272-78.660524 0-21.792329 8.864902-41.513486 23.094998-55.743582l311.677579-311.703161L88.135828 199.723787c-14.230096-14.255679-23.094998-33.92567-23.094998-55.642275 0-43.430138 35.254945-78.762855 78.737272-78.762855 21.741163 0 41.437761 8.813736 55.642275 23.069415l311.727721 311.727721L822.876842 88.389096c14.281261-14.255679 33.977859-23.069415 55.642275-23.069415 43.557028 0 78.735226 35.332716 78.735226 78.762855C957.254342 165.798117 948.5194 185.468109 934.184927 199.723787"></path></svg></div><div class="content-container"></div></div></div>'), Dl = /* @__PURE__ */ p('<div class="button-container"></div>'), Mt = (e) => (() => {
+  const t = Pl.cloneNode(!0), r = t.firstChild, n = r.firstChild, a = n.firstChild, l = n.nextSibling;
+  return t.$$click = (h) => {
+    h.target === h.currentTarget && e.onClose && e.onClose();
   }, C(n, () => e.title, a), st(a, "click", e.onClose, !0), C(l, () => e.children), C(r, (() => {
-    const d = G(() => !!(e.buttons && e.buttons.length > 0));
-    return () => d() && (() => {
-      const h = Sl.cloneNode(!0);
-      return C(h, () => e.buttons.map((v) => w(Cl, ao(v, {
+    const h = W(() => !!(e.buttons && e.buttons.length > 0));
+    return () => h() && (() => {
+      const d = Dl.cloneNode(!0);
+      return C(d, () => e.buttons.map((b) => w(vl, lo(b, {
         get style() {
           return {
             ...e.minButtonWidth ? {
@@ -2218,19 +2218,19 @@ const xl = /* @__PURE__ */ p('<div class="klinecharts-pro-loading"><i class="cir
           };
         },
         get children() {
-          return v.children;
+          return b.children;
         }
-      })))), V((v) => {
-        const x = e.btnParentStyle, b = !!e.isMobile;
-        return v._v$8 = Ft(h, x, v._v$8), b !== v._v$9 && h.classList.toggle("mobile-buttons", v._v$9 = b), v;
+      })))), z((b) => {
+        const x = e.btnParentStyle, v = !!e.isMobile;
+        return b._v$8 = Ut(d, x, b._v$8), v !== b._v$9 && d.classList.toggle("mobile-buttons", b._v$9 = v), b;
       }, {
         _v$8: void 0,
         _v$9: void 0
-      }), h;
+      }), d;
     })();
-  })(), null), V((d) => {
-    const h = !!e.isMobile, v = e.isMobile ? "100%" : `${e.width ?? 400}px`, x = (e.isMobile, "auto"), b = e.isMobile ? "60vh" : "90vh", L = !!e.isMobile, B = !!e.isMobile, N = !!e.isMobile;
-    return h !== d._v$ && t.classList.toggle("mobile-modal", d._v$ = h), v !== d._v$2 && r.style.setProperty("width", d._v$2 = v), x !== d._v$3 && r.style.setProperty("height", d._v$3 = x), b !== d._v$4 && r.style.setProperty("max-height", d._v$4 = b), L !== d._v$5 && r.classList.toggle("mobile-inner", d._v$5 = L), B !== d._v$6 && n.classList.toggle("mobile-title", d._v$6 = B), N !== d._v$7 && l.classList.toggle("mobile-content", d._v$7 = N), d;
+  })(), null), z((h) => {
+    const d = !!e.isMobile, b = e.isMobile ? "100%" : `${e.width ?? 400}px`, x = (e.isMobile, "auto"), v = e.isMobile ? "60vh" : "90vh", L = !!e.isMobile, B = !!e.isMobile, N = !!e.isMobile;
+    return d !== h._v$ && t.classList.toggle("mobile-modal", h._v$ = d), b !== h._v$2 && r.style.setProperty("width", h._v$2 = b), x !== h._v$3 && r.style.setProperty("height", h._v$3 = x), v !== h._v$4 && r.style.setProperty("max-height", h._v$4 = v), L !== h._v$5 && r.classList.toggle("mobile-inner", h._v$5 = L), B !== h._v$6 && n.classList.toggle("mobile-title", h._v$6 = B), N !== h._v$7 && l.classList.toggle("mobile-content", h._v$7 = N), h;
   }, {
     _v$: void 0,
     _v$2: void 0,
@@ -2242,76 +2242,76 @@ const xl = /* @__PURE__ */ p('<div class="klinecharts-pro-loading"><i class="cir
   }), t;
 })();
 je(["click"]);
-const Pl = /* @__PURE__ */ p('<div tabindex="0"><div class="selector-container"><span class="value"></span><i class="arrow"></i></div></div>'), Dl = /* @__PURE__ */ p('<div class="drop-down-container"><ul></ul></div>'), Nl = /* @__PURE__ */ p('<div><input type="text"></div>'), Ol = /* @__PURE__ */ p("<li></li>"), C1 = (e) => {
-  const [t, r] = M(!1), [n, a] = M("");
-  let l, d;
-  const h = G(() => {
+const Nl = /* @__PURE__ */ p('<div tabindex="0"><div class="selector-container"><span class="value"></span><i class="arrow"></i></div></div>'), Ol = /* @__PURE__ */ p('<div class="drop-down-container"><ul></ul></div>'), Il = /* @__PURE__ */ p('<div><input type="text"></div>'), El = /* @__PURE__ */ p("<li></li>"), p1 = (e) => {
+  const [t, r] = T(!1), [n, a] = T("");
+  let l, h;
+  const d = W(() => {
     if (!e.dataSource || !e.searchable)
       return e.dataSource;
-    const b = n().toLowerCase().trim();
-    return b ? typeof e.dataSource[0] == "string" ? e.dataSource.filter((B) => B.toLowerCase().includes(b)) : e.dataSource.filter((B) => {
-      var U, K;
-      const N = ((U = B.text) == null ? void 0 : U.toString().toLowerCase()) || "", Z = ((K = B.key) == null ? void 0 : K.toLowerCase()) || "";
-      return N.includes(b) || Z.includes(b);
+    const v = n().toLowerCase().trim();
+    return v ? typeof e.dataSource[0] == "string" ? e.dataSource.filter((B) => B.toLowerCase().includes(v)) : e.dataSource.filter((B) => {
+      var V, R;
+      const N = ((V = B.text) == null ? void 0 : V.toString().toLowerCase()) || "", oe = ((R = B.key) == null ? void 0 : R.toLowerCase()) || "";
+      return N.includes(v) || oe.includes(v);
     }) : e.dataSource;
-  }), v = () => {
-    const b = !t();
-    r(b), a(""), b && e.searchable && setTimeout(() => l == null ? void 0 : l.focus(), 50);
-  }, x = (b) => {
-    const L = b.relatedTarget;
-    d && L && d.contains(L) || (r(!1), a(""));
+  }), b = () => {
+    const v = !t();
+    r(v), a(""), v && e.searchable && setTimeout(() => l == null ? void 0 : l.focus(), 50);
+  }, x = (v) => {
+    const L = v.relatedTarget;
+    h && L && h.contains(L) || (r(!1), a(""));
   };
   return (() => {
-    const b = Pl.cloneNode(!0), L = b.firstChild, B = L.firstChild;
-    b.addEventListener("blur", x), b.$$click = (Z) => {
-      Z.stopPropagation(), v();
+    const v = Nl.cloneNode(!0), L = v.firstChild, B = L.firstChild;
+    v.addEventListener("blur", x), v.$$click = (oe) => {
+      oe.stopPropagation(), b();
     };
-    const N = d;
-    return typeof N == "function" ? xt(N, b) : d = b, C(B, () => e.value), C(b, (() => {
-      const Z = G(() => !!(e.dataSource && e.dataSource.length > 0));
-      return () => Z() && (() => {
-        const U = Dl.cloneNode(!0), K = U.firstChild;
-        return U.$$mousedown = (z) => z.preventDefault(), C(U, (() => {
-          const z = G(() => !!e.searchable);
-          return () => z() && (() => {
-            const ce = Nl.cloneNode(!0), j = ce.firstChild;
-            ce.style.setProperty("padding", "8px"), ce.style.setProperty("border-bottom", "1px solid #333"), j.$$click = (te) => te.stopPropagation(), j.$$input = (te) => a(te.currentTarget.value);
-            const J = l;
-            return typeof J == "function" ? xt(J, j) : l = j, j.style.setProperty("width", "100%"), j.style.setProperty("padding", "6px 10px"), j.style.setProperty("border", "1px solid var(--klinecharts-pro-border-color)"), j.style.setProperty("border-radius", "4px"), j.style.setProperty("background-color", "var(--klinecharts-pro-popover-background-color)"), j.style.setProperty("color", "#fff"), j.style.setProperty("font-size", "13px"), j.style.setProperty("outline", "none"), V(() => Ie(j, "placeholder", e.searchPlaceholder || "Search...")), V(() => j.value = n()), ce;
+    const N = h;
+    return typeof N == "function" ? Lt(N, v) : h = v, C(B, () => e.value), C(v, (() => {
+      const oe = W(() => !!(e.dataSource && e.dataSource.length > 0));
+      return () => oe() && (() => {
+        const V = Ol.cloneNode(!0), R = V.firstChild;
+        return V.$$mousedown = (U) => U.preventDefault(), C(V, (() => {
+          const U = W(() => !!e.searchable);
+          return () => U() && (() => {
+            const ce = Il.cloneNode(!0), j = ce.firstChild;
+            ce.style.setProperty("padding", "8px"), ce.style.setProperty("border-bottom", "1px solid #333"), j.$$click = (ee) => ee.stopPropagation(), j.$$input = (ee) => a(ee.currentTarget.value);
+            const X = l;
+            return typeof X == "function" ? Lt(X, j) : l = j, j.style.setProperty("width", "100%"), j.style.setProperty("padding", "6px 10px"), j.style.setProperty("border", "1px solid var(--klinecharts-pro-border-color)"), j.style.setProperty("border-radius", "4px"), j.style.setProperty("background-color", "var(--klinecharts-pro-popover-background-color)"), j.style.setProperty("color", "#fff"), j.style.setProperty("font-size", "13px"), j.style.setProperty("outline", "none"), z(() => Ie(j, "placeholder", e.searchPlaceholder || "Search...")), z(() => j.value = n()), ce;
           })();
-        })(), K), C(K, () => {
-          var z;
-          return (z = h()) == null ? void 0 : z.map((ce) => {
-            const J = ce[e.valueKey ?? "text"] ?? ce;
+        })(), R), C(R, () => {
+          var U;
+          return (U = d()) == null ? void 0 : U.map((ce) => {
+            const X = ce[e.valueKey ?? "text"] ?? ce;
             return (() => {
-              const te = Ol.cloneNode(!0);
-              return te.$$click = (pe) => {
-                var H;
-                pe.stopPropagation(), e.value !== J && ((H = e.onSelected) == null || H.call(e, ce)), r(!1), a("");
-              }, C(te, J), V(() => te.classList.toggle("selected", e.value === J)), te;
+              const ee = El.cloneNode(!0);
+              return ee.$$click = (pe) => {
+                var Z;
+                pe.stopPropagation(), e.value !== X && ((Z = e.onSelected) == null || Z.call(e, ce)), r(!1), a("");
+              }, C(ee, X), z(() => ee.classList.toggle("selected", e.value === X)), ee;
             })();
           });
-        }), U;
+        }), V;
       })();
-    })(), null), V((Z) => {
-      const U = e.style, K = `klinecharts-pro-select ${e.class ?? ""} ${t() ? "klinecharts-pro-select-show" : ""}`;
-      return Z._v$ = Ft(b, U, Z._v$), K !== Z._v$2 && fe(b, Z._v$2 = K), Z;
+    })(), null), z((oe) => {
+      const V = e.style, R = `klinecharts-pro-select ${e.class ?? ""} ${t() ? "klinecharts-pro-select-show" : ""}`;
+      return oe._v$ = Ut(v, V, oe._v$), R !== oe._v$2 && fe(v, oe._v$2 = R), oe;
     }, {
       _v$: void 0,
       _v$2: void 0
-    }), b;
+    }), v;
   })();
 };
 je(["click", "mousedown", "input"]);
-const Il = /* @__PURE__ */ p('<span class="prefix"></span>'), El = /* @__PURE__ */ p('<span class="suffix"></span>'), Bl = /* @__PURE__ */ p('<div><input class="value"></div>'), Io = (e) => {
-  const t = ao({
+const Bl = /* @__PURE__ */ p('<span class="prefix"></span>'), Fl = /* @__PURE__ */ p('<span class="suffix"></span>'), Ul = /* @__PURE__ */ p('<div><input class="value"></div>'), Bo = (e) => {
+  const t = lo({
     min: Number.MIN_SAFE_INTEGER,
     max: Number.MAX_SAFE_INTEGER
   }, e);
   let r;
-  const [n, a] = M("normal");
+  const [n, a] = T("normal");
   return (() => {
-    const l = Bl.cloneNode(!0), d = l.firstChild;
+    const l = Ul.cloneNode(!0), h = l.firstChild;
     return l.$$click = () => {
       r == null || r.focus();
     }, C(l, w(le, {
@@ -2319,360 +2319,365 @@ const Il = /* @__PURE__ */ p('<span class="prefix"></span>'), El = /* @__PURE__ 
         return t.prefix;
       },
       get children() {
-        const h = Il.cloneNode(!0);
-        return C(h, () => t.prefix), h;
+        const d = Bl.cloneNode(!0);
+        return C(d, () => t.prefix), d;
       }
-    }), d), d.addEventListener("change", (h) => {
-      var x, b;
-      const v = h.target.value;
+    }), h), h.addEventListener("change", (d) => {
+      var x, v;
+      const b = d.target.value;
       if ("precision" in t) {
         let L;
         const B = Math.max(0, Math.floor(t.precision));
-        B <= 0 ? L = new RegExp(/^[1-9]\d*$/) : L = new RegExp("^\\d+\\.?\\d{0," + B + "}$"), (v === "" || L.test(v) && +v >= t.min && +v <= t.max) && ((x = t.onChange) == null || x.call(t, v === "" ? v : +v));
+        B <= 0 ? L = new RegExp(/^[1-9]\d*$/) : L = new RegExp("^\\d+\\.?\\d{0," + B + "}$"), (b === "" || L.test(b) && +b >= t.min && +b <= t.max) && ((x = t.onChange) == null || x.call(t, b === "" ? b : +b));
       } else
-        (b = t.onChange) == null || b.call(t, v);
-    }), d.addEventListener("blur", () => {
+        (v = t.onChange) == null || v.call(t, b);
+    }), h.addEventListener("blur", () => {
       a("normal");
-    }), d.addEventListener("focus", () => {
+    }), h.addEventListener("focus", () => {
       a("focus");
-    }), xt((h) => {
-      r = h;
-    }, d), C(l, w(le, {
+    }), Lt((d) => {
+      r = d;
+    }, h), C(l, w(le, {
       get when() {
         return t.suffix;
       },
       get children() {
-        const h = El.cloneNode(!0);
-        return C(h, () => t.suffix), h;
+        const d = Fl.cloneNode(!0);
+        return C(d, () => t.suffix), d;
       }
-    }), null), V((h) => {
-      const v = t.style, x = `klinecharts-pro-input ${t.class ?? ""}`, b = n(), L = t.placeholder ?? "";
-      return h._v$ = Ft(l, v, h._v$), x !== h._v$2 && fe(l, h._v$2 = x), b !== h._v$3 && Ie(l, "data-status", h._v$3 = b), L !== h._v$4 && Ie(d, "placeholder", h._v$4 = L), h;
+    }), null), z((d) => {
+      const b = t.style, x = `klinecharts-pro-input ${t.class ?? ""}`, v = n(), L = t.placeholder ?? "";
+      return d._v$ = Ut(l, b, d._v$), x !== d._v$2 && fe(l, d._v$2 = x), v !== d._v$3 && Ie(l, "data-status", d._v$3 = v), L !== d._v$4 && Ie(h, "placeholder", d._v$4 = L), d;
     }, {
       _v$: void 0,
       _v$2: void 0,
       _v$3: void 0,
       _v$4: void 0
-    }), V(() => d.value = t.value), l;
+    }), z(() => h.value = t.value), l;
   })();
 };
 je(["click"]);
-const Fl = /* @__PURE__ */ p('<div><i class="thumb"></i></div>'), Ul = (e) => (() => {
-  const t = Fl.cloneNode(!0);
+const zl = /* @__PURE__ */ p('<div><i class="thumb"></i></div>'), Vl = (e) => (() => {
+  const t = zl.cloneNode(!0);
   return t.$$click = (r) => {
     e.onChange && e.onChange();
-  }, V((r) => {
+  }, z((r) => {
     const n = e.style, a = `klinecharts-pro-switch ${e.open ? "turn-on" : "turn-off"} ${e.class ?? ""}`;
-    return r._v$ = Ft(t, n, r._v$), a !== r._v$2 && fe(t, r._v$2 = a), r;
+    return r._v$ = Ut(t, n, r._v$), a !== r._v$2 && fe(t, r._v$2 = a), r;
   }, {
     _v$: void 0,
     _v$2: void 0
   }), t;
 })();
 je(["click"]);
-let Te = null, B0 = !1;
-function zl(e, t) {
+let Ae = null, U0 = !1;
+function xt(e) {
+  return e == null ? void 0 : e.trim().toLowerCase();
+}
+function Kl(e, t) {
   return e.x >= t.x && e.x <= t.x + t.width && e.y >= t.y && e.y <= t.y + t.height;
 }
-function Tn(e, t = "body") {
-  var h, v, x;
-  const r = Te;
+function Mn(e, t = "body") {
+  const r = Ae;
   if (!r || !e)
     return e;
-  const n = e.toLowerCase(), a = (h = r.upColor) == null ? void 0 : h.toLowerCase(), l = (v = r.downColor) == null ? void 0 : v.toLowerCase(), d = (x = r.noChangeColor) == null ? void 0 : x.toLowerCase();
-  return n === a ? t === "border" ? r.borderUpColor ?? e : t === "wick" ? r.wickUpColor ?? e : e : n === l ? t === "border" ? r.borderDownColor ?? e : t === "wick" ? r.wickDownColor ?? e : e : n === d ? t === "border" ? r.borderNoChangeColor ?? e : t === "wick" ? r.wickNoChangeColor ?? e : e : e;
+  const n = xt(e), a = xt(r.upColor), l = xt(r.downColor), h = xt(r.noChangeColor);
+  return n === a ? t === "border" ? r.borderUpColor ?? e : t === "wick" ? r.wickUpColor ?? e : e : n === l ? t === "border" ? r.borderDownColor ?? e : t === "wick" ? r.wickDownColor ?? e : e : n === h ? t === "border" ? r.borderNoChangeColor ?? e : t === "wick" ? r.wickNoChangeColor ?? e : e : e;
 }
-function Vl(e) {
-  var n, a, l;
-  const t = Te;
+function Rl(e) {
+  const t = Ae;
   if (!t || !e)
     return !1;
-  const r = e.toLowerCase();
-  return r === ((n = t.upColor) == null ? void 0 : n.toLowerCase()) || r === ((a = t.downColor) == null ? void 0 : a.toLowerCase()) || r === ((l = t.noChangeColor) == null ? void 0 : l.toLowerCase());
+  const r = xt(e);
+  return r === xt(t.upColor) || r === xt(t.downColor) || r === xt(t.noChangeColor);
 }
-function Kl(e, t, r) {
-  const { x: n, y: a, width: l, height: d } = t, h = r.style ?? g1.Fill, v = l <= 1.5 && d > 1, x = r.color ?? "currentColor", b = Tn(x, v ? "wick" : "body"), L = r.borderSize ?? 1, B = Tn(r.borderColor ?? "currentColor", "border"), N = r.borderStyle ?? ze.Solid, Z = r.borderRadius ?? 0, U = r.borderDashedValue ?? [2, 2];
-  if (h === g1.Fill || r.style === g1.StrokeFill) {
-    e.fillStyle = b, e.beginPath(), e.moveTo(n + Z, a), e.arcTo(n + l, a, n + l, a + d, Z), e.arcTo(n + l, a + d, n, a + d, Z), e.arcTo(n, a + d, n, a, Z), e.arcTo(n, a, n + l, a, Z), e.closePath(), e.fill();
-    const K = Tn(x, "border");
-    !v && l > 1.5 && Vl(x) && K && K !== x && (e.strokeStyle = K, e.lineWidth = 1, e.setLineDash([]), e.beginPath(), e.moveTo(n + Z, a), e.arcTo(n + l, a, n + l, a + d, Z), e.arcTo(n + l, a + d, n, a + d, Z), e.arcTo(n, a + d, n, a, Z), e.arcTo(n, a, n + l, a, Z), e.closePath(), e.stroke());
+function Tn(e, t, r) {
+  const { x: n, y: a, width: l, height: h } = t, d = Math.max(0, Math.min(r, Math.abs(l) / 2, Math.abs(h) / 2));
+  e.beginPath(), e.moveTo(n + d, a), e.arcTo(n + l, a, n + l, a + h, d), e.arcTo(n + l, a + h, n, a + h, d), e.arcTo(n, a + h, n, a, d), e.arcTo(n, a, n + l, a, d), e.closePath();
+}
+function jl(e, t, r) {
+  const n = r.style ?? y1.Fill, a = t.width <= 1.5 && t.height > 1, l = r.color ?? "currentColor", h = Mn(l, a ? "wick" : "body"), d = r.borderSize ?? 1, b = Mn(r.borderColor ?? "currentColor", "border"), x = r.borderStyle ?? ze.Solid, v = r.borderRadius ?? 0, L = r.borderDashedValue ?? [2, 2], B = n === y1.Fill || r.style === y1.StrokeFill, N = n === y1.Stroke || r.style === y1.StrokeFill;
+  if (B) {
+    e.fillStyle = h, Tn(e, t, v), e.fill();
+    const oe = Mn(l, "border");
+    !a && Rl(l) && oe && (e.strokeStyle = oe, e.lineWidth = Math.max(1, d), e.setLineDash([]), Tn(e, t, v), e.stroke());
   }
-  (h === g1.Stroke || r.style === g1.StrokeFill) && (e.strokeStyle = B, e.lineWidth = L, e.setLineDash(N === ze.Dashed ? U : []), e.beginPath(), e.moveTo(n + Z, a), e.arcTo(n + l, a, n + l, a + d, Z), e.arcTo(n + l, a + d, n, a + d, Z), e.arcTo(n, a + d, n, a, Z), e.arcTo(n, a, n + l, a, Z), e.closePath(), e.stroke());
+  N && (e.strokeStyle = b, e.lineWidth = d, e.setLineDash(x === ze.Dashed ? L : []), Tn(e, t, v), e.stroke());
 }
-function Rl() {
-  B0 || (B0 = !0, o9({
+function Ql() {
+  U0 || (U0 = !0, a9({
     name: "rect",
-    checkEventOn: zl,
-    draw: Kl
+    checkEventOn: Kl,
+    draw: jl
   }));
 }
-function It(e) {
+function Et(e) {
   var r;
   const t = (r = e == null ? void 0 : e.candle) == null ? void 0 : r.bar;
-  t && (Te = {
-    ...Te ?? {},
+  t && (Ae = {
+    ...Ae ?? {},
     ...t,
-    borderUpColor: t.borderUpColor ?? t.upColor ?? (Te == null ? void 0 : Te.borderUpColor),
-    borderDownColor: t.borderDownColor ?? t.downColor ?? (Te == null ? void 0 : Te.borderDownColor),
-    borderNoChangeColor: t.borderNoChangeColor ?? t.noChangeColor ?? (Te == null ? void 0 : Te.borderNoChangeColor),
-    wickUpColor: t.wickUpColor ?? t.upColor ?? (Te == null ? void 0 : Te.wickUpColor),
-    wickDownColor: t.wickDownColor ?? t.downColor ?? (Te == null ? void 0 : Te.wickDownColor),
-    wickNoChangeColor: t.wickNoChangeColor ?? t.noChangeColor ?? (Te == null ? void 0 : Te.wickNoChangeColor)
+    borderUpColor: t.borderUpColor ?? t.upColor ?? (Ae == null ? void 0 : Ae.borderUpColor),
+    borderDownColor: t.borderDownColor ?? t.downColor ?? (Ae == null ? void 0 : Ae.borderDownColor),
+    borderNoChangeColor: t.borderNoChangeColor ?? t.noChangeColor ?? (Ae == null ? void 0 : Ae.borderNoChangeColor),
+    wickUpColor: t.wickUpColor ?? t.upColor ?? (Ae == null ? void 0 : Ae.wickUpColor),
+    wickDownColor: t.wickDownColor ?? t.downColor ?? (Ae == null ? void 0 : Ae.wickDownColor),
+    wickNoChangeColor: t.wickNoChangeColor ?? t.noChangeColor ?? (Ae == null ? void 0 : Ae.wickNoChangeColor)
   });
 }
-const jl = "指标", Ql = "更多", Zl = "主图指标", Hl = "副图指标", ql = "设置", Yl = "时区", Wl = "截屏", Gl = "全屏", Xl = "退出全屏", Jl = "保存", ec = "确定", tc = "取消", nc = "MA(移动平均线)", rc = "EMA(指数平滑移动平均线)", oc = "SMA", ic = "BOLL(布林线)", ac = "BBI(多空指数)", sc = "SAR(停损点指向指标)", lc = "VOL(成交量)", cc = "MACD(指数平滑异同移动平均线)", uc = "KDJ(随机指标)", dc = "RSI(相对强弱指标)", hc = "BIAS(乖离率)", fc = "BRAR(情绪指标)", mc = "CCI(顺势指标)", gc = "DMI(动向指标)", yc = "CR(能量指标)", Cc = "PSY(心理线)", pc = "DMA(平行线差指标)", vc = "TRIX(三重指数平滑平均线)", bc = "OBV(能量潮指标)", $c = "VR(成交量变异率)", _c = "WR(威廉指标)", kc = "MTM(动量指标)", xc = "EMV(简易波动指标)", Lc = "ROC(变动率指标)", wc = "PVT(价量趋势指标)", Tc = "AO(动量震荡指标)", Ac = "世界统一时间", Mc = "(UTC-10) 檀香山", Sc = "(UTC-8) 朱诺", Pc = "(UTC-7) 洛杉矶", Dc = "(UTC-5) 芝加哥", Nc = "(UTC-4) 多伦多", Oc = "(UTC-3) 圣保罗", Ic = "(UTC+1) 伦敦", Ec = "(UTC+2) 柏林", Bc = "(UTC+3) 巴林", Fc = "(UTC+4) 迪拜", Uc = "(UTC+5) 阿什哈巴德", zc = "(UTC+6) 阿拉木图", Vc = "(UTC+7) 曼谷", Kc = "(UTC+8) 上海", Rc = "(UTC+9) 东京", jc = "(UTC+10) 悉尼", Qc = "(UTC+12) 诺福克岛", Zc = "水平直线", Hc = "水平射线", qc = "水平线段", Yc = "垂直直线", Wc = "垂直射线", Gc = "垂直线段", Xc = "直线", Jc = "射线", e4 = "线段", t4 = "箭头", n4 = "价格线", r4 = "价格通道线", o4 = "平行直线", i4 = "斐波那契回调直线", a4 = "斐波那契回调线段", s4 = "斐波那契圆环", l4 = "斐波那契螺旋", c4 = "斐波那契速度阻力扇", u4 = "斐波那契趋势扩展", d4 = "江恩箱", h4 = "矩形", f4 = "平行四边形", m4 = "圆", g4 = "三角形", y4 = "三浪", C4 = "五浪", p4 = "八浪", v4 = "任意浪", b4 = "ABCD形态", $4 = "XABCD形态", _4 = "弱磁模式", k4 = "强磁模式", x4 = "商品搜索", L4 = "商品代码", w4 = "参数1", T4 = "参数2", A4 = "参数3", M4 = "参数4", S4 = "参数5", P4 = "周期", D4 = "标准差", N4 = "蜡烛图类型", O4 = "全实心", I4 = "全空心", E4 = "涨空心", B4 = "跌空心", F4 = "OHLC", U4 = "面积图", z4 = "最新价显示", V4 = "最高价显示", K4 = "最低价显示", R4 = "指标最新值显示", j4 = "价格轴类型", Q4 = "线性轴", Z4 = "百分比轴", H4 = "对数轴", q4 = "倒置坐标", Y4 = "网格线显示", W4 = "恢复默认", G4 = {
-  indicator: jl,
-  more: Ql,
-  main_indicator: Zl,
-  sub_indicator: Hl,
-  setting: ql,
-  timezone: Yl,
-  screenshot: Wl,
-  full_screen: Gl,
-  exit_full_screen: Xl,
-  save: Jl,
-  confirm: ec,
-  cancel: tc,
-  ma: nc,
-  ema: rc,
-  sma: oc,
-  boll: ic,
-  bbi: ac,
-  sar: sc,
-  vol: lc,
-  macd: cc,
-  kdj: uc,
-  rsi: dc,
-  bias: hc,
-  brar: fc,
-  cci: mc,
-  dmi: gc,
-  cr: yc,
-  psy: Cc,
-  dma: pc,
-  trix: vc,
-  obv: bc,
-  vr: $c,
-  wr: _c,
-  mtm: kc,
-  emv: xc,
-  roc: Lc,
-  pvt: wc,
+const Zl = "指标", Hl = "更多", ql = "主图指标", Yl = "副图指标", Wl = "设置", Gl = "时区", Xl = "截屏", Jl = "全屏", ec = "退出全屏", tc = "保存", nc = "确定", rc = "取消", oc = "MA(移动平均线)", ic = "EMA(指数平滑移动平均线)", ac = "SMA", sc = "BOLL(布林线)", lc = "BBI(多空指数)", cc = "SAR(停损点指向指标)", uc = "VOL(成交量)", dc = "MACD(指数平滑异同移动平均线)", hc = "KDJ(随机指标)", fc = "RSI(相对强弱指标)", mc = "BIAS(乖离率)", gc = "BRAR(情绪指标)", yc = "CCI(顺势指标)", Cc = "DMI(动向指标)", pc = "CR(能量指标)", vc = "PSY(心理线)", bc = "DMA(平行线差指标)", $c = "TRIX(三重指数平滑平均线)", _c = "OBV(能量潮指标)", kc = "VR(成交量变异率)", xc = "WR(威廉指标)", Lc = "MTM(动量指标)", wc = "EMV(简易波动指标)", Ac = "ROC(变动率指标)", Mc = "PVT(价量趋势指标)", Tc = "AO(动量震荡指标)", Sc = "世界统一时间", Pc = "(UTC-10) 檀香山", Dc = "(UTC-8) 朱诺", Nc = "(UTC-7) 洛杉矶", Oc = "(UTC-5) 芝加哥", Ic = "(UTC-4) 多伦多", Ec = "(UTC-3) 圣保罗", Bc = "(UTC+1) 伦敦", Fc = "(UTC+2) 柏林", Uc = "(UTC+3) 巴林", zc = "(UTC+4) 迪拜", Vc = "(UTC+5) 阿什哈巴德", Kc = "(UTC+6) 阿拉木图", Rc = "(UTC+7) 曼谷", jc = "(UTC+8) 上海", Qc = "(UTC+9) 东京", Zc = "(UTC+10) 悉尼", Hc = "(UTC+12) 诺福克岛", qc = "水平直线", Yc = "水平射线", Wc = "水平线段", Gc = "垂直直线", Xc = "垂直射线", Jc = "垂直线段", e4 = "直线", t4 = "射线", n4 = "线段", r4 = "箭头", o4 = "价格线", i4 = "价格通道线", a4 = "平行直线", s4 = "斐波那契回调直线", l4 = "斐波那契回调线段", c4 = "斐波那契圆环", u4 = "斐波那契螺旋", d4 = "斐波那契速度阻力扇", h4 = "斐波那契趋势扩展", f4 = "江恩箱", m4 = "矩形", g4 = "平行四边形", y4 = "圆", C4 = "三角形", p4 = "三浪", v4 = "五浪", b4 = "八浪", $4 = "任意浪", _4 = "ABCD形态", k4 = "XABCD形态", x4 = "弱磁模式", L4 = "强磁模式", w4 = "商品搜索", A4 = "商品代码", M4 = "参数1", T4 = "参数2", S4 = "参数3", P4 = "参数4", D4 = "参数5", N4 = "周期", O4 = "标准差", I4 = "蜡烛图类型", E4 = "全实心", B4 = "全空心", F4 = "涨空心", U4 = "跌空心", z4 = "OHLC", V4 = "面积图", K4 = "最新价显示", R4 = "最高价显示", j4 = "最低价显示", Q4 = "指标最新值显示", Z4 = "价格轴类型", H4 = "线性轴", q4 = "百分比轴", Y4 = "对数轴", W4 = "倒置坐标", G4 = "网格线显示", X4 = "恢复默认", J4 = {
+  indicator: Zl,
+  more: Hl,
+  main_indicator: ql,
+  sub_indicator: Yl,
+  setting: Wl,
+  timezone: Gl,
+  screenshot: Xl,
+  full_screen: Jl,
+  exit_full_screen: ec,
+  save: tc,
+  confirm: nc,
+  cancel: rc,
+  ma: oc,
+  ema: ic,
+  sma: ac,
+  boll: sc,
+  bbi: lc,
+  sar: cc,
+  vol: uc,
+  macd: dc,
+  kdj: hc,
+  rsi: fc,
+  bias: mc,
+  brar: gc,
+  cci: yc,
+  dmi: Cc,
+  cr: pc,
+  psy: vc,
+  dma: bc,
+  trix: $c,
+  obv: _c,
+  vr: kc,
+  wr: xc,
+  mtm: Lc,
+  emv: wc,
+  roc: Ac,
+  pvt: Mc,
   ao: Tc,
-  utc: Ac,
-  honolulu: Mc,
-  juneau: Sc,
-  los_angeles: Pc,
-  chicago: Dc,
-  toronto: Nc,
-  sao_paulo: Oc,
-  london: Ic,
-  berlin: Ec,
-  bahrain: Bc,
-  dubai: Fc,
-  ashkhabad: Uc,
-  almaty: zc,
-  bangkok: Vc,
-  shanghai: Kc,
-  tokyo: Rc,
-  sydney: jc,
-  norfolk: Qc,
-  horizontal_straight_line: Zc,
-  horizontal_ray_line: Hc,
-  horizontal_segment: qc,
-  vertical_straight_line: Yc,
-  vertical_ray_line: Wc,
-  vertical_segment: Gc,
-  straight_line: Xc,
-  ray_line: Jc,
-  segment: e4,
-  arrow: t4,
-  price_line: n4,
-  price_channel_line: r4,
-  parallel_straight_line: o4,
-  fibonacci_line: i4,
-  fibonacci_segment: a4,
-  fibonacci_circle: s4,
-  fibonacci_spiral: l4,
-  fibonacci_speed_resistance_fan: c4,
-  fibonacci_extension: u4,
-  gann_box: d4,
-  rect: h4,
-  parallelogram: f4,
-  circle: m4,
-  triangle: g4,
-  three_waves: y4,
-  five_waves: C4,
-  eight_waves: p4,
-  any_waves: v4,
-  abcd: b4,
-  xabcd: $4,
-  weak_magnet: _4,
-  strong_magnet: k4,
-  symbol_search: x4,
-  symbol_code: L4,
-  params_1: w4,
+  utc: Sc,
+  honolulu: Pc,
+  juneau: Dc,
+  los_angeles: Nc,
+  chicago: Oc,
+  toronto: Ic,
+  sao_paulo: Ec,
+  london: Bc,
+  berlin: Fc,
+  bahrain: Uc,
+  dubai: zc,
+  ashkhabad: Vc,
+  almaty: Kc,
+  bangkok: Rc,
+  shanghai: jc,
+  tokyo: Qc,
+  sydney: Zc,
+  norfolk: Hc,
+  horizontal_straight_line: qc,
+  horizontal_ray_line: Yc,
+  horizontal_segment: Wc,
+  vertical_straight_line: Gc,
+  vertical_ray_line: Xc,
+  vertical_segment: Jc,
+  straight_line: e4,
+  ray_line: t4,
+  segment: n4,
+  arrow: r4,
+  price_line: o4,
+  price_channel_line: i4,
+  parallel_straight_line: a4,
+  fibonacci_line: s4,
+  fibonacci_segment: l4,
+  fibonacci_circle: c4,
+  fibonacci_spiral: u4,
+  fibonacci_speed_resistance_fan: d4,
+  fibonacci_extension: h4,
+  gann_box: f4,
+  rect: m4,
+  parallelogram: g4,
+  circle: y4,
+  triangle: C4,
+  three_waves: p4,
+  five_waves: v4,
+  eight_waves: b4,
+  any_waves: $4,
+  abcd: _4,
+  xabcd: k4,
+  weak_magnet: x4,
+  strong_magnet: L4,
+  symbol_search: w4,
+  symbol_code: A4,
+  params_1: M4,
   params_2: T4,
-  params_3: A4,
-  params_4: M4,
-  params_5: S4,
-  period: P4,
-  standard_deviation: D4,
-  candle_type: N4,
-  candle_solid: O4,
-  candle_stroke: I4,
-  candle_up_stroke: E4,
-  candle_down_stroke: B4,
-  ohlc: F4,
-  area: U4,
-  last_price_show: z4,
-  high_price_show: V4,
-  low_price_show: K4,
-  indicator_last_value_show: R4,
-  price_axis_type: j4,
-  normal: Q4,
-  percentage: Z4,
-  log: H4,
-  reverse_coordinate: q4,
-  grid_show: Y4,
-  restore_default: W4
-}, X4 = "Indicator", J4 = "More", eu = "Main Indicator", tu = "Sub Indicator", nu = "Setting", ru = "Timezone", ou = "Screenshot", iu = "Full Screen", au = "Exit", su = "Save", lu = "Confirm", cu = "Cancel", uu = "MA(Moving Average)", du = "EMA(Exponential Moving Average)", hu = "SMA", fu = "BOLL(Bolinger Bands)", mu = "BBI(Bull And Bearlndex)", gu = "SAR(Stop and Reverse)", yu = "VOL(Volume)", Cu = "MACD(Moving Average Convergence / Divergence)", pu = "KDJ(KDJ Index)", vu = "RSI(Relative Strength Index)", bu = "BIAS(Bias Ratio)", $u = "BRAR(情绪指标)", _u = "CCI(Commodity Channel Index)", ku = "DMI(Directional Movement Index)", xu = "CR(能量指标)", Lu = "PSY(Psychological Line)", wu = "DMA(Different of Moving Average)", Tu = "TRIX(Triple Exponentially Smoothed Moving Average)", Au = "OBV(On Balance Volume)", Mu = "VR(Volatility Volume Ratio)", Su = "WR(Williams %R)", Pu = "MTM(Momentum Index)", Du = "EMV(Ease of Movement Value)", Nu = "ROC(Price Rate of Change)", Ou = "PVT(Price and Volume Trend)", Iu = "AO(Awesome Oscillator)", Eu = "UTC", Bu = "(UTC-10) Honolulu", Fu = "(UTC-8) Juneau", Uu = "(UTC-7) Los Angeles", zu = "(UTC-5) Chicago", Vu = "(UTC-4) Toronto", Ku = "(UTC-3) Sao Paulo", Ru = "(UTC+1) London", ju = "(UTC+2) Berlin", Qu = "(UTC+3) Bahrain", Zu = "(UTC+4) Dubai", Hu = "(UTC+5) Ashkhabad", qu = "(UTC+6) Almaty", Yu = "(UTC+7) Bangkok", Wu = "(UTC+8) Shanghai", Gu = "(UTC+9) Tokyo", Xu = "(UTC+10) Sydney", Ju = "(UTC+12) Norfolk", ed = "Horizontal Line", td = "Horizontal Ray", nd = "Horizontal Segment", rd = "Vertical Line", od = "Vertical Ray", id = "Vertical Segment", ad = "Trend Line", sd = "Ray", ld = "Segment", cd = "Arrow", ud = "Price Line", dd = "Price Channel Line", hd = "Parallel Line", fd = "Fibonacci Line", md = "Fibonacci Segment", gd = "Fibonacci Circle", yd = "Fibonacci Spiral", Cd = "Fibonacci Sector", pd = "Fibonacci Extension", vd = "Gann Box", bd = "Rect", $d = "Parallelogram", _d = "Circle", kd = "Triangle", xd = "Three Waves", Ld = "Five Waves", wd = "Eight Waves", Td = "Any Waves", Ad = "ABCD Pattern", Md = "XABCD Pattern", Sd = "Weak Magnet", Pd = "Strong Magnet", Dd = "Symbol Search", Nd = "Symbol Code", Od = "Parameter 1", Id = "Parameter 2", Ed = "Parameter 3", Bd = "Parameter 4", Fd = "Parameter 5", Ud = "Period", zd = "Standard Deviation", Vd = "Candle Type", Kd = "Candle Solid", Rd = "Candle Stroke", jd = "Candle Up Stroke", Qd = "Candle Down Stroke", Zd = "OHLC", Hd = "Area", qd = "Show Last Price", Yd = "Show Highest Price", Wd = "Show Lowest Price", Gd = "Show indicator's last value", Xd = "Price Axis Type", Jd = "Normal", eh = "Percentage", th = "Log", nh = "Reverse Coordinate", rh = "Show Grids", oh = "Restore Defaults", ih = {
-  indicator: X4,
-  more: J4,
-  main_indicator: eu,
-  sub_indicator: tu,
-  setting: nu,
-  timezone: ru,
-  screenshot: ou,
-  full_screen: iu,
-  exit_full_screen: au,
-  save: su,
-  confirm: lu,
-  cancel: cu,
-  ma: uu,
-  ema: du,
-  sma: hu,
-  boll: fu,
-  bbi: mu,
-  sar: gu,
-  vol: yu,
-  macd: Cu,
-  kdj: pu,
-  rsi: vu,
-  bias: bu,
-  brar: $u,
-  cci: _u,
-  dmi: ku,
-  cr: xu,
-  psy: Lu,
-  dma: wu,
+  params_3: S4,
+  params_4: P4,
+  params_5: D4,
+  period: N4,
+  standard_deviation: O4,
+  candle_type: I4,
+  candle_solid: E4,
+  candle_stroke: B4,
+  candle_up_stroke: F4,
+  candle_down_stroke: U4,
+  ohlc: z4,
+  area: V4,
+  last_price_show: K4,
+  high_price_show: R4,
+  low_price_show: j4,
+  indicator_last_value_show: Q4,
+  price_axis_type: Z4,
+  normal: H4,
+  percentage: q4,
+  log: Y4,
+  reverse_coordinate: W4,
+  grid_show: G4,
+  restore_default: X4
+}, eu = "Indicator", tu = "More", nu = "Main Indicator", ru = "Sub Indicator", ou = "Setting", iu = "Timezone", au = "Screenshot", su = "Full Screen", lu = "Exit", cu = "Save", uu = "Confirm", du = "Cancel", hu = "MA(Moving Average)", fu = "EMA(Exponential Moving Average)", mu = "SMA", gu = "BOLL(Bolinger Bands)", yu = "BBI(Bull And Bearlndex)", Cu = "SAR(Stop and Reverse)", pu = "VOL(Volume)", vu = "MACD(Moving Average Convergence / Divergence)", bu = "KDJ(KDJ Index)", $u = "RSI(Relative Strength Index)", _u = "BIAS(Bias Ratio)", ku = "BRAR(情绪指标)", xu = "CCI(Commodity Channel Index)", Lu = "DMI(Directional Movement Index)", wu = "CR(能量指标)", Au = "PSY(Psychological Line)", Mu = "DMA(Different of Moving Average)", Tu = "TRIX(Triple Exponentially Smoothed Moving Average)", Su = "OBV(On Balance Volume)", Pu = "VR(Volatility Volume Ratio)", Du = "WR(Williams %R)", Nu = "MTM(Momentum Index)", Ou = "EMV(Ease of Movement Value)", Iu = "ROC(Price Rate of Change)", Eu = "PVT(Price and Volume Trend)", Bu = "AO(Awesome Oscillator)", Fu = "UTC", Uu = "(UTC-10) Honolulu", zu = "(UTC-8) Juneau", Vu = "(UTC-7) Los Angeles", Ku = "(UTC-5) Chicago", Ru = "(UTC-4) Toronto", ju = "(UTC-3) Sao Paulo", Qu = "(UTC+1) London", Zu = "(UTC+2) Berlin", Hu = "(UTC+3) Bahrain", qu = "(UTC+4) Dubai", Yu = "(UTC+5) Ashkhabad", Wu = "(UTC+6) Almaty", Gu = "(UTC+7) Bangkok", Xu = "(UTC+8) Shanghai", Ju = "(UTC+9) Tokyo", ed = "(UTC+10) Sydney", td = "(UTC+12) Norfolk", nd = "Horizontal Line", rd = "Horizontal Ray", od = "Horizontal Segment", id = "Vertical Line", ad = "Vertical Ray", sd = "Vertical Segment", ld = "Trend Line", cd = "Ray", ud = "Segment", dd = "Arrow", hd = "Price Line", fd = "Price Channel Line", md = "Parallel Line", gd = "Fibonacci Line", yd = "Fibonacci Segment", Cd = "Fibonacci Circle", pd = "Fibonacci Spiral", vd = "Fibonacci Sector", bd = "Fibonacci Extension", $d = "Gann Box", _d = "Rect", kd = "Parallelogram", xd = "Circle", Ld = "Triangle", wd = "Three Waves", Ad = "Five Waves", Md = "Eight Waves", Td = "Any Waves", Sd = "ABCD Pattern", Pd = "XABCD Pattern", Dd = "Weak Magnet", Nd = "Strong Magnet", Od = "Symbol Search", Id = "Symbol Code", Ed = "Parameter 1", Bd = "Parameter 2", Fd = "Parameter 3", Ud = "Parameter 4", zd = "Parameter 5", Vd = "Period", Kd = "Standard Deviation", Rd = "Candle Type", jd = "Candle Solid", Qd = "Candle Stroke", Zd = "Candle Up Stroke", Hd = "Candle Down Stroke", qd = "OHLC", Yd = "Area", Wd = "Show Last Price", Gd = "Show Highest Price", Xd = "Show Lowest Price", Jd = "Show indicator's last value", eh = "Price Axis Type", th = "Normal", nh = "Percentage", rh = "Log", oh = "Reverse Coordinate", ih = "Show Grids", ah = "Restore Defaults", sh = {
+  indicator: eu,
+  more: tu,
+  main_indicator: nu,
+  sub_indicator: ru,
+  setting: ou,
+  timezone: iu,
+  screenshot: au,
+  full_screen: su,
+  exit_full_screen: lu,
+  save: cu,
+  confirm: uu,
+  cancel: du,
+  ma: hu,
+  ema: fu,
+  sma: mu,
+  boll: gu,
+  bbi: yu,
+  sar: Cu,
+  vol: pu,
+  macd: vu,
+  kdj: bu,
+  rsi: $u,
+  bias: _u,
+  brar: ku,
+  cci: xu,
+  dmi: Lu,
+  cr: wu,
+  psy: Au,
+  dma: Mu,
   trix: Tu,
-  obv: Au,
-  vr: Mu,
-  wr: Su,
-  mtm: Pu,
-  emv: Du,
-  roc: Nu,
-  pvt: Ou,
-  ao: Iu,
-  utc: Eu,
-  honolulu: Bu,
-  juneau: Fu,
-  los_angeles: Uu,
-  chicago: zu,
-  toronto: Vu,
-  sao_paulo: Ku,
-  london: Ru,
-  berlin: ju,
-  bahrain: Qu,
-  dubai: Zu,
-  ashkhabad: Hu,
-  almaty: qu,
-  bangkok: Yu,
-  shanghai: Wu,
-  tokyo: Gu,
-  sydney: Xu,
-  norfolk: Ju,
-  horizontal_straight_line: ed,
-  horizontal_ray_line: td,
-  horizontal_segment: nd,
-  vertical_straight_line: rd,
-  vertical_ray_line: od,
-  vertical_segment: id,
-  straight_line: ad,
-  ray_line: sd,
-  segment: ld,
-  arrow: cd,
-  price_line: ud,
-  price_channel_line: dd,
-  parallel_straight_line: hd,
-  fibonacci_line: fd,
-  fibonacci_segment: md,
-  fibonacci_circle: gd,
-  fibonacci_spiral: yd,
-  fibonacci_speed_resistance_fan: Cd,
-  fibonacci_extension: pd,
-  gann_box: vd,
-  rect: bd,
-  parallelogram: $d,
-  circle: _d,
-  triangle: kd,
-  three_waves: xd,
-  five_waves: Ld,
-  eight_waves: wd,
+  obv: Su,
+  vr: Pu,
+  wr: Du,
+  mtm: Nu,
+  emv: Ou,
+  roc: Iu,
+  pvt: Eu,
+  ao: Bu,
+  utc: Fu,
+  honolulu: Uu,
+  juneau: zu,
+  los_angeles: Vu,
+  chicago: Ku,
+  toronto: Ru,
+  sao_paulo: ju,
+  london: Qu,
+  berlin: Zu,
+  bahrain: Hu,
+  dubai: qu,
+  ashkhabad: Yu,
+  almaty: Wu,
+  bangkok: Gu,
+  shanghai: Xu,
+  tokyo: Ju,
+  sydney: ed,
+  norfolk: td,
+  horizontal_straight_line: nd,
+  horizontal_ray_line: rd,
+  horizontal_segment: od,
+  vertical_straight_line: id,
+  vertical_ray_line: ad,
+  vertical_segment: sd,
+  straight_line: ld,
+  ray_line: cd,
+  segment: ud,
+  arrow: dd,
+  price_line: hd,
+  price_channel_line: fd,
+  parallel_straight_line: md,
+  fibonacci_line: gd,
+  fibonacci_segment: yd,
+  fibonacci_circle: Cd,
+  fibonacci_spiral: pd,
+  fibonacci_speed_resistance_fan: vd,
+  fibonacci_extension: bd,
+  gann_box: $d,
+  rect: _d,
+  parallelogram: kd,
+  circle: xd,
+  triangle: Ld,
+  three_waves: wd,
+  five_waves: Ad,
+  eight_waves: Md,
   any_waves: Td,
-  abcd: Ad,
-  xabcd: Md,
-  weak_magnet: Sd,
-  strong_magnet: Pd,
-  symbol_search: Dd,
-  symbol_code: Nd,
-  params_1: Od,
-  params_2: Id,
-  params_3: Ed,
-  params_4: Bd,
-  params_5: Fd,
-  period: Ud,
-  standard_deviation: zd,
-  candle_type: Vd,
-  candle_solid: Kd,
-  candle_stroke: Rd,
-  candle_up_stroke: jd,
-  candle_down_stroke: Qd,
-  ohlc: Zd,
-  area: Hd,
-  last_price_show: qd,
-  high_price_show: Yd,
-  low_price_show: Wd,
-  indicator_last_value_show: Gd,
-  price_axis_type: Xd,
-  normal: Jd,
-  percentage: eh,
-  log: th,
-  reverse_coordinate: nh,
-  grid_show: rh,
-  restore_default: oh
-}, Eo = {
-  "zh-CN": G4,
-  "en-US": ih
+  abcd: Sd,
+  xabcd: Pd,
+  weak_magnet: Dd,
+  strong_magnet: Nd,
+  symbol_search: Od,
+  symbol_code: Id,
+  params_1: Ed,
+  params_2: Bd,
+  params_3: Fd,
+  params_4: Ud,
+  params_5: zd,
+  period: Vd,
+  standard_deviation: Kd,
+  candle_type: Rd,
+  candle_solid: jd,
+  candle_stroke: Qd,
+  candle_up_stroke: Zd,
+  candle_down_stroke: Hd,
+  ohlc: qd,
+  area: Yd,
+  last_price_show: Wd,
+  high_price_show: Gd,
+  low_price_show: Xd,
+  indicator_last_value_show: Jd,
+  price_axis_type: eh,
+  normal: th,
+  percentage: nh,
+  log: rh,
+  reverse_coordinate: oh,
+  grid_show: ih,
+  restore_default: ah
+}, Fo = {
+  "zh-CN": J4,
+  "en-US": sh
 };
-function Ng(e, t) {
-  Eo[e] = t;
+function Ig(e, t) {
+  Fo[e] = t;
 }
 const c = (e, t) => {
   var r;
-  return ((r = Eo[t]) == null ? void 0 : r[e]) ?? e;
-}, ah = /* @__PURE__ */ p('<div class="scroll-indicator left"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg></div>'), sh = /* @__PURE__ */ p('<img alt="symbol">'), lh = /* @__PURE__ */ p('<div class="symbol"><span></span></div>'), ch = /* @__PURE__ */ p('<span class="down-arrow-icon mobile-separate-arrow"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9L12 15L18 9"></path></svg></span>'), uh = /* @__PURE__ */ p('<span class="mobile-more-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"></path><circle cx="12" cy="12" r="3"></circle></svg></span>'), dh = /* @__PURE__ */ p('<div class="item tools" title="Time Tools"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M16 3v4"></path><path d="M8 3v4"></path><path d="M3 10h18"></path><path d="M12 14v4"></path><path d="M10 16h4"></path></svg></div>'), hh = /* @__PURE__ */ p('<div class="item tools"><svg viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="20" height="20" rx="4" ry="4" fill="none" stroke="currentColor" stroke-width="2"></rect><path d="m15.92 13.9-3.65-3.55a.773.773 0 0 1 0-1.12c.32-.33.79-.33 1.11 0l3.02 3.38c.31.32.31.81 0 1.13-.16.16-.48.16-.48.16Z" fill="currentColor" stroke="1"></path><path d="m12.43 14.23-.48-.17q-.48-.48 0-.96l4.13-4.36c.31-.32.63-.32.95 0s.32.65 0 .97l-4.13 4.35c-.15.17-.31.17-.47.17Zm-1.11-9.52c.31 0 1.11.16 1.11.97 0 .64-.95.48-1.27.48-1.43 0-1.91.81-2.07 1.45l-.31 1.94h1.58c.32 0 .64.32.64.64 0 .33-.32.65-.64.65H8.62l-1.11 4.99c-.16 1.46-1.11 1.46-1.59 0L7.03 11H5.6c-.31 0-.63-.32-.63-.65 0-.64.32-.8.63-.8h1.75l.48-2.1c.31-2.74 2.69-2.9 3.49-2.74Z" fill="noncurrentColore" stroke="1"></path></svg><span></span></div>'), fh = /* @__PURE__ */ p('<div class="klinecharts-pro-order-tools-display-menu"></div>'), mh = /* @__PURE__ */ p('<div class="klinecharts-pro-order-tools-popover"><div><button type="button" class="klinecharts-pro-order-tools-item klinecharts-pro-order-tools-group-title"><span class="klinecharts-pro-order-tools-title-left"><label class="klinecharts-pro-order-tools-checkbox-box"><input class="klinecharts-pro-order-tools-checkbox-input" type="checkbox"><span class="klinecharts-pro-order-tools-checkbox-fill"></span></label><span class="klinecharts-pro-order-tools-label">Quick Order</span></span><span class="klinecharts-pro-order-tools-chevron">›</span></button><div class="klinecharts-pro-order-tools-submenu"><label class="klinecharts-pro-order-tools-item"><span class="klinecharts-pro-order-tools-checkbox-box"><input class="klinecharts-pro-order-tools-checkbox-input" type="checkbox"><span class="klinecharts-pro-order-tools-checkbox-fill"></span></span><span class="klinecharts-pro-order-tools-label">Floating Window</span></label><label class="klinecharts-pro-order-tools-item"><span class="klinecharts-pro-order-tools-checkbox-box"><input class="klinecharts-pro-order-tools-checkbox-input" type="checkbox"><span class="klinecharts-pro-order-tools-checkbox-fill"></span></span><span class="klinecharts-pro-order-tools-label">Plus Button</span></label></div></div><div><button type="button" class="klinecharts-pro-order-tools-item klinecharts-pro-order-tools-group-title"><span class="klinecharts-pro-order-tools-title-left"><label class="klinecharts-pro-order-tools-checkbox-box"><input class="klinecharts-pro-order-tools-checkbox-input" type="checkbox"><span class="klinecharts-pro-order-tools-checkbox-fill"></span></label><span class="klinecharts-pro-order-tools-label">Open Orders</span></span><span class="klinecharts-pro-order-tools-chevron">&rsaquo;</span></button><div class="klinecharts-pro-order-tools-submenu"><div class="klinecharts-pro-order-tools-setting-row"><span class="klinecharts-pro-order-tools-label">Extended Price Line</span><button type="button"><span></span></button></div><div class="klinecharts-pro-order-tools-setting-row"><span class="klinecharts-pro-order-tools-label">Display</span><div class="klinecharts-pro-order-tools-display"><button type="button" class="klinecharts-pro-order-tools-display-button"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4"></path></svg></button></div></div></div></div><label class="klinecharts-pro-order-tools-item"><span class="klinecharts-pro-order-tools-checkbox-box"><input class="klinecharts-pro-order-tools-checkbox-input" type="checkbox"><span class="klinecharts-pro-order-tools-checkbox-fill"></span></span><span class="klinecharts-pro-order-tools-label">Positions</span></label> <label class="klinecharts-pro-order-tools-item"><span class="klinecharts-pro-order-tools-checkbox-box"><input class="klinecharts-pro-order-tools-checkbox-input" type="checkbox"><span class="klinecharts-pro-order-tools-checkbox-fill"></span></span><span class="klinecharts-pro-order-tools-label">Breakeven Price</span></label> <label class="klinecharts-pro-order-tools-item"><span class="klinecharts-pro-order-tools-checkbox-box"><input class="klinecharts-pro-order-tools-checkbox-input" type="checkbox"><span class="klinecharts-pro-order-tools-checkbox-fill"></span></span><span class="klinecharts-pro-order-tools-label">Liquidation Price</span></label><div><button type="button" class="klinecharts-pro-order-tools-item klinecharts-pro-order-tools-group-title"><span class="klinecharts-pro-order-tools-title-left"><label class="klinecharts-pro-order-tools-checkbox-box"><input class="klinecharts-pro-order-tools-checkbox-input" type="checkbox"><span class="klinecharts-pro-order-tools-checkbox-fill"></span></label><span class="klinecharts-pro-order-tools-label">Price Line</span></span><span class="klinecharts-pro-order-tools-chevron">&rsaquo;</span></button><div class="klinecharts-pro-order-tools-submenu"><label class="klinecharts-pro-order-tools-item"><span class="klinecharts-pro-order-tools-checkbox-box"><input class="klinecharts-pro-order-tools-checkbox-input" type="checkbox"><span class="klinecharts-pro-order-tools-checkbox-fill"></span></span><span class="klinecharts-pro-order-tools-label">Market Price Line</span></label><label class="klinecharts-pro-order-tools-item"><span class="klinecharts-pro-order-tools-checkbox-box"><input class="klinecharts-pro-order-tools-checkbox-input" type="checkbox"><span class="klinecharts-pro-order-tools-checkbox-fill"></span></span><span class="klinecharts-pro-order-tools-label">Count Down</span></label><label class="klinecharts-pro-order-tools-item"><span class="klinecharts-pro-order-tools-checkbox-box"><input class="klinecharts-pro-order-tools-checkbox-input" type="checkbox"><span class="klinecharts-pro-order-tools-checkbox-fill"></span></span><span class="klinecharts-pro-order-tools-label">Bid & Ask Price</span></label></div></div><label class="klinecharts-pro-order-tools-item"><span class="klinecharts-pro-order-tools-checkbox-box"><input class="klinecharts-pro-order-tools-checkbox-input" type="checkbox"><span class="klinecharts-pro-order-tools-checkbox-fill"></span></span><span class="klinecharts-pro-order-tools-label">Order History</span></label></div>'), gh = /* @__PURE__ */ p('<div><div class="item tools order-tools-trigger"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Orders"><path d="M4 7h10"></path><path d="M4 12h8"></path><path d="M4 17h6"></path><path d="M18 6v12"></path><path d="M15 15l3 3 3-3"></path></svg><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9L12 15L18 9"></path></svg></div></div>'), yh = /* @__PURE__ */ p('<div class="item tools"><svg width="20" height="20" viewBox="0 0 20 20"><path d="M18.5446,9.09091C18.3333,6.61616,17.2887,4.31818,15.5751,2.63889C13.8498,0.94697,11.6197,0,9.28404,0C8.02817,0,6.81925,0.265151,5.66901,0.782828C5.65728,0.782828,5.65728,0.795454,5.64554,0.795454C5.6338,0.795454,5.6338,0.808081,5.62207,0.808081C4.53052,1.31313,3.55634,2.0202,2.71127,2.92929C1.85446,3.85101,1.18545,4.91162,0.715963,6.11111C0.246479,7.33586,0,8.64899,0,10C0,10.8712,0.105634,11.7172,0.305164,12.5379C0.305164,12.5631,0.316901,12.5884,0.328638,12.6136C0.739437,14.2298,1.51408,15.7197,2.62911,16.9571C4.07277,18.548,5.92723,19.5581,7.93427,19.8737C7.95775,19.8737,7.96948,19.8864,7.99296,19.8864C8.3216,19.9369,8.66197,19.9747,9.00235,19.9747L9.21362,19.9747C9.61268,19.9747,10.3756,19.9369,11.0094,19.697C11.1737,19.6338,11.3028,19.5076,11.3732,19.3434C11.4437,19.1793,11.4554,18.9899,11.3967,18.8131C11.3028,18.5354,11.0563,18.346,10.7864,18.346C10.716,18.346,10.6338,18.3586,10.5634,18.3838C10.0939,18.5606,9.46009,18.5859,9.20188,18.5859L9.09624,18.5859C9.20188,18.2702,9.23709,17.9167,9.15493,17.5505C9.00235,16.8939,8.50939,16.3384,7.58216,15.7955L7.19484,15.5682C6.57277,15.2146,6.23239,15.0253,6.03286,14.7348C5.83333,14.4444,5.69249,13.9899,5.51643,12.9798C5.38732,12.298,5.04695,11.7677,4.50704,11.4646C4.14319,11.2626,3.70892,11.149,3.19249,11.149C2.82864,11.149,2.42958,11.1995,2.00704,11.3005C1.79578,11.351,1.59624,11.4141,1.42019,11.4646C1.33803,10.9848,1.30282,10.4798,1.30282,9.97475C1.30282,6.93182,2.76995,4.26768,4.98826,2.72727C5,3.00505,5.05869,3.29545,5.17606,3.57323C5.48122,4.26768,6.10329,4.7096,7.01878,4.89899C7.06573,4.91162,7.10094,4.91162,7.13615,4.91162L7.1831,4.91162C7.26526,4.91162,7.57042,4.92424,7.88732,5.0505C8.3216,5.2399,8.56808,5.55555,8.65023,6.04798C8.84977,7.61364,9.07277,10.4293,8.79108,11.3384C8.76761,11.4141,8.75587,11.4899,8.75587,11.5657C8.75587,11.9444,9.0493,12.2601,9.40141,12.2601C9.57747,12.2601,9.74179,12.1843,9.85915,12.0581C9.97653,11.9318,12.6174,9.05303,13.3216,8.09343C13.4038,7.97979,13.4859,7.87878,13.5798,7.76515C13.9202,7.33586,14.2723,6.90656,14.4014,6.26262C14.554,5.56818,14.4014,4.79798,13.9437,3.85101C13.615,3.16919,13.5563,2.86616,13.5446,2.75252C13.5563,2.7399,13.5798,2.72727,13.6033,2.71464C15.6221,4.10353,17.0188,6.43939,17.2535,9.19192C17.2887,9.55808,17.5587,9.82323,17.8991,9.82323L17.9577,9.82323C18.3099,9.8106,18.5681,9.48232,18.5446,9.09091ZM3.19249,12.5631C3.48592,12.5631,3.72066,12.6136,3.89671,12.7146C4.08451,12.8283,4.19014,12.9924,4.23709,13.2702C4.43662,14.3434,4.61268,15.0631,5,15.6061C5.37559,16.1364,5.85681,16.4015,6.58451,16.8182L6.60798,16.8308C6.71362,16.8939,6.84272,16.9571,6.96009,17.0328C7.69953,17.4621,7.86385,17.7525,7.89906,17.8914C7.93427,18.0303,7.85211,18.2323,7.74648,18.4343C4.91784,17.8535,2.65258,15.6944,1.73709,12.8283C2.15962,12.702,2.71127,12.5631,3.19249,12.5631ZM12.7934,4.5202C13.4272,5.83333,13.1455,6.18687,12.5822,6.89394C12.4883,7.00758,12.3944,7.12121,12.3005,7.24747C11.9484,7.72727,11.0211,8.77525,10.2113,9.68434C10.2113,9.24242,10.1878,8.73737,10.1526,8.19444C10.0704,6.95707,9.92958,5.90909,9.92958,5.87121L9.92958,5.83333C9.75352,4.83586,9.20188,4.11616,8.3216,3.76263C7.82864,3.56061,7.37089,3.53535,7.19484,3.53535C6.73709,3.43434,6.4554,3.24495,6.33803,2.99242C6.19718,2.68939,6.29108,2.24747,6.38498,1.9697C7.28873,1.59091,8.26291,1.37626,9.28404,1.37626C10.3873,1.37626,11.4437,1.61616,12.4061,2.04545C12.3357,2.18434,12.277,2.34848,12.2535,2.5505C12.2066,3.04293,12.3709,3.64899,12.7934,4.5202Z"></path><path d="M15.22299772857666,9.722223632261718C12.59389772857666,9.722223632261718,10.44600772857666,12.020201374511718,10.44600772857666,14.861111374511719C10.44600772857666,17.70202137451172,12.58215772857666,20.000021374511718,15.223007728576661,20.000021374511718C17.86384772857666,20.000021374511718,19.99999772857666,17.70202137451172,19.99999772857666,14.861111374511719C19.99999772857666,12.020201374511718,17.85211772857666,9.72222212709572,15.22299772857666,9.722223632261718ZM15.22299772857666,18.598491374511717C13.30985772857666,18.598491374511717,11.737087728576661,16.91919137451172,11.737087728576661,14.848481374511719C11.737087728576661,12.777781374511719,13.29811772857666,11.098491374511719,15.22299772857666,11.098491374511719C17.14787772857666,11.098491374511719,18.708917728576658,12.777781374511719,18.708917728576658,14.848481374511719C18.708917728576658,16.91919137451172,17.13614772857666,18.59848137451172,15.22299772857666,18.598491374511717Z"></path><path d="M15.692486288146974,15.050496970825195L15.692486288146974,12.676760970825196C15.692486288146974,12.297972970825196,15.399058288146973,11.982316970825195,15.046945288146972,11.982316970825195C14.694833288146972,11.982316970825195,14.401406288146973,12.297972970825196,14.401406288146973,12.676760970825196L14.401406288146973,15.340896970825195C14.401406288146973,15.530296970825194,14.471829288146973,15.694436970825196,14.589200288146973,15.833326970825196L15.751176288146972,17.095956970825195C15.868546288146973,17.222216970825194,16.032866288146973,17.297976970825196,16.208916288146973,17.297976970825196C16.384976288146973,17.297976970825196,16.537556288146973,17.222216970825194,16.666666288146974,17.095956970825195C16.78403628814697,16.969686970825194,16.854456288146974,16.792916970825196,16.854456288146974,16.603526970825193C16.854456288146974,16.414136970825197,16.78403628814697,16.237366970825196,16.666666288146974,16.111106970825197L15.692486288146974,15.050496970825195Z"></path></svg></div>'), Ch = /* @__PURE__ */ p('<div class="item tools"><svg viewBox="0 0 20 20"><path d="M19.7361,12.542L18.1916,11.2919C18.2647,10.8678,18.3025,10.4347,18.3025,10.0017C18.3025,9.56861,18.2647,9.13555,18.1916,8.71142L19.7361,7.46135C19.9743,7.26938,20.0615,6.95686,19.9554,6.6756L19.9342,6.61756C19.5074,5.49026,18.8755,4.45449,18.0549,3.53926L18.0124,3.49238C17.8096,3.26692,17.4819,3.1821,17.1848,3.28032L15.2677,3.92544C14.5603,3.3763,13.7704,2.94324,12.9168,2.63966L12.5466,0.742229C12.49,0.449802,12.2472,0.222111,11.9383,0.168536L11.8746,0.157375C10.6461,-0.0524583,9.35391,-0.0524583,8.1254,0.157375L8.06174,0.168536C7.75284,0.222111,7.50997,0.449802,7.45338,0.742229L7.08082,2.64859C6.2343,2.95217,5.44909,3.383,4.74641,3.92991L2.81522,3.28032C2.52047,3.1821,2.19036,3.26469,1.98757,3.49238L1.94513,3.53926C1.12455,4.45672,0.492609,5.49249,0.0658141,6.61756L0.0445921,6.6756C-0.0615171,6.95463,0.0257283,7.26715,0.263885,7.46135L1.82723,8.72482C1.75413,9.14448,1.71876,9.57308,1.71876,9.99944C1.71876,10.428,1.75413,10.8566,1.82723,11.2741L0.263885,12.5375C0.025729,12.7295,-0.0615164,13.042,0.0445929,13.3233L0.0658148,13.3813C0.49261,14.5064,1.12455,15.5444,1.94513,16.4596L1.98757,16.5065C2.19036,16.732,2.51812,16.8168,2.81522,16.7186L4.74641,16.069C5.44909,16.6159,6.2343,17.0489,7.08082,17.3503L7.45338,19.2567C7.50997,19.5491,7.75284,19.7768,8.06174,19.8303L8.1254,19.8415C8.74084,19.9464,9.37042,20,10,20C10.6296,20,11.2615,19.9464,11.8746,19.8415L11.9383,19.8303C12.2472,19.7768,12.49,19.5491,12.5466,19.2567L12.9168,17.3592C13.7704,17.0556,14.5603,16.6248,15.2677,16.0734L17.1848,16.7186C17.4795,16.8168,17.8096,16.7342,18.0124,16.5065L18.0549,16.4596C18.8755,15.5422,19.5074,14.5064,19.9342,13.3813L19.9554,13.3233C20.0615,13.0487,19.9743,12.7362,19.7361,12.542ZM16.5175,8.97483C16.5764,9.3119,16.6071,9.65791,16.6071,10.0039C16.6071,10.3499,16.5764,10.6959,16.5175,11.033L16.3618,11.9281L18.1233,13.3545C17.8568,13.9372,17.5196,14.4863,17.1188,14.9975L14.9305,14.2631L14.1901,14.839C13.6266,15.2765,12.9994,15.6203,12.3203,15.8614L11.4219,16.1806L10.9998,18.3459C10.3372,18.4173,9.66045,18.4173,8.9955,18.3459L8.57342,16.1761L7.6821,15.8524C7.01008,15.6114,6.38521,15.2676,5.82637,14.8323L5.08596,14.2541L2.88361,14.9953C2.48275,14.4841,2.14791,13.9327,1.8791,13.3523L3.65938,11.9125L3.50611,11.0196C3.44952,10.687,3.41887,10.3432,3.41887,10.0039C3.41887,9.66237,3.44716,9.32083,3.50611,8.98822L3.65938,8.09531L1.8791,6.6555C2.14556,6.07288,2.48275,5.52374,2.88361,5.01255L5.08596,5.75367L5.82637,5.17551C6.38521,4.74022,7.01008,4.39645,7.6821,4.15536L8.57578,3.83615L8.99786,1.66638C9.66045,1.59495,10.3372,1.59495,11.0021,1.66638L11.4242,3.83168L12.3226,4.1509C12.9994,4.39198,13.6289,4.73575,14.1925,5.17328L14.9329,5.7492L17.1211,5.01479C17.522,5.52598,17.8568,6.07734,18.1256,6.65773L16.3642,8.08416L16.5175,8.97483ZM10.0024,5.85189C7.7104,5.85189,5.85231,7.61092,5.85231,9.78068C5.85231,11.9504,7.7104,13.7095,10.0024,13.7095C12.2943,13.7095,14.1524,11.9504,14.1524,9.78068C14.1524,7.61092,12.2943,5.85189,10.0024,5.85189ZM11.8699,11.5486C11.37,12.0196,10.7074,12.2808,10.0024,12.2808C9.29732,12.2808,8.63473,12.0196,8.13483,11.5486C7.6373,11.0754,7.36142,10.4481,7.36142,9.78068C7.36142,9.11323,7.6373,8.48596,8.13483,8.01272C8.63473,7.53948,9.29732,7.28054,10.0024,7.28054C10.7074,7.28054,11.37,7.53948,11.8699,8.01272C12.3674,8.48596,12.6433,9.11323,12.6433,9.78068C12.6433,10.4481,12.3674,11.0754,11.8699,11.5486Z"></path></svg></div>'), ph = /* @__PURE__ */ p('<div class="item tools"><svg viewBox="0 0 20 20"><path d="M6.50977,1L13.4902,1C13.6406,1,13.7695,1.1104910000000001,13.7969,1.2631700000000001L14.0273,2.52277C14.1387,3.13147,14.6543,3.57143,15.2559,3.57143L17.5,3.57143C18.8809,3.57143,20,4.72254,20,6.14286L20,16.4286C20,17.8489,18.8809,19,17.5,19L2.5,19C1.11914,19,0,17.8489,0,16.4286L0,6.14286C0,4.72254,1.11914,3.57143,2.5,3.57143L4.74414,3.57143C5.3457,3.57143,5.86133,3.13147,5.97266,2.52277L6.20312,1.2631700000000001C6.23047,1.1104910000000001,6.35937,1,6.50977,1ZM15.2559,4.857139999999999C14.0547,4.857139999999999,13.0215,3.97522,12.7988,2.75982L12.7129,2.28571L7.28711,2.28571L7.20117,2.75982C6.98047,3.97522,5.94727,4.857139999999999,4.74414,4.857139999999999L2.5,4.857139999999999C1.81055,4.857139999999999,1.25,5.43371,1.25,6.14286L1.25,16.4286C1.25,17.1377,1.81055,17.7143,2.5,17.7143L17.5,17.7143C18.1895,17.7143,18.75,17.1377,18.75,16.4286L18.75,6.14286C18.75,5.43371,18.1895,4.857139999999999,17.5,4.857139999999999L15.2559,4.857139999999999ZM4.375,6.78571L3.125,6.78571C2.7793,6.78571,2.5,6.49844,2.5,6.14286C2.5,5.78728,2.7793,5.5,3.125,5.5L4.375,5.5C4.7207,5.5,5,5.78728,5,6.14286C5,6.49844,4.7207,6.78571,4.375,6.78571ZM10,6.14286C7.06641,6.14286,4.6875,8.58973,4.6875,11.6071C4.6875,14.6246,7.06641,17.0714,10,17.0714C12.9336,17.0714,15.3125,14.6246,15.3125,11.6071C15.3125,8.58973,12.9336,6.14286,10,6.14286ZM10,7.42857C11.0859,7.42857,12.1055,7.8625,12.873,8.65201C13.6406,9.44152,14.0625,10.49018,14.0625,11.6071C14.0625,12.7241,13.6406,13.7728,12.873,14.5623C12.1055,15.3518,11.0859,15.7857,10,15.7857C8.91406,15.7857,7.89453,15.3518,7.12695,14.5623C6.35937,13.7728,5.9375,12.7241,5.9375,11.6071C5.9375,10.49018,6.35938,9.44152,7.12695,8.65201C7.89453,7.8625,8.91406,7.42857,10,7.42857ZM10,9.67857C8.96484,9.67857,8.125,10.54241,8.125,11.6071C8.125,12.6719,8.96484,13.5357,10,13.5357C11.0352,13.5357,11.875,12.6719,11.875,11.6071C11.875,10.54241,11.0352,9.67857,10,9.67857ZM10,10.96429C10.3438,10.96429,10.625,11.2536,10.625,11.6071C10.625,11.9607,10.3438,12.25,10,12.25C9.65625,12.25,9.375,11.9607,9.375,11.6071C9.375,11.2536,9.65625,10.96429,10,10.96429Z"></path></svg></div>'), vh = /* @__PURE__ */ p('<div class="item tools chart-view-toggle"></div>'), bh = /* @__PURE__ */ p('<div class="scroll-indicator right"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"></path></svg></div>'), $h = /* @__PURE__ */ p('<div><div class="klinecharts-pro-period-bar"><div class="menu-container"><svg viewBox="0 0 1024 1024"><path d="M192.037 287.953h640.124c17.673 0 32-14.327 32-32s-14.327-32-32-32H192.037c-17.673 0-32 14.327-32 32s14.327 32 32 32zM832.161 479.169H438.553c-17.673 0-32 14.327-32 32s14.327 32 32 32h393.608c17.673 0 32-14.327 32-32s-14.327-32-32-32zM832.161 735.802H192.037c-17.673 0-32 14.327-32 32s14.327 32 32 32h640.124c17.673 0 32-14.327 32-32s-14.327-32-32-32zM319.028 351.594l-160 160 160 160z"></path></svg></div><div><div class="item tools fullscreen-toggle"></div></div></div></div>'), _h = /* @__PURE__ */ p("<span></span>"), kh = /* @__PURE__ */ p('<button type="button"></button>'), xh = /* @__PURE__ */ p('<svg viewBox="0 0 20 20"><path d="M1.08108,0L0,1.079L4.18919,5.27938L2.54826,6.91715L6.9112,6.91715L6.9112,2.56262L5.28957,4.18112L1.08108,0ZM15.8108,5.27938L20,1.079L18.9189,0L14.7104,4.18112L13.0888,2.56262L13.0888,6.91715L17.4517,6.91715L15.8108,5.27938ZM4.16988,14.7014L0.07722,18.8054L1.1583,20L5.27027,15.7996L6.9112,17.4374L6.9112,13.0829L2.54826,13.0829L4.16988,14.7014ZM17.4517,13.0829L13.0888,13.0829L13.0888,17.4374L14.7297,15.7996L18.8417,20L19.9228,18.8054L15.8301,14.7013L17.4517,13.0829Z"></path></svg>'), Lh = /* @__PURE__ */ p('<svg viewBox="0 0 20 20"><path d="M2.93444,1.76899L7.57544,6.40999L6.38918,7.59626L1.76899,2.93444L0,4.70343L0,0L4.70343,0L2.93444,1.76899ZM6.40999,12.4037L1.76899,17.0447L0,15.2758L0,19.9792L4.70343,19.9792L2.93444,18.2102L7.57544,13.5692L6.40999,12.4037ZM15.2758,0L17.0447,1.76899L12.4037,6.40999L13.59,7.59626L18.231,2.95526L20,4.72425L20,0L15.2758,0ZM13.5692,12.4037L12.3829,13.59L17.0239,18.231L15.2549,20L19.9792,20L19.9792,15.2758L18.2102,17.0447L13.5692,12.4037Z"></path></svg>'), wh = /* @__PURE__ */ p('<svg viewBox="0 0 24 24"><path d="M3 20V7l4 3 5-7 5 4h4v13H3Zm5-3 4-5.5 7 5.45V9h-2.7l-3.9-3.1-4.95 6.95L5 10.4V14l3 3Z"></path></svg>'), Th = /* @__PURE__ */ p('<svg viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"></path><path d="M9 4H7v2H5v12h2v2h2v-2h2V6H9zM19 8h-2V4h-2v4h-2v7h2v5h2v-5h2z"></path></svg>'), F0 = (e) => e.charAt(0).toUpperCase() + e.slice(1), Ah = (e) => {
+  return ((r = Fo[t]) == null ? void 0 : r[e]) ?? e;
+}, lh = /* @__PURE__ */ p('<div class="scroll-indicator left"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg></div>'), ch = /* @__PURE__ */ p('<img alt="symbol">'), uh = /* @__PURE__ */ p('<div class="symbol"><span></span></div>'), dh = /* @__PURE__ */ p('<span class="down-arrow-icon mobile-separate-arrow"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9L12 15L18 9"></path></svg></span>'), hh = /* @__PURE__ */ p('<span class="mobile-more-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"></path><circle cx="12" cy="12" r="3"></circle></svg></span>'), fh = /* @__PURE__ */ p('<div class="item tools" title="Time Tools"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M16 3v4"></path><path d="M8 3v4"></path><path d="M3 10h18"></path><path d="M12 14v4"></path><path d="M10 16h4"></path></svg></div>'), mh = /* @__PURE__ */ p('<div class="item tools"><svg viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="20" height="20" rx="4" ry="4" fill="none" stroke="currentColor" stroke-width="2"></rect><path d="m15.92 13.9-3.65-3.55a.773.773 0 0 1 0-1.12c.32-.33.79-.33 1.11 0l3.02 3.38c.31.32.31.81 0 1.13-.16.16-.48.16-.48.16Z" fill="currentColor" stroke="1"></path><path d="m12.43 14.23-.48-.17q-.48-.48 0-.96l4.13-4.36c.31-.32.63-.32.95 0s.32.65 0 .97l-4.13 4.35c-.15.17-.31.17-.47.17Zm-1.11-9.52c.31 0 1.11.16 1.11.97 0 .64-.95.48-1.27.48-1.43 0-1.91.81-2.07 1.45l-.31 1.94h1.58c.32 0 .64.32.64.64 0 .33-.32.65-.64.65H8.62l-1.11 4.99c-.16 1.46-1.11 1.46-1.59 0L7.03 11H5.6c-.31 0-.63-.32-.63-.65 0-.64.32-.8.63-.8h1.75l.48-2.1c.31-2.74 2.69-2.9 3.49-2.74Z" fill="noncurrentColore" stroke="1"></path></svg><span></span></div>'), gh = /* @__PURE__ */ p('<div class="klinecharts-pro-order-tools-display-menu"></div>'), yh = /* @__PURE__ */ p('<div class="klinecharts-pro-order-tools-popover"><div><button type="button" class="klinecharts-pro-order-tools-item klinecharts-pro-order-tools-group-title"><span class="klinecharts-pro-order-tools-title-left"><label class="klinecharts-pro-order-tools-checkbox-box"><input class="klinecharts-pro-order-tools-checkbox-input" type="checkbox"><span class="klinecharts-pro-order-tools-checkbox-fill"></span></label><span class="klinecharts-pro-order-tools-label">Quick Order</span></span><span class="klinecharts-pro-order-tools-chevron">›</span></button><div class="klinecharts-pro-order-tools-submenu"><label class="klinecharts-pro-order-tools-item"><span class="klinecharts-pro-order-tools-checkbox-box"><input class="klinecharts-pro-order-tools-checkbox-input" type="checkbox"><span class="klinecharts-pro-order-tools-checkbox-fill"></span></span><span class="klinecharts-pro-order-tools-label">Floating Window</span></label><label class="klinecharts-pro-order-tools-item"><span class="klinecharts-pro-order-tools-checkbox-box"><input class="klinecharts-pro-order-tools-checkbox-input" type="checkbox"><span class="klinecharts-pro-order-tools-checkbox-fill"></span></span><span class="klinecharts-pro-order-tools-label">Plus Button</span></label></div></div><div><button type="button" class="klinecharts-pro-order-tools-item klinecharts-pro-order-tools-group-title"><span class="klinecharts-pro-order-tools-title-left"><label class="klinecharts-pro-order-tools-checkbox-box"><input class="klinecharts-pro-order-tools-checkbox-input" type="checkbox"><span class="klinecharts-pro-order-tools-checkbox-fill"></span></label><span class="klinecharts-pro-order-tools-label">Open Orders</span></span><span class="klinecharts-pro-order-tools-chevron">&rsaquo;</span></button><div class="klinecharts-pro-order-tools-submenu"><div class="klinecharts-pro-order-tools-setting-row"><span class="klinecharts-pro-order-tools-label">Extended Price Line</span><button type="button"><span></span></button></div><div class="klinecharts-pro-order-tools-setting-row"><span class="klinecharts-pro-order-tools-label">Display</span><div class="klinecharts-pro-order-tools-display"><button type="button" class="klinecharts-pro-order-tools-display-button"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4"></path></svg></button></div></div></div></div><label class="klinecharts-pro-order-tools-item"><span class="klinecharts-pro-order-tools-checkbox-box"><input class="klinecharts-pro-order-tools-checkbox-input" type="checkbox"><span class="klinecharts-pro-order-tools-checkbox-fill"></span></span><span class="klinecharts-pro-order-tools-label">Positions</span></label> <label class="klinecharts-pro-order-tools-item"><span class="klinecharts-pro-order-tools-checkbox-box"><input class="klinecharts-pro-order-tools-checkbox-input" type="checkbox"><span class="klinecharts-pro-order-tools-checkbox-fill"></span></span><span class="klinecharts-pro-order-tools-label">Breakeven Price</span></label> <label class="klinecharts-pro-order-tools-item"><span class="klinecharts-pro-order-tools-checkbox-box"><input class="klinecharts-pro-order-tools-checkbox-input" type="checkbox"><span class="klinecharts-pro-order-tools-checkbox-fill"></span></span><span class="klinecharts-pro-order-tools-label">Liquidation Price</span></label><div><button type="button" class="klinecharts-pro-order-tools-item klinecharts-pro-order-tools-group-title"><span class="klinecharts-pro-order-tools-title-left"><label class="klinecharts-pro-order-tools-checkbox-box"><input class="klinecharts-pro-order-tools-checkbox-input" type="checkbox"><span class="klinecharts-pro-order-tools-checkbox-fill"></span></label><span class="klinecharts-pro-order-tools-label">Price Line</span></span><span class="klinecharts-pro-order-tools-chevron">&rsaquo;</span></button><div class="klinecharts-pro-order-tools-submenu"><label class="klinecharts-pro-order-tools-item"><span class="klinecharts-pro-order-tools-checkbox-box"><input class="klinecharts-pro-order-tools-checkbox-input" type="checkbox"><span class="klinecharts-pro-order-tools-checkbox-fill"></span></span><span class="klinecharts-pro-order-tools-label">Market Price Line</span></label><label class="klinecharts-pro-order-tools-item"><span class="klinecharts-pro-order-tools-checkbox-box"><input class="klinecharts-pro-order-tools-checkbox-input" type="checkbox"><span class="klinecharts-pro-order-tools-checkbox-fill"></span></span><span class="klinecharts-pro-order-tools-label">Count Down</span></label><label class="klinecharts-pro-order-tools-item"><span class="klinecharts-pro-order-tools-checkbox-box"><input class="klinecharts-pro-order-tools-checkbox-input" type="checkbox"><span class="klinecharts-pro-order-tools-checkbox-fill"></span></span><span class="klinecharts-pro-order-tools-label">Bid & Ask Price</span></label></div></div><label class="klinecharts-pro-order-tools-item"><span class="klinecharts-pro-order-tools-checkbox-box"><input class="klinecharts-pro-order-tools-checkbox-input" type="checkbox"><span class="klinecharts-pro-order-tools-checkbox-fill"></span></span><span class="klinecharts-pro-order-tools-label">Order History</span></label></div>'), Ch = /* @__PURE__ */ p('<div><div class="item tools order-tools-trigger"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Orders"><path d="M4 7h10"></path><path d="M4 12h8"></path><path d="M4 17h6"></path><path d="M18 6v12"></path><path d="M15 15l3 3 3-3"></path></svg><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9L12 15L18 9"></path></svg></div></div>'), ph = /* @__PURE__ */ p('<div class="item tools"><svg width="20" height="20" viewBox="0 0 20 20"><path d="M18.5446,9.09091C18.3333,6.61616,17.2887,4.31818,15.5751,2.63889C13.8498,0.94697,11.6197,0,9.28404,0C8.02817,0,6.81925,0.265151,5.66901,0.782828C5.65728,0.782828,5.65728,0.795454,5.64554,0.795454C5.6338,0.795454,5.6338,0.808081,5.62207,0.808081C4.53052,1.31313,3.55634,2.0202,2.71127,2.92929C1.85446,3.85101,1.18545,4.91162,0.715963,6.11111C0.246479,7.33586,0,8.64899,0,10C0,10.8712,0.105634,11.7172,0.305164,12.5379C0.305164,12.5631,0.316901,12.5884,0.328638,12.6136C0.739437,14.2298,1.51408,15.7197,2.62911,16.9571C4.07277,18.548,5.92723,19.5581,7.93427,19.8737C7.95775,19.8737,7.96948,19.8864,7.99296,19.8864C8.3216,19.9369,8.66197,19.9747,9.00235,19.9747L9.21362,19.9747C9.61268,19.9747,10.3756,19.9369,11.0094,19.697C11.1737,19.6338,11.3028,19.5076,11.3732,19.3434C11.4437,19.1793,11.4554,18.9899,11.3967,18.8131C11.3028,18.5354,11.0563,18.346,10.7864,18.346C10.716,18.346,10.6338,18.3586,10.5634,18.3838C10.0939,18.5606,9.46009,18.5859,9.20188,18.5859L9.09624,18.5859C9.20188,18.2702,9.23709,17.9167,9.15493,17.5505C9.00235,16.8939,8.50939,16.3384,7.58216,15.7955L7.19484,15.5682C6.57277,15.2146,6.23239,15.0253,6.03286,14.7348C5.83333,14.4444,5.69249,13.9899,5.51643,12.9798C5.38732,12.298,5.04695,11.7677,4.50704,11.4646C4.14319,11.2626,3.70892,11.149,3.19249,11.149C2.82864,11.149,2.42958,11.1995,2.00704,11.3005C1.79578,11.351,1.59624,11.4141,1.42019,11.4646C1.33803,10.9848,1.30282,10.4798,1.30282,9.97475C1.30282,6.93182,2.76995,4.26768,4.98826,2.72727C5,3.00505,5.05869,3.29545,5.17606,3.57323C5.48122,4.26768,6.10329,4.7096,7.01878,4.89899C7.06573,4.91162,7.10094,4.91162,7.13615,4.91162L7.1831,4.91162C7.26526,4.91162,7.57042,4.92424,7.88732,5.0505C8.3216,5.2399,8.56808,5.55555,8.65023,6.04798C8.84977,7.61364,9.07277,10.4293,8.79108,11.3384C8.76761,11.4141,8.75587,11.4899,8.75587,11.5657C8.75587,11.9444,9.0493,12.2601,9.40141,12.2601C9.57747,12.2601,9.74179,12.1843,9.85915,12.0581C9.97653,11.9318,12.6174,9.05303,13.3216,8.09343C13.4038,7.97979,13.4859,7.87878,13.5798,7.76515C13.9202,7.33586,14.2723,6.90656,14.4014,6.26262C14.554,5.56818,14.4014,4.79798,13.9437,3.85101C13.615,3.16919,13.5563,2.86616,13.5446,2.75252C13.5563,2.7399,13.5798,2.72727,13.6033,2.71464C15.6221,4.10353,17.0188,6.43939,17.2535,9.19192C17.2887,9.55808,17.5587,9.82323,17.8991,9.82323L17.9577,9.82323C18.3099,9.8106,18.5681,9.48232,18.5446,9.09091ZM3.19249,12.5631C3.48592,12.5631,3.72066,12.6136,3.89671,12.7146C4.08451,12.8283,4.19014,12.9924,4.23709,13.2702C4.43662,14.3434,4.61268,15.0631,5,15.6061C5.37559,16.1364,5.85681,16.4015,6.58451,16.8182L6.60798,16.8308C6.71362,16.8939,6.84272,16.9571,6.96009,17.0328C7.69953,17.4621,7.86385,17.7525,7.89906,17.8914C7.93427,18.0303,7.85211,18.2323,7.74648,18.4343C4.91784,17.8535,2.65258,15.6944,1.73709,12.8283C2.15962,12.702,2.71127,12.5631,3.19249,12.5631ZM12.7934,4.5202C13.4272,5.83333,13.1455,6.18687,12.5822,6.89394C12.4883,7.00758,12.3944,7.12121,12.3005,7.24747C11.9484,7.72727,11.0211,8.77525,10.2113,9.68434C10.2113,9.24242,10.1878,8.73737,10.1526,8.19444C10.0704,6.95707,9.92958,5.90909,9.92958,5.87121L9.92958,5.83333C9.75352,4.83586,9.20188,4.11616,8.3216,3.76263C7.82864,3.56061,7.37089,3.53535,7.19484,3.53535C6.73709,3.43434,6.4554,3.24495,6.33803,2.99242C6.19718,2.68939,6.29108,2.24747,6.38498,1.9697C7.28873,1.59091,8.26291,1.37626,9.28404,1.37626C10.3873,1.37626,11.4437,1.61616,12.4061,2.04545C12.3357,2.18434,12.277,2.34848,12.2535,2.5505C12.2066,3.04293,12.3709,3.64899,12.7934,4.5202Z"></path><path d="M15.22299772857666,9.722223632261718C12.59389772857666,9.722223632261718,10.44600772857666,12.020201374511718,10.44600772857666,14.861111374511719C10.44600772857666,17.70202137451172,12.58215772857666,20.000021374511718,15.223007728576661,20.000021374511718C17.86384772857666,20.000021374511718,19.99999772857666,17.70202137451172,19.99999772857666,14.861111374511719C19.99999772857666,12.020201374511718,17.85211772857666,9.72222212709572,15.22299772857666,9.722223632261718ZM15.22299772857666,18.598491374511717C13.30985772857666,18.598491374511717,11.737087728576661,16.91919137451172,11.737087728576661,14.848481374511719C11.737087728576661,12.777781374511719,13.29811772857666,11.098491374511719,15.22299772857666,11.098491374511719C17.14787772857666,11.098491374511719,18.708917728576658,12.777781374511719,18.708917728576658,14.848481374511719C18.708917728576658,16.91919137451172,17.13614772857666,18.59848137451172,15.22299772857666,18.598491374511717Z"></path><path d="M15.692486288146974,15.050496970825195L15.692486288146974,12.676760970825196C15.692486288146974,12.297972970825196,15.399058288146973,11.982316970825195,15.046945288146972,11.982316970825195C14.694833288146972,11.982316970825195,14.401406288146973,12.297972970825196,14.401406288146973,12.676760970825196L14.401406288146973,15.340896970825195C14.401406288146973,15.530296970825194,14.471829288146973,15.694436970825196,14.589200288146973,15.833326970825196L15.751176288146972,17.095956970825195C15.868546288146973,17.222216970825194,16.032866288146973,17.297976970825196,16.208916288146973,17.297976970825196C16.384976288146973,17.297976970825196,16.537556288146973,17.222216970825194,16.666666288146974,17.095956970825195C16.78403628814697,16.969686970825194,16.854456288146974,16.792916970825196,16.854456288146974,16.603526970825193C16.854456288146974,16.414136970825197,16.78403628814697,16.237366970825196,16.666666288146974,16.111106970825197L15.692486288146974,15.050496970825195Z"></path></svg></div>'), vh = /* @__PURE__ */ p('<div class="item tools"><svg viewBox="0 0 20 20"><path d="M19.7361,12.542L18.1916,11.2919C18.2647,10.8678,18.3025,10.4347,18.3025,10.0017C18.3025,9.56861,18.2647,9.13555,18.1916,8.71142L19.7361,7.46135C19.9743,7.26938,20.0615,6.95686,19.9554,6.6756L19.9342,6.61756C19.5074,5.49026,18.8755,4.45449,18.0549,3.53926L18.0124,3.49238C17.8096,3.26692,17.4819,3.1821,17.1848,3.28032L15.2677,3.92544C14.5603,3.3763,13.7704,2.94324,12.9168,2.63966L12.5466,0.742229C12.49,0.449802,12.2472,0.222111,11.9383,0.168536L11.8746,0.157375C10.6461,-0.0524583,9.35391,-0.0524583,8.1254,0.157375L8.06174,0.168536C7.75284,0.222111,7.50997,0.449802,7.45338,0.742229L7.08082,2.64859C6.2343,2.95217,5.44909,3.383,4.74641,3.92991L2.81522,3.28032C2.52047,3.1821,2.19036,3.26469,1.98757,3.49238L1.94513,3.53926C1.12455,4.45672,0.492609,5.49249,0.0658141,6.61756L0.0445921,6.6756C-0.0615171,6.95463,0.0257283,7.26715,0.263885,7.46135L1.82723,8.72482C1.75413,9.14448,1.71876,9.57308,1.71876,9.99944C1.71876,10.428,1.75413,10.8566,1.82723,11.2741L0.263885,12.5375C0.025729,12.7295,-0.0615164,13.042,0.0445929,13.3233L0.0658148,13.3813C0.49261,14.5064,1.12455,15.5444,1.94513,16.4596L1.98757,16.5065C2.19036,16.732,2.51812,16.8168,2.81522,16.7186L4.74641,16.069C5.44909,16.6159,6.2343,17.0489,7.08082,17.3503L7.45338,19.2567C7.50997,19.5491,7.75284,19.7768,8.06174,19.8303L8.1254,19.8415C8.74084,19.9464,9.37042,20,10,20C10.6296,20,11.2615,19.9464,11.8746,19.8415L11.9383,19.8303C12.2472,19.7768,12.49,19.5491,12.5466,19.2567L12.9168,17.3592C13.7704,17.0556,14.5603,16.6248,15.2677,16.0734L17.1848,16.7186C17.4795,16.8168,17.8096,16.7342,18.0124,16.5065L18.0549,16.4596C18.8755,15.5422,19.5074,14.5064,19.9342,13.3813L19.9554,13.3233C20.0615,13.0487,19.9743,12.7362,19.7361,12.542ZM16.5175,8.97483C16.5764,9.3119,16.6071,9.65791,16.6071,10.0039C16.6071,10.3499,16.5764,10.6959,16.5175,11.033L16.3618,11.9281L18.1233,13.3545C17.8568,13.9372,17.5196,14.4863,17.1188,14.9975L14.9305,14.2631L14.1901,14.839C13.6266,15.2765,12.9994,15.6203,12.3203,15.8614L11.4219,16.1806L10.9998,18.3459C10.3372,18.4173,9.66045,18.4173,8.9955,18.3459L8.57342,16.1761L7.6821,15.8524C7.01008,15.6114,6.38521,15.2676,5.82637,14.8323L5.08596,14.2541L2.88361,14.9953C2.48275,14.4841,2.14791,13.9327,1.8791,13.3523L3.65938,11.9125L3.50611,11.0196C3.44952,10.687,3.41887,10.3432,3.41887,10.0039C3.41887,9.66237,3.44716,9.32083,3.50611,8.98822L3.65938,8.09531L1.8791,6.6555C2.14556,6.07288,2.48275,5.52374,2.88361,5.01255L5.08596,5.75367L5.82637,5.17551C6.38521,4.74022,7.01008,4.39645,7.6821,4.15536L8.57578,3.83615L8.99786,1.66638C9.66045,1.59495,10.3372,1.59495,11.0021,1.66638L11.4242,3.83168L12.3226,4.1509C12.9994,4.39198,13.6289,4.73575,14.1925,5.17328L14.9329,5.7492L17.1211,5.01479C17.522,5.52598,17.8568,6.07734,18.1256,6.65773L16.3642,8.08416L16.5175,8.97483ZM10.0024,5.85189C7.7104,5.85189,5.85231,7.61092,5.85231,9.78068C5.85231,11.9504,7.7104,13.7095,10.0024,13.7095C12.2943,13.7095,14.1524,11.9504,14.1524,9.78068C14.1524,7.61092,12.2943,5.85189,10.0024,5.85189ZM11.8699,11.5486C11.37,12.0196,10.7074,12.2808,10.0024,12.2808C9.29732,12.2808,8.63473,12.0196,8.13483,11.5486C7.6373,11.0754,7.36142,10.4481,7.36142,9.78068C7.36142,9.11323,7.6373,8.48596,8.13483,8.01272C8.63473,7.53948,9.29732,7.28054,10.0024,7.28054C10.7074,7.28054,11.37,7.53948,11.8699,8.01272C12.3674,8.48596,12.6433,9.11323,12.6433,9.78068C12.6433,10.4481,12.3674,11.0754,11.8699,11.5486Z"></path></svg></div>'), bh = /* @__PURE__ */ p('<div class="item tools"><svg viewBox="0 0 20 20"><path d="M6.50977,1L13.4902,1C13.6406,1,13.7695,1.1104910000000001,13.7969,1.2631700000000001L14.0273,2.52277C14.1387,3.13147,14.6543,3.57143,15.2559,3.57143L17.5,3.57143C18.8809,3.57143,20,4.72254,20,6.14286L20,16.4286C20,17.8489,18.8809,19,17.5,19L2.5,19C1.11914,19,0,17.8489,0,16.4286L0,6.14286C0,4.72254,1.11914,3.57143,2.5,3.57143L4.74414,3.57143C5.3457,3.57143,5.86133,3.13147,5.97266,2.52277L6.20312,1.2631700000000001C6.23047,1.1104910000000001,6.35937,1,6.50977,1ZM15.2559,4.857139999999999C14.0547,4.857139999999999,13.0215,3.97522,12.7988,2.75982L12.7129,2.28571L7.28711,2.28571L7.20117,2.75982C6.98047,3.97522,5.94727,4.857139999999999,4.74414,4.857139999999999L2.5,4.857139999999999C1.81055,4.857139999999999,1.25,5.43371,1.25,6.14286L1.25,16.4286C1.25,17.1377,1.81055,17.7143,2.5,17.7143L17.5,17.7143C18.1895,17.7143,18.75,17.1377,18.75,16.4286L18.75,6.14286C18.75,5.43371,18.1895,4.857139999999999,17.5,4.857139999999999L15.2559,4.857139999999999ZM4.375,6.78571L3.125,6.78571C2.7793,6.78571,2.5,6.49844,2.5,6.14286C2.5,5.78728,2.7793,5.5,3.125,5.5L4.375,5.5C4.7207,5.5,5,5.78728,5,6.14286C5,6.49844,4.7207,6.78571,4.375,6.78571ZM10,6.14286C7.06641,6.14286,4.6875,8.58973,4.6875,11.6071C4.6875,14.6246,7.06641,17.0714,10,17.0714C12.9336,17.0714,15.3125,14.6246,15.3125,11.6071C15.3125,8.58973,12.9336,6.14286,10,6.14286ZM10,7.42857C11.0859,7.42857,12.1055,7.8625,12.873,8.65201C13.6406,9.44152,14.0625,10.49018,14.0625,11.6071C14.0625,12.7241,13.6406,13.7728,12.873,14.5623C12.1055,15.3518,11.0859,15.7857,10,15.7857C8.91406,15.7857,7.89453,15.3518,7.12695,14.5623C6.35937,13.7728,5.9375,12.7241,5.9375,11.6071C5.9375,10.49018,6.35938,9.44152,7.12695,8.65201C7.89453,7.8625,8.91406,7.42857,10,7.42857ZM10,9.67857C8.96484,9.67857,8.125,10.54241,8.125,11.6071C8.125,12.6719,8.96484,13.5357,10,13.5357C11.0352,13.5357,11.875,12.6719,11.875,11.6071C11.875,10.54241,11.0352,9.67857,10,9.67857ZM10,10.96429C10.3438,10.96429,10.625,11.2536,10.625,11.6071C10.625,11.9607,10.3438,12.25,10,12.25C9.65625,12.25,9.375,11.9607,9.375,11.6071C9.375,11.2536,9.65625,10.96429,10,10.96429Z"></path></svg></div>'), $h = /* @__PURE__ */ p('<div class="item tools chart-view-toggle"></div>'), _h = /* @__PURE__ */ p('<div class="scroll-indicator right"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"></path></svg></div>'), kh = /* @__PURE__ */ p('<div><div class="klinecharts-pro-period-bar"><div class="menu-container"><svg viewBox="0 0 1024 1024"><path d="M192.037 287.953h640.124c17.673 0 32-14.327 32-32s-14.327-32-32-32H192.037c-17.673 0-32 14.327-32 32s14.327 32 32 32zM832.161 479.169H438.553c-17.673 0-32 14.327-32 32s14.327 32 32 32h393.608c17.673 0 32-14.327 32-32s-14.327-32-32-32zM832.161 735.802H192.037c-17.673 0-32 14.327-32 32s14.327 32 32 32h640.124c17.673 0 32-14.327 32-32s-14.327-32-32-32zM319.028 351.594l-160 160 160 160z"></path></svg></div><div><div class="item tools fullscreen-toggle"></div></div></div></div>'), xh = /* @__PURE__ */ p("<span></span>"), Lh = /* @__PURE__ */ p('<button type="button"></button>'), wh = /* @__PURE__ */ p('<svg viewBox="0 0 20 20"><path d="M1.08108,0L0,1.079L4.18919,5.27938L2.54826,6.91715L6.9112,6.91715L6.9112,2.56262L5.28957,4.18112L1.08108,0ZM15.8108,5.27938L20,1.079L18.9189,0L14.7104,4.18112L13.0888,2.56262L13.0888,6.91715L17.4517,6.91715L15.8108,5.27938ZM4.16988,14.7014L0.07722,18.8054L1.1583,20L5.27027,15.7996L6.9112,17.4374L6.9112,13.0829L2.54826,13.0829L4.16988,14.7014ZM17.4517,13.0829L13.0888,13.0829L13.0888,17.4374L14.7297,15.7996L18.8417,20L19.9228,18.8054L15.8301,14.7013L17.4517,13.0829Z"></path></svg>'), Ah = /* @__PURE__ */ p('<svg viewBox="0 0 20 20"><path d="M2.93444,1.76899L7.57544,6.40999L6.38918,7.59626L1.76899,2.93444L0,4.70343L0,0L4.70343,0L2.93444,1.76899ZM6.40999,12.4037L1.76899,17.0447L0,15.2758L0,19.9792L4.70343,19.9792L2.93444,18.2102L7.57544,13.5692L6.40999,12.4037ZM15.2758,0L17.0447,1.76899L12.4037,6.40999L13.59,7.59626L18.231,2.95526L20,4.72425L20,0L15.2758,0ZM13.5692,12.4037L12.3829,13.59L17.0239,18.231L15.2549,20L19.9792,20L19.9792,15.2758L18.2102,17.0447L13.5692,12.4037Z"></path></svg>'), Mh = /* @__PURE__ */ p('<svg viewBox="0 0 24 24"><path d="M3 20V7l4 3 5-7 5 4h4v13H3Zm5-3 4-5.5 7 5.45V9h-2.7l-3.9-3.1-4.95 6.95L5 10.4V14l3 3Z"></path></svg>'), Th = /* @__PURE__ */ p('<svg viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"></path><path d="M9 4H7v2H5v12h2v2h2v-2h2V6H9zM19 8h-2V4h-2v4h-2v7h2v5h2v-5h2z"></path></svg>'), z0 = (e) => e.charAt(0).toUpperCase() + e.slice(1), Sh = (e) => {
   let t, r, n;
-  const [a, l] = M(window.innerWidth < 768), [d, h] = M(localStorage.getItem("klinechart_secondary_period") || ""), [v, x] = M(!1), [b, L] = M(!1), [B, N] = M(!1), [Z, U] = M(!1), [K, z] = M(!1), [ce, j] = M({
+  const [a, l] = T(window.innerWidth < 768), [h, d] = T(localStorage.getItem("klinechart_secondary_period") || ""), [b, x] = T(!1), [v, L] = T(!1), [B, N] = T(!1), [oe, V] = T(!1), [R, U] = T(!1), [ce, j] = T({
     top: 0,
     left: 0,
     minWidth: 220
-  }), J = () => {
-    l(window.innerWidth < 768), requestAnimationFrame(I), v() && W();
-  }, [te, pe] = M(!1), H = () => document.fullscreenElement ?? document.body, q = () => {
+  }), X = () => {
+    l(window.innerWidth < 768), requestAnimationFrame(I), b() && Y();
+  }, [ee, pe] = T(!1), Z = () => document.fullscreenElement ?? document.body, H = () => {
     pe(!!document.fullscreenElement);
-  }, [ne, se] = M(!1), [A, Y] = M(!1), W = () => {
+  }, [te, se] = T(!1), [M, q] = T(!1), Y = () => {
     if (!r)
       return;
     const O = r.getBoundingClientRect(), F = Math.max(220, Math.ceil(O.width)), ve = window.innerWidth, Le = Math.min(Math.max(8, O.right - F), Math.max(8, ve - F - 8));
@@ -2681,115 +2686,115 @@ const c = (e, t) => {
       left: Math.ceil(Le),
       minWidth: F
     });
-  }, R = () => {
-    L(!1), N(!1), U(!1), z(!1);
+  }, K = () => {
+    L(!1), N(!1), V(!1), U(!1);
   }, de = () => {
     x((O) => {
       const F = !O;
-      return F ? queueMicrotask(W) : R(), F;
+      return F ? queueMicrotask(Y) : K(), F;
     });
   }, he = (O) => {
-    if (!v())
+    if (!b())
       return;
     const F = O.target;
-    F && (r != null && r.contains(F) || n != null && n.contains(F) || (R(), x(!1)));
-  }, re = () => {
-    v() && W();
+    F && (r != null && r.contains(F) || n != null && n.contains(F) || (K(), x(!1)));
+  }, ne = () => {
+    b() && Y();
   }, I = () => {
     if (!t) {
-      se(!1), Y(!1);
+      se(!1), q(!1);
       return;
     }
     const O = t, F = O.scrollWidth > O.clientWidth + 2;
-    se(F && O.scrollLeft > 2), Y(F && O.scrollLeft + O.clientWidth < O.scrollWidth - 2);
+    se(F && O.scrollLeft > 2), q(F && O.scrollLeft + O.clientWidth < O.scrollWidth - 2);
   };
-  Vn(() => {
-    window.addEventListener("resize", J), document.addEventListener("fullscreenchange", q), document.addEventListener("mousedown", he), window.addEventListener("scroll", re, !0), document.addEventListener("mozfullscreenchange", q), document.addEventListener("webkitfullscreenchange", q), document.addEventListener("msfullscreenchange", q), t && (t.addEventListener("scroll", I), setTimeout(I, 100));
-  }), Lt(() => {
-    window.removeEventListener("resize", J), document.removeEventListener("fullscreenchange", q), document.removeEventListener("mousedown", he), window.removeEventListener("scroll", re, !0), document.removeEventListener("mozfullscreenchange", q), document.removeEventListener("webkitfullscreenchange", q), document.removeEventListener("msfullscreenchange", q), t && t.removeEventListener("scroll", I);
+  Rn(() => {
+    window.addEventListener("resize", X), document.addEventListener("fullscreenchange", H), document.addEventListener("mousedown", he), window.addEventListener("scroll", ne, !0), document.addEventListener("mozfullscreenchange", H), document.addEventListener("webkitfullscreenchange", H), document.addEventListener("msfullscreenchange", H), t && (t.addEventListener("scroll", I), setTimeout(I, 100));
+  }), wt(() => {
+    window.removeEventListener("resize", X), document.removeEventListener("fullscreenchange", H), document.removeEventListener("mousedown", he), window.removeEventListener("scroll", ne, !0), document.removeEventListener("mozfullscreenchange", H), document.removeEventListener("webkitfullscreenchange", H), document.removeEventListener("msfullscreenchange", H), t && t.removeEventListener("scroll", I);
   });
-  const Q = G(() => {
+  const Q = W(() => {
     const O = e.periods.filter((F) => {
-      if (!a() || te())
+      if (!a() || ee())
         return !0;
-      const ve = e.period.text, Le = d();
+      const ve = e.period.text, Le = h();
       if (F.text === ve || Le && F.text === Le)
         return !0;
       if (!Le || Le === ve) {
-        const ye = e.periods.find((Me) => Me.text !== ve);
+        const ye = e.periods.find((Te) => Te.text !== ve);
         return F.text === (ye == null ? void 0 : ye.text);
       }
       return !1;
-    }).slice(0, a() && !te() ? 2 : e.periods.length);
+    }).slice(0, a() && !ee() ? 2 : e.periods.length);
     return setTimeout(I, 50), O;
   });
   let D = e.period.text;
   return Re(() => {
     const O = e.period.text;
-    O !== D && (a() && (h(D), localStorage.setItem("klinechart_secondary_period", D)), D = O), setTimeout(I, 50);
+    O !== D && (a() && (d(D), localStorage.setItem("klinechart_secondary_period", D)), D = O), setTimeout(I, 50);
   }), Re(() => {
-    te(), setTimeout(I, 100);
+    ee(), setTimeout(I, 100);
   }), Re(() => {
     if (!e.showOrderToolsMenu) {
       x(!1);
       return;
     }
-    v() && queueMicrotask(W);
+    b() && queueMicrotask(Y);
   }), (() => {
-    const O = $h.cloneNode(!0), F = O.firstChild, ve = F.firstChild, Le = ve.firstChild, ye = ve.nextSibling, Me = ye.firstChild;
+    const O = kh.cloneNode(!0), F = O.firstChild, ve = F.firstChild, Le = ve.firstChild, ye = ve.nextSibling, Te = ye.firstChild;
     return O.style.setProperty("position", "relative"), O.style.setProperty("width", "100%"), O.style.setProperty("display", "flex"), O.style.setProperty("align-items", "center"), C(O, w(le, {
       get when() {
-        return ne();
+        return te();
       },
       get children() {
-        const _ = ah.cloneNode(!0);
+        const _ = lh.cloneNode(!0);
         return _.$$click = () => t.scrollBy({
           left: -100,
           behavior: "smooth"
         }), _.style.setProperty("position", "absolute"), _.style.setProperty("left", "0"), _.style.setProperty("top", "0"), _.style.setProperty("bottom", "1px"), _.style.setProperty("width", "30px"), _.style.setProperty("display", "flex"), _.style.setProperty("align-items", "center"), _.style.setProperty("justify-content", "center"), _.style.setProperty("background", "var(--klinecharts-pro-popover-background-color)"), _.style.setProperty("z-index", "10"), _.style.setProperty("cursor", "pointer"), _.style.setProperty("color", "var(--klinecharts-pro-primary-color)"), _;
       }
-    }), F), xt((_) => {
+    }), F), Lt((_) => {
       t = _;
     }, F), F.style.setProperty("width", "100%"), F.style.setProperty("overflow", "auto"), st(Le, "click", e.onMenuClick, !0), C(F, w(le, {
       get when() {
         return e.symbol;
       },
       get children() {
-        const _ = lh.cloneNode(!0), ge = _.firstChild;
+        const _ = uh.cloneNode(!0), ge = _.firstChild;
         return st(_, "click", e.onSymbolClick, !0), C(_, w(le, {
           get when() {
             return e.symbol.logo;
           },
           get children() {
-            const Ne = sh.cloneNode(!0);
-            return V(() => Ie(Ne, "src", e.symbol.logo)), Ne;
+            const Ne = ch.cloneNode(!0);
+            return z(() => Ie(Ne, "src", e.symbol.logo)), Ne;
           }
         }), ge), C(ge, () => e.symbol.shortName ?? e.symbol.name ?? e.symbol.ticker), _;
       }
     }), ye), C(F, () => Q().map((_, ge) => {
       const Ne = _.text === e.period.text;
       return (() => {
-        const ut = _h.cloneNode(!0);
+        const ut = xh.cloneNode(!0);
         return ut.$$click = ($e) => {
-          a() && Ne && !te() ? (e.onMobilePeriodClick ? e.onMobilePeriodClick(_) : e.onMenuClick(), $e.stopPropagation()) : e.onPeriodChange(_);
+          a() && Ne && !ee() ? (e.onMobilePeriodClick ? e.onMobilePeriodClick(_) : e.onMenuClick(), $e.stopPropagation()) : e.onPeriodChange(_);
         }, fe(ut, `item period ${Ne ? "selected" : ""}`), C(ut, () => _.text), ut;
       })();
     }), ye), C(F, w(le, {
       get when() {
-        return G(() => !!(a() && !te()))() && Q().length > 1;
+        return W(() => !!(a() && !ee()))() && Q().length > 1;
       },
       get children() {
-        const _ = ch.cloneNode(!0);
+        const _ = dh.cloneNode(!0);
         return _.$$click = (ge) => {
           ge.stopPropagation(), e.onMobilePeriodClick ? e.onMobilePeriodClick(e.period) : e.onMenuClick();
         }, _.style.setProperty("margin-left", "4px"), _.style.setProperty("display", "inline-flex"), _.style.setProperty("align-items", "center"), _;
       }
     }), ye), C(F, w(le, {
       get when() {
-        return G(() => !!a())() && !te();
+        return W(() => !!a())() && !ee();
       },
       get children() {
-        const _ = uh.cloneNode(!0);
+        const _ = hh.cloneNode(!0);
         return _.$$click = (ge) => {
           var Ne;
           ge.stopPropagation(), (Ne = e.onMobileMoreClick) == null || Ne.call(e);
@@ -2800,7 +2805,7 @@ const c = (e, t) => {
         return !a();
       },
       get children() {
-        const _ = dh.cloneNode(!0);
+        const _ = fh.cloneNode(!0);
         return st(_, "click", e.onTimeToolsClick, !0), _;
       }
     }), ye), C(F, w(le, {
@@ -2808,7 +2813,7 @@ const c = (e, t) => {
         return !a();
       },
       get children() {
-        const _ = hh.cloneNode(!0), ge = _.firstChild, Ne = ge.nextSibling;
+        const _ = mh.cloneNode(!0), ge = _.firstChild, Ne = ge.nextSibling;
         return st(_, "click", e.onIndicatorClick, !0), C(Ne, () => c("indicator", e.locale)), _;
       }
     }), ye), ye.style.setProperty("display", "flex"), ye.style.setProperty("gap", "4px"), ye.style.setProperty("margin-left", "auto"), ye.style.setProperty("align-items", "center"), ye.style.setProperty("flex", "0 0 auto"), C(ye, w(le, {
@@ -2816,27 +2821,27 @@ const c = (e, t) => {
         return e.showOrderToolsMenu;
       },
       get children() {
-        const _ = gh.cloneNode(!0), ge = _.firstChild, Ne = ge.firstChild, ut = Ne.nextSibling;
-        return xt(($e) => {
+        const _ = Ch.cloneNode(!0), ge = _.firstChild, Ne = ge.firstChild, ut = Ne.nextSibling;
+        return Lt(($e) => {
           r = $e;
         }, _), _.style.setProperty("display", "flex"), _.style.setProperty("align-items", "center"), ge.$$click = ($e) => {
           $e.stopPropagation(), de();
         }, ge.style.setProperty("gap", "6px"), ut.style.setProperty("transition", "transform 0.2s ease"), C(_, w(le, {
           get when() {
-            return v();
+            return b();
           },
           get children() {
-            return w(j9, {
+            return w(Z9, {
               get mount() {
-                return H();
+                return Z();
               },
               get children() {
-                const $e = mh.cloneNode(!0), Ct = $e.firstChild, dt = Ct.firstChild, t1 = dt.firstChild, Be = t1.firstChild, _1 = Be.firstChild, zt = dt.nextSibling, At = zt.firstChild, Mt = At.firstChild, rt = Mt.firstChild, k1 = At.nextSibling, qe = k1.firstChild, n1 = qe.firstChild, r1 = Ct.nextSibling, pt = r1.firstChild, St = pt.firstChild, o1 = St.firstChild, x1 = o1.firstChild, Vt = pt.nextSibling, i1 = Vt.firstChild, L1 = i1.firstChild, w1 = L1.nextSibling, a1 = i1.nextSibling, Qe = a1.firstChild, Ke = Qe.nextSibling, Ze = Ke.firstChild, He = Ze.firstChild, T1 = r1.nextSibling, s1 = T1.firstChild, Kt = s1.firstChild, A1 = T1.nextSibling, Ae = A1.nextSibling, Fe = Ae.firstChild, M1 = Fe.firstChild, Ge = Ae.nextSibling, vt = Ge.nextSibling, bt = vt.firstChild, S1 = bt.firstChild, ht = vt.nextSibling, l1 = ht.firstChild, ft = l1.firstChild, Pt = ft.firstChild, P1 = Pt.firstChild, c1 = l1.nextSibling, Dt = c1.firstChild, Ye = Dt.firstChild, D1 = Ye.firstChild, u1 = Dt.nextSibling, $t = u1.firstChild, Rt = $t.firstChild, pn = u1.nextSibling, vn = pn.firstChild, N1 = vn.firstChild, d1 = ht.nextSibling, O1 = d1.firstChild, _t = O1.firstChild;
-                return $e.$$mousedown = ($) => $.stopPropagation(), xt(($) => {
+                const $e = yh.cloneNode(!0), Ct = $e.firstChild, dt = Ct.firstChild, n1 = dt.firstChild, Be = n1.firstChild, k1 = Be.firstChild, Vt = dt.nextSibling, Tt = Vt.firstChild, St = Tt.firstChild, rt = St.firstChild, x1 = Tt.nextSibling, qe = x1.firstChild, r1 = qe.firstChild, o1 = Ct.nextSibling, pt = o1.firstChild, Pt = pt.firstChild, i1 = Pt.firstChild, L1 = i1.firstChild, Kt = pt.nextSibling, a1 = Kt.firstChild, w1 = a1.firstChild, A1 = w1.nextSibling, s1 = a1.nextSibling, Qe = s1.firstChild, Ke = Qe.nextSibling, Ze = Ke.firstChild, He = Ze.firstChild, M1 = o1.nextSibling, l1 = M1.firstChild, Rt = l1.firstChild, T1 = M1.nextSibling, Me = T1.nextSibling, Fe = Me.firstChild, S1 = Fe.firstChild, Ge = Me.nextSibling, vt = Ge.nextSibling, bt = vt.firstChild, P1 = bt.firstChild, ht = vt.nextSibling, c1 = ht.firstChild, ft = c1.firstChild, Dt = ft.firstChild, D1 = Dt.firstChild, u1 = c1.nextSibling, Nt = u1.firstChild, Ye = Nt.firstChild, N1 = Ye.firstChild, d1 = Nt.nextSibling, $t = d1.firstChild, jt = $t.firstChild, vn = d1.nextSibling, bn = vn.firstChild, O1 = bn.firstChild, h1 = ht.nextSibling, I1 = h1.firstChild, _t = I1.firstChild;
+                return $e.$$mousedown = ($) => $.stopPropagation(), Lt(($) => {
                   n = $;
                 }, $e), $e.style.setProperty("position", "fixed"), $e.style.setProperty("z-index", "9999"), dt.$$click = ($) => {
                   $.preventDefault(), $.stopPropagation(), L((S) => !S);
-                }, Be.$$mousedown = ($) => $.stopPropagation(), Be.$$click = ($) => $.stopPropagation(), _1.addEventListener("change", ($) => {
+                }, Be.$$mousedown = ($) => $.stopPropagation(), Be.$$click = ($) => $.stopPropagation(), k1.addEventListener("change", ($) => {
                   var S;
                   $.stopPropagation(), L(!0), (S = e.onOrderToolsStateChange) == null || S.call(e, {
                     quickOrder: $.currentTarget.checked
@@ -2846,80 +2851,80 @@ const c = (e, t) => {
                   (S = e.onOrderToolsStateChange) == null || S.call(e, {
                     quickOrderFloatingWindow: $.currentTarget.checked
                   });
-                }), n1.addEventListener("change", ($) => {
+                }), r1.addEventListener("change", ($) => {
                   var S;
                   (S = e.onOrderToolsStateChange) == null || S.call(e, {
                     quickOrderPlusButton: $.currentTarget.checked
                   });
                 }), pt.$$click = ($) => {
-                  $.preventDefault(), $.stopPropagation(), N((S) => !S), U(!1);
-                }, o1.$$mousedown = ($) => $.stopPropagation(), o1.$$click = ($) => $.stopPropagation(), x1.addEventListener("change", ($) => {
+                  $.preventDefault(), $.stopPropagation(), N((S) => !S), V(!1);
+                }, i1.$$mousedown = ($) => $.stopPropagation(), i1.$$click = ($) => $.stopPropagation(), L1.addEventListener("change", ($) => {
                   var S;
                   $.stopPropagation(), N(!0), (S = e.onOrderToolsStateChange) == null || S.call(e, {
                     openOrders: $.currentTarget.checked
                   });
-                }), w1.$$click = ($) => {
+                }), A1.$$click = ($) => {
                   var S, Oe;
                   $.preventDefault(), $.stopPropagation(), (Oe = e.onOrderToolsStateChange) == null || Oe.call(e, {
                     openOrdersExtendedPriceLine: !(((S = e.orderToolsState) == null ? void 0 : S.openOrdersExtendedPriceLine) ?? !0)
                   });
                 }, Ze.$$click = ($) => {
-                  $.preventDefault(), $.stopPropagation(), U((S) => !S);
+                  $.preventDefault(), $.stopPropagation(), V((S) => !S);
                 }, C(Ze, () => {
                   var $;
-                  return F0((($ = e.orderToolsState) == null ? void 0 : $.openOrdersDisplay) ?? "right");
+                  return z0((($ = e.orderToolsState) == null ? void 0 : $.openOrdersDisplay) ?? "right");
                 }, He), C(Ke, w(le, {
                   get when() {
-                    return Z();
+                    return oe();
                   },
                   get children() {
-                    const $ = fh.cloneNode(!0);
+                    const $ = gh.cloneNode(!0);
                     return C($, () => ["left", "center", "right"].map((S) => (() => {
-                      const Oe = kh.cloneNode(!0);
+                      const Oe = Lh.cloneNode(!0);
                       return Oe.$$click = (Ue) => {
                         var ot;
                         Ue.preventDefault(), Ue.stopPropagation(), (ot = e.onOrderToolsStateChange) == null || ot.call(e, {
                           openOrdersDisplay: S
-                        }), U(!1);
-                      }, C(Oe, () => F0(S)), V(() => {
+                        }), V(!1);
+                      }, C(Oe, () => z0(S)), z(() => {
                         var Ue;
                         return fe(Oe, (((Ue = e.orderToolsState) == null ? void 0 : Ue.openOrdersDisplay) ?? "right") === S ? "selected" : "");
                       }), Oe;
                     })())), $;
                   }
-                }), null), Kt.addEventListener("change", ($) => {
+                }), null), Rt.addEventListener("change", ($) => {
                   var S;
                   (S = e.onOrderToolsStateChange) == null || S.call(e, {
                     positions: $.currentTarget.checked
                   });
-                }), M1.addEventListener("change", ($) => {
+                }), S1.addEventListener("change", ($) => {
                   var S;
                   (S = e.onOrderToolsStateChange) == null || S.call(e, {
                     breakevenPrice: $.currentTarget.checked
                   });
-                }), S1.addEventListener("change", ($) => {
+                }), P1.addEventListener("change", ($) => {
                   var S;
                   (S = e.onOrderToolsStateChange) == null || S.call(e, {
                     liquidationPrice: $.currentTarget.checked
                   });
-                }), l1.$$click = ($) => {
-                  $.preventDefault(), $.stopPropagation(), z((S) => !S);
-                }, Pt.$$mousedown = ($) => $.stopPropagation(), Pt.$$click = ($) => $.stopPropagation(), P1.addEventListener("change", ($) => {
+                }), c1.$$click = ($) => {
+                  $.preventDefault(), $.stopPropagation(), U((S) => !S);
+                }, Dt.$$mousedown = ($) => $.stopPropagation(), Dt.$$click = ($) => $.stopPropagation(), D1.addEventListener("change", ($) => {
                   var S;
-                  $.stopPropagation(), z(!0), (S = e.onOrderToolsStateChange) == null || S.call(e, {
+                  $.stopPropagation(), U(!0), (S = e.onOrderToolsStateChange) == null || S.call(e, {
                     priceLine: $.currentTarget.checked
                   });
-                }), D1.addEventListener("change", ($) => {
+                }), N1.addEventListener("change", ($) => {
                   var S;
                   (S = e.onOrderToolsStateChange) == null || S.call(e, {
                     marketPriceLine: $.currentTarget.checked
                   });
-                }), Rt.addEventListener("change", ($) => {
+                }), jt.addEventListener("change", ($) => {
                   var S;
                   (S = e.onOrderToolsStateChange) == null || S.call(e, {
                     countDown: $.currentTarget.checked
                   });
-                }), N1.addEventListener("change", ($) => {
+                }), O1.addEventListener("change", ($) => {
                   var S;
                   (S = e.onOrderToolsStateChange) == null || S.call(e, {
                     bidAskPrice: $.currentTarget.checked
@@ -2929,10 +2934,10 @@ const c = (e, t) => {
                   (S = e.onOrderToolsStateChange) == null || S.call(e, {
                     orderHistory: $.currentTarget.checked
                   });
-                }), V(($) => {
-                  var F1;
-                  const S = `${ce().top}px`, Oe = `${ce().left}px`, Ue = `${ce().minWidth}px`, ot = `klinecharts-pro-order-tools-group${b() ? " klinecharts-pro-order-tools-group-open" : ""}`, mt = `klinecharts-pro-order-tools-group${B() ? " klinecharts-pro-order-tools-group-open" : ""}`, I1 = `klinecharts-pro-order-tools-switch${((F1 = e.orderToolsState) == null ? void 0 : F1.openOrdersExtendedPriceLine) ?? !0 ? " klinecharts-pro-order-tools-switch-on" : ""}`, E1 = `klinecharts-pro-order-tools-display-arrow${Z() ? " klinecharts-pro-order-tools-display-arrow-open" : ""}`, B1 = `klinecharts-pro-order-tools-group${K() ? " klinecharts-pro-order-tools-group-open" : ""}`;
-                  return S !== $._v$ && $e.style.setProperty("top", $._v$ = S), Oe !== $._v$2 && $e.style.setProperty("left", $._v$2 = Oe), Ue !== $._v$3 && $e.style.setProperty("width", $._v$3 = Ue), ot !== $._v$4 && fe(Ct, $._v$4 = ot), mt !== $._v$5 && fe(r1, $._v$5 = mt), I1 !== $._v$6 && fe(w1, $._v$6 = I1), E1 !== $._v$7 && Ie(He, "class", $._v$7 = E1), B1 !== $._v$8 && fe(ht, $._v$8 = B1), $;
+                }), z(($) => {
+                  var U1;
+                  const S = `${ce().top}px`, Oe = `${ce().left}px`, Ue = `${ce().minWidth}px`, ot = `klinecharts-pro-order-tools-group${v() ? " klinecharts-pro-order-tools-group-open" : ""}`, mt = `klinecharts-pro-order-tools-group${B() ? " klinecharts-pro-order-tools-group-open" : ""}`, E1 = `klinecharts-pro-order-tools-switch${((U1 = e.orderToolsState) == null ? void 0 : U1.openOrdersExtendedPriceLine) ?? !0 ? " klinecharts-pro-order-tools-switch-on" : ""}`, B1 = `klinecharts-pro-order-tools-display-arrow${oe() ? " klinecharts-pro-order-tools-display-arrow-open" : ""}`, F1 = `klinecharts-pro-order-tools-group${R() ? " klinecharts-pro-order-tools-group-open" : ""}`;
+                  return S !== $._v$ && $e.style.setProperty("top", $._v$ = S), Oe !== $._v$2 && $e.style.setProperty("left", $._v$2 = Oe), Ue !== $._v$3 && $e.style.setProperty("width", $._v$3 = Ue), ot !== $._v$4 && fe(Ct, $._v$4 = ot), mt !== $._v$5 && fe(o1, $._v$5 = mt), E1 !== $._v$6 && fe(A1, $._v$6 = E1), B1 !== $._v$7 && Ie(He, "class", $._v$7 = B1), F1 !== $._v$8 && fe(ht, $._v$8 = F1), $;
                 }, {
                   _v$: void 0,
                   _v$2: void 0,
@@ -2942,109 +2947,109 @@ const c = (e, t) => {
                   _v$6: void 0,
                   _v$7: void 0,
                   _v$8: void 0
-                }), V(() => {
+                }), z(() => {
                   var $, S, Oe, Ue;
-                  return _1.checked = ((($ = e.orderToolsState) == null ? void 0 : $.quickOrderFloatingWindow) ?? ((S = e.orderToolsState) == null ? void 0 : S.quickOrder) ?? !0) || (((Oe = e.orderToolsState) == null ? void 0 : Oe.quickOrderPlusButton) ?? ((Ue = e.orderToolsState) == null ? void 0 : Ue.quickOrder) ?? !0);
-                }), V(() => {
+                  return k1.checked = ((($ = e.orderToolsState) == null ? void 0 : $.quickOrderFloatingWindow) ?? ((S = e.orderToolsState) == null ? void 0 : S.quickOrder) ?? !0) || (((Oe = e.orderToolsState) == null ? void 0 : Oe.quickOrderPlusButton) ?? ((Ue = e.orderToolsState) == null ? void 0 : Ue.quickOrder) ?? !0);
+                }), z(() => {
                   var $, S;
                   return rt.checked = (($ = e.orderToolsState) == null ? void 0 : $.quickOrderFloatingWindow) ?? ((S = e.orderToolsState) == null ? void 0 : S.quickOrder) ?? !0;
-                }), V(() => {
+                }), z(() => {
                   var $, S;
-                  return n1.checked = (($ = e.orderToolsState) == null ? void 0 : $.quickOrderPlusButton) ?? ((S = e.orderToolsState) == null ? void 0 : S.quickOrder) ?? !0;
-                }), V(() => {
+                  return r1.checked = (($ = e.orderToolsState) == null ? void 0 : $.quickOrderPlusButton) ?? ((S = e.orderToolsState) == null ? void 0 : S.quickOrder) ?? !0;
+                }), z(() => {
                   var $;
-                  return x1.checked = (($ = e.orderToolsState) == null ? void 0 : $.openOrders) ?? !0;
-                }), V(() => {
+                  return L1.checked = (($ = e.orderToolsState) == null ? void 0 : $.openOrders) ?? !0;
+                }), z(() => {
                   var $;
-                  return Kt.checked = (($ = e.orderToolsState) == null ? void 0 : $.positions) ?? !0;
-                }), V(() => {
+                  return Rt.checked = (($ = e.orderToolsState) == null ? void 0 : $.positions) ?? !0;
+                }), z(() => {
                   var $;
-                  return M1.checked = (($ = e.orderToolsState) == null ? void 0 : $.breakevenPrice) ?? !0;
-                }), V(() => {
+                  return S1.checked = (($ = e.orderToolsState) == null ? void 0 : $.breakevenPrice) ?? !0;
+                }), z(() => {
                   var $;
-                  return S1.checked = (($ = e.orderToolsState) == null ? void 0 : $.liquidationPrice) ?? !0;
-                }), V(() => {
+                  return P1.checked = (($ = e.orderToolsState) == null ? void 0 : $.liquidationPrice) ?? !0;
+                }), z(() => {
                   var $, S, Oe, Ue, ot, mt;
-                  return P1.checked = ((($ = e.orderToolsState) == null ? void 0 : $.marketPriceLine) ?? ((S = e.orderToolsState) == null ? void 0 : S.priceLine) ?? !0) || (((Oe = e.orderToolsState) == null ? void 0 : Oe.countDown) ?? ((Ue = e.orderToolsState) == null ? void 0 : Ue.priceLine) ?? !0) || (((ot = e.orderToolsState) == null ? void 0 : ot.bidAskPrice) ?? ((mt = e.orderToolsState) == null ? void 0 : mt.priceLine) ?? !0);
-                }), V(() => {
+                  return D1.checked = ((($ = e.orderToolsState) == null ? void 0 : $.marketPriceLine) ?? ((S = e.orderToolsState) == null ? void 0 : S.priceLine) ?? !0) || (((Oe = e.orderToolsState) == null ? void 0 : Oe.countDown) ?? ((Ue = e.orderToolsState) == null ? void 0 : Ue.priceLine) ?? !0) || (((ot = e.orderToolsState) == null ? void 0 : ot.bidAskPrice) ?? ((mt = e.orderToolsState) == null ? void 0 : mt.priceLine) ?? !0);
+                }), z(() => {
                   var $, S;
-                  return D1.checked = (($ = e.orderToolsState) == null ? void 0 : $.marketPriceLine) ?? ((S = e.orderToolsState) == null ? void 0 : S.priceLine) ?? !0;
-                }), V(() => {
+                  return N1.checked = (($ = e.orderToolsState) == null ? void 0 : $.marketPriceLine) ?? ((S = e.orderToolsState) == null ? void 0 : S.priceLine) ?? !0;
+                }), z(() => {
                   var $, S;
-                  return Rt.checked = (($ = e.orderToolsState) == null ? void 0 : $.countDown) ?? ((S = e.orderToolsState) == null ? void 0 : S.priceLine) ?? !0;
-                }), V(() => {
+                  return jt.checked = (($ = e.orderToolsState) == null ? void 0 : $.countDown) ?? ((S = e.orderToolsState) == null ? void 0 : S.priceLine) ?? !0;
+                }), z(() => {
                   var $, S;
-                  return N1.checked = (($ = e.orderToolsState) == null ? void 0 : $.bidAskPrice) ?? ((S = e.orderToolsState) == null ? void 0 : S.priceLine) ?? !0;
-                }), V(() => {
+                  return O1.checked = (($ = e.orderToolsState) == null ? void 0 : $.bidAskPrice) ?? ((S = e.orderToolsState) == null ? void 0 : S.priceLine) ?? !0;
+                }), z(() => {
                   var $;
                   return _t.checked = (($ = e.orderToolsState) == null ? void 0 : $.orderHistory) ?? !0;
                 }), $e;
               }
             });
           }
-        }), null), V(($e) => {
-          const Ct = a() ? "0 8px" : "0 10px", dt = v() ? "rotate(180deg)" : "rotate(0deg)";
+        }), null), z(($e) => {
+          const Ct = a() ? "0 8px" : "0 10px", dt = b() ? "rotate(180deg)" : "rotate(0deg)";
           return Ct !== $e._v$9 && ge.style.setProperty("padding", $e._v$9 = Ct), dt !== $e._v$10 && ut.style.setProperty("transform", $e._v$10 = dt), $e;
         }, {
           _v$9: void 0,
           _v$10: void 0
         }), _;
       }
-    }), Me), C(ye, w(le, {
+    }), Te), C(ye, w(le, {
       get when() {
         return !a();
       },
       get children() {
         return [(() => {
-          const _ = yh.cloneNode(!0);
+          const _ = ph.cloneNode(!0);
           return st(_, "click", e.onTimezoneClick, !0), _;
         })(), (() => {
-          const _ = Ch.cloneNode(!0);
+          const _ = vh.cloneNode(!0);
           return st(_, "click", e.onSettingClick, !0), _;
         })()];
       }
-    }), Me), C(ye, w(le, {
+    }), Te), C(ye, w(le, {
       get when() {
         return !a();
       },
       get children() {
-        const _ = ph.cloneNode(!0);
+        const _ = bh.cloneNode(!0);
         return st(_, "click", e.onScreenshotClick, !0), _;
       }
-    }), Me), Me.$$click = () => {
-      if (te())
+    }), Te), Te.$$click = () => {
+      if (ee())
         (document.exitFullscreen || document.msExitFullscreen || document.mozCancelFullScreen || document.webkitExitFullscreen).call(document);
       else {
         const _ = t == null ? void 0 : t.closest(".klinecharts-pro");
         _ && ((_ == null ? void 0 : _.requestFullscreen) ?? (_ == null ? void 0 : _.webkitRequestFullscreen) ?? (_ == null ? void 0 : _.mozRequestFullScreen) ?? (_ == null ? void 0 : _.msRequestFullscreen)).call(_);
       }
-    }, C(Me, (() => {
-      const _ = G(() => !!te());
-      return () => _() ? xh.cloneNode(!0) : Lh.cloneNode(!0);
+    }, C(Te, (() => {
+      const _ = W(() => !!ee());
+      return () => _() ? wh.cloneNode(!0) : Ah.cloneNode(!0);
     })()), C(ye, w(le, {
       get when() {
-        return G(() => !!e.chartViewToggle)() && !te();
+        return W(() => !!e.chartViewToggle)() && !ee();
       },
       get children() {
-        const _ = vh.cloneNode(!0);
+        const _ = $h.cloneNode(!0);
         return st(_, "click", e.chartViewToggle.onToggle, !0), C(_, (() => {
-          const ge = G(() => e.chartViewToggle.view === "chart");
-          return () => ge() ? wh.cloneNode(!0) : Th.cloneNode(!0);
-        })()), V(() => Ie(_, "title", e.chartViewToggle.view === "chart" ? "View Depth" : "View Chart")), _;
+          const ge = W(() => e.chartViewToggle.view === "chart");
+          return () => ge() ? Mh.cloneNode(!0) : Th.cloneNode(!0);
+        })()), z(() => Ie(_, "title", e.chartViewToggle.view === "chart" ? "View Depth" : "View Chart")), _;
       }
     }), null), C(O, w(le, {
       get when() {
-        return A();
+        return M();
       },
       get children() {
-        const _ = bh.cloneNode(!0);
+        const _ = _h.cloneNode(!0);
         return _.$$click = () => t.scrollBy({
           left: 100,
           behavior: "smooth"
         }), _.style.setProperty("position", "absolute"), _.style.setProperty("right", "0"), _.style.setProperty("top", "0"), _.style.setProperty("bottom", "1px"), _.style.setProperty("width", "30px"), _.style.setProperty("display", "flex"), _.style.setProperty("align-items", "center"), _.style.setProperty("justify-content", "center"), _.style.setProperty("background", "var(--klinecharts-pro-popover-background-color)"), _.style.setProperty("z-index", "10"), _.style.setProperty("cursor", "pointer"), _.style.setProperty("color", "var(--klinecharts-pro-primary-color)"), _;
       }
-    }), null), V((_) => {
-      const ge = e.spread ? "" : "rotate", Ne = te() ? "0px" : "var(--klinecharts-pro-period-bar-padding-right)";
+    }), null), z((_) => {
+      const ge = e.spread ? "" : "rotate", Ne = ee() ? "0px" : "var(--klinecharts-pro-period-bar-padding-right)";
       return ge !== _._v$11 && Ie(Le, "class", _._v$11 = ge), Ne !== _._v$12 && ye.style.setProperty("padding-right", _._v$12 = Ne), _;
     }, {
       _v$11: void 0,
@@ -3053,52 +3058,52 @@ const c = (e, t) => {
   })();
 };
 je(["click", "mousedown"]);
-const Mh = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M12.41465,11L18.5,11C18.7761,11,19,11.22386,19,11.5C19,11.77614,18.7761,12,18.5,12L12.41465,12C12.20873,12.5826,11.65311,13,11,13C10.34689,13,9.79127,12.5826,9.58535,12L3.5,12C3.223857,12,3,11.77614,3,11.5C3,11.22386,3.223857,11,3.5,11L9.58535,11C9.79127,10.417404,10.34689,10,11,10C11.65311,10,12.20873,10.417404,12.41465,11Z" stroke-opacity="0" stroke="none"></path></svg>'), Sh = () => Mh.cloneNode(!0), Ph = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M6.91465,11L11.08535,11C11.29127,10.417404,11.84689,10,12.5,10C13.15311,10,13.70873,10.417404,13.91465,11L18.5,11C18.7761,11,19,11.22386,19,11.5C19,11.77614,18.7761,12,18.5,12L13.91465,12C13.70873,12.5826,13.15311,13,12.5,13C11.84689,13,11.29127,12.5826,11.08535,12L6.91465,12C6.70873,12.5826,6.15311,13,5.5,13C4.671573,13,4,12.32843,4,11.5C4,10.671573,4.671573,10,5.5,10C6.15311,10,6.70873,10.417404,6.91465,11Z" stroke-opacity="0" stroke="none"></path></svg>'), Dh = () => Ph.cloneNode(!0), Nh = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M6.91465,12.5C6.70873,13.0826,6.15311,13.5,5.5,13.5C4.671573,13.5,4,12.82843,4,12C4,11.171573,4.671573,10.5,5.5,10.5C6.15311,10.5,6.70873,10.917404,6.91465,11.5L16.0853,11.5C16.2913,10.917404,16.846899999999998,10.5,17.5,10.5C18.328400000000002,10.5,19,11.171573,19,12C19,12.82843,18.328400000000002,13.5,17.5,13.5C16.846899999999998,13.5,16.2913,13.0826,16.0853,12.5L6.91465,12.5Z" stroke-opacity="0" stroke="none"></path></svg>'), Oh = () => Nh.cloneNode(!0), Ih = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M11,12.41465L11,18.5C11,18.7761,11.22386,19,11.5,19C11.77614,19,12,18.7761,12,18.5L12,12.41465C12.5826,12.20873,13,11.65311,13,11C13,10.34689,12.5826,9.79127,12,9.58535L12,3.5C12,3.223857,11.77614,3,11.5,3C11.22386,3,11,3.223857,11,3.5L11,9.58535C10.417404,9.79127,10,10.34689,10,11C10,11.65311,10.417404,12.20873,11,12.41465Z" stroke-opacity="0" stroke="none"></path></svg>'), Eh = () => Ih.cloneNode(!0), Bh = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M11.66558837890625,19C10.83716137890625,19,10.16558837890625,18.328400000000002,10.16558837890625,17.5C10.16558837890625,16.846899999999998,10.58298437890625,16.2913,11.16557337890625,16.0854L11.16557337890625,11.91464C10.58298437890625,11.70872,10.16558837890625,11.1531,10.16558837890625,10.5C10.16558837890625,9.8469,10.58298437890625,9.29128,11.16557337890625,9.08536L11.16557337890625,4.5C11.16557337890625,4.223857,11.38942837890625,4,11.66556837890625,4C11.94171837890625,4,12.16556837890625,4.223857,12.16556837890625,4.5L12.16556837890625,9.08535C12.74817837890625,9.291260000000001,13.16558837890625,9.846879999999999,13.16558837890625,10.5C13.16558837890625,11.153120000000001,12.74817837890625,11.708739999999999,12.16556837890625,11.91465L12.16556837890625,16.0854C12.74817837890625,16.2913,13.16558837890625,16.846899999999998,13.16558837890625,17.5C13.16558837890625,18.328400000000002,12.49401837890625,19,11.66558837890625,19Z" stroke-opacity="0" stroke="none"></path></svg>'), Fh = () => Bh.cloneNode(!0), Uh = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M11.165603637695312,6.91465C11.748203637695312,6.70873,12.165603637695312,6.15311,12.165603637695312,5.5C12.165603637695312,4.671573,11.494033637695313,4,10.665603637695312,4C9.837176637695313,4,9.165603637695312,4.671573,9.165603637695312,5.5C9.165603637695312,6.15311,9.583007637695312,6.70873,10.165603637695312,6.91465L10.165603637695312,16.0854C9.583007637695312,16.2913,9.165603637695312,16.846899999999998,9.165603637695312,17.5C9.165603637695312,18.328400000000002,9.837176637695313,19,10.665603637695312,19C11.494033637695313,19,12.165603637695312,18.328400000000002,12.165603637695312,17.5C12.165603637695312,16.846899999999998,11.748203637695312,16.2913,11.165603637695312,16.0854L11.165603637695312,6.91465Z" stroke-opacity="0" fill-rule="evenodd" fill-opacity="1"></path></svg>'), zh = () => Uh.cloneNode(!0), Vh = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M5.146447,15.753C4.9511845,15.9483,4.9511845,16.2649,5.146447,16.4602C5.341709,16.6554,5.658291,16.6554,5.853554,16.4602L8.156600000000001,14.15711C8.352409999999999,14.25082,8.57173,14.3033,8.8033,14.3033C9.631730000000001,14.3033,10.3033,13.63172,10.3033,12.80329C10.3033,12.57172,10.250820000000001,12.352409999999999,10.157119999999999,12.15659L12.156600000000001,10.15711C12.352409999999999,10.250820000000001,12.571729999999999,10.30329,12.8033,10.30329C13.63173,10.30329,14.3033,9.63172,14.3033,8.80329C14.3033,8.57172,14.25082,8.352409999999999,14.15712,8.15659L16.4602,5.853553C16.6554,5.658291,16.6554,5.341709,16.4602,5.146447C16.2649,4.9511843,15.9483,4.9511843,15.753,5.146447L13.45001,7.449479999999999C13.25419,7.35577,13.03487,7.3032900000000005,12.8033,7.3032900000000005C11.97487,7.3032900000000005,11.3033,7.97487,11.3033,8.80329C11.3033,9.03487,11.35578,9.254190000000001,11.44949,9.450009999999999L9.450009999999999,11.449480000000001C9.254190000000001,11.35577,9.03487,11.30329,8.8033,11.30329C7.97487,11.30329,7.3033,11.97487,7.3033,12.80329C7.3033,13.03487,7.35578,13.25419,7.44949,13.45001L5.146447,15.753Z" stroke-opacity="0" stroke="none"></path></svg>'), Kh = () => Vh.cloneNode(!0), Rh = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M7.573332939453125,14.54567903564453C7.667042939453125,14.741499035644532,7.719512939453125,14.960809035644532,7.719512939453125,15.19239903564453C7.719512939453125,16.02079903564453,7.047942939453125,16.69239903564453,6.219512939453125,16.69239903564453C5.391085939453125,16.69239903564453,4.719512939453125,16.02079903564453,4.719512939453125,15.19239903564453C4.719512939453125,14.36394903564453,5.391085939453125,13.692379035644532,6.219512939453125,13.692379035644532C6.451092939453125,13.692379035644532,6.670412939453125,13.74485903564453,6.866232939453125,13.83856903564453L9.865702939453126,10.83909903564453C9.771992939453124,10.643279035644532,9.719512939453125,10.42395903564453,9.719512939453125,10.192379035644532C9.719512939453125,9.36394903564453,10.391082939453124,8.692379035644532,11.219512939453125,8.692379035644532C11.451092939453126,8.692379035644532,11.670412939453126,8.74485903564453,11.866232939453125,8.838569035644532L15.462112939453124,5.242645035644531C15.657412939453126,5.047383335644532,15.974012939453125,5.047383335644532,16.169212939453125,5.242645035644531C16.364512939453125,5.437907035644531,16.364512939453125,5.754489035644531,16.169212939453125,5.949752035644531L12.573332939453124,9.545679035644532C12.667042939453125,9.74149903564453,12.719512939453125,9.96080903564453,12.719512939453125,10.192379035644532C12.719512939453125,11.020809035644533,12.047942939453126,11.692379035644532,11.219512939453125,11.692379035644532C10.987942939453125,11.692379035644532,10.768632939453125,11.639909035644532,10.572812939453126,11.54619903564453L7.573332939453125,14.54567903564453Z" stroke-opacity="0" stroke="none"></path></svg>'), jh = () => Rh.cloneNode(!0), Qh = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M15.719512939453125,8.461776733398438C16.547912939453127,8.461776733398438,17.219512939453125,7.7902067333984375,17.219512939453125,6.9617767333984375C17.219512939453125,6.133349733398438,16.547912939453127,5.4617767333984375,15.719512939453125,5.4617767333984375C14.891082939453124,5.4617767333984375,14.219512939453125,6.133349733398438,14.219512939453125,6.9617767333984375C14.219512939453125,7.193346733398437,14.271992939453124,7.412666733398438,14.365692939453124,7.608486733398438L7.366222939453126,14.607956733398437C7.170402939453125,14.514256733398437,6.951082939453125,14.461776733398438,6.719512939453125,14.461776733398438C5.891085939453125,14.461776733398438,5.219512939453125,15.133346733398437,5.219512939453125,15.961776733398438C5.219512939453125,16.79017673339844,5.891085939453125,17.461776733398438,6.719512939453125,17.461776733398438C7.547942939453125,17.461776733398438,8.219512939453125,16.79017673339844,8.219512939453125,15.961776733398438C8.219512939453125,15.730176733398437,8.167032939453126,15.510876733398437,8.073322939453124,15.315066733398437L15.072802939453124,8.315586733398437C15.268612939453124,8.409296733398438,15.487912939453125,8.461776733398438,15.719512939453125,8.461776733398438Z" stroke-opacity="0" stroke="none"></path></svg>'), Zh = () => Qh.cloneNode(!0), Hh = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M17.0643,7.033864912109375L18,3.585784912109375L14.5078,4.509695912109375L15.3537,5.344934912109375L6.02026,14.560584912109375C5.87635,14.517484912109374,5.72366,14.494284912109375,5.5655,14.494284912109375C4.7009,14.494284912109375,4,15.186384912109375,4,16.040084912109375C4,16.893784912109375,4.7009,17.585784912109375,5.5655,17.585784912109375C6.43011,17.585784912109375,7.13101,16.893784912109375,7.13101,16.040084912109375C7.13101,15.722284912109375,7.03392,15.426984912109376,6.86744,15.181384912109374L16.0917,6.073604912109375L17.0643,7.033864912109375Z" stroke-opacity="0" stroke="none"></path></svg>'), qh = () => Hh.cloneNode(!0), Yh = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M6.91465,13.00505L18.5,13.00505C18.7761,13.00505,19,13.228909999999999,19,13.50505C19,13.781189999999999,18.7761,14.00505,18.5,14.00505L6.91465,14.00505C6.70873,14.58765,6.15311,15.00505,5.5,15.00505C4.671573,15.00505,4,14.33348,4,13.50505C4,12.67662,4.671573,12.00505,5.5,12.00505C6.15311,12.00505,6.70873,12.422450000000001,6.91465,13.00505ZM7.81404,11.625L10.48591,11.625L10.48591,10.90625L9.65193,10.90625L9.65193,7.125L8.997630000000001,7.125C8.71443,7.306641,8.415600000000001,7.419922,7.96443,7.498047L7.96443,8.05078L8.77497,8.05078L8.77497,10.90625L7.81404,10.90625L7.81404,11.625ZM11.081620000000001,11.625L14.0562,11.625L14.0562,10.88281L13.09724,10.88281C12.8863,10.88281,12.59333,10.90625,12.36482,10.93555C13.17537,10.11328,13.84724,9.2207,13.84724,8.39062C13.84724,7.541016,13.28865,7,12.4488,7C11.84333,7,11.446850000000001,7.234375,11.03279,7.679688L11.52497,8.16797C11.747630000000001,7.914062,12.0113,7.697266,12.33552,7.697266C12.7613,7.697266,13.00154,7.982422,13.00154,8.43359C13.00154,9.14648,12.29255,10.00781,11.081620000000001,11.11523L11.081620000000001,11.625ZM15.9605,11.75C16.8121,11.75,17.526899999999998,11.2832,17.526899999999998,10.4375C17.526899999999998,9.82031,17.142200000000003,9.43945,16.6441,9.30078L16.6441,9.27148C17.1129,9.08594,17.3824,8.7207,17.3824,8.21289C17.3824,7.421875,16.8004,7,15.9429,7C15.4215,7,14.9957,7.210938,14.6109,7.541016L15.066,8.11133C15.3258,7.849609,15.5836,7.697266,15.9019,7.697266C16.2789,7.697266,16.4957,7.914062,16.4957,8.28125C16.4957,8.70898,16.2301,9,15.4215,9L15.4215,9.63672C16.3804,9.63672,16.6383,9.91992,16.6383,10.38086C16.6383,10.79688,16.3336,11.03125,15.8824,11.03125C15.4742,11.03125,15.1578,10.82227,14.8922,10.55078L14.4781,11.13281C14.7906,11.486329999999999,15.2652,11.75,15.9605,11.75Z" stroke-opacity="0" stroke="none"></path></svg>'), Wh = () => Yh.cloneNode(!0), Gh = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M3.146447,14.178126025390625C2.9511847,13.982826025390626,2.9511847,13.666226025390625,3.146447,13.470926025390625L7.39146,9.225966025390626C7.35417,9.095106025390624,7.33421,8.956946025390625,7.33421,8.814116025390625C7.33421,7.985696025390625,8.00578,7.314116025390625,8.834209999999999,7.314116025390625C8.97703,7.314116025390625,9.11519,7.334086025390625,9.24605,7.371366025390625L13.753,2.864373025390625C13.9483,2.669110325390625,14.2649,2.669110325390625,14.4602,2.864373025390625C14.6554,3.059635025390625,14.6554,3.376217025390625,14.4602,3.571479025390625L10.06916,7.962476025390625C10.23631,8.204386025390626,10.334209999999999,8.497826025390625,10.334209999999999,8.814116025390625C10.334209999999999,9.642546025390626,9.66264,10.314116025390625,8.834209999999999,10.314116025390625C8.51791,10.314116025390625,8.22448,10.216226025390625,7.98256,10.049076025390626L3.853554,14.178126025390625C3.658291,14.373326025390625,3.341709,14.373326025390625,3.146447,14.178126025390625ZM7.67736,19.188526025390626C7.4821,18.993226025390626,7.4821,18.676626025390625,7.67736,18.481426025390626L9.9804,16.178326025390625C9.88669,15.982526025390625,9.834209999999999,15.763226025390624,9.834209999999999,15.531626025390626C9.834209999999999,14.703226025390626,10.50578,14.031626025390626,11.33421,14.031626025390626C11.56579,14.031626025390626,11.78511,14.084126025390624,11.98093,14.177826025390624L13.9804,12.178356025390626C13.8867,11.982536025390624,13.8342,11.763216025390625,13.8342,11.531636025390625C13.8342,10.703206025390624,14.5058,10.031636025390625,15.3342,10.031636025390625C15.5658,10.031636025390625,15.7851,10.084116025390625,15.9809,10.177826025390626L18.284,7.874796025390625C18.4792,7.679536025390625,18.7958,7.679536025390625,18.9911,7.874796025390625C19.1863,8.070056025390624,19.1863,8.386636025390626,18.9911,8.581906025390625L16.688000000000002,10.884936025390624C16.7817,11.080756025390626,16.8342,11.300066025390626,16.8342,11.531636025390625C16.8342,12.360066025390624,16.162599999999998,13.031626025390626,15.3342,13.031626025390626C15.1026,13.031626025390626,14.8833,12.979126025390626,14.6875,12.885426025390625L12.68803,14.884926025390625C12.78174,15.080726025390625,12.83421,15.300026025390626,12.83421,15.531626025390626C12.83421,16.360026025390624,12.16264,17.031626025390626,11.33421,17.031626025390626C11.10264,17.031626025390626,10.88333,16.979126025390627,10.68751,16.885426025390625L8.38446,19.188526025390626C8.1892,19.383726025390626,7.87262,19.383726025390626,7.67736,19.188526025390626Z" stroke-opacity="0" stroke="none"></path></svg>'), Xh = () => Gh.cloneNode(!0), Jh = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M3.3367688759765626,12.63173C3.5320318759765623,12.82699,3.8486138759765627,12.82699,4.043876875976562,12.63173L11.822052875976562,4.853553C12.017312875976563,4.658291,12.017312875976563,4.341708,11.822052875976562,4.146446C11.626792875976562,3.9511843,11.310202875976563,3.9511843,11.114942875976563,4.146446L3.3367688759765626,11.92462C3.1415071759765625,12.11988,3.1415071759765625,12.43647,3.3367688759765626,12.63173ZM5.001492875976562,17.0351C4.806232875976562,16.8399,4.806232875976562,16.5233,5.001492875976562,16.328L7.304532875976562,14.025C7.210822875976563,13.82916,7.158352875976563,13.60984,7.158352875976563,13.37827C7.158352875976563,12.54984,7.829922875976562,11.87827,8.658352875976561,11.87827C8.889922875976563,11.87827,9.109232875976563,11.93075,9.305052875976562,12.02446L11.304532875976562,10.02498C11.210822875976563,9.82916,11.158352875976561,9.60984,11.158352875976561,9.37827C11.158352875976561,8.54984,11.829922875976562,7.8782700000000006,12.658352875976563,7.8782700000000006C12.889922875976563,7.8782700000000006,13.109232875976563,7.93075,13.305022875976562,8.024460000000001L15.608122875976562,5.72142C15.803322875976562,5.5261499999999995,16.119922875976563,5.5261499999999995,16.315222875976563,5.72142C16.510422875976563,5.9166799999999995,16.510422875976563,6.23326,16.315222875976563,6.42852L14.012122875976562,8.73156C14.105822875976562,8.92738,14.158322875976562,9.1467,14.158322875976562,9.37827C14.158322875976562,10.2067,13.486822875976562,10.87827,12.658352875976563,10.87827C12.426772875976562,10.87827,12.207452875976562,10.82579,12.011642875976563,10.73209L10.012162875976562,12.73156C10.105872875976562,12.92738,10.158352875976561,13.1467,10.158352875976561,13.37827C10.158352875976561,14.2067,9.486772875976563,14.8783,8.658352875976561,14.8783C8.426772875976562,14.8783,8.207452875976562,14.8258,8.011642875976563,14.7321L5.708602875976562,17.0351C5.513342875976562,17.2304,5.196752875976562,17.2304,5.001492875976562,17.0351ZM10.415712875976563,18.328C10.220452875976562,18.5233,9.903862875976563,18.5233,9.708602875976563,18.328C9.513342875976562,18.1328,9.513342875976562,17.816200000000002,9.708602875976563,17.6209L12.304532875976562,15.025C12.210822875976563,14.8292,12.158352875976563,14.6098,12.158352875976563,14.3783C12.158352875976563,13.54984,12.829922875976562,12.87827,13.658322875976562,12.87827C13.889922875976563,12.87827,14.109222875976563,12.93075,14.305022875976562,13.02446L17.486822875976564,9.84274C17.682022875976564,9.64747,17.99862287597656,9.64747,18.19392287597656,9.84274C18.38912287597656,10.038,18.38912287597656,10.35458,18.19392287597656,10.54984L15.012122875976562,13.73156C15.105822875976562,13.92738,15.158322875976562,14.1467,15.158322875976562,14.3783C15.158322875976562,15.2067,14.486822875976562,15.8783,13.658322875976562,15.8783C13.426822875976562,15.8783,13.207422875976562,15.8258,13.011642875976563,15.7321L10.415712875976563,18.328Z" stroke-opacity="0" stroke="none"></path></svg>'), ef = () => Jh.cloneNode(!0), tf = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M13.1889,6C12.98303,6.582599999999999,12.42741,7,11.7743,7C11.12119,7,10.565570000000001,6.582599999999999,10.35965,6L3.5,6C3.223857,6,3,5.77614,3,5.5C3,5.22386,3.223857,5,3.5,5L10.35965,5C10.565570000000001,4.417404,11.12119,4,11.7743,4C12.42741,4,12.98303,4.417404,13.1889,5L18.5,5C18.7761,5,19,5.22386,19,5.5C19,5.77614,18.7761,6,18.5,6L13.1889,6ZM3,8.5C3,8.22386,3.223857,8,3.5,8L18.5,8C18.7761,8,19,8.22386,19,8.5C19,8.77614,18.7761,9,18.5,9L3.5,9C3.223857,9,3,8.77614,3,8.5ZM3.278549,11.5C3.278549,11.22386,3.502407,11,3.778549,11L18.7785,11C19.0547,11,19.2785,11.22386,19.2785,11.5C19.2785,11.77614,19.0547,12,18.7785,12L3.778549,12C3.502407,12,3.278549,11.77614,3.278549,11.5ZM3.139267,14.5C3.139267,14.2239,3.363124,14,3.6392670000000003,14L18.6393,14C18.915399999999998,14,19.1393,14.2239,19.1393,14.5C19.1393,14.7761,18.915399999999998,15,18.6393,15L3.6392670000000003,15C3.363124,15,3.139267,14.7761,3.139267,14.5ZM13.1889,18C12.98303,18.5826,12.42741,19,11.7743,19C11.12119,19,10.565570000000001,18.5826,10.35965,18L3.778549,18C3.502407,18,3.278549,17.7761,3.278549,17.5C3.278549,17.2239,3.502407,17,3.778549,17L10.35965,17C10.565570000000001,16.4174,11.12119,16,11.7743,16C12.42741,16,12.98303,16.4174,13.1889,17L18.7785,17C19.0547,17,19.2785,17.2239,19.2785,17.5C19.2785,17.7761,19.0547,18,18.7785,18L13.1889,18Z" stroke-opacity="0" stroke="none"></path></svg>'), nf = () => tf.cloneNode(!0), rf = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M4.91465,6C4.70873,6.582599999999999,4.15311,7,3.5,7C2.671573,7,2,6.32843,2,5.5C2,4.671573,2.671573,4,3.5,4C4.15311,4,4.70873,4.417404,4.91465,5L18.2257,5C18.5018,5,18.7257,5.22386,18.7257,5.5C18.7257,5.77614,18.5018,6,18.2257,6L4.91465,6ZM2.7257,8.5C2.7257,8.22386,2.949558,8,3.2257,8L18.2257,8C18.5018,8,18.7257,8.22386,18.7257,8.5C18.7257,8.77614,18.5018,9,18.2257,9L3.2257,9C2.949558,9,2.7257,8.77614,2.7257,8.5ZM3.00425,11.5C3.00425,11.22386,3.22811,11,3.50425,11L18.5042,11C18.7804,11,19.0042,11.22386,19.0042,11.5C19.0042,11.77614,18.7804,12,18.5042,12L3.50425,12C3.22811,12,3.00425,11.77614,3.00425,11.5ZM2.864967,14.5C2.864967,14.2239,3.08882,14,3.36497,14L18.365,14C18.6411,14,18.865,14.2239,18.865,14.5C18.865,14.7761,18.6411,15,18.365,15L3.36497,15C3.08882,15,2.864967,14.7761,2.864967,14.5ZM20,17.5C20,18.328400000000002,19.3284,19,18.5,19C17.846899999999998,19,17.2913,18.5826,17.0854,18L3.50425,18C3.22811,18,3.00425,17.7761,3.00425,17.5C3.00425,17.2239,3.22811,17,3.50425,17L17.0854,17C17.2913,16.4174,17.846899999999998,16,18.5,16C19.3284,16,20,16.671599999999998,20,17.5Z" stroke-opacity="0" stroke="none"></path></svg>'), of = () => rf.cloneNode(!0), af = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><ellipse cx="10.5" cy="11.5" rx="1.5" ry="1.5" stroke-opacity="0" stroke="none"></ellipse><ellipse cx="17.5" cy="11.5" rx="1.5" ry="1.5" stroke-opacity="0" stroke="none"></ellipse><ellipse cx="10.5" cy="11.5" rx="7" ry="7" fill-opacity="0" stroke-opacity="1" fill="none" stroke-width="1"></ellipse><ellipse cx="10.5" cy="11.5" rx="5" ry="5" fill-opacity="0" stroke-opacity="1" fill="none" stroke-width="1"></ellipse><ellipse cx="10.5" cy="11.5" rx="3" ry="3" fill-opacity="0" stroke-opacity="1" fill="none" stroke-width="1"></ellipse></svg>'), sf = () => af.cloneNode(!0), lf = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M3,7.32468C5.90649,3.3893050000000002,11.49833,2.81306,14.6674,6.31944C14.9056,6.1554199999999994,15.192,6.05979,15.5,6.05979C15.845,6.05979,16.1628,6.17974,16.4162,6.381349999999999L18.4509,4.23827L19,4.816615L16.8945,7.03429C16.962600000000002,7.21075,17,7.40319,17,7.60463C17,8.45782,16.328400000000002,9.14947,15.5,9.14947C14.6716,9.14947,14,8.45782,14,7.60463C14,7.36402,14.0534,7.13625,14.1487,6.93322C11.32695,3.748365,6.25159,4.253956,3.612785,7.82695L3,7.32468ZM14.09,15.4717C15.7427,13.78985,16.244500000000002,11.524740000000001,15.5633,9.30134L15.5618,9.30134L16.3012,9.0502C17.072400000000002,11.56646,16.497700000000002,14.158,14.6282,16.0599C12.28737,18.442,8.62386,18.6988,6.41348,16.4501C4.5526,14.5572,4.52076,11.19671,6.36766,9.3177C7.89069,7.76754,10.07544,7.706189999999999,11.56741,9.22363C11.95453,9.61742,12.24817,10.08363,12.43369,10.57677L14.1451,8.77421L14.6942,9.35256L12.64982,11.50582C12.65827,11.59712,12.66295,11.68839,12.66378,11.77936C12.87398,12.04523,13,12.38451,13,12.7541C13,13.60729,12.32843,14.2989,11.5,14.2989C10.67157,14.2989,10,13.60729,10,12.7541C10,11.90091,10.67157,11.20926,11.5,11.20926C11.60387,11.20926,11.70528,11.220130000000001,11.8032,11.240829999999999L11.81763,11.22564C11.69858,10.71874,11.42858,10.21929,11.0284,9.81179C9.844000000000001,8.60765,8.136890000000001,8.65592,6.90822,9.90586C5.37975,11.460930000000001,5.40693,14.288,6.95404,15.8619C8.84598,17.7867,12.03496,17.5626,14.09,15.4717Z" stroke-opacity="0" stroke="none"></path></svg>'), cf = () => lf.cloneNode(!0), uf = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M4,17.0854L4,3.5C4,3.223858,4.22386,3,4.5,3C4.77614,3,5,3.223858,5,3.5L5,10L7.57584,10L9.8127,4.46359C9.91614,4.20756,10.20756,4.08386,10.46359,4.1873000000000005C10.71963,4.29075,10.84333,4.58216,10.73988,4.8382000000000005L8.65438,10L11.08535,10C11.29127,9.4174,11.84689,9,12.5,9C12.65154,9,12.79784,9.02247,12.93573,9.06427L16.6464,5.35355C16.8417,5.15829,17.1583,5.15829,17.3536,5.35355C17.5488,5.54882,17.5488,5.8654,17.3536,6.06066L13.7475,9.66675C13.907,9.90508,14,10.19168,14,10.5C14,11.15311,13.5826,11.70873,13,11.91465L13,14.3638L18.3714,12.1936C18.6274,12.09015,18.918799999999997,12.21385,19.0222,12.46989C19.1257,12.72592,19.002,13.0173,18.746000000000002,13.1208L13,15.4423L13,18L19.5,18C19.7761,18,20,18.2239,20,18.5C20,18.7761,19.7761,19,19.5,19L5.91465,19C5.70873,19.5826,5.15311,20,4.5,20C3.671573,20,3,19.3284,3,18.5C3,17.846899999999998,3.417404,17.2913,4,17.0854ZM6.3729499999999994,17.0413L12,14.7678L12,11.91465C11.88136,11.87271,11.76956,11.81627,11.66675,11.74746L6.3729499999999994,17.0413ZM12,15.8463L6.6694700000000005,18L12,18L12,15.8463ZM6.38629,15.6137L8.250350000000001,11L11,11L6.38629,15.6137ZM5,11L7.17182,11L5,16.3754L5,11Z" stroke-opacity="0" fill-rule="evenodd" fill-opacity="1"></path></svg>'), df = () => uf.cloneNode(!0), hf = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M17,4.5C17,5.32843,16.328400000000002,6,15.5,6C15.0931,6,14.7241,5.83802,14.4539,5.57503L5.98992,8.32515C5.99658,8.38251,6,8.440850000000001,6,8.5C6,9.15311,5.582599999999999,9.70873,5,9.91465L5,11.08535C5.42621,11.236,5.763999999999999,11.57379,5.91465,12L19.5,12C19.7761,12,20,12.22386,20,12.5C20,12.77614,19.7761,13,19.5,13L5.91465,13C5.70873,13.5826,5.15311,14,4.5,14C3.671573,14,3,13.3284,3,12.5C3,11.84689,3.417404,11.29127,4,11.08535L4,9.91465C3.417404,9.70873,3,9.15311,3,8.5C3,7.67157,3.671573,7,4.5,7C4.90411,7,5.2709,7.15981,5.5406200000000005,7.41967L14.0093,4.66802C14.0032,4.6128599999999995,14,4.5568,14,4.5C14,3.671573,14.6716,3,15.5,3C16.328400000000002,3,17,3.671573,17,4.5ZM4,15.5C4,15.2239,4.22386,15,4.5,15L19.5,15C19.7761,15,20,15.2239,20,15.5C20,15.7761,19.7761,16,19.5,16L4.5,16C4.22386,16,4,15.7761,4,15.5ZM4,18.5C4,18.2239,4.22386,18,4.5,18L19.5,18C19.7761,18,20,18.2239,20,18.5C20,18.7761,19.7761,19,19.5,19L4.5,19C4.22386,19,4,18.7761,4,18.5Z" stroke-opacity="0" stroke="none"></path></svg>'), ff = () => hf.cloneNode(!0), mf = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M20,3.5C20,4.15311,19.5826,4.70873,19,4.91465L19,18.5C19,18.7761,18.7761,19,18.5,19L4.91465,19C4.70873,19.5826,4.15311,20,3.5,20C2.671573,20,2,19.3284,2,18.5C2,17.846899999999998,2.417404,17.2913,3,17.0854L3,3.5C3,3.22386,3.22386,3,3.5,3L17.0854,3C17.2913,2.417404,17.846899999999998,2,18.5,2C19.3284,2,20,2.671573,20,3.5ZM17.0854,4C17.236,4.42621,17.5738,4.763999999999999,18,4.91465L18,8L14,8L14,4L17.0854,4ZM13,4L13,8L9,8L9,4L13,4ZM13,9L9,9L9,13L13,13L13,9ZM13,14L9,14L9,18L13,18L13,14ZM14,18L14,14L18,14L18,18L14,18ZM18,13L14,13L14,9L18,9L18,13ZM4.91465,18C4.763999999999999,17.5738,4.42621,17.236,4,17.0854L4,14L8,14L8,18L4.91465,18ZM4,8L4,4L8,4L8,8L4,8ZM8,9L8,13L4,13L4,9L8,9Z" stroke-opacity="0" fill-rule="evenodd" fill-opacity="1"></path></svg>'), gf = () => mf.cloneNode(!0), yf = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><ellipse cx="10.5" cy="11.5" rx="1.5" ry="1.5" stroke-opacity="0" stroke="none"></ellipse><ellipse cx="17.5" cy="11.5" rx="1.5" ry="1.5" stroke-opacity="0" stroke="none"></ellipse><ellipse cx="10.5" cy="11.5" rx="7" ry="7" fill-opacity="0" fill="none" stroke-opacity="1" stroke-width="1"></ellipse></svg>'), Cf = () => yf.cloneNode(!0), pf = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M11.57625,6.9981C11.55099,6.999359999999999,11.52557,7,11.5,7C11.34,7,11.18584,6.97495,11.04125,6.9285499999999995L5.55401,16.4327C5.713760000000001,16.5905,5.83826,16.7839,5.91465,17L16.0854,17C16.2187,16.622700000000002,16.4987,16.314700000000002,16.8569,16.1445L11.57625,6.9981ZM12.50759,6.611219999999999C12.81005,6.336790000000001,13,5.94058,13,5.5C13,4.671573,12.32843,4,11.5,4C10.67157,4,10,4.671573,10,5.5C10,5.80059,10.08841,6.08052,10.24066,6.31522L4.64514,16.0069C4.59738,16.002299999999998,4.54896,16,4.5,16C3.671573,16,3,16.671599999999998,3,17.5C3,18.328400000000002,3.671573,19,4.5,19C5.15311,19,5.70873,18.5826,5.91465,18L16.0854,18C16.2913,18.5826,16.846899999999998,19,17.5,19C18.328400000000002,19,19,18.328400000000002,19,17.5C19,16.8365,18.5691,16.2735,17.971899999999998,16.075699999999998L12.50759,6.611219999999999Z" stroke-opacity="0" fill-rule="evenodd" fill-opacity="1"></path></svg>'), vf = () => pf.cloneNode(!0), bf = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M19,4.5C19,5.15311,18.5826,5.70873,18,5.91465L18,18.5C18,18.7761,17.7761,19,17.5,19L5.91465,19C5.70873,19.5826,5.15311,20,4.5,20C3.671573,20,3,19.3284,3,18.5C3,17.846899999999998,3.417404,17.2913,4,17.0854L4,4.5C4,4.22386,4.22386,4,4.5,4L16.0854,4C16.2913,3.417404,16.846899999999998,3,17.5,3C18.328400000000002,3,19,3.671573,19,4.5ZM5,5L16.0854,5C16.236,5.42621,16.5738,5.763999999999999,17,5.91465L17,18L5.91465,18C5.763999999999999,17.5738,5.42621,17.236,5,17.0854L5,5Z" stroke-opacity="0" fill-rule="evenodd" fill-opacity="1"></path></svg>'), $f = () => bf.cloneNode(!0), _f = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M19.6401,7.99355C20.4028,7.92291,21,7.2811900000000005,21,6.5C21,5.671573,20.3284,5,19.5,5C18.8469,5,18.2913,5.417404,18.0854,6L7.62067,6C7.34453,6,7.12067,6.22386,7.12067,6.5C7.12067,6.5479,7.12741,6.59423,7.13999,6.63809L3.2294099999999997,15.0243C2.530138,15.1517,2,15.764,2,16.5C2,17.328400000000002,2.671573,18,3.5,18C4.15311,18,4.70873,17.5826,4.91465,17L14.5963,17C14.6456,17.076,14.7162,17.1396,14.8044,17.1807C15.0546,17.2974,15.3521,17.1891,15.4688,16.9388L19.6401,7.99355ZM14.7896,16.0293L18.6551,7.739599999999999C18.3942,7.56144,18.1925,7.30307,18.0854,7L8.0746,7L4.25044,15.2009C4.55701,15.3784,4.79493,15.6613,4.91465,16L14.6207,16C14.68,16,14.7368,16.0103,14.7896,16.0293Z" stroke-opacity="0" fill-rule="evenodd" fill-opacity="1"></path></svg>'), kf = () => _f.cloneNode(!0), xf = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M8.134443814697265,7.494615087890625L8.764323814697265,7.494615087890625L8.764323814697265,3.414215087890625L8.310223814697267,3.414215087890625L7.294603814697266,4.005035087890625L7.289713814697266,4.634915087890625L8.134443814697265,4.149892087890625L8.134443814697265,7.494615087890625ZM18.832003814697266,6.933095087890624Q19.004603814697266,6.635245087890625,19.004603814697266,6.2543850878906255Q19.004603814697266,5.884915087890625,18.845103814697264,5.593575087890625Q18.685503814697267,5.3006050878906255,18.399103814697266,5.136225087890625Q18.114303814697266,4.9702050878906245,17.754603814697266,4.9653250878906245L18.820603814697265,3.840647087890625L18.820603814697265,3.414215087890625L16.519203814697264,3.414215087890625L16.519203814697264,3.939931087890625L18.050803814697264,3.939931087890625L16.719403814697266,5.334785087890625L17.074203814697263,5.7205350878906245Q17.254903814697265,5.484525087890625,17.619503814697268,5.484525087890625Q17.980803814697268,5.484525087890625,18.187503814697266,5.689605087890625Q18.394203814697267,5.894685087890625,18.394203814697267,6.2543850878906255Q18.394203814697267,6.604315087890625,18.187503814697266,6.822415087890625Q17.980803814697268,7.0405150878906255,17.640603814697265,7.0405150878906255Q17.334603814697267,7.0405150878906255,17.124703814697266,6.890775087890625Q16.914703814697265,6.739415087890626,16.820303814697265,6.469225087890624L16.354803814697263,6.744295087890626Q16.480103814697266,7.125155087890625,16.821903814697265,7.341625087890625Q17.165403814697264,7.559725087890625,17.640603814697265,7.559725087890625Q18.039403814697266,7.559725087890625,18.348603814697267,7.393705087890625Q18.659503814697267,7.229315087890625,18.832003814697266,6.933095087890624ZM10.000003814697266,10.634915087890626C10.000003814697266,11.024655087890626,9.851363814697265,11.379685087890625,9.607683814697266,11.646395087890625L12.168903814697266,15.171615087890626C12.275403814697265,15.147615087890625,12.386203814697266,15.134915087890626,12.500003814697266,15.134915087890626C12.596503814697266,15.134915087890626,12.690803814697265,15.144015087890624,12.782303814697265,15.161415087890624L16.108803814697268,11.196955087890625C16.038703814697264,11.023375087890624,16.000003814697266,10.833655087890625,16.000003814697266,10.634915087890626C16.000003814697266,9.806495087890625,16.671603814697264,9.134915087890626,17.500003814697266,9.134915087890626C18.328403814697264,9.134915087890626,19.000003814697266,9.806495087890625,19.000003814697266,10.634915087890626C19.000003814697266,11.463345087890625,18.328403814697264,12.134915087890626,17.500003814697266,12.134915087890626C17.239503814697265,12.134915087890626,16.994503814697268,12.068495087890625,16.781003814697264,11.951675087890624L13.654703814697266,15.677415087890624C13.870303814697266,15.937215087890625,14.000003814697266,16.270915087890625,14.000003814697266,16.634915087890626C14.000003814697266,17.463315087890624,13.328403814697266,18.134915087890626,12.500003814697266,18.134915087890626C11.671573814697265,18.134915087890626,11.000003814697266,17.463315087890624,11.000003814697266,16.634915087890626C11.000003814697266,16.284415087890626,11.120193814697265,15.962015087890626,11.321603814697266,15.706715087890625L8.715393814697265,12.119565087890624C8.645053814697267,12.129685087890625,8.573143814697266,12.134915087890626,8.500003814697266,12.134915087890626C8.162103814697264,12.134915087890626,7.8503038146972655,12.023195087890626,7.599523814697266,11.834665087890626L4.505583814697266,15.521915087890624C4.809213814697266,15.796415087890624,5.000003814697266,16.193415087890624,5.000003814697266,16.634915087890626C5.000003814697266,17.463315087890624,4.328433814697266,18.134915087890626,3.5000038146972656,18.134915087890626C2.6715768146972656,18.134915087890626,2.0000038146972656,17.463315087890624,2.0000038146972656,16.634915087890626C2.0000038146972656,15.806515087890626,2.6715768146972656,15.134915087890626,3.5000038146972656,15.134915087890626C3.508253814697266,15.134915087890626,3.5164838146972657,15.135015087890626,3.524703814697266,15.135115087890625L7.033823814697266,10.953115087890625C7.011673814697265,10.850565087890626,7.000003814697266,10.744105087890624,7.000003814697266,10.634915087890626C7.000003814697266,9.806495087890625,7.671573814697266,9.134915087890626,8.500003814697266,9.134915087890626C9.328433814697267,9.134915087890626,10.000003814697266,9.806495087890625,10.000003814697266,10.634915087890626Z" stroke-opacity="0" stroke="none"></path></svg>'), Lf = () => xf.cloneNode(!0), wf = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M8.13444,7.494615087890625L8.76432,7.494615087890625L8.76432,3.414215087890625L8.310220000000001,3.414215087890625L7.2946,4.005035087890625L7.28971,4.634915087890625L8.13444,4.149892087890625L8.13444,7.494615087890625ZM18.832,6.929835087890625Q19.0046,6.635245087890625,19.0046,6.2543850878906255Q19.0046,5.889805087890625,18.8451,5.5952050878906245Q18.6855,5.3006050878906255,18.3975,5.132965087890625Q18.1094,4.9653250878906245,17.7399,4.9653250878906245Q17.435499999999998,4.9653250878906245,17.1556,5.149245087890625L17.2793,3.939931087890625L18.8304,3.939931087890625L18.8304,3.414215087890625L16.7406,3.414215087890625L16.5094,5.665195087890625L17.0156,5.795405087890625Q17.095399999999998,5.655425087890626,17.2516,5.570795087890625Q17.4095,5.484525087890625,17.6357,5.484525087890625Q17.9694,5.484525087890625,18.1842,5.697745087890625Q18.4007,5.909335087890625,18.4007,6.2543850878906255Q18.4007,6.604315087890625,18.1842,6.822415087890625Q17.9694,7.0405150878906255,17.6292,7.0405150878906255Q17.3298,7.0405150878906255,17.119799999999998,6.890775087890625Q16.9098,6.739415087890626,16.825200000000002,6.474115087890625L16.3597,6.749175087890626Q16.470399999999998,7.110505087890624,16.807299999999998,7.335115087890625Q17.144199999999998,7.559725087890625,17.6292,7.559725087890625Q18.0296,7.559725087890625,18.3438,7.392075087890625Q18.6595,7.224435087890625,18.832,6.929835087890625ZM10,10.634915087890626C10,11.024655087890626,9.85136,11.379685087890625,9.60768,11.646395087890625L12.1689,15.171615087890626C12.2754,15.147615087890625,12.3862,15.134915087890626,12.5,15.134915087890626C12.5965,15.134915087890626,12.6908,15.144015087890624,12.7823,15.161415087890624L16.108800000000002,11.196955087890625C16.0387,11.023375087890624,16,10.833655087890625,16,10.634915087890626C16,9.806495087890625,16.671599999999998,9.134915087890626,17.5,9.134915087890626C18.3284,9.134915087890626,19,9.806495087890625,19,10.634915087890626C19,11.463345087890625,18.3284,12.134915087890626,17.5,12.134915087890626C17.2395,12.134915087890626,16.994500000000002,12.068505087890625,16.781,11.951675087890624L13.6547,15.677415087890624C13.8703,15.937215087890625,14,16.270915087890625,14,16.634915087890626C14,17.463315087890624,13.3284,18.134915087890626,12.5,18.134915087890626C11.67157,18.134915087890626,11,17.463315087890624,11,16.634915087890626C11,16.284415087890626,11.12019,15.962015087890626,11.3216,15.706715087890625L8.71539,12.119565087890624C8.645050000000001,12.129685087890625,8.57314,12.134915087890626,8.5,12.134915087890626C8.162099999999999,12.134915087890626,7.8503,12.023195087890626,7.59952,11.834665087890626L4.50558,15.521915087890624C4.80921,15.796415087890624,5,16.193415087890624,5,16.634915087890626C5,17.463315087890624,4.32843,18.134915087890626,3.5,18.134915087890626C2.671573,18.134915087890626,2,17.463315087890624,2,16.634915087890626C2,15.806515087890626,2.671573,15.134915087890626,3.5,15.134915087890626C3.5082500000000003,15.134915087890626,3.51648,15.135015087890626,3.5247,15.135115087890625L7.03382,10.953115087890625C7.01167,10.850565087890626,7,10.744105087890624,7,10.634915087890626C7,9.806495087890625,7.67157,9.134915087890626,8.5,9.134915087890626C9.32843,9.134915087890626,10,9.806495087890625,10,10.634915087890626Z" stroke-opacity="0" stroke="none"></path></svg>'), Tf = () => wf.cloneNode(!0), Af = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M18.8532,7.020985087890625Q19.0257,6.734525087890625,19.0257,6.369945087890625Q19.0257,6.020005087890625,18.8499,5.754705087890625Q18.6758,5.489415087890626,18.3649,5.339675087890625Q18.5944,5.209465087890625,18.7214,4.994615087890625Q18.8499,4.779775087890625,18.8499,4.5193550878906255Q18.8499,4.2003480878906245,18.7002,3.951324087890625Q18.5505,3.700673087890625,18.277,3.557444087890625Q18.0052,3.414215087890625,17.6455,3.414215087890625Q17.285800000000002,3.414215087890625,17.0107,3.557444087890625Q16.7357,3.700673087890625,16.5843,3.951324087890625Q16.4346,4.2003480878906245,16.4346,4.5193550878906255Q16.4346,4.779775087890625,16.561500000000002,4.994615087890625Q16.6901,5.209465087890625,16.919600000000003,5.339675087890625Q16.6055,5.489415087890626,16.4297,5.757965087890625Q16.255499999999998,6.024895087890625,16.255499999999998,6.369945087890625Q16.255499999999998,6.734525087890625,16.4297,7.020985087890625Q16.6055,7.305815087890625,16.919600000000003,7.465325087890625Q17.2354,7.624825087890625,17.6455,7.624825087890625Q18.0557,7.624825087890625,18.3682,7.465325087890625Q18.6807,7.305815087890625,18.8532,7.020985087890625ZM8.76432,7.559725087890625L8.13444,7.559725087890625L8.13444,4.214996087890625L7.28971,4.700025087890625L7.2946,4.070139087890625L8.310220000000001,3.479319087890625L8.76432,3.479319087890625L8.76432,7.559725087890625ZM17.1816,4.955555087890625Q17.0042,4.784655087890625,17.0042,4.5095950878906255Q17.0042,4.229645087890625,17.18,4.057119087890625Q17.355800000000002,3.884592087890625,17.6455,3.884592087890625Q17.935200000000002,3.884592087890625,18.1077,4.057119087890625Q18.2803,4.229645087890625,18.2803,4.5095950878906255Q18.2803,4.784655087890625,18.1045,4.955555087890625Q17.930300000000003,5.124825087890625,17.6455,5.124825087890625Q17.3607,5.124825087890625,17.1816,4.955555087890625ZM18.2217,5.7953950878906255Q18.4398,6.005365087890625,18.4398,6.3552950878906245Q18.4398,6.705235087890625,18.2217,6.915195087890625Q18.0052,7.125155087890625,17.6455,7.125155087890625Q17.285800000000002,7.125155087890625,17.067700000000002,6.915195087890625Q16.849600000000002,6.705235087890625,16.849600000000002,6.3552950878906245Q16.849600000000002,6.005365087890625,17.064500000000002,5.7953950878906255Q17.2793,5.585435087890625,17.6455,5.585435087890625Q18.0052,5.585435087890625,18.2217,5.7953950878906255ZM9.60768,11.711495087890626C9.85136,11.444785087890626,10,11.089765087890626,10,10.700025087890625C10,9.871595087890626,9.32843,9.200025087890625,8.5,9.200025087890625C7.67157,9.200025087890625,7,9.871595087890626,7,10.700025087890625C7,10.809205087890625,7.01167,10.915665087890625,7.03382,11.018215087890624L3.5247,15.200215087890625C3.51648,15.200115087890625,3.5082500000000003,15.200015087890625,3.5,15.200015087890625C2.671573,15.200015087890625,2,15.871615087890625,2,16.700015087890627C2,17.528415087890625,2.671573,18.200015087890627,3.5,18.200015087890627C4.32843,18.200015087890627,5,17.528415087890625,5,16.700015087890627C5,16.258515087890625,4.80921,15.861515087890625,4.50558,15.587015087890626L7.59952,11.899765087890625C7.8503,12.088295087890625,8.162099999999999,12.200025087890625,8.5,12.200025087890625C8.57314,12.200025087890625,8.645050000000001,12.194785087890626,8.71539,12.184675087890625L11.3216,15.771815087890625C11.12019,16.027215087890625,11,16.349515087890623,11,16.700015087890627C11,17.528415087890625,11.67157,18.200015087890627,12.5,18.200015087890627C13.3284,18.200015087890627,14,17.528415087890625,14,16.700015087890627C14,16.336015087890623,13.8703,16.002315087890626,13.6547,15.742515087890625L16.781,12.016775087890625C16.994500000000002,12.133605087890626,17.2395,12.200025087890625,17.5,12.200025087890625C18.3284,12.200025087890625,19,11.528445087890624,19,10.700025087890625C19,9.871595087890626,18.3284,9.200025087890625,17.5,9.200025087890625C16.671599999999998,9.200025087890625,16,9.871595087890626,16,10.700025087890625C16,10.898765087890624,16.0387,11.088475087890625,16.108800000000002,11.262055087890625L12.7823,15.226515087890625C12.6908,15.209115087890625,12.5965,15.200015087890625,12.5,15.200015087890625C12.3862,15.200015087890625,12.2754,15.212715087890626,12.1689,15.236715087890625L9.60768,11.711495087890626Z" stroke-opacity="0" stroke="none"></path></svg>'), Mf = () => Af.cloneNode(!0), Sf = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M9.474616630859375,7.494615087890625L8.844736630859375,7.494615087890625L8.844736630859375,4.149892087890625L8.000006630859374,4.634915087890625L8.004896630859374,4.005035087890625L9.020516630859376,3.414215087890625L9.474616630859375,3.414215087890625L9.474616630859375,7.494615087890625ZM18.529296630859378,4.8318550878906255Q18.307996630859375,5.028795087890625,18.122396630859377,5.385245087890625Q17.868496630859376,5.019035087890625,17.629196630859376,4.8269750878906255Q17.389996630859375,4.634915087890625,17.168596630859376,4.634915087890625Q16.794296630859375,4.634915087890625,16.522496630859376,4.976715087890625Q16.252296630859377,5.3168850878906255,16.252296630859377,5.7856350878906255Q16.252296630859377,6.218575087890625,16.502896630859375,6.521315087890625Q16.755196630859373,6.822415087890625,17.114896630859377,6.822415087890625Q17.368796630859375,6.822415087890625,17.588596630859374,6.625475087890624Q17.809896630859377,6.428535087890625,17.998696630859374,6.0688350878906245Q18.249396630859373,6.439935087890625,18.488596630859377,6.631985087890625Q18.727896630859377,6.822415087890625,18.952496630859375,6.822415087890625Q19.326796630859373,6.822415087890625,19.596996630859376,6.482245087890625Q19.868796630859375,6.140455087890626,19.868796630859375,5.671705087890626Q19.868796630859375,5.238755087890625,19.618196630859376,4.937655087890625Q19.367496630859375,4.634915087890625,19.006196630859375,4.634915087890625Q18.750696630859377,4.634915087890625,18.529296630859378,4.8318550878906255ZM18.337296630859377,5.674955087890625L18.278696630859375,5.596835087890625Q18.449596630859375,5.272935087890625,18.622096630859374,5.1101750878906245Q18.794596630859374,4.947415087890625,18.967096630859373,4.947415087890625Q19.194996630859375,4.947415087890625,19.346396630859374,5.1345950878906255Q19.497696630859377,5.320135087890625,19.497696630859377,5.598455087890625Q19.497696630859377,5.8914250878906245,19.360996630859376,6.096505087890625Q19.224296630859374,6.301585087890626,19.027396630859375,6.301585087890626Q18.915096630859374,6.301585087890626,18.742496630859375,6.146965087890624Q18.569996630859375,5.992335087890625,18.337296630859377,5.674955087890625ZM17.785496630859377,5.779125087890625L17.842496630859372,5.857245087890625Q17.668296630859373,6.186025087890625,17.495796630859374,6.348785087890625Q17.324896630859374,6.509915087890625,17.153996630859375,6.509915087890625Q16.926096630859377,6.509915087890625,16.774796630859377,6.324375087890624Q16.623396630859375,6.137195087890625,16.623396630859375,5.858875087890625Q16.623396630859375,5.565905087890625,16.761696630859376,5.360825087890625Q16.900096630859373,5.1557550878906255,17.095396630859376,5.1557550878906255Q17.228896630859374,5.1557550878906255,17.365596630859375,5.2778250878906245Q17.502296630859377,5.399895087890625,17.785496630859377,5.779125087890625ZM10.710296630859375,10.634915087890626C10.710296630859375,11.024655087890626,10.561656630859375,11.379685087890625,10.317976630859375,11.646395087890625L12.879196630859376,15.171615087890626C12.985696630859374,15.147615087890625,13.096496630859376,15.134915087890626,13.210296630859375,15.134915087890626C13.306796630859376,15.134915087890626,13.401096630859374,15.144015087890624,13.492596630859374,15.161415087890624L16.819096630859377,11.196955087890625C16.748996630859374,11.023375087890624,16.710296630859375,10.833655087890625,16.710296630859375,10.634915087890626C16.710296630859375,9.806495087890625,17.381896630859373,9.134915087890626,18.210296630859375,9.134915087890626C19.038696630859373,9.134915087890626,19.710296630859375,9.806495087890625,19.710296630859375,10.634915087890626C19.710296630859375,11.463345087890625,19.038696630859373,12.134915087890626,18.210296630859375,12.134915087890626C17.949796630859375,12.134915087890626,17.704796630859377,12.068505087890625,17.491296630859374,11.951675087890624L14.364996630859375,15.677415087890624C14.580596630859375,15.937215087890625,14.710296630859375,16.270915087890625,14.710296630859375,16.634915087890626C14.710296630859375,17.463315087890624,14.038696630859375,18.134915087890626,13.210296630859375,18.134915087890626C12.381866630859374,18.134915087890626,11.710296630859375,17.463315087890624,11.710296630859375,16.634915087890626C11.710296630859375,16.284415087890626,11.830486630859374,15.962015087890626,12.031896630859375,15.706715087890625L9.425686630859374,12.119565087890624C9.355346630859376,12.129685087890625,9.283436630859375,12.134915087890626,9.210296630859375,12.134915087890626C8.872396630859374,12.134915087890626,8.560596630859376,12.023195087890626,8.309816630859375,11.834665087890626L5.215876630859375,15.521915087890624C5.519506630859375,15.796415087890624,5.710296630859375,16.193415087890624,5.710296630859375,16.634915087890626C5.710296630859375,17.463315087890624,5.038726630859375,18.134915087890626,4.210296630859375,18.134915087890626C3.381869630859375,18.134915087890626,2.710296630859375,17.463315087890624,2.710296630859375,16.634915087890626C2.710296630859375,15.806515087890626,3.381869630859375,15.134915087890626,4.210296630859375,15.134915087890626C4.218546630859375,15.134915087890626,4.226776630859375,15.135015087890626,4.234996630859375,15.135115087890625L7.744116630859375,10.953115087890625C7.721966630859375,10.850565087890626,7.710296630859375,10.744105087890624,7.710296630859375,10.634915087890626C7.710296630859375,9.806495087890625,8.381866630859374,9.134915087890626,9.210296630859375,9.134915087890626C10.038726630859376,9.134915087890626,10.710296630859375,9.806495087890625,10.710296630859375,10.634915087890626Z" stroke-opacity="0" stroke="none"></path></svg>'), Pf = () => Sf.cloneNode(!0), Df = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M21,5.5C21,6.32843,20.3284,7,19.5,7C19.4136,7,19.3289,6.99269,19.2465,6.97866L15.6257,15.5086C15.8587,15.7729,16,16.119999999999997,16,16.5C16,17.328400000000002,15.3284,18,14.5,18C13.8469,18,13.2913,17.5826,13.0854,17L3.91465,17C3.70873,17.5826,3.15311,18,2.5,18C1.671573,18,1,17.328400000000002,1,16.5C1,15.6716,1.671573,15,2.5,15C2.5840199999999998,15,2.66643,15.0069,2.74668,15.0202L6.36934,6.48574C6.13933,6.22213,6,5.87733,6,5.5C6,4.671573,6.67157,4,7.5,4C8.15311,4,8.70873,4.417404,8.91465,5L18.0854,5C18.2913,4.417404,18.8469,4,19.5,4C20.3284,4,21,4.671573,21,5.5ZM18.0854,6L8.91465,6C8.892579999999999,6.06243,8.8665,6.12296,8.83672,6.18128L13.9814,15.0921C14.143,15.0325,14.3177,15,14.5,15C14.584,15,14.6664,15.0069,14.7467,15.0202L18.3693,6.48574C18.2462,6.3446,18.149,6.1802,18.0854,6ZM13.2036,15.745L8.0861,6.8811800000000005C7.90605,6.95768,7.70797,7,7.5,7C7.41359,7,7.32888,6.99269,7.24647,6.97866L3.62571,15.5086C3.7512,15.651,3.8501,15.8174,3.91465,16L13.0854,16C13.1169,15.9108,13.1566,15.8255,13.2036,15.745Z" stroke-opacity="0" stroke="none"></path></svg>'), Nf = () => Df.cloneNode(!0), Of = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M5.92159,5.93994C6.04014,5.90529,6.152620000000001,5.85639,6.25704,5.79523L9.12729,9.89437C9.045449999999999,10.07959,9,10.28449,9,10.5C9,10.79522,9.08529,11.07053,9.232569999999999,11.30262L4.97573,16.7511L5.92159,5.93994ZM4.92259,5.8848400000000005C4.38078,5.658659999999999,4,5.1238,4,4.5C4,3.671573,4.67157,3,5.5,3C6.2157,3,6.81433,3.50124,6.96399,4.17183L15.1309,4.88634C15.3654,4.36387,15.8902,4,16.5,4C17.328400000000002,4,18,4.67157,18,5.5C18,6.08983,17.659599999999998,6.60015,17.1645,6.84518L18.4264,14.0018C18.4508,14.0006,18.4753,14,18.5,14C19.3284,14,20,14.6716,20,15.5C20,16.328400000000002,19.3284,17,18.5,17C17.932499999999997,17,17.4386,16.6849,17.183799999999998,16.22L5.99686,18.5979C5.946429999999999,19.3807,5.29554,20,4.5,20C3.671573,20,3,19.3284,3,18.5C3,17.869300000000003,3.389292,17.3295,3.94071,17.1077L4.92259,5.8848400000000005ZM5.72452,17.6334C5.69799,17.596,5.6698,17.5599,5.64004,17.525100000000002L10.01843,11.92103C10.16958,11.97223,10.33155,12,10.5,12C10.80059,12,11.08052,11.91158,11.31522,11.75934L17.0606,15.0765C17.0457,15.1271,17.0335,15.1789,17.023899999999998,15.2317L5.72452,17.6334ZM11.92855,10.95875L17.4349,14.1379L16.1699,6.96356C15.9874,6.92257,15.8174,6.8483,15.6667,6.74746L11.99771,10.4165C11.99923,10.44414,12,10.47198,12,10.5C12,10.66,11.97495,10.814160000000001,11.92855,10.95875ZM10.5,9C10.259830000000001,9,10.03285,9.05644,9.83159,9.15679L7.04919,5.1831L15.0493,5.88302C15.054,5.90072,15.059,5.91829,15.0643,5.9357299999999995L11.56066,9.43934C11.28921,9.16789,10.91421,9,10.5,9Z" stroke-opacity="0" fill-rule="evenodd" fill-opacity="1"></path></svg>'), If = () => Of.cloneNode(!0), Ef = /* @__PURE__ */ p('<svg viewBox="0 0 22 22"><path d="M4.727219638671875,8.007996215820313L9.973849638671876,2.7629472158203123C10.167279638671875,2.5696791158203123,10.480729638671875,2.5696791158203123,10.674169638671875,2.7629472158203123L13.223329638671874,5.311756215820313C13.416929638671874,5.505236215820313,13.416929638671874,5.8189862158203125,13.223329638671874,6.012466215820313L7.977129638671875,11.257906215820313C7.379859638671875,11.855176215820313,7.407609638671875,12.909396215820312,8.033809638671876,13.535596215820313C8.660409638671876,14.162596215820313,9.713849638671874,14.189996215820312,10.311129638671876,13.591896215820313L15.556929638671875,8.346066215820311C15.750429638671875,8.152526215820313,16.064229638671875,8.152526215820313,16.257629638671872,8.346066215820311L18.806529638671876,10.895266215820312C19.000029638671876,11.088746215820313,19.000029638671876,11.402496215820312,18.806529638671876,11.595976215820313L13.560629638671875,16.841796215820313C11.165619638671876,19.237196215820312,7.197149638671875,19.19919621582031,4.783499638671875,16.785496215820313C2.3698426386718747,14.371896215820312,2.331397638671875,10.403416215820313,4.727219638671875,8.007996215820313ZM12.172299638671875,5.662106215820312L10.323809638671875,3.8136162158203124L5.4287196386718755,8.709096215820313C3.422893638671875,10.714536215820312,3.4549956386718748,14.055196215820313,5.484999638671875,16.08479621582031C7.514609638671875,18.114796215820313,10.855289638671875,18.146496215820314,12.860719638671876,16.141096215820312L15.465629638671874,13.535796215820312L14.090929638671875,12.160756215820312L14.791629638671875,11.460436215820312L16.166229638671876,12.834996215820313L17.755829638671877,11.245226215820313L15.907729638671874,9.396736215820312L11.011839638671875,14.292596215820312C10.042809638671875,15.262396215820312,8.418249638671874,15.243796215820312,7.406019638671875,14.306496215820312L7.333099638671875,14.236296215820312C6.327599638671876,13.230796215820313,6.284009638671876,11.550396215820312,7.276419638671875,10.557586215820312L9.882199638671874,7.952026215820313L8.501079638671875,6.570906215820313L9.201789638671876,5.870186215820313L10.582939638671874,7.251336215820312L12.172299638671875,5.662106215820312Z" stroke-opacity="0" fill-rule="evenodd" fill-opacity="1"></path></svg>'), Bf = (e) => (() => {
-  const t = Ef.cloneNode(!0);
-  return Ie(t, "class", `icon-overlay ${e ?? ""}`), t;
-})(), Ff = /* @__PURE__ */ p('<svg viewBox="0 0 22 22"><defs><clipPath id="master_svg0_151_615"><rect x="0" y="0" width="22" height="22" rx="0"></rect></clipPath></defs><g clip-path="url(#master_svg0_151_615)"><path d="M19.672,3.0673368C19.4417,2.9354008,19.1463,3.00292252,18.9994,3.2210900000000002L17.4588,5.50622L16.743299999999998,3.781253L13.9915,7.4662L13.9618,7.51108C13.8339,7.72862,13.8936,8.005659999999999,14.1004,8.15391L14.1462,8.183430000000001C14.3683,8.308720000000001,14.6511,8.25001,14.8022,8.047229999999999L16.4907,5.78571L17.246299999999998,7.60713L19.8374,3.7635389999999997L19.8651,3.717088C19.9871,3.484615,19.9023,3.199273,19.672,3.0673368ZM4.79974,8.462530000000001L10.117740000000001,3.252975C10.31381,3.0610145,10.63152,3.0610145,10.82759,3.252975L13.4115,5.78453C13.6076,5.976710000000001,13.6076,6.28833,13.4115,6.4805L8.093869999999999,11.69045C7.48847,12.28368,7.51659,13.3308,8.151309999999999,13.9528C8.786439999999999,14.5755,9.85421,14.6027,10.45961,14.0087L15.7768,8.79831C15.9729,8.60609,16.2909,8.60609,16.487099999999998,8.79831L19.0705,11.33026C19.2667,11.52244,19.2667,11.83406,19.0705,12.02623L13.7533,17.2366C11.32572,19.6158,7.30328,19.578,4.85679,17.1807C2.410298,14.7834,2.371331,10.84174,4.79974,8.462530000000001ZM12.3461,6.1325199999999995L10.47246,4.29654L5.51079,9.15889C3.477674,11.15076,3.510214,14.4688,5.56784,16.4847C7.62506,18.500999999999998,11.01117,18.5325,13.0439,16.540599999999998L15.6842,13.9529L14.2908,12.58718L15.0011,11.89161L16.394399999999997,13.2569L18.0056,11.67786L16.1323,9.84188L11.16985,14.7046C10.18764,15.6679,8.540980000000001,15.6494,7.51498,14.7184L7.44107,14.6487C6.4219,13.65,6.37771,11.98096,7.38362,10.994869999999999L10.02485,8.40693L8.624939999999999,7.03516L9.335180000000001,6.33919L10.73512,7.71099L12.3461,6.1325199999999995Z" stroke-opacity="0" fill-rule="evenodd" fill-opacity="1"></path></g></svg>'), Uf = (e) => (() => {
+const Ph = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M12.41465,11L18.5,11C18.7761,11,19,11.22386,19,11.5C19,11.77614,18.7761,12,18.5,12L12.41465,12C12.20873,12.5826,11.65311,13,11,13C10.34689,13,9.79127,12.5826,9.58535,12L3.5,12C3.223857,12,3,11.77614,3,11.5C3,11.22386,3.223857,11,3.5,11L9.58535,11C9.79127,10.417404,10.34689,10,11,10C11.65311,10,12.20873,10.417404,12.41465,11Z" stroke-opacity="0" stroke="none"></path></svg>'), Dh = () => Ph.cloneNode(!0), Nh = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M6.91465,11L11.08535,11C11.29127,10.417404,11.84689,10,12.5,10C13.15311,10,13.70873,10.417404,13.91465,11L18.5,11C18.7761,11,19,11.22386,19,11.5C19,11.77614,18.7761,12,18.5,12L13.91465,12C13.70873,12.5826,13.15311,13,12.5,13C11.84689,13,11.29127,12.5826,11.08535,12L6.91465,12C6.70873,12.5826,6.15311,13,5.5,13C4.671573,13,4,12.32843,4,11.5C4,10.671573,4.671573,10,5.5,10C6.15311,10,6.70873,10.417404,6.91465,11Z" stroke-opacity="0" stroke="none"></path></svg>'), Oh = () => Nh.cloneNode(!0), Ih = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M6.91465,12.5C6.70873,13.0826,6.15311,13.5,5.5,13.5C4.671573,13.5,4,12.82843,4,12C4,11.171573,4.671573,10.5,5.5,10.5C6.15311,10.5,6.70873,10.917404,6.91465,11.5L16.0853,11.5C16.2913,10.917404,16.846899999999998,10.5,17.5,10.5C18.328400000000002,10.5,19,11.171573,19,12C19,12.82843,18.328400000000002,13.5,17.5,13.5C16.846899999999998,13.5,16.2913,13.0826,16.0853,12.5L6.91465,12.5Z" stroke-opacity="0" stroke="none"></path></svg>'), Eh = () => Ih.cloneNode(!0), Bh = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M11,12.41465L11,18.5C11,18.7761,11.22386,19,11.5,19C11.77614,19,12,18.7761,12,18.5L12,12.41465C12.5826,12.20873,13,11.65311,13,11C13,10.34689,12.5826,9.79127,12,9.58535L12,3.5C12,3.223857,11.77614,3,11.5,3C11.22386,3,11,3.223857,11,3.5L11,9.58535C10.417404,9.79127,10,10.34689,10,11C10,11.65311,10.417404,12.20873,11,12.41465Z" stroke-opacity="0" stroke="none"></path></svg>'), Fh = () => Bh.cloneNode(!0), Uh = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M11.66558837890625,19C10.83716137890625,19,10.16558837890625,18.328400000000002,10.16558837890625,17.5C10.16558837890625,16.846899999999998,10.58298437890625,16.2913,11.16557337890625,16.0854L11.16557337890625,11.91464C10.58298437890625,11.70872,10.16558837890625,11.1531,10.16558837890625,10.5C10.16558837890625,9.8469,10.58298437890625,9.29128,11.16557337890625,9.08536L11.16557337890625,4.5C11.16557337890625,4.223857,11.38942837890625,4,11.66556837890625,4C11.94171837890625,4,12.16556837890625,4.223857,12.16556837890625,4.5L12.16556837890625,9.08535C12.74817837890625,9.291260000000001,13.16558837890625,9.846879999999999,13.16558837890625,10.5C13.16558837890625,11.153120000000001,12.74817837890625,11.708739999999999,12.16556837890625,11.91465L12.16556837890625,16.0854C12.74817837890625,16.2913,13.16558837890625,16.846899999999998,13.16558837890625,17.5C13.16558837890625,18.328400000000002,12.49401837890625,19,11.66558837890625,19Z" stroke-opacity="0" stroke="none"></path></svg>'), zh = () => Uh.cloneNode(!0), Vh = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M11.165603637695312,6.91465C11.748203637695312,6.70873,12.165603637695312,6.15311,12.165603637695312,5.5C12.165603637695312,4.671573,11.494033637695313,4,10.665603637695312,4C9.837176637695313,4,9.165603637695312,4.671573,9.165603637695312,5.5C9.165603637695312,6.15311,9.583007637695312,6.70873,10.165603637695312,6.91465L10.165603637695312,16.0854C9.583007637695312,16.2913,9.165603637695312,16.846899999999998,9.165603637695312,17.5C9.165603637695312,18.328400000000002,9.837176637695313,19,10.665603637695312,19C11.494033637695313,19,12.165603637695312,18.328400000000002,12.165603637695312,17.5C12.165603637695312,16.846899999999998,11.748203637695312,16.2913,11.165603637695312,16.0854L11.165603637695312,6.91465Z" stroke-opacity="0" fill-rule="evenodd" fill-opacity="1"></path></svg>'), Kh = () => Vh.cloneNode(!0), Rh = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M5.146447,15.753C4.9511845,15.9483,4.9511845,16.2649,5.146447,16.4602C5.341709,16.6554,5.658291,16.6554,5.853554,16.4602L8.156600000000001,14.15711C8.352409999999999,14.25082,8.57173,14.3033,8.8033,14.3033C9.631730000000001,14.3033,10.3033,13.63172,10.3033,12.80329C10.3033,12.57172,10.250820000000001,12.352409999999999,10.157119999999999,12.15659L12.156600000000001,10.15711C12.352409999999999,10.250820000000001,12.571729999999999,10.30329,12.8033,10.30329C13.63173,10.30329,14.3033,9.63172,14.3033,8.80329C14.3033,8.57172,14.25082,8.352409999999999,14.15712,8.15659L16.4602,5.853553C16.6554,5.658291,16.6554,5.341709,16.4602,5.146447C16.2649,4.9511843,15.9483,4.9511843,15.753,5.146447L13.45001,7.449479999999999C13.25419,7.35577,13.03487,7.3032900000000005,12.8033,7.3032900000000005C11.97487,7.3032900000000005,11.3033,7.97487,11.3033,8.80329C11.3033,9.03487,11.35578,9.254190000000001,11.44949,9.450009999999999L9.450009999999999,11.449480000000001C9.254190000000001,11.35577,9.03487,11.30329,8.8033,11.30329C7.97487,11.30329,7.3033,11.97487,7.3033,12.80329C7.3033,13.03487,7.35578,13.25419,7.44949,13.45001L5.146447,15.753Z" stroke-opacity="0" stroke="none"></path></svg>'), jh = () => Rh.cloneNode(!0), Qh = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M7.573332939453125,14.54567903564453C7.667042939453125,14.741499035644532,7.719512939453125,14.960809035644532,7.719512939453125,15.19239903564453C7.719512939453125,16.02079903564453,7.047942939453125,16.69239903564453,6.219512939453125,16.69239903564453C5.391085939453125,16.69239903564453,4.719512939453125,16.02079903564453,4.719512939453125,15.19239903564453C4.719512939453125,14.36394903564453,5.391085939453125,13.692379035644532,6.219512939453125,13.692379035644532C6.451092939453125,13.692379035644532,6.670412939453125,13.74485903564453,6.866232939453125,13.83856903564453L9.865702939453126,10.83909903564453C9.771992939453124,10.643279035644532,9.719512939453125,10.42395903564453,9.719512939453125,10.192379035644532C9.719512939453125,9.36394903564453,10.391082939453124,8.692379035644532,11.219512939453125,8.692379035644532C11.451092939453126,8.692379035644532,11.670412939453126,8.74485903564453,11.866232939453125,8.838569035644532L15.462112939453124,5.242645035644531C15.657412939453126,5.047383335644532,15.974012939453125,5.047383335644532,16.169212939453125,5.242645035644531C16.364512939453125,5.437907035644531,16.364512939453125,5.754489035644531,16.169212939453125,5.949752035644531L12.573332939453124,9.545679035644532C12.667042939453125,9.74149903564453,12.719512939453125,9.96080903564453,12.719512939453125,10.192379035644532C12.719512939453125,11.020809035644533,12.047942939453126,11.692379035644532,11.219512939453125,11.692379035644532C10.987942939453125,11.692379035644532,10.768632939453125,11.639909035644532,10.572812939453126,11.54619903564453L7.573332939453125,14.54567903564453Z" stroke-opacity="0" stroke="none"></path></svg>'), Zh = () => Qh.cloneNode(!0), Hh = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M15.719512939453125,8.461776733398438C16.547912939453127,8.461776733398438,17.219512939453125,7.7902067333984375,17.219512939453125,6.9617767333984375C17.219512939453125,6.133349733398438,16.547912939453127,5.4617767333984375,15.719512939453125,5.4617767333984375C14.891082939453124,5.4617767333984375,14.219512939453125,6.133349733398438,14.219512939453125,6.9617767333984375C14.219512939453125,7.193346733398437,14.271992939453124,7.412666733398438,14.365692939453124,7.608486733398438L7.366222939453126,14.607956733398437C7.170402939453125,14.514256733398437,6.951082939453125,14.461776733398438,6.719512939453125,14.461776733398438C5.891085939453125,14.461776733398438,5.219512939453125,15.133346733398437,5.219512939453125,15.961776733398438C5.219512939453125,16.79017673339844,5.891085939453125,17.461776733398438,6.719512939453125,17.461776733398438C7.547942939453125,17.461776733398438,8.219512939453125,16.79017673339844,8.219512939453125,15.961776733398438C8.219512939453125,15.730176733398437,8.167032939453126,15.510876733398437,8.073322939453124,15.315066733398437L15.072802939453124,8.315586733398437C15.268612939453124,8.409296733398438,15.487912939453125,8.461776733398438,15.719512939453125,8.461776733398438Z" stroke-opacity="0" stroke="none"></path></svg>'), qh = () => Hh.cloneNode(!0), Yh = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M17.0643,7.033864912109375L18,3.585784912109375L14.5078,4.509695912109375L15.3537,5.344934912109375L6.02026,14.560584912109375C5.87635,14.517484912109374,5.72366,14.494284912109375,5.5655,14.494284912109375C4.7009,14.494284912109375,4,15.186384912109375,4,16.040084912109375C4,16.893784912109375,4.7009,17.585784912109375,5.5655,17.585784912109375C6.43011,17.585784912109375,7.13101,16.893784912109375,7.13101,16.040084912109375C7.13101,15.722284912109375,7.03392,15.426984912109376,6.86744,15.181384912109374L16.0917,6.073604912109375L17.0643,7.033864912109375Z" stroke-opacity="0" stroke="none"></path></svg>'), Wh = () => Yh.cloneNode(!0), Gh = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M6.91465,13.00505L18.5,13.00505C18.7761,13.00505,19,13.228909999999999,19,13.50505C19,13.781189999999999,18.7761,14.00505,18.5,14.00505L6.91465,14.00505C6.70873,14.58765,6.15311,15.00505,5.5,15.00505C4.671573,15.00505,4,14.33348,4,13.50505C4,12.67662,4.671573,12.00505,5.5,12.00505C6.15311,12.00505,6.70873,12.422450000000001,6.91465,13.00505ZM7.81404,11.625L10.48591,11.625L10.48591,10.90625L9.65193,10.90625L9.65193,7.125L8.997630000000001,7.125C8.71443,7.306641,8.415600000000001,7.419922,7.96443,7.498047L7.96443,8.05078L8.77497,8.05078L8.77497,10.90625L7.81404,10.90625L7.81404,11.625ZM11.081620000000001,11.625L14.0562,11.625L14.0562,10.88281L13.09724,10.88281C12.8863,10.88281,12.59333,10.90625,12.36482,10.93555C13.17537,10.11328,13.84724,9.2207,13.84724,8.39062C13.84724,7.541016,13.28865,7,12.4488,7C11.84333,7,11.446850000000001,7.234375,11.03279,7.679688L11.52497,8.16797C11.747630000000001,7.914062,12.0113,7.697266,12.33552,7.697266C12.7613,7.697266,13.00154,7.982422,13.00154,8.43359C13.00154,9.14648,12.29255,10.00781,11.081620000000001,11.11523L11.081620000000001,11.625ZM15.9605,11.75C16.8121,11.75,17.526899999999998,11.2832,17.526899999999998,10.4375C17.526899999999998,9.82031,17.142200000000003,9.43945,16.6441,9.30078L16.6441,9.27148C17.1129,9.08594,17.3824,8.7207,17.3824,8.21289C17.3824,7.421875,16.8004,7,15.9429,7C15.4215,7,14.9957,7.210938,14.6109,7.541016L15.066,8.11133C15.3258,7.849609,15.5836,7.697266,15.9019,7.697266C16.2789,7.697266,16.4957,7.914062,16.4957,8.28125C16.4957,8.70898,16.2301,9,15.4215,9L15.4215,9.63672C16.3804,9.63672,16.6383,9.91992,16.6383,10.38086C16.6383,10.79688,16.3336,11.03125,15.8824,11.03125C15.4742,11.03125,15.1578,10.82227,14.8922,10.55078L14.4781,11.13281C14.7906,11.486329999999999,15.2652,11.75,15.9605,11.75Z" stroke-opacity="0" stroke="none"></path></svg>'), Xh = () => Gh.cloneNode(!0), Jh = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M3.146447,14.178126025390625C2.9511847,13.982826025390626,2.9511847,13.666226025390625,3.146447,13.470926025390625L7.39146,9.225966025390626C7.35417,9.095106025390624,7.33421,8.956946025390625,7.33421,8.814116025390625C7.33421,7.985696025390625,8.00578,7.314116025390625,8.834209999999999,7.314116025390625C8.97703,7.314116025390625,9.11519,7.334086025390625,9.24605,7.371366025390625L13.753,2.864373025390625C13.9483,2.669110325390625,14.2649,2.669110325390625,14.4602,2.864373025390625C14.6554,3.059635025390625,14.6554,3.376217025390625,14.4602,3.571479025390625L10.06916,7.962476025390625C10.23631,8.204386025390626,10.334209999999999,8.497826025390625,10.334209999999999,8.814116025390625C10.334209999999999,9.642546025390626,9.66264,10.314116025390625,8.834209999999999,10.314116025390625C8.51791,10.314116025390625,8.22448,10.216226025390625,7.98256,10.049076025390626L3.853554,14.178126025390625C3.658291,14.373326025390625,3.341709,14.373326025390625,3.146447,14.178126025390625ZM7.67736,19.188526025390626C7.4821,18.993226025390626,7.4821,18.676626025390625,7.67736,18.481426025390626L9.9804,16.178326025390625C9.88669,15.982526025390625,9.834209999999999,15.763226025390624,9.834209999999999,15.531626025390626C9.834209999999999,14.703226025390626,10.50578,14.031626025390626,11.33421,14.031626025390626C11.56579,14.031626025390626,11.78511,14.084126025390624,11.98093,14.177826025390624L13.9804,12.178356025390626C13.8867,11.982536025390624,13.8342,11.763216025390625,13.8342,11.531636025390625C13.8342,10.703206025390624,14.5058,10.031636025390625,15.3342,10.031636025390625C15.5658,10.031636025390625,15.7851,10.084116025390625,15.9809,10.177826025390626L18.284,7.874796025390625C18.4792,7.679536025390625,18.7958,7.679536025390625,18.9911,7.874796025390625C19.1863,8.070056025390624,19.1863,8.386636025390626,18.9911,8.581906025390625L16.688000000000002,10.884936025390624C16.7817,11.080756025390626,16.8342,11.300066025390626,16.8342,11.531636025390625C16.8342,12.360066025390624,16.162599999999998,13.031626025390626,15.3342,13.031626025390626C15.1026,13.031626025390626,14.8833,12.979126025390626,14.6875,12.885426025390625L12.68803,14.884926025390625C12.78174,15.080726025390625,12.83421,15.300026025390626,12.83421,15.531626025390626C12.83421,16.360026025390624,12.16264,17.031626025390626,11.33421,17.031626025390626C11.10264,17.031626025390626,10.88333,16.979126025390627,10.68751,16.885426025390625L8.38446,19.188526025390626C8.1892,19.383726025390626,7.87262,19.383726025390626,7.67736,19.188526025390626Z" stroke-opacity="0" stroke="none"></path></svg>'), ef = () => Jh.cloneNode(!0), tf = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M3.3367688759765626,12.63173C3.5320318759765623,12.82699,3.8486138759765627,12.82699,4.043876875976562,12.63173L11.822052875976562,4.853553C12.017312875976563,4.658291,12.017312875976563,4.341708,11.822052875976562,4.146446C11.626792875976562,3.9511843,11.310202875976563,3.9511843,11.114942875976563,4.146446L3.3367688759765626,11.92462C3.1415071759765625,12.11988,3.1415071759765625,12.43647,3.3367688759765626,12.63173ZM5.001492875976562,17.0351C4.806232875976562,16.8399,4.806232875976562,16.5233,5.001492875976562,16.328L7.304532875976562,14.025C7.210822875976563,13.82916,7.158352875976563,13.60984,7.158352875976563,13.37827C7.158352875976563,12.54984,7.829922875976562,11.87827,8.658352875976561,11.87827C8.889922875976563,11.87827,9.109232875976563,11.93075,9.305052875976562,12.02446L11.304532875976562,10.02498C11.210822875976563,9.82916,11.158352875976561,9.60984,11.158352875976561,9.37827C11.158352875976561,8.54984,11.829922875976562,7.8782700000000006,12.658352875976563,7.8782700000000006C12.889922875976563,7.8782700000000006,13.109232875976563,7.93075,13.305022875976562,8.024460000000001L15.608122875976562,5.72142C15.803322875976562,5.5261499999999995,16.119922875976563,5.5261499999999995,16.315222875976563,5.72142C16.510422875976563,5.9166799999999995,16.510422875976563,6.23326,16.315222875976563,6.42852L14.012122875976562,8.73156C14.105822875976562,8.92738,14.158322875976562,9.1467,14.158322875976562,9.37827C14.158322875976562,10.2067,13.486822875976562,10.87827,12.658352875976563,10.87827C12.426772875976562,10.87827,12.207452875976562,10.82579,12.011642875976563,10.73209L10.012162875976562,12.73156C10.105872875976562,12.92738,10.158352875976561,13.1467,10.158352875976561,13.37827C10.158352875976561,14.2067,9.486772875976563,14.8783,8.658352875976561,14.8783C8.426772875976562,14.8783,8.207452875976562,14.8258,8.011642875976563,14.7321L5.708602875976562,17.0351C5.513342875976562,17.2304,5.196752875976562,17.2304,5.001492875976562,17.0351ZM10.415712875976563,18.328C10.220452875976562,18.5233,9.903862875976563,18.5233,9.708602875976563,18.328C9.513342875976562,18.1328,9.513342875976562,17.816200000000002,9.708602875976563,17.6209L12.304532875976562,15.025C12.210822875976563,14.8292,12.158352875976563,14.6098,12.158352875976563,14.3783C12.158352875976563,13.54984,12.829922875976562,12.87827,13.658322875976562,12.87827C13.889922875976563,12.87827,14.109222875976563,12.93075,14.305022875976562,13.02446L17.486822875976564,9.84274C17.682022875976564,9.64747,17.99862287597656,9.64747,18.19392287597656,9.84274C18.38912287597656,10.038,18.38912287597656,10.35458,18.19392287597656,10.54984L15.012122875976562,13.73156C15.105822875976562,13.92738,15.158322875976562,14.1467,15.158322875976562,14.3783C15.158322875976562,15.2067,14.486822875976562,15.8783,13.658322875976562,15.8783C13.426822875976562,15.8783,13.207422875976562,15.8258,13.011642875976563,15.7321L10.415712875976563,18.328Z" stroke-opacity="0" stroke="none"></path></svg>'), nf = () => tf.cloneNode(!0), rf = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M13.1889,6C12.98303,6.582599999999999,12.42741,7,11.7743,7C11.12119,7,10.565570000000001,6.582599999999999,10.35965,6L3.5,6C3.223857,6,3,5.77614,3,5.5C3,5.22386,3.223857,5,3.5,5L10.35965,5C10.565570000000001,4.417404,11.12119,4,11.7743,4C12.42741,4,12.98303,4.417404,13.1889,5L18.5,5C18.7761,5,19,5.22386,19,5.5C19,5.77614,18.7761,6,18.5,6L13.1889,6ZM3,8.5C3,8.22386,3.223857,8,3.5,8L18.5,8C18.7761,8,19,8.22386,19,8.5C19,8.77614,18.7761,9,18.5,9L3.5,9C3.223857,9,3,8.77614,3,8.5ZM3.278549,11.5C3.278549,11.22386,3.502407,11,3.778549,11L18.7785,11C19.0547,11,19.2785,11.22386,19.2785,11.5C19.2785,11.77614,19.0547,12,18.7785,12L3.778549,12C3.502407,12,3.278549,11.77614,3.278549,11.5ZM3.139267,14.5C3.139267,14.2239,3.363124,14,3.6392670000000003,14L18.6393,14C18.915399999999998,14,19.1393,14.2239,19.1393,14.5C19.1393,14.7761,18.915399999999998,15,18.6393,15L3.6392670000000003,15C3.363124,15,3.139267,14.7761,3.139267,14.5ZM13.1889,18C12.98303,18.5826,12.42741,19,11.7743,19C11.12119,19,10.565570000000001,18.5826,10.35965,18L3.778549,18C3.502407,18,3.278549,17.7761,3.278549,17.5C3.278549,17.2239,3.502407,17,3.778549,17L10.35965,17C10.565570000000001,16.4174,11.12119,16,11.7743,16C12.42741,16,12.98303,16.4174,13.1889,17L18.7785,17C19.0547,17,19.2785,17.2239,19.2785,17.5C19.2785,17.7761,19.0547,18,18.7785,18L13.1889,18Z" stroke-opacity="0" stroke="none"></path></svg>'), of = () => rf.cloneNode(!0), af = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M4.91465,6C4.70873,6.582599999999999,4.15311,7,3.5,7C2.671573,7,2,6.32843,2,5.5C2,4.671573,2.671573,4,3.5,4C4.15311,4,4.70873,4.417404,4.91465,5L18.2257,5C18.5018,5,18.7257,5.22386,18.7257,5.5C18.7257,5.77614,18.5018,6,18.2257,6L4.91465,6ZM2.7257,8.5C2.7257,8.22386,2.949558,8,3.2257,8L18.2257,8C18.5018,8,18.7257,8.22386,18.7257,8.5C18.7257,8.77614,18.5018,9,18.2257,9L3.2257,9C2.949558,9,2.7257,8.77614,2.7257,8.5ZM3.00425,11.5C3.00425,11.22386,3.22811,11,3.50425,11L18.5042,11C18.7804,11,19.0042,11.22386,19.0042,11.5C19.0042,11.77614,18.7804,12,18.5042,12L3.50425,12C3.22811,12,3.00425,11.77614,3.00425,11.5ZM2.864967,14.5C2.864967,14.2239,3.08882,14,3.36497,14L18.365,14C18.6411,14,18.865,14.2239,18.865,14.5C18.865,14.7761,18.6411,15,18.365,15L3.36497,15C3.08882,15,2.864967,14.7761,2.864967,14.5ZM20,17.5C20,18.328400000000002,19.3284,19,18.5,19C17.846899999999998,19,17.2913,18.5826,17.0854,18L3.50425,18C3.22811,18,3.00425,17.7761,3.00425,17.5C3.00425,17.2239,3.22811,17,3.50425,17L17.0854,17C17.2913,16.4174,17.846899999999998,16,18.5,16C19.3284,16,20,16.671599999999998,20,17.5Z" stroke-opacity="0" stroke="none"></path></svg>'), sf = () => af.cloneNode(!0), lf = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><ellipse cx="10.5" cy="11.5" rx="1.5" ry="1.5" stroke-opacity="0" stroke="none"></ellipse><ellipse cx="17.5" cy="11.5" rx="1.5" ry="1.5" stroke-opacity="0" stroke="none"></ellipse><ellipse cx="10.5" cy="11.5" rx="7" ry="7" fill-opacity="0" stroke-opacity="1" fill="none" stroke-width="1"></ellipse><ellipse cx="10.5" cy="11.5" rx="5" ry="5" fill-opacity="0" stroke-opacity="1" fill="none" stroke-width="1"></ellipse><ellipse cx="10.5" cy="11.5" rx="3" ry="3" fill-opacity="0" stroke-opacity="1" fill="none" stroke-width="1"></ellipse></svg>'), cf = () => lf.cloneNode(!0), uf = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M3,7.32468C5.90649,3.3893050000000002,11.49833,2.81306,14.6674,6.31944C14.9056,6.1554199999999994,15.192,6.05979,15.5,6.05979C15.845,6.05979,16.1628,6.17974,16.4162,6.381349999999999L18.4509,4.23827L19,4.816615L16.8945,7.03429C16.962600000000002,7.21075,17,7.40319,17,7.60463C17,8.45782,16.328400000000002,9.14947,15.5,9.14947C14.6716,9.14947,14,8.45782,14,7.60463C14,7.36402,14.0534,7.13625,14.1487,6.93322C11.32695,3.748365,6.25159,4.253956,3.612785,7.82695L3,7.32468ZM14.09,15.4717C15.7427,13.78985,16.244500000000002,11.524740000000001,15.5633,9.30134L15.5618,9.30134L16.3012,9.0502C17.072400000000002,11.56646,16.497700000000002,14.158,14.6282,16.0599C12.28737,18.442,8.62386,18.6988,6.41348,16.4501C4.5526,14.5572,4.52076,11.19671,6.36766,9.3177C7.89069,7.76754,10.07544,7.706189999999999,11.56741,9.22363C11.95453,9.61742,12.24817,10.08363,12.43369,10.57677L14.1451,8.77421L14.6942,9.35256L12.64982,11.50582C12.65827,11.59712,12.66295,11.68839,12.66378,11.77936C12.87398,12.04523,13,12.38451,13,12.7541C13,13.60729,12.32843,14.2989,11.5,14.2989C10.67157,14.2989,10,13.60729,10,12.7541C10,11.90091,10.67157,11.20926,11.5,11.20926C11.60387,11.20926,11.70528,11.220130000000001,11.8032,11.240829999999999L11.81763,11.22564C11.69858,10.71874,11.42858,10.21929,11.0284,9.81179C9.844000000000001,8.60765,8.136890000000001,8.65592,6.90822,9.90586C5.37975,11.460930000000001,5.40693,14.288,6.95404,15.8619C8.84598,17.7867,12.03496,17.5626,14.09,15.4717Z" stroke-opacity="0" stroke="none"></path></svg>'), df = () => uf.cloneNode(!0), hf = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M4,17.0854L4,3.5C4,3.223858,4.22386,3,4.5,3C4.77614,3,5,3.223858,5,3.5L5,10L7.57584,10L9.8127,4.46359C9.91614,4.20756,10.20756,4.08386,10.46359,4.1873000000000005C10.71963,4.29075,10.84333,4.58216,10.73988,4.8382000000000005L8.65438,10L11.08535,10C11.29127,9.4174,11.84689,9,12.5,9C12.65154,9,12.79784,9.02247,12.93573,9.06427L16.6464,5.35355C16.8417,5.15829,17.1583,5.15829,17.3536,5.35355C17.5488,5.54882,17.5488,5.8654,17.3536,6.06066L13.7475,9.66675C13.907,9.90508,14,10.19168,14,10.5C14,11.15311,13.5826,11.70873,13,11.91465L13,14.3638L18.3714,12.1936C18.6274,12.09015,18.918799999999997,12.21385,19.0222,12.46989C19.1257,12.72592,19.002,13.0173,18.746000000000002,13.1208L13,15.4423L13,18L19.5,18C19.7761,18,20,18.2239,20,18.5C20,18.7761,19.7761,19,19.5,19L5.91465,19C5.70873,19.5826,5.15311,20,4.5,20C3.671573,20,3,19.3284,3,18.5C3,17.846899999999998,3.417404,17.2913,4,17.0854ZM6.3729499999999994,17.0413L12,14.7678L12,11.91465C11.88136,11.87271,11.76956,11.81627,11.66675,11.74746L6.3729499999999994,17.0413ZM12,15.8463L6.6694700000000005,18L12,18L12,15.8463ZM6.38629,15.6137L8.250350000000001,11L11,11L6.38629,15.6137ZM5,11L7.17182,11L5,16.3754L5,11Z" stroke-opacity="0" fill-rule="evenodd" fill-opacity="1"></path></svg>'), ff = () => hf.cloneNode(!0), mf = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M17,4.5C17,5.32843,16.328400000000002,6,15.5,6C15.0931,6,14.7241,5.83802,14.4539,5.57503L5.98992,8.32515C5.99658,8.38251,6,8.440850000000001,6,8.5C6,9.15311,5.582599999999999,9.70873,5,9.91465L5,11.08535C5.42621,11.236,5.763999999999999,11.57379,5.91465,12L19.5,12C19.7761,12,20,12.22386,20,12.5C20,12.77614,19.7761,13,19.5,13L5.91465,13C5.70873,13.5826,5.15311,14,4.5,14C3.671573,14,3,13.3284,3,12.5C3,11.84689,3.417404,11.29127,4,11.08535L4,9.91465C3.417404,9.70873,3,9.15311,3,8.5C3,7.67157,3.671573,7,4.5,7C4.90411,7,5.2709,7.15981,5.5406200000000005,7.41967L14.0093,4.66802C14.0032,4.6128599999999995,14,4.5568,14,4.5C14,3.671573,14.6716,3,15.5,3C16.328400000000002,3,17,3.671573,17,4.5ZM4,15.5C4,15.2239,4.22386,15,4.5,15L19.5,15C19.7761,15,20,15.2239,20,15.5C20,15.7761,19.7761,16,19.5,16L4.5,16C4.22386,16,4,15.7761,4,15.5ZM4,18.5C4,18.2239,4.22386,18,4.5,18L19.5,18C19.7761,18,20,18.2239,20,18.5C20,18.7761,19.7761,19,19.5,19L4.5,19C4.22386,19,4,18.7761,4,18.5Z" stroke-opacity="0" stroke="none"></path></svg>'), gf = () => mf.cloneNode(!0), yf = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M20,3.5C20,4.15311,19.5826,4.70873,19,4.91465L19,18.5C19,18.7761,18.7761,19,18.5,19L4.91465,19C4.70873,19.5826,4.15311,20,3.5,20C2.671573,20,2,19.3284,2,18.5C2,17.846899999999998,2.417404,17.2913,3,17.0854L3,3.5C3,3.22386,3.22386,3,3.5,3L17.0854,3C17.2913,2.417404,17.846899999999998,2,18.5,2C19.3284,2,20,2.671573,20,3.5ZM17.0854,4C17.236,4.42621,17.5738,4.763999999999999,18,4.91465L18,8L14,8L14,4L17.0854,4ZM13,4L13,8L9,8L9,4L13,4ZM13,9L9,9L9,13L13,13L13,9ZM13,14L9,14L9,18L13,18L13,14ZM14,18L14,14L18,14L18,18L14,18ZM18,13L14,13L14,9L18,9L18,13ZM4.91465,18C4.763999999999999,17.5738,4.42621,17.236,4,17.0854L4,14L8,14L8,18L4.91465,18ZM4,8L4,4L8,4L8,8L4,8ZM8,9L8,13L4,13L4,9L8,9Z" stroke-opacity="0" fill-rule="evenodd" fill-opacity="1"></path></svg>'), Cf = () => yf.cloneNode(!0), pf = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><ellipse cx="10.5" cy="11.5" rx="1.5" ry="1.5" stroke-opacity="0" stroke="none"></ellipse><ellipse cx="17.5" cy="11.5" rx="1.5" ry="1.5" stroke-opacity="0" stroke="none"></ellipse><ellipse cx="10.5" cy="11.5" rx="7" ry="7" fill-opacity="0" fill="none" stroke-opacity="1" stroke-width="1"></ellipse></svg>'), vf = () => pf.cloneNode(!0), bf = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M11.57625,6.9981C11.55099,6.999359999999999,11.52557,7,11.5,7C11.34,7,11.18584,6.97495,11.04125,6.9285499999999995L5.55401,16.4327C5.713760000000001,16.5905,5.83826,16.7839,5.91465,17L16.0854,17C16.2187,16.622700000000002,16.4987,16.314700000000002,16.8569,16.1445L11.57625,6.9981ZM12.50759,6.611219999999999C12.81005,6.336790000000001,13,5.94058,13,5.5C13,4.671573,12.32843,4,11.5,4C10.67157,4,10,4.671573,10,5.5C10,5.80059,10.08841,6.08052,10.24066,6.31522L4.64514,16.0069C4.59738,16.002299999999998,4.54896,16,4.5,16C3.671573,16,3,16.671599999999998,3,17.5C3,18.328400000000002,3.671573,19,4.5,19C5.15311,19,5.70873,18.5826,5.91465,18L16.0854,18C16.2913,18.5826,16.846899999999998,19,17.5,19C18.328400000000002,19,19,18.328400000000002,19,17.5C19,16.8365,18.5691,16.2735,17.971899999999998,16.075699999999998L12.50759,6.611219999999999Z" stroke-opacity="0" fill-rule="evenodd" fill-opacity="1"></path></svg>'), $f = () => bf.cloneNode(!0), _f = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M19,4.5C19,5.15311,18.5826,5.70873,18,5.91465L18,18.5C18,18.7761,17.7761,19,17.5,19L5.91465,19C5.70873,19.5826,5.15311,20,4.5,20C3.671573,20,3,19.3284,3,18.5C3,17.846899999999998,3.417404,17.2913,4,17.0854L4,4.5C4,4.22386,4.22386,4,4.5,4L16.0854,4C16.2913,3.417404,16.846899999999998,3,17.5,3C18.328400000000002,3,19,3.671573,19,4.5ZM5,5L16.0854,5C16.236,5.42621,16.5738,5.763999999999999,17,5.91465L17,18L5.91465,18C5.763999999999999,17.5738,5.42621,17.236,5,17.0854L5,5Z" stroke-opacity="0" fill-rule="evenodd" fill-opacity="1"></path></svg>'), kf = () => _f.cloneNode(!0), xf = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M19.6401,7.99355C20.4028,7.92291,21,7.2811900000000005,21,6.5C21,5.671573,20.3284,5,19.5,5C18.8469,5,18.2913,5.417404,18.0854,6L7.62067,6C7.34453,6,7.12067,6.22386,7.12067,6.5C7.12067,6.5479,7.12741,6.59423,7.13999,6.63809L3.2294099999999997,15.0243C2.530138,15.1517,2,15.764,2,16.5C2,17.328400000000002,2.671573,18,3.5,18C4.15311,18,4.70873,17.5826,4.91465,17L14.5963,17C14.6456,17.076,14.7162,17.1396,14.8044,17.1807C15.0546,17.2974,15.3521,17.1891,15.4688,16.9388L19.6401,7.99355ZM14.7896,16.0293L18.6551,7.739599999999999C18.3942,7.56144,18.1925,7.30307,18.0854,7L8.0746,7L4.25044,15.2009C4.55701,15.3784,4.79493,15.6613,4.91465,16L14.6207,16C14.68,16,14.7368,16.0103,14.7896,16.0293Z" stroke-opacity="0" fill-rule="evenodd" fill-opacity="1"></path></svg>'), Lf = () => xf.cloneNode(!0), wf = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M8.134443814697265,7.494615087890625L8.764323814697265,7.494615087890625L8.764323814697265,3.414215087890625L8.310223814697267,3.414215087890625L7.294603814697266,4.005035087890625L7.289713814697266,4.634915087890625L8.134443814697265,4.149892087890625L8.134443814697265,7.494615087890625ZM18.832003814697266,6.933095087890624Q19.004603814697266,6.635245087890625,19.004603814697266,6.2543850878906255Q19.004603814697266,5.884915087890625,18.845103814697264,5.593575087890625Q18.685503814697267,5.3006050878906255,18.399103814697266,5.136225087890625Q18.114303814697266,4.9702050878906245,17.754603814697266,4.9653250878906245L18.820603814697265,3.840647087890625L18.820603814697265,3.414215087890625L16.519203814697264,3.414215087890625L16.519203814697264,3.939931087890625L18.050803814697264,3.939931087890625L16.719403814697266,5.334785087890625L17.074203814697263,5.7205350878906245Q17.254903814697265,5.484525087890625,17.619503814697268,5.484525087890625Q17.980803814697268,5.484525087890625,18.187503814697266,5.689605087890625Q18.394203814697267,5.894685087890625,18.394203814697267,6.2543850878906255Q18.394203814697267,6.604315087890625,18.187503814697266,6.822415087890625Q17.980803814697268,7.0405150878906255,17.640603814697265,7.0405150878906255Q17.334603814697267,7.0405150878906255,17.124703814697266,6.890775087890625Q16.914703814697265,6.739415087890626,16.820303814697265,6.469225087890624L16.354803814697263,6.744295087890626Q16.480103814697266,7.125155087890625,16.821903814697265,7.341625087890625Q17.165403814697264,7.559725087890625,17.640603814697265,7.559725087890625Q18.039403814697266,7.559725087890625,18.348603814697267,7.393705087890625Q18.659503814697267,7.229315087890625,18.832003814697266,6.933095087890624ZM10.000003814697266,10.634915087890626C10.000003814697266,11.024655087890626,9.851363814697265,11.379685087890625,9.607683814697266,11.646395087890625L12.168903814697266,15.171615087890626C12.275403814697265,15.147615087890625,12.386203814697266,15.134915087890626,12.500003814697266,15.134915087890626C12.596503814697266,15.134915087890626,12.690803814697265,15.144015087890624,12.782303814697265,15.161415087890624L16.108803814697268,11.196955087890625C16.038703814697264,11.023375087890624,16.000003814697266,10.833655087890625,16.000003814697266,10.634915087890626C16.000003814697266,9.806495087890625,16.671603814697264,9.134915087890626,17.500003814697266,9.134915087890626C18.328403814697264,9.134915087890626,19.000003814697266,9.806495087890625,19.000003814697266,10.634915087890626C19.000003814697266,11.463345087890625,18.328403814697264,12.134915087890626,17.500003814697266,12.134915087890626C17.239503814697265,12.134915087890626,16.994503814697268,12.068495087890625,16.781003814697264,11.951675087890624L13.654703814697266,15.677415087890624C13.870303814697266,15.937215087890625,14.000003814697266,16.270915087890625,14.000003814697266,16.634915087890626C14.000003814697266,17.463315087890624,13.328403814697266,18.134915087890626,12.500003814697266,18.134915087890626C11.671573814697265,18.134915087890626,11.000003814697266,17.463315087890624,11.000003814697266,16.634915087890626C11.000003814697266,16.284415087890626,11.120193814697265,15.962015087890626,11.321603814697266,15.706715087890625L8.715393814697265,12.119565087890624C8.645053814697267,12.129685087890625,8.573143814697266,12.134915087890626,8.500003814697266,12.134915087890626C8.162103814697264,12.134915087890626,7.8503038146972655,12.023195087890626,7.599523814697266,11.834665087890626L4.505583814697266,15.521915087890624C4.809213814697266,15.796415087890624,5.000003814697266,16.193415087890624,5.000003814697266,16.634915087890626C5.000003814697266,17.463315087890624,4.328433814697266,18.134915087890626,3.5000038146972656,18.134915087890626C2.6715768146972656,18.134915087890626,2.0000038146972656,17.463315087890624,2.0000038146972656,16.634915087890626C2.0000038146972656,15.806515087890626,2.6715768146972656,15.134915087890626,3.5000038146972656,15.134915087890626C3.508253814697266,15.134915087890626,3.5164838146972657,15.135015087890626,3.524703814697266,15.135115087890625L7.033823814697266,10.953115087890625C7.011673814697265,10.850565087890626,7.000003814697266,10.744105087890624,7.000003814697266,10.634915087890626C7.000003814697266,9.806495087890625,7.671573814697266,9.134915087890626,8.500003814697266,9.134915087890626C9.328433814697267,9.134915087890626,10.000003814697266,9.806495087890625,10.000003814697266,10.634915087890626Z" stroke-opacity="0" stroke="none"></path></svg>'), Af = () => wf.cloneNode(!0), Mf = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M8.13444,7.494615087890625L8.76432,7.494615087890625L8.76432,3.414215087890625L8.310220000000001,3.414215087890625L7.2946,4.005035087890625L7.28971,4.634915087890625L8.13444,4.149892087890625L8.13444,7.494615087890625ZM18.832,6.929835087890625Q19.0046,6.635245087890625,19.0046,6.2543850878906255Q19.0046,5.889805087890625,18.8451,5.5952050878906245Q18.6855,5.3006050878906255,18.3975,5.132965087890625Q18.1094,4.9653250878906245,17.7399,4.9653250878906245Q17.435499999999998,4.9653250878906245,17.1556,5.149245087890625L17.2793,3.939931087890625L18.8304,3.939931087890625L18.8304,3.414215087890625L16.7406,3.414215087890625L16.5094,5.665195087890625L17.0156,5.795405087890625Q17.095399999999998,5.655425087890626,17.2516,5.570795087890625Q17.4095,5.484525087890625,17.6357,5.484525087890625Q17.9694,5.484525087890625,18.1842,5.697745087890625Q18.4007,5.909335087890625,18.4007,6.2543850878906255Q18.4007,6.604315087890625,18.1842,6.822415087890625Q17.9694,7.0405150878906255,17.6292,7.0405150878906255Q17.3298,7.0405150878906255,17.119799999999998,6.890775087890625Q16.9098,6.739415087890626,16.825200000000002,6.474115087890625L16.3597,6.749175087890626Q16.470399999999998,7.110505087890624,16.807299999999998,7.335115087890625Q17.144199999999998,7.559725087890625,17.6292,7.559725087890625Q18.0296,7.559725087890625,18.3438,7.392075087890625Q18.6595,7.224435087890625,18.832,6.929835087890625ZM10,10.634915087890626C10,11.024655087890626,9.85136,11.379685087890625,9.60768,11.646395087890625L12.1689,15.171615087890626C12.2754,15.147615087890625,12.3862,15.134915087890626,12.5,15.134915087890626C12.5965,15.134915087890626,12.6908,15.144015087890624,12.7823,15.161415087890624L16.108800000000002,11.196955087890625C16.0387,11.023375087890624,16,10.833655087890625,16,10.634915087890626C16,9.806495087890625,16.671599999999998,9.134915087890626,17.5,9.134915087890626C18.3284,9.134915087890626,19,9.806495087890625,19,10.634915087890626C19,11.463345087890625,18.3284,12.134915087890626,17.5,12.134915087890626C17.2395,12.134915087890626,16.994500000000002,12.068505087890625,16.781,11.951675087890624L13.6547,15.677415087890624C13.8703,15.937215087890625,14,16.270915087890625,14,16.634915087890626C14,17.463315087890624,13.3284,18.134915087890626,12.5,18.134915087890626C11.67157,18.134915087890626,11,17.463315087890624,11,16.634915087890626C11,16.284415087890626,11.12019,15.962015087890626,11.3216,15.706715087890625L8.71539,12.119565087890624C8.645050000000001,12.129685087890625,8.57314,12.134915087890626,8.5,12.134915087890626C8.162099999999999,12.134915087890626,7.8503,12.023195087890626,7.59952,11.834665087890626L4.50558,15.521915087890624C4.80921,15.796415087890624,5,16.193415087890624,5,16.634915087890626C5,17.463315087890624,4.32843,18.134915087890626,3.5,18.134915087890626C2.671573,18.134915087890626,2,17.463315087890624,2,16.634915087890626C2,15.806515087890626,2.671573,15.134915087890626,3.5,15.134915087890626C3.5082500000000003,15.134915087890626,3.51648,15.135015087890626,3.5247,15.135115087890625L7.03382,10.953115087890625C7.01167,10.850565087890626,7,10.744105087890624,7,10.634915087890626C7,9.806495087890625,7.67157,9.134915087890626,8.5,9.134915087890626C9.32843,9.134915087890626,10,9.806495087890625,10,10.634915087890626Z" stroke-opacity="0" stroke="none"></path></svg>'), Tf = () => Mf.cloneNode(!0), Sf = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M18.8532,7.020985087890625Q19.0257,6.734525087890625,19.0257,6.369945087890625Q19.0257,6.020005087890625,18.8499,5.754705087890625Q18.6758,5.489415087890626,18.3649,5.339675087890625Q18.5944,5.209465087890625,18.7214,4.994615087890625Q18.8499,4.779775087890625,18.8499,4.5193550878906255Q18.8499,4.2003480878906245,18.7002,3.951324087890625Q18.5505,3.700673087890625,18.277,3.557444087890625Q18.0052,3.414215087890625,17.6455,3.414215087890625Q17.285800000000002,3.414215087890625,17.0107,3.557444087890625Q16.7357,3.700673087890625,16.5843,3.951324087890625Q16.4346,4.2003480878906245,16.4346,4.5193550878906255Q16.4346,4.779775087890625,16.561500000000002,4.994615087890625Q16.6901,5.209465087890625,16.919600000000003,5.339675087890625Q16.6055,5.489415087890626,16.4297,5.757965087890625Q16.255499999999998,6.024895087890625,16.255499999999998,6.369945087890625Q16.255499999999998,6.734525087890625,16.4297,7.020985087890625Q16.6055,7.305815087890625,16.919600000000003,7.465325087890625Q17.2354,7.624825087890625,17.6455,7.624825087890625Q18.0557,7.624825087890625,18.3682,7.465325087890625Q18.6807,7.305815087890625,18.8532,7.020985087890625ZM8.76432,7.559725087890625L8.13444,7.559725087890625L8.13444,4.214996087890625L7.28971,4.700025087890625L7.2946,4.070139087890625L8.310220000000001,3.479319087890625L8.76432,3.479319087890625L8.76432,7.559725087890625ZM17.1816,4.955555087890625Q17.0042,4.784655087890625,17.0042,4.5095950878906255Q17.0042,4.229645087890625,17.18,4.057119087890625Q17.355800000000002,3.884592087890625,17.6455,3.884592087890625Q17.935200000000002,3.884592087890625,18.1077,4.057119087890625Q18.2803,4.229645087890625,18.2803,4.5095950878906255Q18.2803,4.784655087890625,18.1045,4.955555087890625Q17.930300000000003,5.124825087890625,17.6455,5.124825087890625Q17.3607,5.124825087890625,17.1816,4.955555087890625ZM18.2217,5.7953950878906255Q18.4398,6.005365087890625,18.4398,6.3552950878906245Q18.4398,6.705235087890625,18.2217,6.915195087890625Q18.0052,7.125155087890625,17.6455,7.125155087890625Q17.285800000000002,7.125155087890625,17.067700000000002,6.915195087890625Q16.849600000000002,6.705235087890625,16.849600000000002,6.3552950878906245Q16.849600000000002,6.005365087890625,17.064500000000002,5.7953950878906255Q17.2793,5.585435087890625,17.6455,5.585435087890625Q18.0052,5.585435087890625,18.2217,5.7953950878906255ZM9.60768,11.711495087890626C9.85136,11.444785087890626,10,11.089765087890626,10,10.700025087890625C10,9.871595087890626,9.32843,9.200025087890625,8.5,9.200025087890625C7.67157,9.200025087890625,7,9.871595087890626,7,10.700025087890625C7,10.809205087890625,7.01167,10.915665087890625,7.03382,11.018215087890624L3.5247,15.200215087890625C3.51648,15.200115087890625,3.5082500000000003,15.200015087890625,3.5,15.200015087890625C2.671573,15.200015087890625,2,15.871615087890625,2,16.700015087890627C2,17.528415087890625,2.671573,18.200015087890627,3.5,18.200015087890627C4.32843,18.200015087890627,5,17.528415087890625,5,16.700015087890627C5,16.258515087890625,4.80921,15.861515087890625,4.50558,15.587015087890626L7.59952,11.899765087890625C7.8503,12.088295087890625,8.162099999999999,12.200025087890625,8.5,12.200025087890625C8.57314,12.200025087890625,8.645050000000001,12.194785087890626,8.71539,12.184675087890625L11.3216,15.771815087890625C11.12019,16.027215087890625,11,16.349515087890623,11,16.700015087890627C11,17.528415087890625,11.67157,18.200015087890627,12.5,18.200015087890627C13.3284,18.200015087890627,14,17.528415087890625,14,16.700015087890627C14,16.336015087890623,13.8703,16.002315087890626,13.6547,15.742515087890625L16.781,12.016775087890625C16.994500000000002,12.133605087890626,17.2395,12.200025087890625,17.5,12.200025087890625C18.3284,12.200025087890625,19,11.528445087890624,19,10.700025087890625C19,9.871595087890626,18.3284,9.200025087890625,17.5,9.200025087890625C16.671599999999998,9.200025087890625,16,9.871595087890626,16,10.700025087890625C16,10.898765087890624,16.0387,11.088475087890625,16.108800000000002,11.262055087890625L12.7823,15.226515087890625C12.6908,15.209115087890625,12.5965,15.200015087890625,12.5,15.200015087890625C12.3862,15.200015087890625,12.2754,15.212715087890626,12.1689,15.236715087890625L9.60768,11.711495087890626Z" stroke-opacity="0" stroke="none"></path></svg>'), Pf = () => Sf.cloneNode(!0), Df = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M9.474616630859375,7.494615087890625L8.844736630859375,7.494615087890625L8.844736630859375,4.149892087890625L8.000006630859374,4.634915087890625L8.004896630859374,4.005035087890625L9.020516630859376,3.414215087890625L9.474616630859375,3.414215087890625L9.474616630859375,7.494615087890625ZM18.529296630859378,4.8318550878906255Q18.307996630859375,5.028795087890625,18.122396630859377,5.385245087890625Q17.868496630859376,5.019035087890625,17.629196630859376,4.8269750878906255Q17.389996630859375,4.634915087890625,17.168596630859376,4.634915087890625Q16.794296630859375,4.634915087890625,16.522496630859376,4.976715087890625Q16.252296630859377,5.3168850878906255,16.252296630859377,5.7856350878906255Q16.252296630859377,6.218575087890625,16.502896630859375,6.521315087890625Q16.755196630859373,6.822415087890625,17.114896630859377,6.822415087890625Q17.368796630859375,6.822415087890625,17.588596630859374,6.625475087890624Q17.809896630859377,6.428535087890625,17.998696630859374,6.0688350878906245Q18.249396630859373,6.439935087890625,18.488596630859377,6.631985087890625Q18.727896630859377,6.822415087890625,18.952496630859375,6.822415087890625Q19.326796630859373,6.822415087890625,19.596996630859376,6.482245087890625Q19.868796630859375,6.140455087890626,19.868796630859375,5.671705087890626Q19.868796630859375,5.238755087890625,19.618196630859376,4.937655087890625Q19.367496630859375,4.634915087890625,19.006196630859375,4.634915087890625Q18.750696630859377,4.634915087890625,18.529296630859378,4.8318550878906255ZM18.337296630859377,5.674955087890625L18.278696630859375,5.596835087890625Q18.449596630859375,5.272935087890625,18.622096630859374,5.1101750878906245Q18.794596630859374,4.947415087890625,18.967096630859373,4.947415087890625Q19.194996630859375,4.947415087890625,19.346396630859374,5.1345950878906255Q19.497696630859377,5.320135087890625,19.497696630859377,5.598455087890625Q19.497696630859377,5.8914250878906245,19.360996630859376,6.096505087890625Q19.224296630859374,6.301585087890626,19.027396630859375,6.301585087890626Q18.915096630859374,6.301585087890626,18.742496630859375,6.146965087890624Q18.569996630859375,5.992335087890625,18.337296630859377,5.674955087890625ZM17.785496630859377,5.779125087890625L17.842496630859372,5.857245087890625Q17.668296630859373,6.186025087890625,17.495796630859374,6.348785087890625Q17.324896630859374,6.509915087890625,17.153996630859375,6.509915087890625Q16.926096630859377,6.509915087890625,16.774796630859377,6.324375087890624Q16.623396630859375,6.137195087890625,16.623396630859375,5.858875087890625Q16.623396630859375,5.565905087890625,16.761696630859376,5.360825087890625Q16.900096630859373,5.1557550878906255,17.095396630859376,5.1557550878906255Q17.228896630859374,5.1557550878906255,17.365596630859375,5.2778250878906245Q17.502296630859377,5.399895087890625,17.785496630859377,5.779125087890625ZM10.710296630859375,10.634915087890626C10.710296630859375,11.024655087890626,10.561656630859375,11.379685087890625,10.317976630859375,11.646395087890625L12.879196630859376,15.171615087890626C12.985696630859374,15.147615087890625,13.096496630859376,15.134915087890626,13.210296630859375,15.134915087890626C13.306796630859376,15.134915087890626,13.401096630859374,15.144015087890624,13.492596630859374,15.161415087890624L16.819096630859377,11.196955087890625C16.748996630859374,11.023375087890624,16.710296630859375,10.833655087890625,16.710296630859375,10.634915087890626C16.710296630859375,9.806495087890625,17.381896630859373,9.134915087890626,18.210296630859375,9.134915087890626C19.038696630859373,9.134915087890626,19.710296630859375,9.806495087890625,19.710296630859375,10.634915087890626C19.710296630859375,11.463345087890625,19.038696630859373,12.134915087890626,18.210296630859375,12.134915087890626C17.949796630859375,12.134915087890626,17.704796630859377,12.068505087890625,17.491296630859374,11.951675087890624L14.364996630859375,15.677415087890624C14.580596630859375,15.937215087890625,14.710296630859375,16.270915087890625,14.710296630859375,16.634915087890626C14.710296630859375,17.463315087890624,14.038696630859375,18.134915087890626,13.210296630859375,18.134915087890626C12.381866630859374,18.134915087890626,11.710296630859375,17.463315087890624,11.710296630859375,16.634915087890626C11.710296630859375,16.284415087890626,11.830486630859374,15.962015087890626,12.031896630859375,15.706715087890625L9.425686630859374,12.119565087890624C9.355346630859376,12.129685087890625,9.283436630859375,12.134915087890626,9.210296630859375,12.134915087890626C8.872396630859374,12.134915087890626,8.560596630859376,12.023195087890626,8.309816630859375,11.834665087890626L5.215876630859375,15.521915087890624C5.519506630859375,15.796415087890624,5.710296630859375,16.193415087890624,5.710296630859375,16.634915087890626C5.710296630859375,17.463315087890624,5.038726630859375,18.134915087890626,4.210296630859375,18.134915087890626C3.381869630859375,18.134915087890626,2.710296630859375,17.463315087890624,2.710296630859375,16.634915087890626C2.710296630859375,15.806515087890626,3.381869630859375,15.134915087890626,4.210296630859375,15.134915087890626C4.218546630859375,15.134915087890626,4.226776630859375,15.135015087890626,4.234996630859375,15.135115087890625L7.744116630859375,10.953115087890625C7.721966630859375,10.850565087890626,7.710296630859375,10.744105087890624,7.710296630859375,10.634915087890626C7.710296630859375,9.806495087890625,8.381866630859374,9.134915087890626,9.210296630859375,9.134915087890626C10.038726630859376,9.134915087890626,10.710296630859375,9.806495087890625,10.710296630859375,10.634915087890626Z" stroke-opacity="0" stroke="none"></path></svg>'), Nf = () => Df.cloneNode(!0), Of = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M21,5.5C21,6.32843,20.3284,7,19.5,7C19.4136,7,19.3289,6.99269,19.2465,6.97866L15.6257,15.5086C15.8587,15.7729,16,16.119999999999997,16,16.5C16,17.328400000000002,15.3284,18,14.5,18C13.8469,18,13.2913,17.5826,13.0854,17L3.91465,17C3.70873,17.5826,3.15311,18,2.5,18C1.671573,18,1,17.328400000000002,1,16.5C1,15.6716,1.671573,15,2.5,15C2.5840199999999998,15,2.66643,15.0069,2.74668,15.0202L6.36934,6.48574C6.13933,6.22213,6,5.87733,6,5.5C6,4.671573,6.67157,4,7.5,4C8.15311,4,8.70873,4.417404,8.91465,5L18.0854,5C18.2913,4.417404,18.8469,4,19.5,4C20.3284,4,21,4.671573,21,5.5ZM18.0854,6L8.91465,6C8.892579999999999,6.06243,8.8665,6.12296,8.83672,6.18128L13.9814,15.0921C14.143,15.0325,14.3177,15,14.5,15C14.584,15,14.6664,15.0069,14.7467,15.0202L18.3693,6.48574C18.2462,6.3446,18.149,6.1802,18.0854,6ZM13.2036,15.745L8.0861,6.8811800000000005C7.90605,6.95768,7.70797,7,7.5,7C7.41359,7,7.32888,6.99269,7.24647,6.97866L3.62571,15.5086C3.7512,15.651,3.8501,15.8174,3.91465,16L13.0854,16C13.1169,15.9108,13.1566,15.8255,13.2036,15.745Z" stroke-opacity="0" stroke="none"></path></svg>'), If = () => Of.cloneNode(!0), Ef = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M5.92159,5.93994C6.04014,5.90529,6.152620000000001,5.85639,6.25704,5.79523L9.12729,9.89437C9.045449999999999,10.07959,9,10.28449,9,10.5C9,10.79522,9.08529,11.07053,9.232569999999999,11.30262L4.97573,16.7511L5.92159,5.93994ZM4.92259,5.8848400000000005C4.38078,5.658659999999999,4,5.1238,4,4.5C4,3.671573,4.67157,3,5.5,3C6.2157,3,6.81433,3.50124,6.96399,4.17183L15.1309,4.88634C15.3654,4.36387,15.8902,4,16.5,4C17.328400000000002,4,18,4.67157,18,5.5C18,6.08983,17.659599999999998,6.60015,17.1645,6.84518L18.4264,14.0018C18.4508,14.0006,18.4753,14,18.5,14C19.3284,14,20,14.6716,20,15.5C20,16.328400000000002,19.3284,17,18.5,17C17.932499999999997,17,17.4386,16.6849,17.183799999999998,16.22L5.99686,18.5979C5.946429999999999,19.3807,5.29554,20,4.5,20C3.671573,20,3,19.3284,3,18.5C3,17.869300000000003,3.389292,17.3295,3.94071,17.1077L4.92259,5.8848400000000005ZM5.72452,17.6334C5.69799,17.596,5.6698,17.5599,5.64004,17.525100000000002L10.01843,11.92103C10.16958,11.97223,10.33155,12,10.5,12C10.80059,12,11.08052,11.91158,11.31522,11.75934L17.0606,15.0765C17.0457,15.1271,17.0335,15.1789,17.023899999999998,15.2317L5.72452,17.6334ZM11.92855,10.95875L17.4349,14.1379L16.1699,6.96356C15.9874,6.92257,15.8174,6.8483,15.6667,6.74746L11.99771,10.4165C11.99923,10.44414,12,10.47198,12,10.5C12,10.66,11.97495,10.814160000000001,11.92855,10.95875ZM10.5,9C10.259830000000001,9,10.03285,9.05644,9.83159,9.15679L7.04919,5.1831L15.0493,5.88302C15.054,5.90072,15.059,5.91829,15.0643,5.9357299999999995L11.56066,9.43934C11.28921,9.16789,10.91421,9,10.5,9Z" stroke-opacity="0" fill-rule="evenodd" fill-opacity="1"></path></svg>'), Bf = () => Ef.cloneNode(!0), Ff = /* @__PURE__ */ p('<svg viewBox="0 0 22 22"><path d="M4.727219638671875,8.007996215820313L9.973849638671876,2.7629472158203123C10.167279638671875,2.5696791158203123,10.480729638671875,2.5696791158203123,10.674169638671875,2.7629472158203123L13.223329638671874,5.311756215820313C13.416929638671874,5.505236215820313,13.416929638671874,5.8189862158203125,13.223329638671874,6.012466215820313L7.977129638671875,11.257906215820313C7.379859638671875,11.855176215820313,7.407609638671875,12.909396215820312,8.033809638671876,13.535596215820313C8.660409638671876,14.162596215820313,9.713849638671874,14.189996215820312,10.311129638671876,13.591896215820313L15.556929638671875,8.346066215820311C15.750429638671875,8.152526215820313,16.064229638671875,8.152526215820313,16.257629638671872,8.346066215820311L18.806529638671876,10.895266215820312C19.000029638671876,11.088746215820313,19.000029638671876,11.402496215820312,18.806529638671876,11.595976215820313L13.560629638671875,16.841796215820313C11.165619638671876,19.237196215820312,7.197149638671875,19.19919621582031,4.783499638671875,16.785496215820313C2.3698426386718747,14.371896215820312,2.331397638671875,10.403416215820313,4.727219638671875,8.007996215820313ZM12.172299638671875,5.662106215820312L10.323809638671875,3.8136162158203124L5.4287196386718755,8.709096215820313C3.422893638671875,10.714536215820312,3.4549956386718748,14.055196215820313,5.484999638671875,16.08479621582031C7.514609638671875,18.114796215820313,10.855289638671875,18.146496215820314,12.860719638671876,16.141096215820312L15.465629638671874,13.535796215820312L14.090929638671875,12.160756215820312L14.791629638671875,11.460436215820312L16.166229638671876,12.834996215820313L17.755829638671877,11.245226215820313L15.907729638671874,9.396736215820312L11.011839638671875,14.292596215820312C10.042809638671875,15.262396215820312,8.418249638671874,15.243796215820312,7.406019638671875,14.306496215820312L7.333099638671875,14.236296215820312C6.327599638671876,13.230796215820313,6.284009638671876,11.550396215820312,7.276419638671875,10.557586215820312L9.882199638671874,7.952026215820313L8.501079638671875,6.570906215820313L9.201789638671876,5.870186215820313L10.582939638671874,7.251336215820312L12.172299638671875,5.662106215820312Z" stroke-opacity="0" fill-rule="evenodd" fill-opacity="1"></path></svg>'), Uf = (e) => (() => {
   const t = Ff.cloneNode(!0);
   return Ie(t, "class", `icon-overlay ${e ?? ""}`), t;
-})(), zf = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M11,17C5.80945,17,3.667717,12.85,3.113386,11.575C2.9622047,11.2,2.9622047,10.8,3.113386,10.425C3.667717,9.15,5.80945,5,11,5C16.165399999999998,5,18.3323,9.15,18.8866,10.425C19.0378,10.8,19.0378,11.2,18.8866,11.575C18.3323,12.85,16.165399999999998,17,11,17ZM4.04567,10.8C3.995276,10.925,3.995276,11.05,4.04567,11.175C4.52441,12.325,6.43937,16,11,16C15.5606,16,17.4756,12.325,17.9543,11.2C18.0047,11.075,18.0047,10.95,17.9543,10.825C17.4756,9.675,15.5606,6,11,6C6.43937,6,4.52441,9.675,4.04567,10.8ZM11,13.5C9.61417,13.5,8.480319999999999,12.375,8.480319999999999,11C8.480319999999999,9.625,9.61417,8.5,11,8.5C12.38583,8.5,13.5197,9.625,13.5197,11C13.5197,12.375,12.38583,13.5,11,13.5ZM11,9.5C10.1685,9.5,9.48819,10.175,9.48819,11C9.48819,11.825,10.1685,12.5,11,12.5C11.8315,12.5,12.51181,11.825,12.51181,11C12.51181,10.175,11.8315,9.5,11,9.5Z" stroke-opacity="0" fill-opacity="1"></path></svg>'), Vf = () => zf.cloneNode(!0), Kf = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M5.80417,14.9887L4.62563,16.167299999999997C4.43037,16.3625,4.43037,16.6791,4.62563,16.8744C4.82089,17.0696,5.13748,17.0696,5.332739999999999,16.8744L6.62638,15.5807C7.75595,16.290100000000002,9.19328,16.7929,11,16.7929C16.165399999999998,16.7929,18.3323,12.64289,18.8866,11.36789C19.0378,10.99289,19.0378,10.59289,18.8866,10.21789C18.5549,9.45486,17.6456,7.66212,15.8617,6.34545L17.3536,4.853553C17.5488,4.658291,17.5488,4.341709,17.3536,4.146447C17.1583,3.9511845,16.8417,3.9511845,16.6464,4.146447L15.0014,5.7915399999999995C13.9314,5.1969,12.61166,4.792893,11,4.792893C5.80945,4.792893,3.667717,8.94289,3.113386,10.21789C2.9622049,10.59289,2.9622049,10.99289,3.113386,11.36789C3.424435,12.08333,4.2353000000000005,13.70399,5.80417,14.9887ZM7.36012,14.847C8.32327,15.4074,9.52286,15.7929,11,15.7929C15.5606,15.7929,17.4756,12.11789,17.9543,10.99289C18.0047,10.86789,18.0047,10.74289,17.9543,10.61789C17.659,9.90846,16.8171,8.23812,15.1447,7.06241L12.96929,9.23782C13.3134,9.66543,13.5197,10.20642,13.5197,10.79289C13.5197,12.16789,12.38583,13.29289,11,13.29289C10.41596,13.29289,9.87667,13.09308,9.44815,12.75896L7.36012,14.847ZM8.794609999999999,11.99829L6.520099999999999,14.2728C5.06905,13.12119,4.32057,11.628250000000001,4.04567,10.96789C3.995275,10.84289,3.995275,10.71789,4.04567,10.59289C4.52441,9.46789,6.43937,5.79289,11,5.79289C12.28868,5.79289,13.3661,6.086320000000001,14.2596,6.53329L12.19759,8.5953C11.84086,8.40257,11.43271,8.29289,11,8.29289C9.61417,8.29289,8.480319999999999,9.41789,8.480319999999999,10.79289C8.480319999999999,11.22918,8.594470000000001,11.64029,8.794609999999999,11.99829ZM10.16528,12.04183C10.404869999999999,12.20032,10.692070000000001,12.29289,11,12.29289C11.8315,12.29289,12.51181,11.61789,12.51181,10.79289C12.51181,10.48318,12.41593,10.194600000000001,12.25216,9.95494L10.16528,12.04183ZM11.43602,9.35687L9.55616,11.236740000000001C9.512,11.09633,9.48819,10.94724,9.48819,10.79289C9.48819,9.96789,10.1685,9.29289,11,9.29289C11.15142,9.29289,11.29782,9.31528,11.43602,9.35687Z" stroke-opacity="0" fill-rule="evenodd" fill-opacity="1"></path></svg>'), Rf = () => Kf.cloneNode(!0), jf = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><defs><clipPath id="master_svg0_151_625"><rect x="0" y="0" width="22" height="22" rx="0"></rect></clipPath></defs><g clip-path="url(#master_svg0_151_625)"><path d="M14.5385,9.76923L15.6538,9.76923C16.6538,9.76923,17.4615,10.576920000000001,17.4615,11.576920000000001L17.4615,17.1923C17.4615,18.1923,16.6538,19,15.6538,19L5.80769,19C4.807692,19,4,18.1923,4,17.1923L4,11.576920000000001C4,10.576920000000001,4.807692,9.76923,5.80769,9.76923L7.23077,9.76923L7.23077,7.576919999999999C7.23077,5.61538,8.88462,4,10.88462,4C12.88462,4,14.5385,5.61538,14.5385,7.576919999999999L14.5385,9.76923ZM10.88461,5.15385C9.5,5.15385,8.38461,6.23077,8.38461,7.576919999999999L8.38461,9.76923L13.38462,9.76923L13.38462,7.576919999999999C13.38462,6.23077,12.26923,5.15385,10.88461,5.15385ZM15.6538,17.8462C16,17.8462,16.3077,17.5385,16.3077,17.1923L16.3077,11.576920000000001C16.3077,11.23077,16,10.923079999999999,15.6538,10.923079999999999L5.80769,10.923079999999999C5.46154,10.923079999999999,5.15385,11.23077,5.15385,11.576920000000001L5.15385,17.1923C5.15385,17.5385,5.46154,17.8462,5.80769,17.8462L15.6538,17.8462ZM10.153839999999999,12.65385C10.153839999999999,12.34615,10.42307,12.07692,10.73076,12.07692C11.038450000000001,12.07692,11.307680000000001,12.34615,11.307680000000001,12.65385L11.307680000000001,14.5769C11.307680000000001,14.8846,11.038450000000001,15.1538,10.73076,15.1538C10.42307,15.1538,10.153839999999999,14.8846,10.153839999999999,14.5769L10.153839999999999,12.65385Z" stroke-opacity="0" fill-rule="evenodd" fill-opacity="1"></path></g></svg>'), Qf = () => jf.cloneNode(!0), Zf = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><defs><clipPath id="master_svg0_151_620"><rect x="0" y="0" width="22" height="22" rx="0"></rect></clipPath></defs><g clip-path="url(#master_svg0_151_620)"><path d="M8.38461,9.76923L15.6538,9.76923C16.6538,9.76923,17.4615,10.576920000000001,17.4615,11.576920000000001L17.4615,17.1923C17.4615,18.1923,16.6538,19,15.6538,19L5.80769,19C4.807692,19,4,18.1923,4,17.1923L4,11.576920000000001C4,10.576920000000001,4.807693,9.76923,5.80769,9.76923L7.23077,9.76923L7.23077,7.576919999999999C7.23077,5.61538,8.88462,4,10.88462,4C12.46154,4,13.84615,4.961539,14.3462,6.423080000000001C14.4615,6.73077,14.3077,7.038460000000001,14,7.15385C13.69231,7.26923,13.38461,7.11538,13.26923,6.80769C12.92308,5.80769,11.96154,5.15385,10.88462,5.15385C9.5,5.15385,8.38461,6.23077,8.38461,7.576919999999999L8.38461,9.76923ZM15.6538,17.8462C16,17.8462,16.3077,17.5385,16.3077,17.1923L16.3077,11.576920000000001C16.3077,11.23077,16,10.923079999999999,15.6538,10.923079999999999L5.80769,10.923079999999999C5.46154,10.923079999999999,5.15385,11.23077,5.15385,11.576920000000001L5.15385,17.1923C5.15385,17.5385,5.46154,17.8462,5.80769,17.8462L15.6538,17.8462ZM10.153839999999999,12.65385C10.153839999999999,12.34615,10.42307,12.07692,10.73076,12.07692C11.03846,12.07692,11.307690000000001,12.34615,11.307690000000001,12.65385L11.307690000000001,14.5769C11.307690000000001,14.8846,11.03846,15.1538,10.73076,15.1538C10.42307,15.1538,10.153839999999999,14.8846,10.153839999999999,14.5769L10.153839999999999,12.65385Z" stroke-opacity="0" fill-rule="evenodd" fill-opacity="1"></path></g></svg>'), Hf = () => Zf.cloneNode(!0), qf = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M16.966900000000003,8.67144C16.6669,8.67144,16.4247,8.91558,16.4247,9.21802L16.4247,16.631500000000003C16.4247,17.322,16.007199999999997,17.9068,15.5139,17.9068L13.93072,17.9068L13.93072,9.2162C13.93072,8.91741,13.68675,8.67144,13.38855,8.67144C13.09036,8.67144,12.84639,8.91741,12.84639,9.21802L12.84639,17.9068L10.151810000000001,17.9068L10.151810000000001,9.21802C10.151810000000001,8.91741,9.90783,8.67144,9.609639999999999,8.67144C9.31145,8.67144,9.06747,8.91741,9.06747,9.219850000000001L9.06747,17.9068L7.48614,17.9068C6.99277,17.9068,6.5753,17.322,6.5753,16.631500000000003L6.5753,9.21802C6.5753,8.91558,6.333130000000001,8.67144,6.03313,8.67144C5.73313,8.67144,5.49096,8.91558,5.49096,9.21802L5.49096,16.631500000000003C5.49096,17.9378,6.385540000000001,19,7.48614,19L15.512,19C16.6127,19,17.509,17.9378,17.509,16.631500000000003L17.509,9.21802C17.509,8.91558,17.2669,8.67144,16.966900000000003,8.67144ZM18.4578,6.21183L4.542169,6.21183C4.243976,6.21183,4,6.45779,4,6.75841C4,7.05903,4.243976,7.30499,4.542169,7.30499L18.4578,7.30499C18.756,7.30499,19,7.05903,19,6.75841C19,6.45779,18.756,6.21183,18.4578,6.21183ZM8.68072,5.10045L14.3193,5.10045C14.6175,5.10045,14.8614,4.852666,14.8614,4.550225C14.8614,4.247783,14.6175,4,14.3193,4L8.68072,4C8.38253,4,8.13855,4.247783,8.13855,4.550225C8.13855,4.852666,8.38253,5.10045,8.68072,5.10045Z" stroke-opacity="0" fill-opacity="1"></path></svg>'), Yf = () => qf.cloneNode(!0), Wf = {
-  horizontalStraightLine: Sh,
-  horizontalRayLine: Dh,
-  horizontalSegment: Oh,
-  verticalStraightLine: Eh,
-  verticalRayLine: Fh,
-  verticalSegment: zh,
-  straightLine: Kh,
-  rayLine: jh,
-  segment: Zh,
-  arrow: qh,
-  priceLine: Wh,
-  priceChannelLine: Xh,
-  parallelStraightLine: ef,
-  fibonacciLine: nf,
-  fibonacciSegment: of,
-  fibonacciCircle: sf,
-  fibonacciSpiral: cf,
-  fibonacciSpeedResistanceFan: df,
-  fibonacciExtension: ff,
-  gannBox: gf,
-  circle: Cf,
-  triangle: vf,
-  rect: $f,
-  parallelogram: kf,
-  threeWaves: Lf,
+})(), zf = /* @__PURE__ */ p('<svg viewBox="0 0 22 22"><defs><clipPath id="master_svg0_151_615"><rect x="0" y="0" width="22" height="22" rx="0"></rect></clipPath></defs><g clip-path="url(#master_svg0_151_615)"><path d="M19.672,3.0673368C19.4417,2.9354008,19.1463,3.00292252,18.9994,3.2210900000000002L17.4588,5.50622L16.743299999999998,3.781253L13.9915,7.4662L13.9618,7.51108C13.8339,7.72862,13.8936,8.005659999999999,14.1004,8.15391L14.1462,8.183430000000001C14.3683,8.308720000000001,14.6511,8.25001,14.8022,8.047229999999999L16.4907,5.78571L17.246299999999998,7.60713L19.8374,3.7635389999999997L19.8651,3.717088C19.9871,3.484615,19.9023,3.199273,19.672,3.0673368ZM4.79974,8.462530000000001L10.117740000000001,3.252975C10.31381,3.0610145,10.63152,3.0610145,10.82759,3.252975L13.4115,5.78453C13.6076,5.976710000000001,13.6076,6.28833,13.4115,6.4805L8.093869999999999,11.69045C7.48847,12.28368,7.51659,13.3308,8.151309999999999,13.9528C8.786439999999999,14.5755,9.85421,14.6027,10.45961,14.0087L15.7768,8.79831C15.9729,8.60609,16.2909,8.60609,16.487099999999998,8.79831L19.0705,11.33026C19.2667,11.52244,19.2667,11.83406,19.0705,12.02623L13.7533,17.2366C11.32572,19.6158,7.30328,19.578,4.85679,17.1807C2.410298,14.7834,2.371331,10.84174,4.79974,8.462530000000001ZM12.3461,6.1325199999999995L10.47246,4.29654L5.51079,9.15889C3.477674,11.15076,3.510214,14.4688,5.56784,16.4847C7.62506,18.500999999999998,11.01117,18.5325,13.0439,16.540599999999998L15.6842,13.9529L14.2908,12.58718L15.0011,11.89161L16.394399999999997,13.2569L18.0056,11.67786L16.1323,9.84188L11.16985,14.7046C10.18764,15.6679,8.540980000000001,15.6494,7.51498,14.7184L7.44107,14.6487C6.4219,13.65,6.37771,11.98096,7.38362,10.994869999999999L10.02485,8.40693L8.624939999999999,7.03516L9.335180000000001,6.33919L10.73512,7.71099L12.3461,6.1325199999999995Z" stroke-opacity="0" fill-rule="evenodd" fill-opacity="1"></path></g></svg>'), Vf = (e) => (() => {
+  const t = zf.cloneNode(!0);
+  return Ie(t, "class", `icon-overlay ${e ?? ""}`), t;
+})(), Kf = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M11,17C5.80945,17,3.667717,12.85,3.113386,11.575C2.9622047,11.2,2.9622047,10.8,3.113386,10.425C3.667717,9.15,5.80945,5,11,5C16.165399999999998,5,18.3323,9.15,18.8866,10.425C19.0378,10.8,19.0378,11.2,18.8866,11.575C18.3323,12.85,16.165399999999998,17,11,17ZM4.04567,10.8C3.995276,10.925,3.995276,11.05,4.04567,11.175C4.52441,12.325,6.43937,16,11,16C15.5606,16,17.4756,12.325,17.9543,11.2C18.0047,11.075,18.0047,10.95,17.9543,10.825C17.4756,9.675,15.5606,6,11,6C6.43937,6,4.52441,9.675,4.04567,10.8ZM11,13.5C9.61417,13.5,8.480319999999999,12.375,8.480319999999999,11C8.480319999999999,9.625,9.61417,8.5,11,8.5C12.38583,8.5,13.5197,9.625,13.5197,11C13.5197,12.375,12.38583,13.5,11,13.5ZM11,9.5C10.1685,9.5,9.48819,10.175,9.48819,11C9.48819,11.825,10.1685,12.5,11,12.5C11.8315,12.5,12.51181,11.825,12.51181,11C12.51181,10.175,11.8315,9.5,11,9.5Z" stroke-opacity="0" fill-opacity="1"></path></svg>'), Rf = () => Kf.cloneNode(!0), jf = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M5.80417,14.9887L4.62563,16.167299999999997C4.43037,16.3625,4.43037,16.6791,4.62563,16.8744C4.82089,17.0696,5.13748,17.0696,5.332739999999999,16.8744L6.62638,15.5807C7.75595,16.290100000000002,9.19328,16.7929,11,16.7929C16.165399999999998,16.7929,18.3323,12.64289,18.8866,11.36789C19.0378,10.99289,19.0378,10.59289,18.8866,10.21789C18.5549,9.45486,17.6456,7.66212,15.8617,6.34545L17.3536,4.853553C17.5488,4.658291,17.5488,4.341709,17.3536,4.146447C17.1583,3.9511845,16.8417,3.9511845,16.6464,4.146447L15.0014,5.7915399999999995C13.9314,5.1969,12.61166,4.792893,11,4.792893C5.80945,4.792893,3.667717,8.94289,3.113386,10.21789C2.9622049,10.59289,2.9622049,10.99289,3.113386,11.36789C3.424435,12.08333,4.2353000000000005,13.70399,5.80417,14.9887ZM7.36012,14.847C8.32327,15.4074,9.52286,15.7929,11,15.7929C15.5606,15.7929,17.4756,12.11789,17.9543,10.99289C18.0047,10.86789,18.0047,10.74289,17.9543,10.61789C17.659,9.90846,16.8171,8.23812,15.1447,7.06241L12.96929,9.23782C13.3134,9.66543,13.5197,10.20642,13.5197,10.79289C13.5197,12.16789,12.38583,13.29289,11,13.29289C10.41596,13.29289,9.87667,13.09308,9.44815,12.75896L7.36012,14.847ZM8.794609999999999,11.99829L6.520099999999999,14.2728C5.06905,13.12119,4.32057,11.628250000000001,4.04567,10.96789C3.995275,10.84289,3.995275,10.71789,4.04567,10.59289C4.52441,9.46789,6.43937,5.79289,11,5.79289C12.28868,5.79289,13.3661,6.086320000000001,14.2596,6.53329L12.19759,8.5953C11.84086,8.40257,11.43271,8.29289,11,8.29289C9.61417,8.29289,8.480319999999999,9.41789,8.480319999999999,10.79289C8.480319999999999,11.22918,8.594470000000001,11.64029,8.794609999999999,11.99829ZM10.16528,12.04183C10.404869999999999,12.20032,10.692070000000001,12.29289,11,12.29289C11.8315,12.29289,12.51181,11.61789,12.51181,10.79289C12.51181,10.48318,12.41593,10.194600000000001,12.25216,9.95494L10.16528,12.04183ZM11.43602,9.35687L9.55616,11.236740000000001C9.512,11.09633,9.48819,10.94724,9.48819,10.79289C9.48819,9.96789,10.1685,9.29289,11,9.29289C11.15142,9.29289,11.29782,9.31528,11.43602,9.35687Z" stroke-opacity="0" fill-rule="evenodd" fill-opacity="1"></path></svg>'), Qf = () => jf.cloneNode(!0), Zf = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><defs><clipPath id="master_svg0_151_625"><rect x="0" y="0" width="22" height="22" rx="0"></rect></clipPath></defs><g clip-path="url(#master_svg0_151_625)"><path d="M14.5385,9.76923L15.6538,9.76923C16.6538,9.76923,17.4615,10.576920000000001,17.4615,11.576920000000001L17.4615,17.1923C17.4615,18.1923,16.6538,19,15.6538,19L5.80769,19C4.807692,19,4,18.1923,4,17.1923L4,11.576920000000001C4,10.576920000000001,4.807692,9.76923,5.80769,9.76923L7.23077,9.76923L7.23077,7.576919999999999C7.23077,5.61538,8.88462,4,10.88462,4C12.88462,4,14.5385,5.61538,14.5385,7.576919999999999L14.5385,9.76923ZM10.88461,5.15385C9.5,5.15385,8.38461,6.23077,8.38461,7.576919999999999L8.38461,9.76923L13.38462,9.76923L13.38462,7.576919999999999C13.38462,6.23077,12.26923,5.15385,10.88461,5.15385ZM15.6538,17.8462C16,17.8462,16.3077,17.5385,16.3077,17.1923L16.3077,11.576920000000001C16.3077,11.23077,16,10.923079999999999,15.6538,10.923079999999999L5.80769,10.923079999999999C5.46154,10.923079999999999,5.15385,11.23077,5.15385,11.576920000000001L5.15385,17.1923C5.15385,17.5385,5.46154,17.8462,5.80769,17.8462L15.6538,17.8462ZM10.153839999999999,12.65385C10.153839999999999,12.34615,10.42307,12.07692,10.73076,12.07692C11.038450000000001,12.07692,11.307680000000001,12.34615,11.307680000000001,12.65385L11.307680000000001,14.5769C11.307680000000001,14.8846,11.038450000000001,15.1538,10.73076,15.1538C10.42307,15.1538,10.153839999999999,14.8846,10.153839999999999,14.5769L10.153839999999999,12.65385Z" stroke-opacity="0" fill-rule="evenodd" fill-opacity="1"></path></g></svg>'), Hf = () => Zf.cloneNode(!0), qf = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><defs><clipPath id="master_svg0_151_620"><rect x="0" y="0" width="22" height="22" rx="0"></rect></clipPath></defs><g clip-path="url(#master_svg0_151_620)"><path d="M8.38461,9.76923L15.6538,9.76923C16.6538,9.76923,17.4615,10.576920000000001,17.4615,11.576920000000001L17.4615,17.1923C17.4615,18.1923,16.6538,19,15.6538,19L5.80769,19C4.807692,19,4,18.1923,4,17.1923L4,11.576920000000001C4,10.576920000000001,4.807693,9.76923,5.80769,9.76923L7.23077,9.76923L7.23077,7.576919999999999C7.23077,5.61538,8.88462,4,10.88462,4C12.46154,4,13.84615,4.961539,14.3462,6.423080000000001C14.4615,6.73077,14.3077,7.038460000000001,14,7.15385C13.69231,7.26923,13.38461,7.11538,13.26923,6.80769C12.92308,5.80769,11.96154,5.15385,10.88462,5.15385C9.5,5.15385,8.38461,6.23077,8.38461,7.576919999999999L8.38461,9.76923ZM15.6538,17.8462C16,17.8462,16.3077,17.5385,16.3077,17.1923L16.3077,11.576920000000001C16.3077,11.23077,16,10.923079999999999,15.6538,10.923079999999999L5.80769,10.923079999999999C5.46154,10.923079999999999,5.15385,11.23077,5.15385,11.576920000000001L5.15385,17.1923C5.15385,17.5385,5.46154,17.8462,5.80769,17.8462L15.6538,17.8462ZM10.153839999999999,12.65385C10.153839999999999,12.34615,10.42307,12.07692,10.73076,12.07692C11.03846,12.07692,11.307690000000001,12.34615,11.307690000000001,12.65385L11.307690000000001,14.5769C11.307690000000001,14.8846,11.03846,15.1538,10.73076,15.1538C10.42307,15.1538,10.153839999999999,14.8846,10.153839999999999,14.5769L10.153839999999999,12.65385Z" stroke-opacity="0" fill-rule="evenodd" fill-opacity="1"></path></g></svg>'), Yf = () => qf.cloneNode(!0), Wf = /* @__PURE__ */ p('<svg class="icon-overlay" viewBox="0 0 22 22"><path d="M16.966900000000003,8.67144C16.6669,8.67144,16.4247,8.91558,16.4247,9.21802L16.4247,16.631500000000003C16.4247,17.322,16.007199999999997,17.9068,15.5139,17.9068L13.93072,17.9068L13.93072,9.2162C13.93072,8.91741,13.68675,8.67144,13.38855,8.67144C13.09036,8.67144,12.84639,8.91741,12.84639,9.21802L12.84639,17.9068L10.151810000000001,17.9068L10.151810000000001,9.21802C10.151810000000001,8.91741,9.90783,8.67144,9.609639999999999,8.67144C9.31145,8.67144,9.06747,8.91741,9.06747,9.219850000000001L9.06747,17.9068L7.48614,17.9068C6.99277,17.9068,6.5753,17.322,6.5753,16.631500000000003L6.5753,9.21802C6.5753,8.91558,6.333130000000001,8.67144,6.03313,8.67144C5.73313,8.67144,5.49096,8.91558,5.49096,9.21802L5.49096,16.631500000000003C5.49096,17.9378,6.385540000000001,19,7.48614,19L15.512,19C16.6127,19,17.509,17.9378,17.509,16.631500000000003L17.509,9.21802C17.509,8.91558,17.2669,8.67144,16.966900000000003,8.67144ZM18.4578,6.21183L4.542169,6.21183C4.243976,6.21183,4,6.45779,4,6.75841C4,7.05903,4.243976,7.30499,4.542169,7.30499L18.4578,7.30499C18.756,7.30499,19,7.05903,19,6.75841C19,6.45779,18.756,6.21183,18.4578,6.21183ZM8.68072,5.10045L14.3193,5.10045C14.6175,5.10045,14.8614,4.852666,14.8614,4.550225C14.8614,4.247783,14.6175,4,14.3193,4L8.68072,4C8.38253,4,8.13855,4.247783,8.13855,4.550225C8.13855,4.852666,8.38253,5.10045,8.68072,5.10045Z" stroke-opacity="0" fill-opacity="1"></path></svg>'), Gf = () => Wf.cloneNode(!0), Xf = {
+  horizontalStraightLine: Dh,
+  horizontalRayLine: Oh,
+  horizontalSegment: Eh,
+  verticalStraightLine: Fh,
+  verticalRayLine: zh,
+  verticalSegment: Kh,
+  straightLine: jh,
+  rayLine: Zh,
+  segment: qh,
+  arrow: Wh,
+  priceLine: Xh,
+  priceChannelLine: ef,
+  parallelStraightLine: nf,
+  fibonacciLine: of,
+  fibonacciSegment: sf,
+  fibonacciCircle: cf,
+  fibonacciSpiral: df,
+  fibonacciSpeedResistanceFan: ff,
+  fibonacciExtension: gf,
+  gannBox: Cf,
+  circle: vf,
+  triangle: $f,
+  rect: kf,
+  parallelogram: Lf,
+  threeWaves: Af,
   fiveWaves: Tf,
-  eightWaves: Mf,
-  anyWaves: Pf,
-  abcd: Nf,
-  xabcd: If,
-  weak_magnet: Bf,
-  strong_magnet: Uf,
-  lock: Qf,
-  unlock: Hf,
-  visible: Vf,
-  invisible: Rf,
-  remove: Yf
+  eightWaves: Pf,
+  anyWaves: Nf,
+  abcd: If,
+  xabcd: Bf,
+  weak_magnet: Uf,
+  strong_magnet: Vf,
+  lock: Hf,
+  unlock: Yf,
+  visible: Rf,
+  invisible: Qf,
+  remove: Gf
 };
-function Gf(e) {
+function Jf(e) {
   return [
     { key: "horizontalStraightLine", text: c("horizontal_straight_line", e) },
     { key: "horizontalRayLine", text: c("horizontal_ray_line", e) },
@@ -3113,13 +3118,13 @@ function Gf(e) {
     { key: "priceLine", text: c("price_line", e) }
   ];
 }
-function Xf(e) {
+function em(e) {
   return [
     { key: "priceChannelLine", text: c("price_channel_line", e) },
     { key: "parallelStraightLine", text: c("parallel_straight_line", e) }
   ];
 }
-function Jf(e) {
+function tm(e) {
   return [
     { key: "circle", text: c("circle", e) },
     { key: "rect", text: c("rect", e) },
@@ -3127,7 +3132,7 @@ function Jf(e) {
     { key: "triangle", text: c("triangle", e) }
   ];
 }
-function em(e) {
+function nm(e) {
   return [
     { key: "fibonacciLine", text: c("fibonacci_line", e) },
     { key: "fibonacciSegment", text: c("fibonacci_segment", e) },
@@ -3138,7 +3143,7 @@ function em(e) {
     { key: "gannBox", text: c("gann_box", e) }
   ];
 }
-function tm(e) {
+function rm(e) {
   return [
     { key: "xabcd", text: c("xabcd", e) },
     { key: "abcd", text: c("abcd", e) },
@@ -3148,51 +3153,51 @@ function tm(e) {
     { key: "anyWaves", text: c("any_waves", e) }
   ];
 }
-function nm(e) {
+function om(e) {
   return [
     { key: "weak_magnet", text: c("weak_magnet", e) },
     { key: "strong_magnet", text: c("strong_magnet", e) }
   ];
 }
-const We = (e) => Wf[e.name](e.class), rm = /* @__PURE__ */ p('<div class="klinecharts-pro-drawing-bar"><span class="split-line"></span><div class="item" tabindex="0"><span style="width:32px;height:32px"></span><div class="icon-arrow"><svg viewBox="0 0 4 6"><path d="M1.07298,0.159458C0.827521,-0.0531526,0.429553,-0.0531526,0.184094,0.159458C-0.0613648,0.372068,-0.0613648,0.716778,0.184094,0.929388L2.61275,3.03303L0.260362,5.07061C0.0149035,5.28322,0.0149035,5.62793,0.260362,5.84054C0.505822,6.05315,0.903789,6.05315,1.14925,5.84054L3.81591,3.53075C4.01812,3.3556,4.05374,3.0908,3.92279,2.88406C3.93219,2.73496,3.87113,2.58315,3.73964,2.46925L1.07298,0.159458Z" stroke="none" stroke-opacity="0"></path></svg></div></div><div class="item"><span style="width:32px;height:32px"></span></div><div class="item"><span style="width:32px;height:32px"></span></div><span class="split-line"></span><div class="item"><span style="width:32px;height:32px"></span></div></div>'), om = /* @__PURE__ */ p('<div class="item" tabindex="0"><span style="width:32px;height:32px"></span><div class="icon-arrow"><svg viewBox="0 0 4 6"><path d="M1.07298,0.159458C0.827521,-0.0531526,0.429553,-0.0531526,0.184094,0.159458C-0.0613648,0.372068,-0.0613648,0.716778,0.184094,0.929388L2.61275,3.03303L0.260362,5.07061C0.0149035,5.28322,0.0149035,5.62793,0.260362,5.84054C0.505822,6.05315,0.903789,6.05315,1.14925,5.84054L3.81591,3.53075C4.01812,3.3556,4.05374,3.0908,3.92279,2.88406C3.93219,2.73496,3.87113,2.58315,3.73964,2.46925L1.07298,0.159458Z" stroke="none" stroke-opacity="0"></path></svg></div></div>'), U0 = /* @__PURE__ */ p('<li><span style="padding-left:8px"></span></li>'), z0 = "drawing_tools", im = (e) => {
-  const [t, r] = M("horizontalStraightLine"), [n, a] = M("priceChannelLine"), [l, d] = M("circle"), [h, v] = M("fibonacciLine"), [x, b] = M("xabcd"), [L, B] = M("weak_magnet"), [N, Z] = M("normal"), [U, K] = M(!1), [z, ce] = M(!0), [j, J] = M(""), te = G(() => [{
+const We = (e) => Xf[e.name](e.class), im = /* @__PURE__ */ p('<div class="klinecharts-pro-drawing-bar"><span class="split-line"></span><div class="item" tabindex="0"><span style="width:32px;height:32px"></span><div class="icon-arrow"><svg viewBox="0 0 4 6"><path d="M1.07298,0.159458C0.827521,-0.0531526,0.429553,-0.0531526,0.184094,0.159458C-0.0613648,0.372068,-0.0613648,0.716778,0.184094,0.929388L2.61275,3.03303L0.260362,5.07061C0.0149035,5.28322,0.0149035,5.62793,0.260362,5.84054C0.505822,6.05315,0.903789,6.05315,1.14925,5.84054L3.81591,3.53075C4.01812,3.3556,4.05374,3.0908,3.92279,2.88406C3.93219,2.73496,3.87113,2.58315,3.73964,2.46925L1.07298,0.159458Z" stroke="none" stroke-opacity="0"></path></svg></div></div><div class="item"><span style="width:32px;height:32px"></span></div><div class="item"><span style="width:32px;height:32px"></span></div><span class="split-line"></span><div class="item"><span style="width:32px;height:32px"></span></div></div>'), am = /* @__PURE__ */ p('<div class="item" tabindex="0"><span style="width:32px;height:32px"></span><div class="icon-arrow"><svg viewBox="0 0 4 6"><path d="M1.07298,0.159458C0.827521,-0.0531526,0.429553,-0.0531526,0.184094,0.159458C-0.0613648,0.372068,-0.0613648,0.716778,0.184094,0.929388L2.61275,3.03303L0.260362,5.07061C0.0149035,5.28322,0.0149035,5.62793,0.260362,5.84054C0.505822,6.05315,0.903789,6.05315,1.14925,5.84054L3.81591,3.53075C4.01812,3.3556,4.05374,3.0908,3.92279,2.88406C3.93219,2.73496,3.87113,2.58315,3.73964,2.46925L1.07298,0.159458Z" stroke="none" stroke-opacity="0"></path></svg></div></div>'), V0 = /* @__PURE__ */ p('<li><span style="padding-left:8px"></span></li>'), K0 = "drawing_tools", sm = (e) => {
+  const [t, r] = T("horizontalStraightLine"), [n, a] = T("priceChannelLine"), [l, h] = T("circle"), [d, b] = T("fibonacciLine"), [x, v] = T("xabcd"), [L, B] = T("weak_magnet"), [N, oe] = T("normal"), [V, R] = T(!1), [U, ce] = T(!0), [j, X] = T(""), ee = W(() => [{
     key: "singleLine",
     icon: t(),
-    list: Gf(e.locale),
+    list: Jf(e.locale),
     setter: r
   }, {
     key: "moreLine",
     icon: n(),
-    list: Xf(e.locale),
+    list: em(e.locale),
     setter: a
   }, {
     key: "polygon",
     icon: l(),
-    list: Jf(e.locale),
-    setter: d
+    list: tm(e.locale),
+    setter: h
   }, {
     key: "fibonacci",
-    icon: h(),
-    list: em(e.locale),
-    setter: v
+    icon: d(),
+    list: nm(e.locale),
+    setter: b
   }, {
     key: "wave",
     icon: x(),
-    list: tm(e.locale),
-    setter: b
-  }]), pe = G(() => nm(e.locale));
+    list: rm(e.locale),
+    setter: v
+  }]), pe = W(() => om(e.locale));
   return (() => {
-    const H = rm.cloneNode(!0), q = H.firstChild, ne = q.nextSibling, se = ne.firstChild, A = se.nextSibling, Y = A.firstChild, W = ne.nextSibling, R = W.firstChild, de = W.nextSibling, he = de.firstChild, re = de.nextSibling, I = re.nextSibling, Q = I.firstChild;
-    return C(H, () => te().map((D) => (() => {
-      const O = om.cloneNode(!0), F = O.firstChild, ve = F.nextSibling, Le = ve.firstChild;
+    const Z = im.cloneNode(!0), H = Z.firstChild, te = H.nextSibling, se = te.firstChild, M = se.nextSibling, q = M.firstChild, Y = te.nextSibling, K = Y.firstChild, de = Y.nextSibling, he = de.firstChild, ne = de.nextSibling, I = ne.nextSibling, Q = I.firstChild;
+    return C(Z, () => ee().map((D) => (() => {
+      const O = am.cloneNode(!0), F = O.firstChild, ve = F.nextSibling, Le = ve.firstChild;
       return O.addEventListener("blur", () => {
-        J("");
+        X("");
       }), F.$$click = () => {
         e.onDrawingItemClick({
-          groupId: z0,
+          groupId: K0,
           name: D.icon,
-          visible: z(),
-          lock: U(),
+          visible: U(),
+          lock: V(),
           mode: N()
         });
       }, C(F, w(We, {
@@ -3200,38 +3205,38 @@ const We = (e) => Wf[e.name](e.class), rm = /* @__PURE__ */ p('<div class="kline
           return D.icon;
         }
       })), ve.$$click = () => {
-        D.key === j() ? J("") : J(D.key);
+        D.key === j() ? X("") : X(D.key);
       }, C(O, (() => {
-        const ye = G(() => D.key === j());
-        return () => ye() && w(cn, {
+        const ye = W(() => D.key === j());
+        return () => ye() && w(un, {
           class: "list",
           get children() {
-            return D.list.map((Me) => (() => {
-              const _ = U0.cloneNode(!0), ge = _.firstChild;
+            return D.list.map((Te) => (() => {
+              const _ = V0.cloneNode(!0), ge = _.firstChild;
               return _.$$click = () => {
-                D.setter(Me.key), e.onDrawingItemClick({
-                  name: Me.key,
-                  lock: U(),
+                D.setter(Te.key), e.onDrawingItemClick({
+                  name: Te.key,
+                  lock: V(),
                   mode: N()
-                }), J("");
+                }), X("");
               }, C(_, w(We, {
                 get name() {
-                  return Me.key;
+                  return Te.key;
                 }
-              }), ge), C(ge, () => Me.text), _;
+              }), ge), C(ge, () => Te.text), _;
             })());
           }
         });
-      })(), null), V(() => Ie(Le, "class", D.key === j() ? "rotate" : "")), O;
-    })()), q), ne.addEventListener("blur", () => {
-      J("");
+      })(), null), z(() => Ie(Le, "class", D.key === j() ? "rotate" : "")), O;
+    })()), H), te.addEventListener("blur", () => {
+      X("");
     }), se.$$click = () => {
       let D = L();
-      N() !== "normal" && (D = "normal"), Z(D), e.onModeChange(D);
+      N() !== "normal" && (D = "normal"), oe(D), e.onModeChange(D);
     }, C(se, (() => {
-      const D = G(() => L() === "weak_magnet");
+      const D = W(() => L() === "weak_magnet");
       return () => D() ? (() => {
-        const O = G(() => N() === "weak_magnet");
+        const O = W(() => N() === "weak_magnet");
         return () => O() ? w(We, {
           name: "weak_magnet",
           class: "selected"
@@ -3239,7 +3244,7 @@ const We = (e) => Wf[e.name](e.class), rm = /* @__PURE__ */ p('<div class="kline
           name: "weak_magnet"
         });
       })() : (() => {
-        const O = G(() => N() === "strong_magnet");
+        const O = W(() => N() === "strong_magnet");
         return () => O() ? w(We, {
           name: "strong_magnet",
           class: "selected"
@@ -3247,17 +3252,17 @@ const We = (e) => Wf[e.name](e.class), rm = /* @__PURE__ */ p('<div class="kline
           name: "strong_magnet"
         });
       })();
-    })()), A.$$click = () => {
-      j() === "mode" ? J("") : J("mode");
-    }, C(ne, (() => {
-      const D = G(() => j() === "mode");
-      return () => D() && w(cn, {
+    })()), M.$$click = () => {
+      j() === "mode" ? X("") : X("mode");
+    }, C(te, (() => {
+      const D = W(() => j() === "mode");
+      return () => D() && w(un, {
         class: "list",
         get children() {
           return pe().map((O) => (() => {
-            const F = U0.cloneNode(!0), ve = F.firstChild;
+            const F = V0.cloneNode(!0), ve = F.firstChild;
             return F.$$click = () => {
-              B(O.key), Z(O.key), e.onModeChange(O.key), J("");
+              B(O.key), oe(O.key), e.onModeChange(O.key), X("");
             }, C(F, w(We, {
               get name() {
                 return O.key;
@@ -3266,35 +3271,35 @@ const We = (e) => Wf[e.name](e.class), rm = /* @__PURE__ */ p('<div class="kline
           })());
         }
       });
-    })(), null), R.$$click = () => {
-      const D = !U();
-      K(D), e.onLockChange(D);
-    }, C(R, (() => {
-      const D = G(() => !!U());
+    })(), null), K.$$click = () => {
+      const D = !V();
+      R(D), e.onLockChange(D);
+    }, C(K, (() => {
+      const D = W(() => !!V());
       return () => D() ? w(We, {
         name: "lock"
       }) : w(We, {
         name: "unlock"
       });
     })()), he.$$click = () => {
-      const D = !z();
+      const D = !U();
       ce(D), e.onVisibleChange(D);
     }, C(he, (() => {
-      const D = G(() => !!z());
+      const D = W(() => !!U());
       return () => D() ? w(We, {
         name: "visible"
       }) : w(We, {
         name: "invisible"
       });
     })()), Q.$$click = () => {
-      e.onRemoveClick(z0);
+      e.onRemoveClick(K0);
     }, C(Q, w(We, {
       name: "remove"
-    })), V(() => Ie(Y, "class", j() === "mode" ? "rotate" : "")), H;
+    })), z(() => Ie(q, "class", j() === "mode" ? "rotate" : "")), Z;
   })();
 };
 je(["click"]);
-const V0 = /* @__PURE__ */ p('<li class="title"></li>'), K0 = /* @__PURE__ */ p('<li class="row"></li>'), am = (e) => w(Tt, {
+const R0 = /* @__PURE__ */ p('<li class="title"></li>'), j0 = /* @__PURE__ */ p('<li class="row"></li>'), lm = (e) => w(Mt, {
   get title() {
     return c("indicator", e.locale);
   },
@@ -3303,23 +3308,23 @@ const V0 = /* @__PURE__ */ p('<li class="title"></li>'), K0 = /* @__PURE__ */ p(
     return e.onClose;
   },
   get children() {
-    return w(cn, {
+    return w(un, {
       class: "klinecharts-pro-indicator-modal-list",
       get children() {
         return [(() => {
-          const t = V0.cloneNode(!0);
+          const t = R0.cloneNode(!0);
           return C(t, () => c("main_indicator", e.locale)), t;
-        })(), G(() => ["MA", "EMA", "SMA", "BOLL", "SAR", "BBI"].map((t) => {
+        })(), W(() => ["MA", "EMA", "SMA", "BOLL", "SAR", "BBI"].map((t) => {
           const r = e.mainIndicators.includes(t);
           return (() => {
-            const n = K0.cloneNode(!0);
+            const n = j0.cloneNode(!0);
             return n.$$click = (a) => {
               e.onMainIndicatorChange({
                 name: t,
                 paneId: "candle_pane",
                 added: !r
               });
-            }, C(n, w(E0, {
+            }, C(n, w(F0, {
               checked: r,
               get label() {
                 return c(t.toLowerCase(), e.locale);
@@ -3327,19 +3332,19 @@ const V0 = /* @__PURE__ */ p('<li class="title"></li>'), K0 = /* @__PURE__ */ p(
             })), n;
           })();
         })), (() => {
-          const t = V0.cloneNode(!0);
+          const t = R0.cloneNode(!0);
           return C(t, () => c("sub_indicator", e.locale)), t;
-        })(), G(() => ["MA", "EMA", "VOL", "MACD", "BOLL", "KDJ", "RSI", "BIAS", "BRAR", "CCI", "DMI", "CR", "PSY", "DMA", "TRIX", "OBV", "VR", "WR", "MTM", "EMV", "SAR", "SMA", "ROC", "PVT", "BBI", "AO"].map((t) => {
+        })(), W(() => ["MA", "EMA", "VOL", "MACD", "BOLL", "KDJ", "RSI", "BIAS", "BRAR", "CCI", "DMI", "CR", "PSY", "DMA", "TRIX", "OBV", "VR", "WR", "MTM", "EMV", "SAR", "SMA", "ROC", "PVT", "BBI", "AO"].map((t) => {
           const r = t in e.subIndicators;
           return (() => {
-            const n = K0.cloneNode(!0);
+            const n = j0.cloneNode(!0);
             return n.$$click = (a) => {
               e.onSubIndicatorChange({
                 name: t,
                 paneId: e.subIndicators[t] ?? "",
                 added: !r
               });
-            }, C(n, w(E0, {
+            }, C(n, w(F0, {
               checked: r,
               get label() {
                 return c(t.toLowerCase(), e.locale);
@@ -3352,7 +3357,7 @@ const V0 = /* @__PURE__ */ p('<li class="title"></li>'), K0 = /* @__PURE__ */ p(
   }
 });
 je(["click"]);
-function R0(e, t) {
+function Q0(e, t) {
   switch (e) {
     case "Etc/UTC":
       return c("utc", t);
@@ -3549,7 +3554,7 @@ function R0(e, t) {
   }
   return e;
 }
-function sm(e) {
+function cm(e) {
   return [
     // UTC
     { key: "Etc/UTC", text: `(UTC+0:00) ${c("utc", e)}` },
@@ -3666,9 +3671,9 @@ function sm(e) {
     { key: "Pacific/Apia", text: `(UTC+13:00) ${c("apia", e)}` }
   ];
 }
-const lm = (e) => {
-  const [t, r] = M(e.timezone), n = G(() => sm(e.locale));
-  return w(Tt, {
+const um = (e) => {
+  const [t, r] = T(e.timezone), n = W(() => cm(e.locale));
+  return w(Mt, {
     get title() {
       return c("timezone", e.locale);
     },
@@ -3685,7 +3690,7 @@ const lm = (e) => {
       return e.onClose;
     },
     get children() {
-      return w(C1, {
+      return w(p1, {
         style: {
           width: "100%",
           "margin-top": "20px"
@@ -3707,7 +3712,7 @@ const lm = (e) => {
     }
   });
 };
-function j0(e) {
+function Z0(e) {
   return [
     {
       key: "candle.type",
@@ -3764,7 +3769,7 @@ function j0(e) {
     }
   ];
 }
-const cm = /* @__PURE__ */ p('<div class="chart-style-color-picker"><button type="button" class="chart-style-color-swatch"></button></div>'), um = /* @__PURE__ */ p('<div class="chart-style-color-popover"><div class="chart-style-color-grid"></div></div>'), dm = /* @__PURE__ */ p('<button type="button" class="chart-style-palette-color"></button>'), hm = /* @__PURE__ */ p('<div class="chart-style-line-control"><div class="chart-style-width-picker"><button type="button" class="chart-style-size-button"><span></span></button></div></div>'), fm = /* @__PURE__ */ p('<div class="chart-style-width-popover"></div>'), mm = /* @__PURE__ */ p('<button type="button"><span></span></button>'), gm = /* @__PURE__ */ p('<div class="klinecharts-pro-setting-modal-title-tabs"><button type="button"></button><button type="button">Chart Style</button></div>'), ym = /* @__PURE__ */ p('<div class="klinecharts-pro-setting-modal-content"></div>'), Cm = /* @__PURE__ */ p('<div class="setting-item"><span class="setting-label"></span><div class="setting-control"></div></div>'), pm = /* @__PURE__ */ p('<div class="klinecharts-pro-chart-style-content"><div class="chart-style-sidebar"><button type="button">Symbol</button><button type="button">Background</button></div><div class="chart-style-panel"><p class="chart-style-note">* Chart Style takes precedence over default chart settings. Click Reset to align with the default theme.</p></div></div>'), vm = /* @__PURE__ */ p("<h3>Symbol</h3>"), bm = /* @__PURE__ */ p('<div class="chart-style-row"><span>Chart</span></div>'), $m = /* @__PURE__ */ p('<div class="chart-style-row"><span>Bullish Candle Stick</span></div>'), _m = /* @__PURE__ */ p('<div class="chart-style-row"><span>Candle Stick</span><div class="chart-style-color-pair"></div></div>'), km = /* @__PURE__ */ p('<div class="chart-style-row"><span>Borders</span><div class="chart-style-color-pair"></div></div>'), xm = /* @__PURE__ */ p('<div class="chart-style-row"><span>Wick</span><div class="chart-style-color-pair"></div></div>'), Lm = /* @__PURE__ */ p("<h3>Background</h3>"), wm = /* @__PURE__ */ p('<div class="chart-style-row"><span>Color</span><button type="button" class="chart-style-color-swatch disabled" title="Chart background is controlled by the active app theme."></button></div>'), Tm = /* @__PURE__ */ p('<div class="chart-style-row"><label class="chart-style-check-row"><input type="checkbox"><span class="chart-style-check-box" aria-hidden="true"></span><span>Vert Grid Lines</span></label></div>'), Am = /* @__PURE__ */ p('<div class="chart-style-row"><label class="chart-style-check-row"><input type="checkbox"><span class="chart-style-check-box" aria-hidden="true"></span><span>Horz Grid Lines</span></label></div>'), Mm = ["#f6465d", "#f59e0b", "#fcd535", "#2ebd85", "#4098a8", "#22c1dc", "#3861fb", "#7b3fe4", "#ec8aa4", "#f7c56b", "#fff0a3", "#9ed4a4", "#83c7bb", "#8bdce6", "#8bb9f7", "#b7a1dc", "#c9343e", "#e76f20", "#f0b93a", "#3f8d3a", "#236e5a", "#237c88", "#1d3fbf", "#3a209f", "#ffffff", "#cbd5e1", "#9ca3af", "#6b7280", "#374151", "#111827", "#000000"], Q0 = [{
+const dm = /* @__PURE__ */ p('<div class="chart-style-color-picker"><button type="button" class="chart-style-color-swatch"></button></div>'), hm = /* @__PURE__ */ p('<div class="chart-style-color-popover"><div class="chart-style-color-grid"></div></div>'), fm = /* @__PURE__ */ p('<button type="button" class="chart-style-palette-color"></button>'), mm = /* @__PURE__ */ p('<div class="chart-style-line-control"><div class="chart-style-width-picker"><button type="button" class="chart-style-size-button"><span></span></button></div></div>'), gm = /* @__PURE__ */ p('<div class="chart-style-width-popover"></div>'), ym = /* @__PURE__ */ p('<button type="button"><span></span></button>'), Cm = /* @__PURE__ */ p('<div class="klinecharts-pro-setting-modal-title-tabs"><button type="button"></button><button type="button">Chart Style</button></div>'), pm = /* @__PURE__ */ p('<div class="klinecharts-pro-setting-modal-content"></div>'), vm = /* @__PURE__ */ p('<div class="setting-item"><span class="setting-label"></span><div class="setting-control"></div></div>'), bm = /* @__PURE__ */ p('<div class="klinecharts-pro-chart-style-content"><div class="chart-style-sidebar"><button type="button">Symbol</button><button type="button">Background</button></div><div class="chart-style-panel"><p class="chart-style-note">* Chart Style takes precedence over default chart settings. Click Reset to align with the default theme.</p></div></div>'), $m = /* @__PURE__ */ p("<h3>Symbol</h3>"), _m = /* @__PURE__ */ p('<div class="chart-style-row"><span>Chart</span></div>'), km = /* @__PURE__ */ p('<div class="chart-style-row"><span>Bullish Candle Stick</span></div>'), xm = /* @__PURE__ */ p('<div class="chart-style-row"><span>Candle Stick</span><div class="chart-style-color-pair"></div></div>'), Lm = /* @__PURE__ */ p('<div class="chart-style-row"><span>Borders</span><div class="chart-style-color-pair"></div></div>'), wm = /* @__PURE__ */ p('<div class="chart-style-row"><span>Wick</span><div class="chart-style-color-pair"></div></div>'), Am = /* @__PURE__ */ p("<h3>Background</h3>"), Mm = /* @__PURE__ */ p('<div class="chart-style-row"><span>Color</span><button type="button" class="chart-style-color-swatch disabled" title="Chart background is controlled by the active app theme."></button></div>'), Tm = /* @__PURE__ */ p('<div class="chart-style-row"><label class="chart-style-check-row"><input type="checkbox"><span class="chart-style-check-box" aria-hidden="true"></span><span>Vert Grid Lines</span></label></div>'), Sm = /* @__PURE__ */ p('<div class="chart-style-row"><label class="chart-style-check-row"><input type="checkbox"><span class="chart-style-check-box" aria-hidden="true"></span><span>Horz Grid Lines</span></label></div>'), Pm = ["#f6465d", "#f59e0b", "#fcd535", "#2ebd85", "#4098a8", "#22c1dc", "#3861fb", "#7b3fe4", "#ec8aa4", "#f7c56b", "#fff0a3", "#9ed4a4", "#83c7bb", "#8bdce6", "#8bb9f7", "#b7a1dc", "#c9343e", "#e76f20", "#f0b93a", "#3f8d3a", "#236e5a", "#237c88", "#1d3fbf", "#3a209f", "#ffffff", "#cbd5e1", "#9ca3af", "#6b7280", "#374151", "#111827", "#000000"], H0 = [{
   key: "candle_solid",
   text: "Candle"
 }, {
@@ -3773,7 +3778,7 @@ const cm = /* @__PURE__ */ p('<div class="chart-style-color-picker"><button type
 }, {
   key: "area",
   text: "Area"
-}], Z0 = [{
+}], q0 = [{
   key: "candle_solid",
   text: "Solid"
 }, {
@@ -3785,13 +3790,13 @@ const cm = /* @__PURE__ */ p('<div class="chart-style-color-picker"><button type
 }, {
   key: "candle_down_stroke",
   text: "Down Stroke"
-}], Sm = [{
+}], Dm = [{
   key: ze.Solid,
   text: "Solid"
 }, {
   key: ze.Dashed,
   text: "Dashed"
-}], Pm = [1, 2, 3, 4], H0 = [{
+}], Nm = [1, 2, 3, 4], Y0 = [{
   key: "candle.type",
   text: "Candle Type"
 }, {
@@ -3851,149 +3856,149 @@ const cm = /* @__PURE__ */ p('<div class="chart-style-color-picker"><button type
 }, {
   key: "grid.vertical.dashedValue",
   text: "Vertical Grid Dash"
-}], Dm = (e) => {
+}], Om = (e) => {
   const t = E.clone(e), r = E.formatValue(t, "candle.bar.upColor"), n = E.formatValue(t, "candle.bar.downColor"), a = E.formatValue(t, "candle.bar.noChangeColor");
   return nt(t, "candle.bar.borderUpColor", E.formatValue(t, "candle.bar.borderUpColor", r)), nt(t, "candle.bar.borderDownColor", E.formatValue(t, "candle.bar.borderDownColor", n)), nt(t, "candle.bar.borderNoChangeColor", E.formatValue(t, "candle.bar.borderNoChangeColor", a)), nt(t, "candle.bar.wickUpColor", E.formatValue(t, "candle.bar.wickUpColor", r)), nt(t, "candle.bar.wickDownColor", E.formatValue(t, "candle.bar.wickDownColor", n)), nt(t, "candle.bar.wickNoChangeColor", E.formatValue(t, "candle.bar.wickNoChangeColor", a)), t;
-}, Nm = (e) => {
-  const [t, r] = M(e.currentStyles), [n, a] = M(Dm(e.currentStyles)), [l, d] = M(j0(e.locale)), [h, v] = M(!1), [x, b] = M("settings"), [L, B] = M("symbol"), [N, Z] = M(null), [U, K] = M(null), z = () => {
-    v(window.innerWidth <= 768);
+}, Im = (e) => {
+  const [t, r] = T(e.currentStyles), [n, a] = T(Om(e.currentStyles)), [l, h] = T(Z0(e.locale)), [d, b] = T(!1), [x, v] = T("settings"), [L, B] = T("symbol"), [N, oe] = T(null), [V, R] = T(null), U = () => {
+    b(window.innerWidth <= 768);
   };
-  Vn(() => {
-    const A = (Y) => {
-      const W = Y.target;
-      W instanceof Element && (W.closest(".chart-style-color-picker") || W.closest(".chart-style-width-picker") || W.closest(".klinecharts-pro-select") || (Z(null), K(null)));
+  Rn(() => {
+    const M = (q) => {
+      const Y = q.target;
+      Y instanceof Element && (Y.closest(".chart-style-color-picker") || Y.closest(".chart-style-width-picker") || Y.closest(".klinecharts-pro-select") || (oe(null), R(null)));
     };
-    z(), window.addEventListener("resize", z), document.addEventListener("mousedown", A), Lt(() => {
-      document.removeEventListener("mousedown", A);
+    U(), window.addEventListener("resize", U), document.addEventListener("mousedown", M), wt(() => {
+      document.removeEventListener("mousedown", M);
     });
-  }), Lt(() => {
-    window.removeEventListener("resize", z);
+  }), wt(() => {
+    window.removeEventListener("resize", U);
   }), Re(() => {
-    d(j0(e.locale));
+    h(Z0(e.locale));
   });
-  const ce = (A, Y) => {
-    const W = {};
-    nt(W, A.key, Y);
-    const R = E.clone(t());
-    nt(R, A.key, Y), r(R), d(l().map((de) => ({
+  const ce = (M, q) => {
+    const Y = {};
+    nt(Y, M.key, q);
+    const K = E.clone(t());
+    nt(K, M.key, q), r(K), h(l().map((de) => ({
       ...de
-    }))), e.onChange(W);
-  }, j = (A, Y) => E.formatValue(n(), A, Y), J = (A, Y) => {
-    const W = E.clone(n());
-    nt(W, A, Y), a(W), e.onChange(te(W));
-  }, te = (A) => ({
+    }))), e.onChange(Y);
+  }, j = (M, q) => E.formatValue(n(), M, q), X = (M, q) => {
+    const Y = E.clone(n());
+    nt(Y, M, q), a(Y), e.onChange(ee(Y));
+  }, ee = (M) => ({
     candle: {
-      type: E.formatValue(A, "candle.type"),
+      type: E.formatValue(M, "candle.type"),
       bar: {
-        upColor: E.formatValue(A, "candle.bar.upColor"),
-        downColor: E.formatValue(A, "candle.bar.downColor"),
-        noChangeColor: E.formatValue(A, "candle.bar.noChangeColor"),
-        borderUpColor: E.formatValue(A, "candle.bar.borderUpColor", E.formatValue(A, "candle.bar.upColor")),
-        borderDownColor: E.formatValue(A, "candle.bar.borderDownColor", E.formatValue(A, "candle.bar.downColor")),
-        borderNoChangeColor: E.formatValue(A, "candle.bar.borderNoChangeColor", E.formatValue(A, "candle.bar.noChangeColor")),
-        wickUpColor: E.formatValue(A, "candle.bar.wickUpColor", E.formatValue(A, "candle.bar.upColor")),
-        wickDownColor: E.formatValue(A, "candle.bar.wickDownColor", E.formatValue(A, "candle.bar.downColor")),
-        wickNoChangeColor: E.formatValue(A, "candle.bar.wickNoChangeColor", E.formatValue(A, "candle.bar.noChangeColor"))
+        upColor: E.formatValue(M, "candle.bar.upColor"),
+        downColor: E.formatValue(M, "candle.bar.downColor"),
+        noChangeColor: E.formatValue(M, "candle.bar.noChangeColor"),
+        borderUpColor: E.formatValue(M, "candle.bar.borderUpColor", E.formatValue(M, "candle.bar.upColor")),
+        borderDownColor: E.formatValue(M, "candle.bar.borderDownColor", E.formatValue(M, "candle.bar.downColor")),
+        borderNoChangeColor: E.formatValue(M, "candle.bar.borderNoChangeColor", E.formatValue(M, "candle.bar.noChangeColor")),
+        wickUpColor: E.formatValue(M, "candle.bar.wickUpColor", E.formatValue(M, "candle.bar.upColor")),
+        wickDownColor: E.formatValue(M, "candle.bar.wickDownColor", E.formatValue(M, "candle.bar.downColor")),
+        wickNoChangeColor: E.formatValue(M, "candle.bar.wickNoChangeColor", E.formatValue(M, "candle.bar.noChangeColor"))
       }
     },
     grid: {
       horizontal: {
-        show: !!E.formatValue(A, "grid.horizontal.show"),
-        color: E.formatValue(A, "grid.horizontal.color"),
-        style: E.formatValue(A, "grid.horizontal.style"),
-        size: Number(E.formatValue(A, "grid.horizontal.size", 1)),
-        dashedValue: E.formatValue(A, "grid.horizontal.dashedValue", [2, 2])
+        show: !!E.formatValue(M, "grid.horizontal.show"),
+        color: E.formatValue(M, "grid.horizontal.color"),
+        style: E.formatValue(M, "grid.horizontal.style"),
+        size: Number(E.formatValue(M, "grid.horizontal.size", 1)),
+        dashedValue: E.formatValue(M, "grid.horizontal.dashedValue", [2, 2])
       },
       vertical: {
-        show: !!E.formatValue(A, "grid.vertical.show"),
-        color: E.formatValue(A, "grid.vertical.color"),
-        style: E.formatValue(A, "grid.vertical.style"),
-        size: Number(E.formatValue(A, "grid.vertical.size", 1)),
-        dashedValue: E.formatValue(A, "grid.vertical.dashedValue", [2, 2])
+        show: !!E.formatValue(M, "grid.vertical.show"),
+        color: E.formatValue(M, "grid.vertical.color"),
+        style: E.formatValue(M, "grid.vertical.style"),
+        size: Number(E.formatValue(M, "grid.vertical.size", 1)),
+        dashedValue: E.formatValue(M, "grid.vertical.dashedValue", [2, 2])
       }
     }
   }), pe = () => {
-    const A = te(n());
-    r(E.clone(n())), e.onChange(A), e.onClose();
-  }, H = () => {
-    const A = e.defaultStyles;
-    if (A) {
-      const Y = E.clone(n());
-      H0.forEach((W) => {
-        const R = W.key.includes("downColor") ? "candle.bar.downColor" : W.key.includes("NoChangeColor") ? "candle.bar.noChangeColor" : "candle.bar.upColor";
-        nt(Y, W.key, E.formatValue(A, W.key, E.formatValue(A, R)));
-      }), a(Y), r(E.clone(Y)), e.onChange(te(Y));
+    const M = ee(n());
+    r(E.clone(n())), e.onChange(M), e.onClose();
+  }, Z = () => {
+    const M = e.defaultStyles;
+    if (M) {
+      const q = E.clone(n());
+      Y0.forEach((Y) => {
+        const K = Y.key.includes("downColor") ? "candle.bar.downColor" : Y.key.includes("NoChangeColor") ? "candle.bar.noChangeColor" : "candle.bar.upColor";
+        nt(q, Y.key, E.formatValue(M, Y.key, E.formatValue(M, K)));
+      }), a(q), r(E.clone(q)), e.onChange(ee(q));
     } else
-      e.onRestoreDefault(H0), a(E.clone(e.currentStyles));
-  }, q = (A, Y = A) => {
-    const W = j(A, "#ffffff");
+      e.onRestoreDefault(Y0), a(E.clone(e.currentStyles));
+  }, H = (M, q = M) => {
+    const Y = j(M, "#ffffff");
     return (() => {
-      const R = cm.cloneNode(!0), de = R.firstChild;
+      const K = dm.cloneNode(!0), de = K.firstChild;
       return de.$$click = () => {
-        Z(N() === Y ? null : Y);
-      }, de.style.setProperty("background", W), C(R, (() => {
-        const he = G(() => N() === Y);
+        oe(N() === q ? null : q);
+      }, de.style.setProperty("background", Y), C(K, (() => {
+        const he = W(() => N() === q);
         return () => he() && (() => {
-          const re = um.cloneNode(!0), I = re.firstChild;
-          return C(I, w(b1, {
-            each: Mm,
+          const ne = hm.cloneNode(!0), I = ne.firstChild;
+          return C(I, w($1, {
+            each: Pm,
             children: (Q) => (() => {
-              const D = dm.cloneNode(!0);
+              const D = fm.cloneNode(!0);
               return D.$$click = () => {
-                J(A, Q), Z(null);
-              }, D.style.setProperty("background", Q), V(() => D.classList.toggle("selected", Q.toLowerCase() === W.toLowerCase())), D;
+                X(M, Q), oe(null);
+              }, D.style.setProperty("background", Q), z(() => D.classList.toggle("selected", Q.toLowerCase() === Y.toLowerCase())), D;
             })()
-          })), re;
+          })), ne;
         })();
-      })(), null), R;
+      })(), null), K;
     })();
-  }, ne = (A) => {
-    const Y = `${A}.style`, W = `${A}.color`, R = `${A}.size`, de = j(Y, ze.Dashed), he = Math.max(1, Number(j(R, 1)));
+  }, te = (M) => {
+    const q = `${M}.style`, Y = `${M}.color`, K = `${M}.size`, de = j(q, ze.Dashed), he = Math.max(1, Number(j(K, 1)));
     return (() => {
-      const re = hm.cloneNode(!0), I = re.firstChild, Q = I.firstChild, D = Q.firstChild;
-      return C(re, w(C1, {
+      const ne = mm.cloneNode(!0), I = ne.firstChild, Q = I.firstChild, D = Q.firstChild;
+      return C(ne, w(p1, {
         get style() {
           return {
-            width: h() ? "100%" : "134px"
+            width: d() ? "100%" : "134px"
           };
         },
         get value() {
           return de === ze.Solid ? "Solid" : "Dashed";
         },
-        dataSource: Sm,
+        dataSource: Dm,
         onSelected: (O) => {
           const F = O.key;
-          J(Y, F), J(`${A}.dashedValue`, F === ze.Solid ? [] : [2, 2]);
+          X(q, F), X(`${M}.dashedValue`, F === ze.Solid ? [] : [2, 2]);
         }
       }), I), Q.$$click = () => {
-        K(U() === R ? null : R);
+        R(V() === K ? null : K);
       }, D.style.setProperty("height", `${he}px`), C(I, (() => {
-        const O = G(() => U() === R);
+        const O = W(() => V() === K);
         return () => O() && (() => {
-          const F = fm.cloneNode(!0);
-          return C(F, w(b1, {
-            each: Pm,
+          const F = gm.cloneNode(!0);
+          return C(F, w($1, {
+            each: Nm,
             children: (ve) => (() => {
-              const Le = mm.cloneNode(!0), ye = Le.firstChild;
+              const Le = ym.cloneNode(!0), ye = Le.firstChild;
               return Le.$$click = () => {
-                J(R, ve), K(null);
+                X(K, ve), R(null);
               }, Le.classList.toggle("selected", he === ve), ye.style.setProperty("height", `${ve}px`), Le;
             })()
           })), F;
         })();
-      })(), null), C(re, () => q(W), null), re;
+      })(), null), C(ne, () => H(Y), null), ne;
     })();
   }, se = (() => {
-    const A = gm.cloneNode(!0), Y = A.firstChild, W = Y.nextSibling;
-    return Y.$$click = () => b("settings"), C(Y, () => c("setting", e.locale)), W.$$click = () => b("chartStyle"), V((R) => {
+    const M = Cm.cloneNode(!0), q = M.firstChild, Y = q.nextSibling;
+    return q.$$click = () => v("settings"), C(q, () => c("setting", e.locale)), Y.$$click = () => v("chartStyle"), z((K) => {
       const de = x() === "settings", he = x() === "chartStyle";
-      return de !== R._v$ && Y.classList.toggle("active", R._v$ = de), he !== R._v$2 && W.classList.toggle("active", R._v$2 = he), R;
+      return de !== K._v$ && q.classList.toggle("active", K._v$ = de), he !== K._v$2 && Y.classList.toggle("active", K._v$2 = he), K;
     }, {
       _v$: void 0,
       _v$2: void 0
-    }), A;
+    }), M;
   })();
-  return w(Tt, {
+  return w(Mt, {
     title: se,
     get width() {
       return x() === "chartStyle" ? 760 : 690;
@@ -4008,10 +4013,10 @@ const cm = /* @__PURE__ */ p('<div class="chart-style-color-picker"><button type
       return x() === "chartStyle" ? 170 : 200;
     },
     get isMobile() {
-      return h();
+      return d();
     },
     get buttons() {
-      return G(() => x() === "settings")() ? [{
+      return W(() => x() === "settings")() ? [{
         children: c("restore_default", e.locale),
         onClick: () => {
           e.onRestoreDefault(l()), e.onClose();
@@ -4019,7 +4024,7 @@ const cm = /* @__PURE__ */ p('<div class="chart-style-color-picker"><button type
       }] : [{
         type: "cancel",
         children: "Reset",
-        onClick: H
+        onClick: Z
       }, {
         children: "Save",
         onClick: pe
@@ -4029,126 +4034,126 @@ const cm = /* @__PURE__ */ p('<div class="chart-style-color-picker"><button type
       return e.onClose;
     },
     get children() {
-      return G(() => x() === "settings")() ? (() => {
-        const A = ym.cloneNode(!0);
-        return C(A, w(b1, {
+      return W(() => x() === "settings")() ? (() => {
+        const M = pm.cloneNode(!0);
+        return C(M, w($1, {
           get each() {
             return l();
           },
-          children: (Y) => {
-            let W;
-            const R = E.formatValue(t(), Y.key);
-            switch (Y.component) {
+          children: (q) => {
+            let Y;
+            const K = E.formatValue(t(), q.key);
+            switch (q.component) {
               case "select": {
-                const de = Y.key === "candle.type" ? "170px" : "120px";
-                W = w(C1, {
+                const de = q.key === "candle.type" ? "170px" : "120px";
+                Y = w(p1, {
                   get style() {
                     return {
-                      width: h() ? "100%" : de,
-                      "min-width": h() ? "auto" : de
+                      width: d() ? "100%" : de,
+                      "min-width": d() ? "auto" : de
                     };
                   },
                   get value() {
-                    return c(R, e.locale);
+                    return c(K, e.locale);
                   },
                   get dataSource() {
-                    return Y.dataSource;
+                    return q.dataSource;
                   },
                   onSelected: (he) => {
-                    const re = he.key;
-                    ce(Y, re);
+                    const ne = he.key;
+                    ce(q, ne);
                   }
                 });
                 break;
               }
               case "switch": {
-                const de = !!R;
-                W = w(Ul, {
+                const de = !!K;
+                Y = w(Vl, {
                   open: de,
                   onChange: () => {
-                    ce(Y, !de);
+                    ce(q, !de);
                   }
                 });
                 break;
               }
             }
             return (() => {
-              const de = Cm.cloneNode(!0), he = de.firstChild, re = he.nextSibling;
-              return C(he, () => Y.text), C(re, W), V(() => de.classList.toggle("mobile-item", !!h())), de;
+              const de = vm.cloneNode(!0), he = de.firstChild, ne = he.nextSibling;
+              return C(he, () => q.text), C(ne, Y), z(() => de.classList.toggle("mobile-item", !!d())), de;
             })();
           }
-        })), V(() => A.classList.toggle("mobile-layout", !!h())), A;
+        })), z(() => M.classList.toggle("mobile-layout", !!d())), M;
       })() : (() => {
-        const A = pm.cloneNode(!0), Y = A.firstChild, W = Y.firstChild, R = W.nextSibling, de = Y.nextSibling, he = de.firstChild;
-        return W.$$click = () => B("symbol"), R.$$click = () => B("background"), C(de, (() => {
-          const re = G(() => L() === "symbol");
-          return () => re() ? [vm.cloneNode(!0), (() => {
-            const I = bm.cloneNode(!0);
-            return I.firstChild, C(I, w(C1, {
+        const M = bm.cloneNode(!0), q = M.firstChild, Y = q.firstChild, K = Y.nextSibling, de = q.nextSibling, he = de.firstChild;
+        return Y.$$click = () => B("symbol"), K.$$click = () => B("background"), C(de, (() => {
+          const ne = W(() => L() === "symbol");
+          return () => ne() ? [$m.cloneNode(!0), (() => {
+            const I = _m.cloneNode(!0);
+            return I.firstChild, C(I, w(p1, {
               get style() {
                 return {
-                  width: h() ? "100%" : "170px"
+                  width: d() ? "100%" : "170px"
                 };
               },
               get value() {
                 var Q;
-                return ((Q = Q0.find((D) => D.key === j("candle.type"))) == null ? void 0 : Q.text) ?? "Candle";
+                return ((Q = H0.find((D) => D.key === j("candle.type"))) == null ? void 0 : Q.text) ?? "Candle";
               },
-              dataSource: Q0,
+              dataSource: H0,
               onSelected: (Q) => {
-                J("candle.type", Q.key);
+                X("candle.type", Q.key);
               }
             }), null), I;
           })(), (() => {
-            const I = $m.cloneNode(!0);
-            return I.firstChild, C(I, w(C1, {
+            const I = km.cloneNode(!0);
+            return I.firstChild, C(I, w(p1, {
               get style() {
                 return {
-                  width: h() ? "100%" : "170px"
+                  width: d() ? "100%" : "170px"
                 };
               },
               get value() {
                 var Q;
-                return ((Q = Z0.find((D) => D.key === j("candle.type"))) == null ? void 0 : Q.text) ?? "Solid";
+                return ((Q = q0.find((D) => D.key === j("candle.type"))) == null ? void 0 : Q.text) ?? "Solid";
               },
-              dataSource: Z0,
+              dataSource: q0,
               onSelected: (Q) => {
-                J("candle.type", Q.key);
+                X("candle.type", Q.key);
               }
             }), null), I;
-          })(), (() => {
-            const I = _m.cloneNode(!0), Q = I.firstChild, D = Q.nextSibling;
-            return C(D, () => q("candle.bar.upColor", "candle-stick-up"), null), C(D, () => q("candle.bar.downColor", "candle-stick-down"), null), I;
-          })(), (() => {
-            const I = km.cloneNode(!0), Q = I.firstChild, D = Q.nextSibling;
-            return C(D, () => q("candle.bar.borderUpColor", "border-up"), null), C(D, () => q("candle.bar.borderDownColor", "border-down"), null), I;
           })(), (() => {
             const I = xm.cloneNode(!0), Q = I.firstChild, D = Q.nextSibling;
-            return C(D, () => q("candle.bar.wickUpColor", "wick-up"), null), C(D, () => q("candle.bar.wickDownColor", "wick-down"), null), I;
-          })()] : [Lm.cloneNode(!0), (() => {
-            const I = wm.cloneNode(!0);
+            return C(D, () => H("candle.bar.upColor", "candle-stick-up"), null), C(D, () => H("candle.bar.downColor", "candle-stick-down"), null), I;
+          })(), (() => {
+            const I = Lm.cloneNode(!0), Q = I.firstChild, D = Q.nextSibling;
+            return C(D, () => H("candle.bar.borderUpColor", "border-up"), null), C(D, () => H("candle.bar.borderDownColor", "border-down"), null), I;
+          })(), (() => {
+            const I = wm.cloneNode(!0), Q = I.firstChild, D = Q.nextSibling;
+            return C(D, () => H("candle.bar.wickUpColor", "wick-up"), null), C(D, () => H("candle.bar.wickDownColor", "wick-down"), null), I;
+          })()] : [Am.cloneNode(!0), (() => {
+            const I = Mm.cloneNode(!0);
             return I.firstChild.nextSibling.style.setProperty("background", "var(--klinecharts-pro-background-color)"), I;
           })(), (() => {
             const I = Tm.cloneNode(!0), Q = I.firstChild, D = Q.firstChild;
-            return D.addEventListener("change", (O) => J("grid.vertical.show", O.currentTarget.checked)), C(I, () => ne("grid.vertical"), null), V(() => D.checked = !!j("grid.vertical.show")), I;
+            return D.addEventListener("change", (O) => X("grid.vertical.show", O.currentTarget.checked)), C(I, () => te("grid.vertical"), null), z(() => D.checked = !!j("grid.vertical.show")), I;
           })(), (() => {
-            const I = Am.cloneNode(!0), Q = I.firstChild, D = Q.firstChild;
-            return D.addEventListener("change", (O) => J("grid.horizontal.show", O.currentTarget.checked)), C(I, () => ne("grid.horizontal"), null), V(() => D.checked = !!j("grid.horizontal.show")), I;
+            const I = Sm.cloneNode(!0), Q = I.firstChild, D = Q.firstChild;
+            return D.addEventListener("change", (O) => X("grid.horizontal.show", O.currentTarget.checked)), C(I, () => te("grid.horizontal"), null), z(() => D.checked = !!j("grid.horizontal.show")), I;
           })()];
-        })(), he), V((re) => {
-          const I = !!h(), Q = L() === "symbol", D = L() === "background";
-          return I !== re._v$3 && A.classList.toggle("mobile-layout", re._v$3 = I), Q !== re._v$4 && W.classList.toggle("active", re._v$4 = Q), D !== re._v$5 && R.classList.toggle("active", re._v$5 = D), re;
+        })(), he), z((ne) => {
+          const I = !!d(), Q = L() === "symbol", D = L() === "background";
+          return I !== ne._v$3 && M.classList.toggle("mobile-layout", ne._v$3 = I), Q !== ne._v$4 && Y.classList.toggle("active", ne._v$4 = Q), D !== ne._v$5 && K.classList.toggle("active", ne._v$5 = D), ne;
         }, {
           _v$3: void 0,
           _v$4: void 0,
           _v$5: void 0
-        }), A;
+        }), M;
       })();
     }
   });
 };
 je(["click"]);
-const Om = /* @__PURE__ */ p('<img style="width:500px;margin-top: 20px">'), Im = (e) => w(Tt, {
+const Em = /* @__PURE__ */ p('<img style="width:500px;margin-top: 20px">'), Bm = (e) => w(Mt, {
   get title() {
     return c("screenshot", e.locale);
   },
@@ -4167,10 +4172,10 @@ const Om = /* @__PURE__ */ p('<img style="width:500px;margin-top: 20px">'), Im =
     return e.onClose;
   },
   get children() {
-    const t = Om.cloneNode(!0);
-    return V(() => Ie(t, "src", e.url)), t;
+    const t = Em.cloneNode(!0);
+    return z(() => Ie(t, "src", e.url)), t;
   }
-}), Em = {
+}), Fm = {
   AO: [
     { paramNameKey: "params_1", precision: 0, min: 1, default: 5 },
     { paramNameKey: "params_2", precision: 0, min: 1, default: 34 }
@@ -4296,9 +4301,9 @@ const Om = /* @__PURE__ */ p('<img style="width:500px;margin-top: 20px">'), Im =
     { paramNameKey: "WR4", precision: 0, min: 1, styleKey: "lines[3].color" },
     { paramNameKey: "WR5", precision: 0, min: 1, styleKey: "lines[4].color" }
   ]
-}, Bm = /* @__PURE__ */ p('<div class="klinecharts-pro-indicator-setting-modal-content"></div>'), Fm = /* @__PURE__ */ p("<span></span>"), Um = (e) => {
-  const [t, r] = M(E.clone(e.params.calcParams)), n = (a) => Em[a];
-  return w(Tt, {
+}, Um = /* @__PURE__ */ p('<div class="klinecharts-pro-indicator-setting-modal-content"></div>'), zm = /* @__PURE__ */ p("<span></span>"), Vm = (e) => {
+  const [t, r] = T(E.clone(e.params.calcParams)), n = (a) => Fm[a];
+  return w(Mt, {
     get title() {
       return e.params.indicatorName;
     },
@@ -4309,8 +4314,8 @@ const Om = /* @__PURE__ */ p('<img style="width:500px;margin-top: 20px">'), Im =
         children: c("confirm", e.locale),
         onClick: () => {
           const a = n(e.params.indicatorName), l = [];
-          E.clone(t()).forEach((d, h) => {
-            !E.isValid(d) || d === "" ? "default" in a[h] && l.push(a[h].default) : l.push(d);
+          E.clone(t()).forEach((h, d) => {
+            !E.isValid(h) || h === "" ? "default" in a[d] && l.push(a[d].default) : l.push(h);
           }), e.onConfirm(l), e.onClose();
         }
       }];
@@ -4319,16 +4324,16 @@ const Om = /* @__PURE__ */ p('<img style="width:500px;margin-top: 20px">'), Im =
       return e.onClose;
     },
     get children() {
-      const a = Bm.cloneNode(!0);
-      return C(a, () => n(e.params.indicatorName).map((l, d) => [(() => {
-        const h = Fm.cloneNode(!0);
-        return C(h, () => c(l.paramNameKey, e.locale)), h;
-      })(), w(Io, {
+      const a = Um.cloneNode(!0);
+      return C(a, () => n(e.params.indicatorName).map((l, h) => [(() => {
+        const d = zm.cloneNode(!0);
+        return C(d, () => c(l.paramNameKey, e.locale)), d;
+      })(), w(Bo, {
         style: {
           width: "200px"
         },
         get value() {
-          return t()[d] ?? "";
+          return t()[h] ?? "";
         },
         get precision() {
           return l.precision;
@@ -4336,16 +4341,16 @@ const Om = /* @__PURE__ */ p('<img style="width:500px;margin-top: 20px">'), Im =
         get min() {
           return l.min;
         },
-        onChange: (h) => {
-          const v = E.clone(t());
-          v[d] = h, r(v);
+        onChange: (d) => {
+          const b = E.clone(t());
+          b[h] = d, r(b);
         }
       })])), a;
     }
   });
-}, zm = /* @__PURE__ */ p('<svg viewBox="0 0 1024 1024"><path d="M945.066667 898.133333l-189.866667-189.866666c55.466667-64 87.466667-149.333333 87.466667-241.066667 0-204.8-168.533333-373.333333-373.333334-373.333333S96 264.533333 96 469.333333 264.533333 842.666667 469.333333 842.666667c91.733333 0 174.933333-34.133333 241.066667-87.466667l189.866667 189.866667c6.4 6.4 14.933333 8.533333 23.466666 8.533333s17.066667-2.133333 23.466667-8.533333c8.533333-12.8 8.533333-34.133333-2.133333-46.933334zM469.333333 778.666667C298.666667 778.666667 160 640 160 469.333333S298.666667 160 469.333333 160 778.666667 298.666667 778.666667 469.333333 640 778.666667 469.333333 778.666667z"></path></svg>'), Vm = /* @__PURE__ */ p('<img alt="symbol">'), Km = /* @__PURE__ */ p("<li><div><span></span></div></li>"), Rm = (e) => {
-  const [t, r] = M(""), [n] = S9(t, e.datafeed.searchSymbols.bind(e.datafeed));
-  return w(Tt, {
+}, Km = /* @__PURE__ */ p('<svg viewBox="0 0 1024 1024"><path d="M945.066667 898.133333l-189.866667-189.866666c55.466667-64 87.466667-149.333333 87.466667-241.066667 0-204.8-168.533333-373.333333-373.333334-373.333333S96 264.533333 96 469.333333 264.533333 842.666667 469.333333 842.666667c91.733333 0 174.933333-34.133333 241.066667-87.466667l189.866667 189.866667c6.4 6.4 14.933333 8.533333 23.466666 8.533333s17.066667-2.133333 23.466667-8.533333c8.533333-12.8 8.533333-34.133333-2.133333-46.933334zM469.333333 778.666667C298.666667 778.666667 160 640 160 469.333333S298.666667 160 469.333333 160 778.666667 298.666667 778.666667 469.333333 640 778.666667 469.333333 778.666667z"></path></svg>'), Rm = /* @__PURE__ */ p('<img alt="symbol">'), jm = /* @__PURE__ */ p("<li><div><span></span></div></li>"), Qm = (e) => {
+  const [t, r] = T(""), [n] = D9(t, e.datafeed.searchSymbols.bind(e.datafeed));
+  return w(Mt, {
     get title() {
       return c("symbol_search", e.locale);
     },
@@ -4354,13 +4359,13 @@ const Om = /* @__PURE__ */ p('<img style="width:500px;margin-top: 20px">'), Im =
       return e.onClose;
     },
     get children() {
-      return [w(Io, {
+      return [w(Bo, {
         class: "klinecharts-pro-symbol-search-modal-input",
         get placeholder() {
           return c("symbol_code", e.locale);
         },
         get suffix() {
-          return zm.cloneNode(!0);
+          return Km.cloneNode(!0);
         },
         get value() {
           return t();
@@ -4369,7 +4374,7 @@ const Om = /* @__PURE__ */ p('<img style="width:500px;margin-top: 20px">'), Im =
           const l = `${a}`;
           r(l);
         }
-      }), w(cn, {
+      }), w(un, {
         class: "klinecharts-pro-symbol-search-modal-list",
         get loading() {
           return n.loading;
@@ -4378,25 +4383,25 @@ const Om = /* @__PURE__ */ p('<img style="width:500px;margin-top: 20px">'), Im =
           return n() ?? [];
         },
         renderItem: (a) => (() => {
-          const l = Km.cloneNode(!0), d = l.firstChild, h = d.firstChild;
+          const l = jm.cloneNode(!0), h = l.firstChild, d = h.firstChild;
           return l.$$click = () => {
             e.onSymbolSelected(a), e.onClose();
-          }, C(d, w(le, {
+          }, C(h, w(le, {
             get when() {
               return a.logo;
             },
             get children() {
-              const v = Vm.cloneNode(!0);
-              return V(() => Ie(v, "src", a.logo)), v;
+              const b = Rm.cloneNode(!0);
+              return z(() => Ie(b, "src", a.logo)), b;
             }
-          }), h), C(h, () => a.shortName ?? a.ticker, null), C(h, () => `${a.name ? `(${a.name})` : ""}`, null), C(l, () => a.exchange ?? "", null), V(() => Ie(h, "title", a.name ?? "")), l;
+          }), d), C(d, () => a.shortName ?? a.ticker, null), C(d, () => `${a.name ? `(${a.name})` : ""}`, null), C(l, () => a.exchange ?? "", null), z(() => Ie(d, "title", a.name ?? "")), l;
         })()
       })];
     }
   });
 };
 je(["click"]);
-const jm = /* @__PURE__ */ p('<div class="klinecharts-pro-mobile-more-modal-content"><div class="item"><svg viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="20" height="20" rx="4" ry="4" fill="none" stroke="currentColor" stroke-width="2"></rect><path d="m15.92 13.9-3.65-3.55a.773.773 0 0 1 0-1.12c.32-.33.79-.33 1.11 0l3.02 3.38c.31.32.31.81 0 1.13-.16.16-.48.16-.48.16Z" fill="currentColor" stroke="1"></path><path d="m12.43 14.23-.48-.17q-.48-.48 0-.96l4.13-4.36c.31-.32.63-.32.95 0s.32.65 0 .97l-4.13 4.35c-.15.17-.31.17-.47.17Zm-1.11-9.52c.31 0 1.11.16 1.11.97 0 .64-.95.48-1.27.48-1.43 0-1.91.81-2.07 1.45l-.31 1.94h1.58c.32 0 .64.32.64.64 0 .33-.32.65-.64.65H8.62l-1.11 4.99c-.16 1.46-1.11 1.46-1.59 0L7.03 11H5.6c-.31 0-.63-.32-.63-.65 0-.64.32-.8.63-.8h1.75l.48-2.1c.31-2.74 2.69-2.9 3.49-2.74Z" fill="noncurrentColore" stroke="1"></path></svg><span></span></div><div class="item"><svg width="20" height="20" viewBox="0 0 20 20"><path d="M18.5446,9.09091C18.3333,6.61616,17.2887,4.31818,15.5751,2.63889C13.8498,0.94697,11.6197,0,9.28404,0C8.02817,0,6.81925,0.265151,5.66901,0.782828C5.65728,0.782828,5.65728,0.795454,5.64554,0.795454C5.6338,0.795454,5.6338,0.808081,5.62207,0.808081C4.53052,1.31313,3.55634,2.0202,2.71127,2.92929C1.85446,3.85101,1.18545,4.91162,0.715963,6.11111C0.246479,7.33586,0,8.64899,0,10C0,10.8712,0.105634,11.7172,0.305164,12.5379C0.305164,12.5631,0.316901,12.5884,0.328638,12.6136C0.739437,14.2298,1.51408,15.7197,2.62911,16.9571C4.07277,18.548,5.92723,19.5581,7.93427,19.8737C7.95775,19.8737,7.96948,19.8864,7.99296,19.8864C8.3216,19.9369,8.66197,19.9747,9.00235,19.9747L9.21362,19.9747C9.61268,19.9747,10.3756,19.9369,11.0094,19.697C11.1737,19.6338,11.3028,19.5076,11.3732,19.3434C11.4437,19.1793,11.4554,18.9899,11.3967,18.8131C11.3028,18.5354,11.0563,18.346,10.7864,18.346C10.716,18.346,10.6338,18.3586,10.5634,18.3838C10.0939,18.5606,9.46009,18.5859,9.20188,18.5859L9.09624,18.5859C9.20188,18.2702,9.23709,17.9167,9.15493,17.5505C9.00235,16.8939,8.50939,16.3384,7.58216,15.7955L7.19484,15.5682C6.57277,15.2146,6.23239,15.0253,6.03286,14.7348C5.83333,14.4444,5.69249,13.9899,5.51643,12.9798C5.38732,12.298,5.04695,11.7677,4.50704,11.4646C4.14319,11.2626,3.70892,11.149,3.19249,11.149C2.82864,11.149,2.42958,11.1995,2.00704,11.3005C1.79578,11.351,1.59624,11.4141,1.42019,11.4646C1.33803,10.9848,1.30282,10.4798,1.30282,9.97475C1.30282,6.93182,2.76995,4.26768,4.98826,2.72727C5,3.00505,5.05869,3.29545,5.17606,3.57323C5.48122,4.26768,6.10329,4.7096,7.01878,4.89899C7.06573,4.91162,7.10094,4.91162,7.13615,4.91162L7.1831,4.91162C7.26526,4.91162,7.57042,4.92424,7.88732,5.0505C8.3216,5.2399,8.56808,5.55555,8.65023,6.04798C8.84977,7.61364,9.07277,10.4293,8.79108,11.3384C8.76761,11.4141,8.75587,11.4899,8.75587,11.5657C8.75587,11.9444,9.0493,12.2601,9.40141,12.2601C9.57747,12.2601,9.74179,12.1843,9.85915,12.0581C9.97653,11.9318,12.6174,9.05303,13.3216,8.09343C13.4038,7.97979,13.4859,7.87878,13.5798,7.76515C13.9202,7.33586,14.2723,6.90656,14.4014,6.26262C14.554,5.56818,14.4014,4.79798,13.9437,3.85101C13.615,3.16919,13.5563,2.86616,13.5446,2.75252C13.5563,2.7399,13.5798,2.72727,13.6033,2.71464C15.6221,4.10353,17.0188,6.43939,17.2535,9.19192C17.2887,9.55808,17.5587,9.82323,17.8991,9.82323L17.9577,9.82323C18.3099,9.8106,18.5681,9.48232,18.5446,9.09091ZM3.19249,12.5631C3.48592,12.5631,3.72066,12.6136,3.89671,12.7146C4.08451,12.8283,4.19014,12.9924,4.23709,13.2702C4.43662,14.3434,4.61268,15.0631,5,15.6061C5.37559,16.1364,5.85681,16.4015,6.58451,16.8182L6.60798,16.8308C6.71362,16.8939,6.84272,16.9571,6.96009,17.0328C7.69953,17.4621,7.86385,17.7525,7.89906,17.8914C7.93427,18.0303,7.85211,18.2323,7.74648,18.4343C4.91784,17.8535,2.65258,15.6944,1.73709,12.8283C2.15962,12.702,2.71127,12.5631,3.19249,12.5631ZM12.7934,4.5202C13.4272,5.83333,13.1455,6.18687,12.5822,6.89394C12.4883,7.00758,12.3944,7.12121,12.3005,7.24747C11.9484,7.72727,11.0211,8.77525,10.2113,9.68434C10.2113,9.24242,10.1878,8.73737,10.1526,8.19444C10.0704,6.95707,9.92958,5.90909,9.92958,5.87121L9.92958,5.83333C9.75352,4.83586,9.20188,4.11616,8.3216,3.76263C7.82864,3.56061,7.37089,3.53535,7.19484,3.53535C6.73709,3.43434,6.4554,3.24495,6.33803,2.99242C6.19718,2.68939,6.29108,2.24747,6.38498,1.9697C7.28873,1.59091,8.26291,1.37626,9.28404,1.37626C10.3873,1.37626,11.4437,1.61616,12.4061,2.04545C12.3357,2.18434,12.277,2.34848,12.2535,2.5505C12.2066,3.04293,12.3709,3.64899,12.7934,4.5202Z"></path></svg><span></span></div><div class="item"><svg viewBox="0 0 20 20"><rect x="3" y="4" width="14" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"></rect><path d="M6 2.5v4M14 2.5v4M3 8h14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path><path d="M10 11v3l2.2 1.3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg><span>Time Tools</span></div><div class="item"><svg viewBox="0 0 20 20"><path d="M19.7361,12.542L18.1916,11.2919C18.2647,10.8678,18.3025,10.4347,18.3025,10.0017C18.3025,9.56861,18.2647,9.13555,18.1916,8.71142L19.7361,7.46135C19.9743,7.26938,20.0615,6.95686,19.9554,6.6756L19.9342,6.61756C19.5074,5.49026,18.8755,4.45449,18.0549,3.53926L18.0124,3.49238C17.8096,3.26692,17.4819,3.1821,17.1848,3.28032L15.2677,3.92544C14.5603,3.3763,13.7704,2.94324,12.9168,2.63966L12.5466,0.742229C12.49,0.449802,12.2472,0.222111,11.9383,0.168536L11.8746,0.157375C10.6461,-0.0524583,9.35391,-0.0524583,8.1254,0.157375L8.06174,0.168536C7.75284,0.222111,7.50997,0.449802,7.45338,0.742229L7.08082,2.64859C6.2343,2.95217,5.44909,3.383,4.74641,3.92991L2.81522,3.28032C2.52047,3.1821,2.19036,3.26469,1.98757,3.49238L1.94513,3.53926C1.12455,4.45672,0.492609,5.49249,0.0658141,6.61756L0.0445921,6.6756C-0.0615171,6.95463,0.0257283,7.26715,0.263885,7.46135L1.82723,8.72482C1.75413,9.14448,1.71876,9.57308,1.71876,9.99944C1.71876,10.428,1.75413,10.8566,1.82723,11.2741L0.263885,12.5375C0.025729,12.7295,-0.0615164,13.042,0.0445929,13.3233L0.0658148,13.3813C0.49261,14.5064,1.12455,15.5444,1.94513,16.4596L1.98757,16.5065C2.19036,16.732,2.51812,16.8168,2.81522,16.7186L4.74641,16.069C5.44909,16.6159,6.2343,17.0489,7.08082,17.3503L7.45338,19.2567C7.50997,19.5491,7.75284,19.7768,8.06174,19.8303L8.1254,19.8415C8.74084,19.9464,9.37042,20,10,20C10.6296,20,11.2615,19.9464,11.8746,19.8415L11.9383,19.8303C12.2472,19.7768,12.49,19.5491,12.5466,19.2567L12.9168,17.3592C13.7704,17.0556,14.5603,16.6248,15.2677,16.0734L17.1848,16.7186C17.4795,16.8168,17.8096,16.7342,18.0124,16.5065L18.0549,16.4596C18.8755,15.5422,19.5074,14.5064,19.9342,13.3813L19.9554,13.3233C20.0615,13.0487,19.9743,12.7362,19.7361,12.542ZM16.5175,8.97483C16.5764,9.3119,16.6071,9.65791,16.6071,10.0039C16.6071,10.3499,16.5764,10.6959,16.5175,11.033L16.3618,11.9281L18.1233,13.3545C17.8568,13.9372,17.5196,14.4863,17.1188,14.9975L14.9305,14.2631L14.1901,14.839C13.6266,15.2765,12.9994,15.6203,12.3203,15.8614L11.4219,16.1806L10.9998,18.3459C10.3372,18.4173,9.66045,18.4173,8.9955,18.3459L8.57342,16.1761L7.6821,15.8524C7.01008,15.6114,6.38521,15.2676,5.82637,14.8323L5.08596,14.2541L2.88361,14.9953C2.48275,14.4841,2.14791,13.9327,1.8791,13.3523L3.65938,11.9125L3.50611,11.0196C3.44952,10.687,3.41887,10.3432,3.41887,10.0039C3.41887,9.66237,3.44716,9.32083,3.50611,8.98822L3.65938,8.09531L1.8791,6.6555C2.14556,6.07288,2.48275,5.52374,2.88361,5.01255L5.08596,5.75367L5.82637,5.17551C6.38521,4.74022,7.01008,4.39645,7.6821,4.15536L8.57578,3.83615L8.99786,1.66638C9.66045,1.59495,10.3372,1.59495,11.0021,1.66638L11.4242,3.83168L12.3226,4.1509C12.9994,4.39198,13.6289,4.73575,14.1925,5.17328L14.9329,5.7492L17.1211,5.01479C17.522,5.52598,17.8568,6.07734,18.1256,6.65773L16.3642,8.08416L16.5175,8.97483ZM10.0024,5.85189C7.7104,5.85189,5.85231,7.61092,5.85231,9.78068C5.85231,11.9504,7.7104,13.7095,10.0024,13.7095C12.2943,13.7095,14.1524,11.9504,14.1524,9.78068C14.1524,7.61092,12.2943,5.85189,10.0024,5.85189ZM11.8699,11.5486C11.37,12.0196,10.7074,12.2808,10.0024,12.2808C9.29732,12.2808,8.63473,12.0196,8.13483,11.5486C7.6373,11.0754,7.36142,10.4481,7.36142,9.78068C7.36142,9.11323,7.6373,8.48596,8.13483,8.01272C8.63473,7.53948,9.29732,7.28054,10.0024,7.28054C10.7074,7.28054,11.37,7.53948,11.8699,8.01272C12.3674,8.48596,12.6433,9.11323,12.6433,9.78068C12.6433,10.4481,12.3674,11.0754,11.8699,11.5486Z"></path></svg><span></span></div></div>'), Qm = (e) => w(Tt, {
+const Zm = /* @__PURE__ */ p('<div class="klinecharts-pro-mobile-more-modal-content"><div class="item"><svg viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="20" height="20" rx="4" ry="4" fill="none" stroke="currentColor" stroke-width="2"></rect><path d="m15.92 13.9-3.65-3.55a.773.773 0 0 1 0-1.12c.32-.33.79-.33 1.11 0l3.02 3.38c.31.32.31.81 0 1.13-.16.16-.48.16-.48.16Z" fill="currentColor" stroke="1"></path><path d="m12.43 14.23-.48-.17q-.48-.48 0-.96l4.13-4.36c.31-.32.63-.32.95 0s.32.65 0 .97l-4.13 4.35c-.15.17-.31.17-.47.17Zm-1.11-9.52c.31 0 1.11.16 1.11.97 0 .64-.95.48-1.27.48-1.43 0-1.91.81-2.07 1.45l-.31 1.94h1.58c.32 0 .64.32.64.64 0 .33-.32.65-.64.65H8.62l-1.11 4.99c-.16 1.46-1.11 1.46-1.59 0L7.03 11H5.6c-.31 0-.63-.32-.63-.65 0-.64.32-.8.63-.8h1.75l.48-2.1c.31-2.74 2.69-2.9 3.49-2.74Z" fill="noncurrentColore" stroke="1"></path></svg><span></span></div><div class="item"><svg width="20" height="20" viewBox="0 0 20 20"><path d="M18.5446,9.09091C18.3333,6.61616,17.2887,4.31818,15.5751,2.63889C13.8498,0.94697,11.6197,0,9.28404,0C8.02817,0,6.81925,0.265151,5.66901,0.782828C5.65728,0.782828,5.65728,0.795454,5.64554,0.795454C5.6338,0.795454,5.6338,0.808081,5.62207,0.808081C4.53052,1.31313,3.55634,2.0202,2.71127,2.92929C1.85446,3.85101,1.18545,4.91162,0.715963,6.11111C0.246479,7.33586,0,8.64899,0,10C0,10.8712,0.105634,11.7172,0.305164,12.5379C0.305164,12.5631,0.316901,12.5884,0.328638,12.6136C0.739437,14.2298,1.51408,15.7197,2.62911,16.9571C4.07277,18.548,5.92723,19.5581,7.93427,19.8737C7.95775,19.8737,7.96948,19.8864,7.99296,19.8864C8.3216,19.9369,8.66197,19.9747,9.00235,19.9747L9.21362,19.9747C9.61268,19.9747,10.3756,19.9369,11.0094,19.697C11.1737,19.6338,11.3028,19.5076,11.3732,19.3434C11.4437,19.1793,11.4554,18.9899,11.3967,18.8131C11.3028,18.5354,11.0563,18.346,10.7864,18.346C10.716,18.346,10.6338,18.3586,10.5634,18.3838C10.0939,18.5606,9.46009,18.5859,9.20188,18.5859L9.09624,18.5859C9.20188,18.2702,9.23709,17.9167,9.15493,17.5505C9.00235,16.8939,8.50939,16.3384,7.58216,15.7955L7.19484,15.5682C6.57277,15.2146,6.23239,15.0253,6.03286,14.7348C5.83333,14.4444,5.69249,13.9899,5.51643,12.9798C5.38732,12.298,5.04695,11.7677,4.50704,11.4646C4.14319,11.2626,3.70892,11.149,3.19249,11.149C2.82864,11.149,2.42958,11.1995,2.00704,11.3005C1.79578,11.351,1.59624,11.4141,1.42019,11.4646C1.33803,10.9848,1.30282,10.4798,1.30282,9.97475C1.30282,6.93182,2.76995,4.26768,4.98826,2.72727C5,3.00505,5.05869,3.29545,5.17606,3.57323C5.48122,4.26768,6.10329,4.7096,7.01878,4.89899C7.06573,4.91162,7.10094,4.91162,7.13615,4.91162L7.1831,4.91162C7.26526,4.91162,7.57042,4.92424,7.88732,5.0505C8.3216,5.2399,8.56808,5.55555,8.65023,6.04798C8.84977,7.61364,9.07277,10.4293,8.79108,11.3384C8.76761,11.4141,8.75587,11.4899,8.75587,11.5657C8.75587,11.9444,9.0493,12.2601,9.40141,12.2601C9.57747,12.2601,9.74179,12.1843,9.85915,12.0581C9.97653,11.9318,12.6174,9.05303,13.3216,8.09343C13.4038,7.97979,13.4859,7.87878,13.5798,7.76515C13.9202,7.33586,14.2723,6.90656,14.4014,6.26262C14.554,5.56818,14.4014,4.79798,13.9437,3.85101C13.615,3.16919,13.5563,2.86616,13.5446,2.75252C13.5563,2.7399,13.5798,2.72727,13.6033,2.71464C15.6221,4.10353,17.0188,6.43939,17.2535,9.19192C17.2887,9.55808,17.5587,9.82323,17.8991,9.82323L17.9577,9.82323C18.3099,9.8106,18.5681,9.48232,18.5446,9.09091ZM3.19249,12.5631C3.48592,12.5631,3.72066,12.6136,3.89671,12.7146C4.08451,12.8283,4.19014,12.9924,4.23709,13.2702C4.43662,14.3434,4.61268,15.0631,5,15.6061C5.37559,16.1364,5.85681,16.4015,6.58451,16.8182L6.60798,16.8308C6.71362,16.8939,6.84272,16.9571,6.96009,17.0328C7.69953,17.4621,7.86385,17.7525,7.89906,17.8914C7.93427,18.0303,7.85211,18.2323,7.74648,18.4343C4.91784,17.8535,2.65258,15.6944,1.73709,12.8283C2.15962,12.702,2.71127,12.5631,3.19249,12.5631ZM12.7934,4.5202C13.4272,5.83333,13.1455,6.18687,12.5822,6.89394C12.4883,7.00758,12.3944,7.12121,12.3005,7.24747C11.9484,7.72727,11.0211,8.77525,10.2113,9.68434C10.2113,9.24242,10.1878,8.73737,10.1526,8.19444C10.0704,6.95707,9.92958,5.90909,9.92958,5.87121L9.92958,5.83333C9.75352,4.83586,9.20188,4.11616,8.3216,3.76263C7.82864,3.56061,7.37089,3.53535,7.19484,3.53535C6.73709,3.43434,6.4554,3.24495,6.33803,2.99242C6.19718,2.68939,6.29108,2.24747,6.38498,1.9697C7.28873,1.59091,8.26291,1.37626,9.28404,1.37626C10.3873,1.37626,11.4437,1.61616,12.4061,2.04545C12.3357,2.18434,12.277,2.34848,12.2535,2.5505C12.2066,3.04293,12.3709,3.64899,12.7934,4.5202Z"></path></svg><span></span></div><div class="item"><svg viewBox="0 0 20 20"><rect x="3" y="4" width="14" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"></rect><path d="M6 2.5v4M14 2.5v4M3 8h14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path><path d="M10 11v3l2.2 1.3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg><span>Time Tools</span></div><div class="item"><svg viewBox="0 0 20 20"><path d="M19.7361,12.542L18.1916,11.2919C18.2647,10.8678,18.3025,10.4347,18.3025,10.0017C18.3025,9.56861,18.2647,9.13555,18.1916,8.71142L19.7361,7.46135C19.9743,7.26938,20.0615,6.95686,19.9554,6.6756L19.9342,6.61756C19.5074,5.49026,18.8755,4.45449,18.0549,3.53926L18.0124,3.49238C17.8096,3.26692,17.4819,3.1821,17.1848,3.28032L15.2677,3.92544C14.5603,3.3763,13.7704,2.94324,12.9168,2.63966L12.5466,0.742229C12.49,0.449802,12.2472,0.222111,11.9383,0.168536L11.8746,0.157375C10.6461,-0.0524583,9.35391,-0.0524583,8.1254,0.157375L8.06174,0.168536C7.75284,0.222111,7.50997,0.449802,7.45338,0.742229L7.08082,2.64859C6.2343,2.95217,5.44909,3.383,4.74641,3.92991L2.81522,3.28032C2.52047,3.1821,2.19036,3.26469,1.98757,3.49238L1.94513,3.53926C1.12455,4.45672,0.492609,5.49249,0.0658141,6.61756L0.0445921,6.6756C-0.0615171,6.95463,0.0257283,7.26715,0.263885,7.46135L1.82723,8.72482C1.75413,9.14448,1.71876,9.57308,1.71876,9.99944C1.71876,10.428,1.75413,10.8566,1.82723,11.2741L0.263885,12.5375C0.025729,12.7295,-0.0615164,13.042,0.0445929,13.3233L0.0658148,13.3813C0.49261,14.5064,1.12455,15.5444,1.94513,16.4596L1.98757,16.5065C2.19036,16.732,2.51812,16.8168,2.81522,16.7186L4.74641,16.069C5.44909,16.6159,6.2343,17.0489,7.08082,17.3503L7.45338,19.2567C7.50997,19.5491,7.75284,19.7768,8.06174,19.8303L8.1254,19.8415C8.74084,19.9464,9.37042,20,10,20C10.6296,20,11.2615,19.9464,11.8746,19.8415L11.9383,19.8303C12.2472,19.7768,12.49,19.5491,12.5466,19.2567L12.9168,17.3592C13.7704,17.0556,14.5603,16.6248,15.2677,16.0734L17.1848,16.7186C17.4795,16.8168,17.8096,16.7342,18.0124,16.5065L18.0549,16.4596C18.8755,15.5422,19.5074,14.5064,19.9342,13.3813L19.9554,13.3233C20.0615,13.0487,19.9743,12.7362,19.7361,12.542ZM16.5175,8.97483C16.5764,9.3119,16.6071,9.65791,16.6071,10.0039C16.6071,10.3499,16.5764,10.6959,16.5175,11.033L16.3618,11.9281L18.1233,13.3545C17.8568,13.9372,17.5196,14.4863,17.1188,14.9975L14.9305,14.2631L14.1901,14.839C13.6266,15.2765,12.9994,15.6203,12.3203,15.8614L11.4219,16.1806L10.9998,18.3459C10.3372,18.4173,9.66045,18.4173,8.9955,18.3459L8.57342,16.1761L7.6821,15.8524C7.01008,15.6114,6.38521,15.2676,5.82637,14.8323L5.08596,14.2541L2.88361,14.9953C2.48275,14.4841,2.14791,13.9327,1.8791,13.3523L3.65938,11.9125L3.50611,11.0196C3.44952,10.687,3.41887,10.3432,3.41887,10.0039C3.41887,9.66237,3.44716,9.32083,3.50611,8.98822L3.65938,8.09531L1.8791,6.6555C2.14556,6.07288,2.48275,5.52374,2.88361,5.01255L5.08596,5.75367L5.82637,5.17551C6.38521,4.74022,7.01008,4.39645,7.6821,4.15536L8.57578,3.83615L8.99786,1.66638C9.66045,1.59495,10.3372,1.59495,11.0021,1.66638L11.4242,3.83168L12.3226,4.1509C12.9994,4.39198,13.6289,4.73575,14.1925,5.17328L14.9329,5.7492L17.1211,5.01479C17.522,5.52598,17.8568,6.07734,18.1256,6.65773L16.3642,8.08416L16.5175,8.97483ZM10.0024,5.85189C7.7104,5.85189,5.85231,7.61092,5.85231,9.78068C5.85231,11.9504,7.7104,13.7095,10.0024,13.7095C12.2943,13.7095,14.1524,11.9504,14.1524,9.78068C14.1524,7.61092,12.2943,5.85189,10.0024,5.85189ZM11.8699,11.5486C11.37,12.0196,10.7074,12.2808,10.0024,12.2808C9.29732,12.2808,8.63473,12.0196,8.13483,11.5486C7.6373,11.0754,7.36142,10.4481,7.36142,9.78068C7.36142,9.11323,7.6373,8.48596,8.13483,8.01272C8.63473,7.53948,9.29732,7.28054,10.0024,7.28054C10.7074,7.28054,11.37,7.53948,11.8699,8.01272C12.3674,8.48596,12.6433,9.11323,12.6433,9.78068C12.6433,10.4481,12.3674,11.0754,11.8699,11.5486Z"></path></svg><span></span></div></div>'), Hm = (e) => w(Mt, {
   get title() {
     return c("more", e.locale);
   },
@@ -4405,12 +4410,12 @@ const jm = /* @__PURE__ */ p('<div class="klinecharts-pro-mobile-more-modal-cont
     return e.onClose;
   },
   get children() {
-    const t = jm.cloneNode(!0), r = t.firstChild, n = r.firstChild, a = n.nextSibling, l = r.nextSibling, d = l.firstChild, h = d.nextSibling, v = l.nextSibling, x = v.nextSibling, b = x.firstChild, L = b.nextSibling;
+    const t = Zm.cloneNode(!0), r = t.firstChild, n = r.firstChild, a = n.nextSibling, l = r.nextSibling, h = l.firstChild, d = h.nextSibling, b = l.nextSibling, x = b.nextSibling, v = x.firstChild, L = v.nextSibling;
     return r.$$click = () => {
       e.onIndicatorClick(), e.onClose();
     }, C(a, () => c("indicator", e.locale)), l.$$click = () => {
       e.onTimezoneClick(), e.onClose();
-    }, C(h, () => c("timezone", e.locale)), v.$$click = () => {
+    }, C(d, () => c("timezone", e.locale)), b.$$click = () => {
       e.onTimeToolsClick(), e.onClose();
     }, x.$$click = () => {
       e.onSettingClick(), e.onClose();
@@ -4418,7 +4423,7 @@ const jm = /* @__PURE__ */ p('<div class="klinecharts-pro-mobile-more-modal-cont
   }
 });
 je(["click"]);
-const Zm = /* @__PURE__ */ p('<div class="klinecharts-pro-time-tools-picker"></div>'), Hm = /* @__PURE__ */ p('<label class="klinecharts-pro-time-tools-field"><button type="button" class="klinecharts-pro-time-tools-input"><span></span><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"></rect><path d="M8 3v4M16 3v4M4 10h16"></path></svg></button></label>'), qm = /* @__PURE__ */ p("<span></span>"), Ym = /* @__PURE__ */ p('<div class="klinecharts-pro-time-tools-calendar"><div class="klinecharts-pro-time-tools-month"><button type="button">&lt;&lt;</button><button type="button">&lt;</button><button type="button" class="calendar-title"></button><button type="button">></button><button type="button">>></button></div></div>'), Wm = /* @__PURE__ */ p('<div class="klinecharts-pro-time-tools-grid"></div>'), Gm = /* @__PURE__ */ p('<span class="weekday"></span>'), Et = /* @__PURE__ */ p('<button type="button"></button>'), Xm = /* @__PURE__ */ p('<div class="klinecharts-pro-time-tools-month-grid"></div>'), Jm = /* @__PURE__ */ p('<div class="klinecharts-pro-time-tools-month-grid year-grid"></div>'), eg = /* @__PURE__ */ p('<div class="klinecharts-pro-time-tools-spinners"><div class="spinner-column scrollable"></div><div class="spinner-column scrollable"></div><div class="spinner-column"></div></div>'), tg = /* @__PURE__ */ p('<div class="klinecharts-pro-time-tools-content"></div>'), ng = /* @__PURE__ */ p('<div class="klinecharts-pro-time-tools-tabs"></div>'), rg = /* @__PURE__ */ p('<div class="klinecharts-pro-time-tools-range-panel"><div class="klinecharts-pro-time-tools-range-header"><button type="button"></button><span class="klinecharts-pro-time-tools-range-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14"></path><path d="m13 6 6 6-6 6"></path></svg></span><button type="button"></button><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"></rect><path d="M8 3v4M16 3v4M4 10h16"></path></svg></div></div>'), og = /* @__PURE__ */ p('<div class="klinecharts-pro-time-tools-panel"><div class="klinecharts-pro-time-tools-row"><div><strong>Time Anchor</strong><span>Anchor to a time on the chart when switching between intervals</span></div><button type="button"><span></span></button></div><div><div><strong>Anchor Point</strong></div><select><option value="date">Date</option><option value="left">Left</option><option value="center">Center</option><option value="right">Right</option></select></div><div><div><strong>Anchor line</strong><span>Mark the anchored time on the chart with a vertical line</span></div><button type="button"><span></span></button></div><div><div><strong>Across Tokens</strong><span>Retain onscreen chart range when switching symbols</span></div><button type="button"><span></span></button></div></div>'), ig = /* @__PURE__ */ p('<div class="klinecharts-pro-time-tools-anchor-date"></div>'), ag = [{
+const qm = /* @__PURE__ */ p('<div class="klinecharts-pro-time-tools-picker"></div>'), Ym = /* @__PURE__ */ p('<label class="klinecharts-pro-time-tools-field"><button type="button" class="klinecharts-pro-time-tools-input"><span></span><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"></rect><path d="M8 3v4M16 3v4M4 10h16"></path></svg></button></label>'), Wm = /* @__PURE__ */ p("<span></span>"), Gm = /* @__PURE__ */ p('<div class="klinecharts-pro-time-tools-calendar"><div class="klinecharts-pro-time-tools-month"><button type="button">&lt;&lt;</button><button type="button">&lt;</button><button type="button" class="calendar-title"></button><button type="button">></button><button type="button">>></button></div></div>'), Xm = /* @__PURE__ */ p('<div class="klinecharts-pro-time-tools-grid"></div>'), Jm = /* @__PURE__ */ p('<span class="weekday"></span>'), Bt = /* @__PURE__ */ p('<button type="button"></button>'), eg = /* @__PURE__ */ p('<div class="klinecharts-pro-time-tools-month-grid"></div>'), tg = /* @__PURE__ */ p('<div class="klinecharts-pro-time-tools-month-grid year-grid"></div>'), ng = /* @__PURE__ */ p('<div class="klinecharts-pro-time-tools-spinners"><div class="spinner-column scrollable"></div><div class="spinner-column scrollable"></div><div class="spinner-column"></div></div>'), rg = /* @__PURE__ */ p('<div class="klinecharts-pro-time-tools-content"></div>'), og = /* @__PURE__ */ p('<div class="klinecharts-pro-time-tools-tabs"></div>'), ig = /* @__PURE__ */ p('<div class="klinecharts-pro-time-tools-range-panel"><div class="klinecharts-pro-time-tools-range-header"><button type="button"></button><span class="klinecharts-pro-time-tools-range-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14"></path><path d="m13 6 6 6-6 6"></path></svg></span><button type="button"></button><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"></rect><path d="M8 3v4M16 3v4M4 10h16"></path></svg></div></div>'), ag = /* @__PURE__ */ p('<div class="klinecharts-pro-time-tools-panel"><div class="klinecharts-pro-time-tools-row"><div><strong>Time Anchor</strong><span>Anchor to a time on the chart when switching between intervals</span></div><button type="button"><span></span></button></div><div><div><strong>Anchor Point</strong></div><select><option value="date">Date</option><option value="left">Left</option><option value="center">Center</option><option value="right">Right</option></select></div><div><div><strong>Anchor line</strong><span>Mark the anchored time on the chart with a vertical line</span></div><button type="button"><span></span></button></div><div><div><strong>Across Tokens</strong><span>Retain onscreen chart range when switching symbols</span></div><button type="button"><span></span></button></div></div>'), sg = /* @__PURE__ */ p('<div class="klinecharts-pro-time-tools-anchor-date"></div>'), lg = [{
   key: "goToDate",
   label: "Go to Date"
 }, {
@@ -4427,7 +4432,7 @@ const Zm = /* @__PURE__ */ p('<div class="klinecharts-pro-time-tools-picker"></d
 }, {
   key: "timeAnchor",
   label: "Time Anchor"
-}], sg = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"], q0 = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"], Qt = (e) => String(e).padStart(2, "0"), Y0 = (e, t, r) => Math.min(r, new Date(e, t + 1, 0).getDate()), An = (e) => {
+}], cg = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"], W0 = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"], Zt = (e) => String(e).padStart(2, "0"), G0 = (e, t, r) => Math.min(r, new Date(e, t + 1, 0).getDate()), Sn = (e) => {
   const t = new Date(e);
   return {
     year: t.getFullYear(),
@@ -4436,210 +4441,210 @@ const Zm = /* @__PURE__ */ p('<div class="klinecharts-pro-time-tools-picker"></d
     hour: t.getHours(),
     minute: t.getMinutes()
   };
-}, Y1 = (e) => new Date(e.year, e.month, e.day, e.hour, e.minute, 0, 0).getTime(), Mn = (e) => e.year * 1e4 + (e.month + 1) * 100 + e.day, Fn = (e) => {
+}, W1 = (e) => new Date(e.year, e.month, e.day, e.hour, e.minute, 0, 0).getTime(), Pn = (e) => e.year * 1e4 + (e.month + 1) * 100 + e.day, zn = (e) => {
   const t = e.hour >= 12 ? "PM" : "AM", r = e.hour % 12 || 12;
-  return `${Qt(e.month + 1)}/${Qt(e.day)}/${e.year} ${Qt(r)}:${Qt(e.minute)} ${t}`;
-}, lg = (e, t) => {
+  return `${Zt(e.month + 1)}/${Zt(e.day)}/${e.year} ${Zt(r)}:${Zt(e.minute)} ${t}`;
+}, ug = (e, t) => {
   const r = new Date(e, t, 1).getDay(), n = new Date(e, t + 1, 0).getDate(), a = new Date(e, t, 0).getDate(), l = [];
-  for (let d = r - 1; d >= 0; d -= 1)
+  for (let h = r - 1; h >= 0; h -= 1)
     l.push({
-      date: new Date(e, t - 1, a - d),
+      date: new Date(e, t - 1, a - h),
       current: !1
     });
-  for (let d = 1; d <= n; d += 1)
+  for (let h = 1; h <= n; h += 1)
     l.push({
-      date: new Date(e, t, d),
+      date: new Date(e, t, h),
       current: !0
     });
   for (; l.length < 42; ) {
-    const d = l[l.length - 1].date;
+    const h = l[l.length - 1].date;
     l.push({
-      date: new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1),
+      date: new Date(h.getFullYear(), h.getMonth(), h.getDate() + 1),
       current: !1
     });
   }
   return l;
-}, W1 = (e) => {
-  const [t, r] = M(!0), [n, a] = M("date"), [l, d] = M(e.value.year), [h, v] = M(e.value.month), x = G(() => lg(l(), h())), b = G(() => Math.floor(l() / 10) * 10), L = G(() => Array.from({
+}, G1 = (e) => {
+  const [t, r] = T(!0), [n, a] = T("date"), [l, h] = T(e.value.year), [d, b] = T(e.value.month), x = W(() => ug(l(), d())), v = W(() => Math.floor(l() / 10) * 10), L = W(() => Array.from({
     length: 12
-  }, (H, q) => b() - 1 + q)), B = G(() => e.value.hour % 12 || 12), N = G(() => e.value.hour >= 12 ? "PM" : "AM"), Z = Array.from({
+  }, (Z, H) => v() - 1 + H)), B = W(() => e.value.hour % 12 || 12), N = W(() => e.value.hour >= 12 ? "PM" : "AM"), oe = Array.from({
     length: 12
-  }, (H, q) => q + 1), U = Array.from({
+  }, (Z, H) => H + 1), V = Array.from({
     length: 60
-  }, (H, q) => q), K = (H) => {
-    const q = new Date(l(), h() + H, 1);
-    d(q.getFullYear()), v(q.getMonth());
-  }, z = () => {
+  }, (Z, H) => H), R = (Z) => {
+    const H = new Date(l(), d() + Z, 1);
+    h(H.getFullYear()), b(H.getMonth());
+  }, U = () => {
     n() === "date" ? a("month") : n() === "month" && a("year");
-  }, ce = (H) => {
-    var q;
+  }, ce = (Z) => {
+    var H;
     e.onChange({
       ...e.value,
-      year: H.getFullYear(),
-      month: H.getMonth(),
-      day: H.getDate()
-    }), (q = e.onDateSelect) == null || q.call(e), d(H.getFullYear()), v(H.getMonth());
-  }, j = (H) => {
-    v(H), e.onChange({
+      year: Z.getFullYear(),
+      month: Z.getMonth(),
+      day: Z.getDate()
+    }), (H = e.onDateSelect) == null || H.call(e), h(Z.getFullYear()), b(Z.getMonth());
+  }, j = (Z) => {
+    b(Z), e.onChange({
       ...e.value,
       year: l(),
-      month: H,
-      day: Y0(l(), H, e.value.day)
+      month: Z,
+      day: G0(l(), Z, e.value.day)
     }), a("date");
-  }, J = (H) => {
-    d(H), e.onChange({
+  }, X = (Z) => {
+    h(Z), e.onChange({
       ...e.value,
-      year: H,
-      day: Y0(H, e.value.month, e.value.day)
+      year: Z,
+      day: G0(Z, e.value.month, e.value.day)
     }), a("month");
-  }, te = (H) => {
-    const q = N() === "PM";
+  }, ee = (Z) => {
+    const H = N() === "PM";
     e.onChange({
       ...e.value,
-      hour: q ? H === 12 ? 12 : H + 12 : H === 12 ? 0 : H
+      hour: H ? Z === 12 ? 12 : Z + 12 : Z === 12 ? 0 : Z
     });
-  }, pe = (H) => {
-    const q = B();
+  }, pe = (Z) => {
+    const H = B();
     e.onChange({
       ...e.value,
-      hour: H === "PM" ? q === 12 ? 12 : q + 12 : q === 12 ? 0 : q
+      hour: Z === "PM" ? H === 12 ? 12 : H + 12 : H === 12 ? 0 : H
     });
   };
   return (() => {
-    const H = Zm.cloneNode(!0);
-    return C(H, (() => {
-      const q = G(() => e.showInput !== !1);
-      return () => q() && (() => {
-        const ne = Hm.cloneNode(!0), se = ne.firstChild, A = se.firstChild;
-        return C(ne, (() => {
-          const Y = G(() => !!e.label);
-          return () => Y() && (() => {
-            const W = qm.cloneNode(!0);
-            return C(W, () => e.label), W;
+    const Z = qm.cloneNode(!0);
+    return C(Z, (() => {
+      const H = W(() => e.showInput !== !1);
+      return () => H() && (() => {
+        const te = Ym.cloneNode(!0), se = te.firstChild, M = se.firstChild;
+        return C(te, (() => {
+          const q = W(() => !!e.label);
+          return () => q() && (() => {
+            const Y = Wm.cloneNode(!0);
+            return C(Y, () => e.label), Y;
           })();
-        })(), se), se.$$click = () => r(!t()), C(A, () => Fn(e.value)), ne;
+        })(), se), se.$$click = () => r(!t()), C(M, () => zn(e.value)), te;
       })();
-    })(), null), C(H, (() => {
-      const q = G(() => !!t());
-      return () => q() && (() => {
-        const ne = Ym.cloneNode(!0), se = ne.firstChild, A = se.firstChild, Y = A.nextSibling, W = Y.nextSibling, R = W.nextSibling, de = R.nextSibling;
-        return A.$$click = () => {
-          n() === "year" ? d(l() - 10) : n() === "month" ? d(l() - 1) : K(-12);
-        }, Y.$$click = () => {
-          n() === "year" ? d(l() - 10) : n() === "month" ? d(l() - 1) : K(-1);
-        }, W.$$click = z, C(W, (() => {
-          const he = G(() => n() === "year");
-          return () => he() ? `${b()}-${b() + 9}` : (() => {
-            const re = G(() => n() === "month");
-            return () => re() ? l() : `${q0[h()]} ${l()}`;
+    })(), null), C(Z, (() => {
+      const H = W(() => !!t());
+      return () => H() && (() => {
+        const te = Gm.cloneNode(!0), se = te.firstChild, M = se.firstChild, q = M.nextSibling, Y = q.nextSibling, K = Y.nextSibling, de = K.nextSibling;
+        return M.$$click = () => {
+          n() === "year" ? h(l() - 10) : n() === "month" ? h(l() - 1) : R(-12);
+        }, q.$$click = () => {
+          n() === "year" ? h(l() - 10) : n() === "month" ? h(l() - 1) : R(-1);
+        }, Y.$$click = U, C(Y, (() => {
+          const he = W(() => n() === "year");
+          return () => he() ? `${v()}-${v() + 9}` : (() => {
+            const ne = W(() => n() === "month");
+            return () => ne() ? l() : `${W0[d()]} ${l()}`;
           })();
-        })()), R.$$click = () => {
-          n() === "year" ? d(l() + 10) : n() === "month" ? d(l() + 1) : K(1);
+        })()), K.$$click = () => {
+          n() === "year" ? h(l() + 10) : n() === "month" ? h(l() + 1) : R(1);
         }, de.$$click = () => {
-          n() === "year" ? d(l() + 10) : n() === "month" ? d(l() + 1) : K(12);
-        }, C(ne, (() => {
-          const he = G(() => n() === "date");
+          n() === "year" ? h(l() + 10) : n() === "month" ? h(l() + 1) : R(12);
+        }, C(te, (() => {
+          const he = W(() => n() === "date");
           return () => he() && (() => {
-            const re = Wm.cloneNode(!0);
-            return C(re, () => sg.map((I) => (() => {
-              const Q = Gm.cloneNode(!0);
+            const ne = Xm.cloneNode(!0);
+            return C(ne, () => cg.map((I) => (() => {
+              const Q = Jm.cloneNode(!0);
               return C(Q, I), Q;
-            })()), null), C(re, () => x().map(({
+            })()), null), C(ne, () => x().map(({
               date: I,
               current: Q
             }) => {
-              const D = Mn({
+              const D = Pn({
                 year: I.getFullYear(),
                 month: I.getMonth(),
                 day: I.getDate()
-              }), O = e.range ? Mn(e.range.from) : NaN, F = e.range ? Mn(e.range.to) : NaN, ve = Math.min(O, F), Le = Math.max(O, F), ye = Number.isFinite(ve) && D >= ve && D <= Le, Me = Number.isFinite(ve) && (D === ve || D === Le), _ = I.getFullYear() === e.value.year && I.getMonth() === e.value.month && I.getDate() === e.value.day;
+              }), O = e.range ? Pn(e.range.from) : NaN, F = e.range ? Pn(e.range.to) : NaN, ve = Math.min(O, F), Le = Math.max(O, F), ye = Number.isFinite(ve) && D >= ve && D <= Le, Te = Number.isFinite(ve) && (D === ve || D === Le), _ = I.getFullYear() === e.value.year && I.getMonth() === e.value.month && I.getDate() === e.value.day;
               return (() => {
-                const ge = Et.cloneNode(!0);
-                return ge.$$click = () => ce(I), fe(ge, `${Q ? "" : "muted"} ${ye ? "in-range" : ""} ${Me || _ ? "selected" : ""}`), C(ge, () => I.getDate()), ge;
+                const ge = Bt.cloneNode(!0);
+                return ge.$$click = () => ce(I), fe(ge, `${Q ? "" : "muted"} ${ye ? "in-range" : ""} ${Te || _ ? "selected" : ""}`), C(ge, () => I.getDate()), ge;
               })();
-            }), null), re;
+            }), null), ne;
           })();
-        })(), null), C(ne, (() => {
-          const he = G(() => n() === "month");
+        })(), null), C(te, (() => {
+          const he = W(() => n() === "month");
           return () => he() && (() => {
-            const re = Xm.cloneNode(!0);
-            return C(re, () => q0.map((I, Q) => (() => {
-              const D = Et.cloneNode(!0);
-              return D.$$click = () => j(Q), C(D, I), V(() => fe(D, Q === e.value.month && l() === e.value.year ? "selected" : "")), D;
-            })())), re;
+            const ne = eg.cloneNode(!0);
+            return C(ne, () => W0.map((I, Q) => (() => {
+              const D = Bt.cloneNode(!0);
+              return D.$$click = () => j(Q), C(D, I), z(() => fe(D, Q === e.value.month && l() === e.value.year ? "selected" : "")), D;
+            })())), ne;
           })();
-        })(), null), C(ne, (() => {
-          const he = G(() => n() === "year");
+        })(), null), C(te, (() => {
+          const he = W(() => n() === "year");
           return () => he() && (() => {
-            const re = Jm.cloneNode(!0);
-            return C(re, () => L().map((I) => (() => {
-              const Q = Et.cloneNode(!0);
-              return Q.$$click = () => J(I), C(Q, I), V(() => fe(Q, `${I < b() || I > b() + 9 ? "muted" : ""} ${I === e.value.year ? "selected" : ""}`)), Q;
-            })())), re;
+            const ne = tg.cloneNode(!0);
+            return C(ne, () => L().map((I) => (() => {
+              const Q = Bt.cloneNode(!0);
+              return Q.$$click = () => X(I), C(Q, I), z(() => fe(Q, `${I < v() || I > v() + 9 ? "muted" : ""} ${I === e.value.year ? "selected" : ""}`)), Q;
+            })())), ne;
           })();
-        })(), null), C(ne, (() => {
-          const he = G(() => n() === "date");
+        })(), null), C(te, (() => {
+          const he = W(() => n() === "date");
           return () => he() && (() => {
-            const re = eg.cloneNode(!0), I = re.firstChild, Q = I.nextSibling, D = Q.nextSibling;
-            return C(I, () => Z.map((O) => (() => {
-              const F = Et.cloneNode(!0);
-              return F.$$click = () => te(O), C(F, () => Qt(O)), V(() => fe(F, O === B() ? "selected" : "")), F;
-            })())), C(Q, () => U.map((O) => (() => {
-              const F = Et.cloneNode(!0);
+            const ne = ng.cloneNode(!0), I = ne.firstChild, Q = I.nextSibling, D = Q.nextSibling;
+            return C(I, () => oe.map((O) => (() => {
+              const F = Bt.cloneNode(!0);
+              return F.$$click = () => ee(O), C(F, () => Zt(O)), z(() => fe(F, O === B() ? "selected" : "")), F;
+            })())), C(Q, () => V.map((O) => (() => {
+              const F = Bt.cloneNode(!0);
               return F.$$click = () => e.onChange({
                 ...e.value,
                 minute: O
-              }), C(F, () => Qt(O)), V(() => fe(F, O === e.value.minute ? "selected" : "")), F;
+              }), C(F, () => Zt(O)), z(() => fe(F, O === e.value.minute ? "selected" : "")), F;
             })())), C(D, () => ["AM", "PM"].map((O) => (() => {
-              const F = Et.cloneNode(!0);
-              return F.$$click = () => pe(O), C(F, O), V(() => fe(F, O === N() ? "selected" : "")), F;
-            })())), re;
+              const F = Bt.cloneNode(!0);
+              return F.$$click = () => pe(O), C(F, O), z(() => fe(F, O === N() ? "selected" : "")), F;
+            })())), ne;
           })();
-        })(), null), ne;
+        })(), null), te;
       })();
-    })(), null), H;
+    })(), null), Z;
   })();
-}, cg = (e) => {
-  const [t, r] = M(e.initialTab ?? "goToDate"), [n, a] = M(An(e.initialTimestamp)), [l, d] = M(An(e.initialRange.from)), [h, v] = M(An(e.initialRange.to)), [x, b] = M("from"), [L, B] = M({
+}, dg = (e) => {
+  const [t, r] = T(e.initialTab ?? "goToDate"), [n, a] = T(Sn(e.initialTimestamp)), [l, h] = T(Sn(e.initialRange.from)), [d, b] = T(Sn(e.initialRange.to)), [x, v] = T("from"), [L, B] = T({
     ...e.anchorSettings,
     anchorLine: e.anchorSettings.anchorLine ?? !0,
     acrossTokens: e.anchorSettings.acrossTokens ?? !0
-  }), N = (U) => {
-    B((K) => ({
-      ...K,
-      ...U
+  }), N = (V) => {
+    B((R) => ({
+      ...R,
+      ...V
     }));
-  }, Z = () => {
-    const U = t();
-    if (U === "goToDate")
-      e.onGoToDate(Y1(n()));
-    else if (U === "timeRange") {
-      const K = Y1(l()), z = Y1(h());
-      e.onTimeRange(K <= z ? {
-        from: K,
-        to: z
+  }, oe = () => {
+    const V = t();
+    if (V === "goToDate")
+      e.onGoToDate(W1(n()));
+    else if (V === "timeRange") {
+      const R = W1(l()), U = W1(d());
+      e.onTimeRange(R <= U ? {
+        from: R,
+        to: U
       } : {
-        from: z,
-        to: K
+        from: U,
+        to: R
       });
     } else {
-      const K = L();
+      const R = L();
       e.onTimeAnchorChange({
-        ...K,
-        timestamp: K.anchorPoint === "date" ? Y1(n()) : K.timestamp
+        ...R,
+        timestamp: R.anchorPoint === "date" ? W1(n()) : R.timestamp
       });
     }
     e.onClose();
   };
-  return w(Tt, {
+  return w(Mt, {
     width: 620,
     get title() {
       return (() => {
-        const U = ng.cloneNode(!0);
-        return C(U, () => ag.map((K) => (() => {
-          const z = Et.cloneNode(!0);
-          return z.$$click = () => r(K.key), C(z, () => K.label), V(() => fe(z, t() === K.key ? "active" : "")), z;
-        })())), U;
+        const V = og.cloneNode(!0);
+        return C(V, () => lg.map((R) => (() => {
+          const U = Bt.cloneNode(!0);
+          return U.$$click = () => r(R.key), C(U, () => R.label), z(() => fe(U, t() === R.key ? "active" : "")), U;
+        })())), V;
       })();
     },
     get buttons() {
@@ -4649,7 +4654,7 @@ const Zm = /* @__PURE__ */ p('<div class="klinecharts-pro-time-tools-picker"></d
         onClick: e.onClose
       }, {
         children: "Confirm",
-        onClick: Z
+        onClick: oe
       }];
     },
     get onClose() {
@@ -4657,71 +4662,71 @@ const Zm = /* @__PURE__ */ p('<div class="klinecharts-pro-time-tools-picker"></d
     },
     minButtonWidth: 112,
     get children() {
-      const U = tg.cloneNode(!0);
-      return C(U, (() => {
-        const K = G(() => t() === "goToDate");
-        return () => K() && w(W1, {
+      const V = rg.cloneNode(!0);
+      return C(V, (() => {
+        const R = W(() => t() === "goToDate");
+        return () => R() && w(G1, {
           label: "",
           get value() {
             return n();
           },
           onChange: a
         });
-      })(), null), C(U, (() => {
-        const K = G(() => t() === "timeRange");
-        return () => K() && (() => {
-          const z = rg.cloneNode(!0), ce = z.firstChild, j = ce.firstChild, J = j.nextSibling, te = J.nextSibling;
-          return j.$$click = () => b("from"), C(j, () => Fn(l())), te.$$click = () => b("to"), C(te, () => Fn(h())), C(z, (() => {
-            const pe = G(() => x() === "from");
-            return () => pe() ? w(W1, {
+      })(), null), C(V, (() => {
+        const R = W(() => t() === "timeRange");
+        return () => R() && (() => {
+          const U = ig.cloneNode(!0), ce = U.firstChild, j = ce.firstChild, X = j.nextSibling, ee = X.nextSibling;
+          return j.$$click = () => v("from"), C(j, () => zn(l())), ee.$$click = () => v("to"), C(ee, () => zn(d())), C(U, (() => {
+            const pe = W(() => x() === "from");
+            return () => pe() ? w(G1, {
               label: "Start",
               get value() {
                 return l();
               },
-              onChange: d,
-              onDateSelect: () => b("to"),
+              onChange: h,
+              onDateSelect: () => v("to"),
               showInput: !1,
               get range() {
                 return {
                   from: l(),
-                  to: h()
+                  to: d()
                 };
               }
-            }) : w(W1, {
+            }) : w(G1, {
               label: "End",
               get value() {
-                return h();
+                return d();
               },
-              onChange: v,
+              onChange: b,
               showInput: !1,
               get range() {
                 return {
                   from: l(),
-                  to: h()
+                  to: d()
                 };
               }
             });
-          })(), null), V((pe) => {
-            const H = x() === "from" ? "active" : "", q = x() === "to" ? "active" : "";
-            return H !== pe._v$ && fe(j, pe._v$ = H), q !== pe._v$2 && fe(te, pe._v$2 = q), pe;
+          })(), null), z((pe) => {
+            const Z = x() === "from" ? "active" : "", H = x() === "to" ? "active" : "";
+            return Z !== pe._v$ && fe(j, pe._v$ = Z), H !== pe._v$2 && fe(ee, pe._v$2 = H), pe;
           }, {
             _v$: void 0,
             _v$2: void 0
-          }), z;
+          }), U;
         })();
-      })(), null), C(U, (() => {
-        const K = G(() => t() === "timeAnchor");
-        return () => K() && (() => {
-          const z = og.cloneNode(!0), ce = z.firstChild, j = ce.firstChild, J = j.nextSibling, te = ce.nextSibling, pe = te.firstChild, H = pe.nextSibling, q = te.nextSibling, ne = q.firstChild, se = ne.nextSibling, A = q.nextSibling, Y = A.firstChild, W = Y.nextSibling;
-          return J.$$click = () => N({
+      })(), null), C(V, (() => {
+        const R = W(() => t() === "timeAnchor");
+        return () => R() && (() => {
+          const U = ag.cloneNode(!0), ce = U.firstChild, j = ce.firstChild, X = j.nextSibling, ee = ce.nextSibling, pe = ee.firstChild, Z = pe.nextSibling, H = ee.nextSibling, te = H.firstChild, se = te.nextSibling, M = H.nextSibling, q = M.firstChild, Y = q.nextSibling;
+          return X.$$click = () => N({
             enabled: !L().enabled
-          }), H.addEventListener("change", (R) => N({
-            anchorPoint: R.currentTarget.value
-          })), C(z, (() => {
-            const R = G(() => !!(L().enabled && L().anchorPoint === "date"));
-            return () => R() && (() => {
-              const de = ig.cloneNode(!0);
-              return C(de, w(W1, {
+          }), Z.addEventListener("change", (K) => N({
+            anchorPoint: K.currentTarget.value
+          })), C(U, (() => {
+            const K = W(() => !!(L().enabled && L().anchorPoint === "date"));
+            return () => K() && (() => {
+              const de = sg.cloneNode(!0);
+              return C(de, w(G1, {
                 label: "Anchor date",
                 get value() {
                   return n();
@@ -4729,13 +4734,13 @@ const Zm = /* @__PURE__ */ p('<div class="klinecharts-pro-time-tools-picker"></d
                 onChange: a
               })), de;
             })();
-          })(), q), se.$$click = () => N({
+          })(), H), se.$$click = () => N({
             anchorLine: !L().anchorLine
-          }), W.$$click = () => N({
+          }), Y.$$click = () => N({
             acrossTokens: !L().acrossTokens
-          }), V((R) => {
-            const de = `klinecharts-pro-time-tools-switch${L().enabled ? " on" : ""}`, he = `klinecharts-pro-time-tools-row${L().enabled ? "" : " disabled"}`, re = !L().enabled, I = `klinecharts-pro-time-tools-row with-divider${L().enabled ? "" : " disabled"}`, Q = `klinecharts-pro-time-tools-switch${L().anchorLine ? " on" : ""}`, D = !L().enabled, O = `klinecharts-pro-time-tools-row with-divider${L().enabled ? "" : " disabled"}`, F = `klinecharts-pro-time-tools-switch${L().acrossTokens ? " on" : ""}`, ve = !L().enabled;
-            return de !== R._v$3 && fe(J, R._v$3 = de), he !== R._v$4 && fe(te, R._v$4 = he), re !== R._v$5 && (H.disabled = R._v$5 = re), I !== R._v$6 && fe(q, R._v$6 = I), Q !== R._v$7 && fe(se, R._v$7 = Q), D !== R._v$8 && (se.disabled = R._v$8 = D), O !== R._v$9 && fe(A, R._v$9 = O), F !== R._v$10 && fe(W, R._v$10 = F), ve !== R._v$11 && (W.disabled = R._v$11 = ve), R;
+          }), z((K) => {
+            const de = `klinecharts-pro-time-tools-switch${L().enabled ? " on" : ""}`, he = `klinecharts-pro-time-tools-row${L().enabled ? "" : " disabled"}`, ne = !L().enabled, I = `klinecharts-pro-time-tools-row with-divider${L().enabled ? "" : " disabled"}`, Q = `klinecharts-pro-time-tools-switch${L().anchorLine ? " on" : ""}`, D = !L().enabled, O = `klinecharts-pro-time-tools-row with-divider${L().enabled ? "" : " disabled"}`, F = `klinecharts-pro-time-tools-switch${L().acrossTokens ? " on" : ""}`, ve = !L().enabled;
+            return de !== K._v$3 && fe(X, K._v$3 = de), he !== K._v$4 && fe(ee, K._v$4 = he), ne !== K._v$5 && (Z.disabled = K._v$5 = ne), I !== K._v$6 && fe(H, K._v$6 = I), Q !== K._v$7 && fe(se, K._v$7 = Q), D !== K._v$8 && (se.disabled = K._v$8 = D), O !== K._v$9 && fe(M, K._v$9 = O), F !== K._v$10 && fe(Y, K._v$10 = F), ve !== K._v$11 && (Y.disabled = K._v$11 = ve), K;
           }, {
             _v$3: void 0,
             _v$4: void 0,
@@ -4746,17 +4751,17 @@ const Zm = /* @__PURE__ */ p('<div class="klinecharts-pro-time-tools-picker"></d
             _v$9: void 0,
             _v$10: void 0,
             _v$11: void 0
-          }), V(() => H.value = L().anchorPoint), z;
+          }), z(() => Z.value = L().anchorPoint), U;
         })();
-      })(), null), U;
+      })(), null), V;
     }
   });
 };
 je(["click"]);
-const ug = /* @__PURE__ */ p('<i class="icon-close klinecharts-pro-load-icon"></i>'), dg = /* @__PURE__ */ p('<div class="klinecharts-pro-content"><div class="klinecharts-pro-widget"></div></div>'), hg = /* @__PURE__ */ p('<div class="klinecharts-pro-time-anchor-line"></div>'), fg = /* @__PURE__ */ p('<div class="klinecharts-pro-time-navigation-tooltip"></div>'), mg = /* @__PURE__ */ p('<div class="klinecharts-pro-countdown-price-mark"><span class="klinecharts-pro-countdown-price-mark-price"></span><span class="klinecharts-pro-countdown-price-mark-timer"></span></div>'), gg = /* @__PURE__ */ p('<div class="overlay-toolbar-color-popover"><div class="overlay-toolbar-color-grid"></div><div class="overlay-toolbar-color-footer"><button type="button" class="overlay-toolbar-add-color">+</button><div class="overlay-toolbar-color-slider"><span></span></div></div></div>'), yg = /* @__PURE__ */ p('<div class="overlay-toolbar-dropdown width-menu"></div>'), Cg = /* @__PURE__ */ p('<div class="overlay-toolbar-dropdown style-menu"><button type="button"><span class="overlay-toolbar-style-sample solid"></span></button><button type="button"><span class="overlay-toolbar-style-sample dashed"></span></button><button type="button"><span class="overlay-toolbar-style-sample dotted"></span></button></div>'), pg = /* @__PURE__ */ p('<div class="klinecharts-pro-overlay-toolbar"><button type="button" class="overlay-toolbar-icon drag" title="Move"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="6" r="1.5"></circle><circle cx="15" cy="6" r="1.5"></circle><circle cx="9" cy="12" r="1.5"></circle><circle cx="15" cy="12" r="1.5"></circle><circle cx="9" cy="18" r="1.5"></circle><circle cx="15" cy="18" r="1.5"></circle></svg></button><button type="button" class="overlay-toolbar-icon refresh" title="Reset"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 0 1 15.4-6.36L21 8"></path><path d="M21 3v5h-5"></path><path d="M21 12a9 9 0 0 1-15.4 6.36L3 16"></path><path d="M3 21v-5h5"></path></svg></button><div class="overlay-toolbar-picker"><button type="button" title="Color"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg></button></div><div class="overlay-toolbar-picker"><button type="button" title="Line width"><span class="overlay-toolbar-line-preview"></span><span>px</span></button></div><div class="overlay-toolbar-picker"><button type="button" title="Line style"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h16"></path></svg></button></div><button type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2"></rect><path d="M20 4 4 20"></path></svg></button><button type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path></svg></button><button type="button" class="overlay-toolbar-icon delete" title="Delete"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"></path><path d="M8 6V4h8v2"></path><path d="M19 6 18 20H6L5 6"></path><path d="M10 11v5"></path><path d="M14 11v5"></path></svg></button></div>'), vg = /* @__PURE__ */ p('<button type="button"></button>'), bg = /* @__PURE__ */ p('<button type="button"><span class="overlay-toolbar-width-sample"></span></button>'), $g = /* @__PURE__ */ p('<div class="klinecharts-pro-quick-order-marker"><button type="button" class="klinecharts-pro-quick-order-plus"></button></div>'), _g = /* @__PURE__ */ p('<span class="klinecharts-pro-quick-order-plus-icon"></span>'), kg = /* @__PURE__ */ p('<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3" aria-hidden="true"><path d="M460-300h40v-160h160v-40H500v-160h-40v160H300v40h160v160ZM224.62-160q-27.62 0-46.12-18.5Q160-197 160-224.62v-510.76q0-27.62 18.5-46.12Q197-800 224.62-800h510.76q27.62 0 46.12 18.5Q800-763 800-735.38v510.76q0 27.62-18.5 46.12Q763-160 735.38-160H224.62Zm0-40h510.76q9.24 0 16.93-7.69 7.69-7.69 7.69-16.93v-510.76q0-9.24-7.69-16.93-7.69-7.69-16.93-7.69H224.62q-9.24 0-16.93 7.69-7.69 7.69-7.69 16.93v510.76q0 9.24 7.69 16.93 7.69 7.69 16.93 7.69ZM200-760v560-560Z"></path></svg>'), xg = /* @__PURE__ */ p('<div class="klinecharts-pro-quick-order-menu-anchor"><div class="klinecharts-pro-quick-order-menu"><button type="button">Trade <!> @ <!> Limit</button><button type="button">Trade <!> @ <!> Stop</button><button type="button">Create new order...</button><button type="button">Copy Price (<!>)</button><button type="button">Draw horizontal line on </button></div></div>');
-Rl();
-const Un = "klinecharts_pro_time_anchor_settings";
-function Bo() {
+const hg = /* @__PURE__ */ p('<i class="icon-close klinecharts-pro-load-icon"></i>'), fg = /* @__PURE__ */ p('<div class="klinecharts-pro-content"><div class="klinecharts-pro-widget"></div></div>'), mg = /* @__PURE__ */ p('<div class="klinecharts-pro-time-anchor-line"></div>'), gg = /* @__PURE__ */ p('<div class="klinecharts-pro-time-navigation-tooltip"></div>'), yg = /* @__PURE__ */ p('<div class="klinecharts-pro-countdown-price-mark"><span class="klinecharts-pro-countdown-price-mark-price"></span><span class="klinecharts-pro-countdown-price-mark-timer"></span></div>'), Cg = /* @__PURE__ */ p('<div class="overlay-toolbar-color-popover"><div class="overlay-toolbar-color-grid"></div><div class="overlay-toolbar-color-footer"><button type="button" class="overlay-toolbar-add-color">+</button><div class="overlay-toolbar-color-slider"><span></span></div></div></div>'), pg = /* @__PURE__ */ p('<div class="overlay-toolbar-dropdown width-menu"></div>'), vg = /* @__PURE__ */ p('<div class="overlay-toolbar-dropdown style-menu"><button type="button"><span class="overlay-toolbar-style-sample solid"></span></button><button type="button"><span class="overlay-toolbar-style-sample dashed"></span></button><button type="button"><span class="overlay-toolbar-style-sample dotted"></span></button></div>'), bg = /* @__PURE__ */ p('<div class="klinecharts-pro-overlay-toolbar"><button type="button" class="overlay-toolbar-icon drag" title="Move"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="6" r="1.5"></circle><circle cx="15" cy="6" r="1.5"></circle><circle cx="9" cy="12" r="1.5"></circle><circle cx="15" cy="12" r="1.5"></circle><circle cx="9" cy="18" r="1.5"></circle><circle cx="15" cy="18" r="1.5"></circle></svg></button><button type="button" class="overlay-toolbar-icon refresh" title="Reset"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 0 1 15.4-6.36L21 8"></path><path d="M21 3v5h-5"></path><path d="M21 12a9 9 0 0 1-15.4 6.36L3 16"></path><path d="M3 21v-5h5"></path></svg></button><div class="overlay-toolbar-picker"><button type="button" title="Color"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg></button></div><div class="overlay-toolbar-picker"><button type="button" title="Line width"><span class="overlay-toolbar-line-preview"></span><span>px</span></button></div><div class="overlay-toolbar-picker"><button type="button" title="Line style"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h16"></path></svg></button></div><button type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2"></rect><path d="M20 4 4 20"></path></svg></button><button type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path></svg></button><button type="button" class="overlay-toolbar-icon delete" title="Delete"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"></path><path d="M8 6V4h8v2"></path><path d="M19 6 18 20H6L5 6"></path><path d="M10 11v5"></path><path d="M14 11v5"></path></svg></button></div>'), $g = /* @__PURE__ */ p('<button type="button"></button>'), _g = /* @__PURE__ */ p('<button type="button"><span class="overlay-toolbar-width-sample"></span></button>'), kg = /* @__PURE__ */ p('<div class="klinecharts-pro-quick-order-marker"><button type="button" class="klinecharts-pro-quick-order-plus"></button></div>'), xg = /* @__PURE__ */ p('<span class="klinecharts-pro-quick-order-plus-icon"></span>'), Lg = /* @__PURE__ */ p('<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3" aria-hidden="true"><path d="M460-300h40v-160h160v-40H500v-160h-40v160H300v40h160v160ZM224.62-160q-27.62 0-46.12-18.5Q160-197 160-224.62v-510.76q0-27.62 18.5-46.12Q197-800 224.62-800h510.76q27.62 0 46.12 18.5Q800-763 800-735.38v510.76q0 27.62-18.5 46.12Q763-160 735.38-160H224.62Zm0-40h510.76q9.24 0 16.93-7.69 7.69-7.69 7.69-16.93v-510.76q0-9.24-7.69-16.93-7.69-7.69-16.93-7.69H224.62q-9.24 0-16.93 7.69-7.69 7.69-7.69 16.93v510.76q0 9.24 7.69 16.93 7.69 7.69 16.93 7.69ZM200-760v560-560Z"></path></svg>'), wg = /* @__PURE__ */ p('<div class="klinecharts-pro-quick-order-menu-anchor"><div class="klinecharts-pro-quick-order-menu"><button type="button">Trade <!> @ <!> Limit</button><button type="button">Trade <!> @ <!> Stop</button><button type="button">Create new order...</button><button type="button">Copy Price (<!>)</button><button type="button">Draw horizontal line on </button></div></div>');
+Ql();
+const Vn = "klinecharts_pro_time_anchor_settings";
+function Uo() {
   return {
     enabled: !1,
     timestamp: Date.now(),
@@ -4765,15 +4770,15 @@ function Bo() {
     acrossTokens: !0
   };
 }
-function Lg() {
+function Ag() {
   try {
-    const e = window.localStorage.getItem(Un);
+    const e = window.localStorage.getItem(Vn);
     if (!e)
       return null;
     const t = JSON.parse(e);
     if (t.enabled !== !0 || t.acrossTokens !== !0 || !Number.isFinite(t.timestamp))
       return null;
-    const r = Bo();
+    const r = Uo();
     return {
       ...r,
       ...t,
@@ -4787,17 +4792,17 @@ function Lg() {
     return null;
   }
 }
-function W0(e) {
+function X0(e) {
   try {
     if (!e.enabled || !e.acrossTokens) {
-      window.localStorage.removeItem(Un);
+      window.localStorage.removeItem(Vn);
       return;
     }
-    window.localStorage.setItem(Un, JSON.stringify(e));
+    window.localStorage.setItem(Vn, JSON.stringify(e));
   } catch {
   }
 }
-function G1(e, t, r, n) {
+function X1(e, t, r, n) {
   t === "VOL" && (n = {
     gap: {
       bottom: 2
@@ -4809,11 +4814,11 @@ function G1(e, t, r, n) {
     // @ts-expect-error
     createTooltipDataSource: ({
       indicator: l,
-      defaultStyles: d
+      defaultStyles: h
     }) => {
-      const h = [];
-      return l.visible ? (h.push(d.tooltip.icons[1]), h.push(d.tooltip.icons[2]), h.push(d.tooltip.icons[3])) : (h.push(d.tooltip.icons[0]), h.push(d.tooltip.icons[2]), h.push(d.tooltip.icons[3])), {
-        icons: h
+      const d = [];
+      return l.visible ? (d.push(h.tooltip.icons[1]), d.push(h.tooltip.icons[2]), d.push(h.tooltip.icons[3])) : (d.push(h.tooltip.icons[0]), d.push(h.tooltip.icons[2]), d.push(h.tooltip.icons[3])), {
+        icons: d
       };
     }
   }, r, n)) ?? null;
@@ -4827,7 +4832,7 @@ function G1(e, t, r, n) {
     }
   return a;
 }
-function X1(e) {
+function J1(e) {
   const t = Math.max(1, e.multiplier || 1);
   switch (e.timespan) {
     case "minute":
@@ -4846,14 +4851,14 @@ function X1(e) {
       return 60 * 60 * 1e3;
   }
 }
-function wg(e) {
-  const t = Math.max(0, Math.ceil(e / 1e3)), r = Math.floor(t / 3600), n = Math.floor(t % 3600 / 60), a = t % 60, l = (d) => String(d).padStart(2, "0");
+function Mg(e) {
+  const t = Math.max(0, Math.ceil(e / 1e3)), r = Math.floor(t / 3600), n = Math.floor(t % 3600 / 60), a = t % 60, l = (h) => String(h).padStart(2, "0");
   return r > 0 ? `${l(r)}:${l(n)}:${l(a)}` : `${l(n)}:${l(a)}`;
 }
 const Tg = (e) => {
-  var Lr, wr, Tr, Ar, Mr, Sr, Pr, Dr, Nr, Or, Ir, Er, Br, Fr, Ur, zr, Vr, Kr, Rr, jr, Qr, Zr, Hr, qr, Yr, Wr, Gr, Xr;
+  var Ar, Mr, Tr, Sr, Pr, Dr, Nr, Or, Ir, Er, Br, Fr, Ur, zr, Vr, Kr, Rr, jr, Qr, Zr, Hr, qr, Yr, Wr, Gr, Xr, Jr, e0;
   let t, r, n = null, a;
-  const [l, d] = M(!1), [h, v] = M(e.theme), [x, b] = M(e.styles), [L, B] = M(e.locale), [N, Z] = M(e.symbol), [U, K] = M(e.period), z = () => {
+  const [l, h] = T(!1), [d, b] = T(e.theme), [x, v] = T(e.styles), [L, B] = T(e.locale), [N, oe] = T(e.symbol), [V, R] = T(e.period), U = () => {
     var o, i, s, u;
     return {
       visibleMarginLeft: ((o = e.indicatorTooltipIconStyles) == null ? void 0 : o.visibleMarginLeft) ?? 7,
@@ -4861,37 +4866,37 @@ const Tg = (e) => {
       marginTop: ((s = e.indicatorTooltipIconStyles) == null ? void 0 : s.marginTop) ?? 1,
       size: ((u = e.indicatorTooltipIconStyles) == null ? void 0 : u.size) ?? 12
     };
-  }, [ce, j] = M(!1), [J, te] = M([...e.mainIndicators]), [pe, H] = M({}), [q, ne] = M(!1), [se, A] = M({
+  }, [ce, j] = T(!1), [X, ee] = T([...e.mainIndicators]), [pe, Z] = T({}), [H, te] = T(!1), [se, M] = T({
     key: e.timezone,
-    text: R0(e.timezone, e.locale)
-  }), [Y, W] = M(!1), [R, de] = M(), [he, re] = M(""), [I, Q] = M(!1), [D, O] = M(Date.now()), [F, ve] = M({
+    text: Q0(e.timezone, e.locale)
+  }), [q, Y] = T(!1), [K, de] = T(), [he, ne] = T(""), [I, Q] = T(!1), [D, O] = T(Date.now()), [F, ve] = T({
     from: Date.now() - 30 * 24 * 60 * 60 * 1e3,
     to: Date.now()
-  }), [Le, ye] = M(Lg() ?? Bo()), [Me, _] = M(e.drawingBarVisible), [ge, Ne] = M(!1), [ut, $e] = M(!1), [Ct, dt] = M(!1), t1 = ((Lr = e.orderTools) == null ? void 0 : Lr.quickOrder) ?? !0, [Be, _1] = M({
-    quickOrder: t1,
-    quickOrderFloatingWindow: ((wr = e.orderTools) == null ? void 0 : wr.quickOrderFloatingWindow) ?? t1,
-    quickOrderPlusButton: ((Tr = e.orderTools) == null ? void 0 : Tr.quickOrderPlusButton) ?? t1,
-    openOrders: ((Ar = e.orderTools) == null ? void 0 : Ar.openOrders) ?? !0,
-    openOrdersExtendedPriceLine: ((Mr = e.orderTools) == null ? void 0 : Mr.openOrdersExtendedPriceLine) ?? !0,
-    openOrdersDisplay: ((Sr = e.orderTools) == null ? void 0 : Sr.openOrdersDisplay) ?? "right",
-    positions: ((Pr = e.orderTools) == null ? void 0 : Pr.positions) ?? !0,
-    breakevenPrice: ((Dr = e.orderTools) == null ? void 0 : Dr.breakevenPrice) ?? !0,
-    liquidationPrice: ((Nr = e.orderTools) == null ? void 0 : Nr.liquidationPrice) ?? !0,
-    priceLine: ((Or = e.orderTools) == null ? void 0 : Or.priceLine) ?? !0,
-    marketPriceLine: ((Ir = e.orderTools) == null ? void 0 : Ir.marketPriceLine) ?? !0,
-    countDown: ((Er = e.orderTools) == null ? void 0 : Er.countDown) ?? !0,
-    bidAskPrice: ((Br = e.orderTools) == null ? void 0 : Br.bidAskPrice) ?? !0,
-    orderHistory: ((Fr = e.orderTools) == null ? void 0 : Fr.orderHistory) ?? !0
-  }), [zt, At] = M(null), [Mt, rt] = M(!1), [k1, qe] = M(!1), [n1, r1] = M(64), [pt, St] = M(null), o1 = 6, [x1, Vt] = M(null), [i1, L1] = M(null), [w1, a1] = M(null), [Qe, Ke] = M(null), [Ze, He] = M(null), T1 = ["#000000", "#2b3342", "#3f4653", "#565d69", "#6f7580", "#8a9099", "#a7acb3", "#c4c8ce", "#ffffff", "#ff4d67", "#ffa629", "#f7ed4a", "#2fc58d", "#4ab09c", "#52c4d3", "#3157f6", "#6a36b8", "#a644b9", "#d83972", "#f2a3a6", "#f5c879", "#f7ee97", "#a6d29f", "#7fc9b9", "#91d7df", "#8fb2ee", "#b09ad2", "#c89ccf", "#d987ab", "#e8757a", "#efb34f", "#efe36e", "#86c17d", "#66b7a8", "#68c4d0", "#5f91e4", "#8059c9", "#aa62c2", "#d34d83", "#b9353d", "#ea8527", "#e8c245", "#4b8c43", "#2f6f60", "#47919b", "#2646c6", "#56309c", "#892f95", "#a82563", "#8e2528", "#de5c1f", "#dc8527", "#255a22", "#164b34", "#225b63", "#15309b", "#442180", "#6b1f74", "#86154e"];
-  let s1 = null;
-  const [Kt, A1] = M({
+  }), [Le, ye] = T(Ag() ?? Uo()), [Te, _] = T(e.drawingBarVisible), [ge, Ne] = T(!1), [ut, $e] = T(!1), [Ct, dt] = T(!1), n1 = ((Ar = e.orderTools) == null ? void 0 : Ar.quickOrder) ?? !0, [Be, k1] = T({
+    quickOrder: n1,
+    quickOrderFloatingWindow: ((Mr = e.orderTools) == null ? void 0 : Mr.quickOrderFloatingWindow) ?? n1,
+    quickOrderPlusButton: ((Tr = e.orderTools) == null ? void 0 : Tr.quickOrderPlusButton) ?? n1,
+    openOrders: ((Sr = e.orderTools) == null ? void 0 : Sr.openOrders) ?? !0,
+    openOrdersExtendedPriceLine: ((Pr = e.orderTools) == null ? void 0 : Pr.openOrdersExtendedPriceLine) ?? !0,
+    openOrdersDisplay: ((Dr = e.orderTools) == null ? void 0 : Dr.openOrdersDisplay) ?? "right",
+    positions: ((Nr = e.orderTools) == null ? void 0 : Nr.positions) ?? !0,
+    breakevenPrice: ((Or = e.orderTools) == null ? void 0 : Or.breakevenPrice) ?? !0,
+    liquidationPrice: ((Ir = e.orderTools) == null ? void 0 : Ir.liquidationPrice) ?? !0,
+    priceLine: ((Er = e.orderTools) == null ? void 0 : Er.priceLine) ?? !0,
+    marketPriceLine: ((Br = e.orderTools) == null ? void 0 : Br.marketPriceLine) ?? !0,
+    countDown: ((Fr = e.orderTools) == null ? void 0 : Fr.countDown) ?? !0,
+    bidAskPrice: ((Ur = e.orderTools) == null ? void 0 : Ur.bidAskPrice) ?? !0,
+    orderHistory: ((zr = e.orderTools) == null ? void 0 : zr.orderHistory) ?? !0
+  }), [Vt, Tt] = T(null), [St, rt] = T(!1), [x1, qe] = T(!1), [r1, o1] = T(64), [pt, Pt] = T(null), i1 = 6, [L1, Kt] = T(null), [a1, w1] = T(null), [A1, s1] = T(null), [Qe, Ke] = T(null), [Ze, He] = T(null), M1 = ["#000000", "#2b3342", "#3f4653", "#565d69", "#6f7580", "#8a9099", "#a7acb3", "#c4c8ce", "#ffffff", "#ff4d67", "#ffa629", "#f7ed4a", "#2fc58d", "#4ab09c", "#52c4d3", "#3157f6", "#6a36b8", "#a644b9", "#d83972", "#f2a3a6", "#f5c879", "#f7ee97", "#a6d29f", "#7fc9b9", "#91d7df", "#8fb2ee", "#b09ad2", "#c89ccf", "#d987ab", "#e8757a", "#efb34f", "#efe36e", "#86c17d", "#66b7a8", "#68c4d0", "#5f91e4", "#8059c9", "#aa62c2", "#d34d83", "#b9353d", "#ea8527", "#e8c245", "#4b8c43", "#2f6f60", "#47919b", "#2646c6", "#56309c", "#892f95", "#a82563", "#8e2528", "#de5c1f", "#dc8527", "#255a22", "#164b34", "#225b63", "#15309b", "#442180", "#6b1f74", "#86154e"];
+  let l1 = null;
+  const [Rt, T1] = T({
     visible: !1,
     indicatorName: "",
     paneId: "",
     calcParams: []
   });
-  let Ae = /* @__PURE__ */ new Map(), Fe = /* @__PURE__ */ new Map();
-  const M1 = (o, i, s) => {
+  let Me = /* @__PURE__ */ new Map(), Fe = /* @__PURE__ */ new Map();
+  const S1 = (o, i, s) => {
     const u = n == null ? void 0 : n.getIndicatorByPaneId(i, o);
     return {
       name: o,
@@ -4908,7 +4913,7 @@ const Tg = (e) => {
     if (e.onIndicatorChange)
       if (u === "add" || u === "change")
         setTimeout(() => {
-          const m = M1(o, i, s);
+          const m = S1(o, i, s);
           e.onIndicatorChange({
             action: u,
             indicator: m
@@ -4977,7 +4982,7 @@ const Tg = (e) => {
           s[u] = `[Error: ${m.message}]`;
         }
     return s;
-  }, S1 = (o) => {
+  }, P1 = (o) => {
     if (!o)
       return null;
     try {
@@ -4994,7 +4999,7 @@ const Tg = (e) => {
         styles: bt(o.styles || {}),
         visible: o.visible ?? !0,
         lock: o.lock ?? !1,
-        mode: o.mode || kn.Normal
+        mode: o.mode || xn.Normal
       };
     } catch (i) {
       return console.error("Error extracting overlay data:", i), null;
@@ -5005,12 +5010,12 @@ const Tg = (e) => {
       const m = (i = n == null ? void 0 : n.getOverlayById) == null ? void 0 : i.call(n, o);
       if (!m)
         return;
-      const g = S1(m);
+      const g = P1(m);
       if (g) {
-        const f = Ae.get(o), y = ((s = f == null ? void 0 : f.points) == null ? void 0 : s.length) || 0, k = ((u = g.points) == null ? void 0 : u.length) || 0;
-        Ae.set(o, g);
-        const T = vt(g.type);
-        if (k >= T) {
+        const f = Me.get(o), y = ((s = f == null ? void 0 : f.points) == null ? void 0 : s.length) || 0, k = ((u = g.points) == null ? void 0 : u.length) || 0;
+        Me.set(o, g);
+        const A = vt(g.type);
+        if (k >= A) {
           const P = Fe.get(o);
           P && !P.complete && (P.complete = !0, P.checkInterval && (clearInterval(P.checkInterval), P.checkInterval = void 0));
         }
@@ -5018,7 +5023,7 @@ const Tg = (e) => {
     } catch (m) {
       console.error(`Error updating overlay tracking for ${o}:`, m);
     }
-  }, l1 = (o, i) => {
+  }, c1 = (o, i) => {
     if (Fe.has(o))
       return;
     const s = {
@@ -5035,7 +5040,7 @@ const Tg = (e) => {
       const m = Fe.get(o);
       if (m && !m.complete) {
         m.checkInterval && clearInterval(m.checkInterval), m.mouseUpHandler && (document.removeEventListener("mouseup", m.mouseUpHandler), document.removeEventListener("touchend", m.mouseUpHandler)), ht(o);
-        const f = Ae.get(o);
+        const f = Me.get(o);
         if (f) {
           const y = vt(f.type), k = ((g = f.points) == null ? void 0 : g.length) || 0;
           k < y && console.warn(`âš ï¸ ${f.type} ${o} has only ${k} point(s), should have ${y}`);
@@ -5048,12 +5053,12 @@ const Tg = (e) => {
       try {
         const s = `kline_drawings_${o}`, m = {
           drawings: i.map((g) => {
-            var T;
+            var A;
             const f = {
               ...g
             };
             f.extendData && (f.extendData = bt(f.extendData)), f.styles && (f.styles = bt(f.styles));
-            const y = vt(g.type), k = ((T = g.points) == null ? void 0 : T.length) || 0;
+            const y = vt(g.type), k = ((A = g.points) == null ? void 0 : A.length) || 0;
             return k < y && console.warn(`âš ï¸ Saving ${g.type} with only ${k} point(s), needs ${y}`), f;
           }),
           timestamp: Date.now()
@@ -5088,21 +5093,21 @@ const Tg = (e) => {
       }
     }
   };
-  const Pt = () => {
+  const Dt = () => {
     const o = N();
     if (o != null && o.ticker) {
-      const i = Array.from(Ae.values());
+      const i = Array.from(Me.values());
       ft.saveDrawings(o.ticker, i);
     }
-  }, P1 = (o) => {
+  }, D1 = (o) => {
     if (!o || !n)
       return;
-    Ae.forEach((s, u) => {
+    Me.forEach((s, u) => {
       var m;
       (m = n == null ? void 0 : n.removeOverlay) == null || m.call(n, {
         id: u
       });
-    }), Ae.clear(), Fe.clear(), Ke(null), He(null), ft.loadDrawings(o).forEach((s) => {
+    }), Me.clear(), Fe.clear(), Ke(null), He(null), ft.loadDrawings(o).forEach((s) => {
       var u;
       try {
         const m = _t({
@@ -5112,9 +5117,9 @@ const Tg = (e) => {
           styles: s.styles,
           visible: s.visible ?? !0,
           lock: s.lock ?? !1,
-          mode: s.mode || kn.Normal
+          mode: s.mode || xn.Normal
         }), g = n == null ? void 0 : n.createOverlay(m), f = typeof g == "string" ? g : null;
-        f && (Ae.set(f, {
+        f && (Me.set(f, {
           ...s,
           id: f
         }), Fe.set(f, {
@@ -5126,7 +5131,7 @@ const Tg = (e) => {
         console.error("Library: Error restoring drawing:", m);
       }
     });
-  }, c1 = (o) => {
+  }, u1 = (o) => {
     var s, u;
     const i = {
       ...Be(),
@@ -5140,8 +5145,8 @@ const Tg = (e) => {
       i.marketPriceLine = m, i.countDown = m, i.bidAskPrice = m;
     } else
       "quickOrderFloatingWindow" in o || "quickOrderPlusButton" in o ? i.quickOrder = i.quickOrderFloatingWindow || i.quickOrderPlusButton : ("marketPriceLine" in o || "countDown" in o || "bidAskPrice" in o) && (i.priceLine = i.marketPriceLine || i.countDown || i.bidAskPrice);
-    _1(i), (u = (s = e.orderTools) == null ? void 0 : s.onChange) == null || u.call(s, i);
-  }, Dt = (o) => {
+    k1(i), (u = (s = e.orderTools) == null ? void 0 : s.onChange) == null || u.call(s, i);
+  }, Nt = (o) => {
     var s;
     const i = Math.min(Math.max(((s = N()) == null ? void 0 : s.pricePrecision) ?? 2, 0), 8);
     return o.toLocaleString(void 0, {
@@ -5149,9 +5154,9 @@ const Tg = (e) => {
       maximumFractionDigits: i
     });
   }, Ye = (o = Date.now()) => {
-    var et, tt, f1, Jr, e0, t0;
+    var et, tt, m1, t0, n0, r0;
     if (!n || !t || !Be().countDown) {
-      Vt(null);
+      Kt(null);
       return;
     }
     n.setStyles({
@@ -5171,7 +5176,7 @@ const Tg = (e) => {
     });
     const i = ((et = n.getDataList) == null ? void 0 : et.call(n)) ?? [], s = i[i.length - 1], u = Number(s == null ? void 0 : s.close);
     if (!s || !Number.isFinite(u) || u <= 0) {
-      Vt(null);
+      Kt(null);
       return;
     }
     const m = (tt = n.convertToPixel) == null ? void 0 : tt.call(n, [{
@@ -5179,31 +5184,31 @@ const Tg = (e) => {
     }], {
       paneId: "candle_pane",
       absolute: !0
-    }), g = Number((f1 = m == null ? void 0 : m[0]) == null ? void 0 : f1.y), f = (Jr = n.getSize) == null ? void 0 : Jr.call(n, "candle_pane"), y = (f == null ? void 0 : f.height) ?? t.clientHeight;
+    }), g = Number((m1 = m == null ? void 0 : m[0]) == null ? void 0 : m1.y), f = (t0 = n.getSize) == null ? void 0 : t0.call(n, "candle_pane"), y = (f == null ? void 0 : f.height) ?? t.clientHeight;
     if (!Number.isFinite(g) || g < 0 || g > y) {
-      Vt(null);
+      Kt(null);
       return;
     }
-    const k = Math.min(Math.max(((e0 = N()) == null ? void 0 : e0.pricePrecision) ?? 2, 0), 8), T = u.toLocaleString(void 0, {
+    const k = Math.min(Math.max(((n0 = N()) == null ? void 0 : n0.pricePrecision) ?? 2, 0), 8), A = u.toLocaleString(void 0, {
       minimumFractionDigits: k,
       maximumFractionDigits: k
-    }), P = (t0 = n.getSize) == null ? void 0 : t0.call(n, "candle_pane", at.YAxis), oe = P != null && P.width && Number.isFinite(P.width) ? Math.max(74, Math.floor(P.width) - 2) : 96, ae = X1(U()), ie = o % ae, ee = ie === 0 ? ae : ae - ie, ue = Number(s.close), be = Number(s.open), Se = n.getStyles().candle.priceMark.last, X = Se.text, Ce = Number(X.size) || 12, me = Number(X.paddingTop) || 2, we = Number(X.paddingBottom) || 2, Pe = Math.min(Number(X.paddingLeft) || 4, 3), Xe = Math.min(Number(X.paddingRight) || 4, 3), Je = Math.max(34, Ce * 2 + me + we + 6), it = Math.max(0, Math.min(g - Je / 2, y - Je));
-    Vt({
+    }), P = (r0 = n.getSize) == null ? void 0 : r0.call(n, "candle_pane", at.YAxis), re = P != null && P.width && Number.isFinite(P.width) ? Math.max(74, Math.floor(P.width) - 2) : 96, ae = J1(V()), ie = o % ae, J = ie === 0 ? ae : ae - ie, ue = Number(s.close), be = Number(s.open), Se = n.getStyles().candle.priceMark.last, G = Se.text, Ce = Number(G.size) || 12, me = Number(G.paddingTop) || 2, we = Number(G.paddingBottom) || 2, Pe = Math.min(Number(G.paddingLeft) || 4, 3), Xe = Math.min(Number(G.paddingRight) || 4, 3), Je = Math.max(34, Ce * 2 + me + we + 6), it = Math.max(0, Math.min(g - Je / 2, y - Je));
+    Kt({
       top: it,
-      width: Math.min(oe, Math.max(62, T.length * (Ce * 0.56) + Pe + Xe + 4)),
-      priceText: T,
-      text: wg(ee),
+      width: Math.min(re, Math.max(62, A.length * (Ce * 0.56) + Pe + Xe + 4)),
+      priceText: A,
+      text: Mg(J),
       color: Number.isFinite(ue) && Number.isFinite(be) && ue < be ? Se.downColor : Se.upColor,
       textSize: Ce,
-      textFamily: X.family,
-      textWeight: X.weight,
+      textFamily: G.family,
+      textWeight: G.weight,
       paddingLeft: Pe,
       paddingRight: Xe,
       paddingTop: me,
       paddingBottom: we,
-      borderRadius: Number(X.borderRadius) || 2
+      borderRadius: Number(G.borderRadius) || 2
     });
-  }, D1 = (o) => {
+  }, N1 = (o) => {
     var s, u;
     const i = Number(o == null ? void 0 : o.y);
     if (!Number.isFinite(i))
@@ -5232,66 +5237,66 @@ const Tg = (e) => {
     } catch {
     }
     return NaN;
-  }, u1 = (o) => {
+  }, d1 = (o) => {
     var g;
     if (!Be().quickOrderPlusButton || (o == null ? void 0 : o.paneId) !== "candle_pane" || !t) {
-      if (k1() || Mt())
+      if (x1() || St())
         return;
-      At(null), rt(!1);
+      Tt(null), rt(!1);
       return;
     }
     const i = (g = n == null ? void 0 : n.getSize) == null ? void 0 : g.call(n, "candle_pane", at.YAxis);
-    i != null && i.width && Number.isFinite(i.width) && r1(Math.max(44, Math.ceil(i.width)));
-    const s = Number(o.y), u = D1(o), m = t.clientHeight;
+    i != null && i.width && Number.isFinite(i.width) && o1(Math.max(44, Math.ceil(i.width)));
+    const s = Number(o.y), u = N1(o), m = t.clientHeight;
     if (!Number.isFinite(s) || !Number.isFinite(u) || u <= 0 || s < 0 || s > m) {
-      if (k1() || Mt())
+      if (x1() || St())
         return;
-      At(null), rt(!1);
+      Tt(null), rt(!1);
       return;
     }
-    s1 = {
+    l1 = {
       ...o
-    }, At({
+    }, Tt({
       y: s,
       price: u
     });
   }, $t = () => {
     var o;
-    if (s1)
+    if (l1)
       try {
-        (o = n == null ? void 0 : n.executeAction) == null || o.call(n, Nt.OnCrosshairChange, s1);
+        (o = n == null ? void 0 : n.executeAction) == null || o.call(n, Ot.OnCrosshairChange, l1);
       } catch {
       }
-  }, Rt = (o) => {
+  }, jt = (o) => {
     var s, u;
-    const i = pt() ?? zt();
+    const i = pt() ?? Vt();
     i && ((u = (s = e.orderTools) == null ? void 0 : s.onQuickOrderAction) == null || u.call(s, {
       action: o,
       price: i.price,
       symbol: N()
-    }), rt(!1), St(null), qe(!1));
-  }, pn = async () => {
+    }), rt(!1), Pt(null), qe(!1));
+  }, vn = async () => {
     var i;
-    const o = pt() ?? zt();
+    const o = pt() ?? Vt();
     if (o) {
       try {
         await ((i = navigator.clipboard) == null ? void 0 : i.writeText(String(o.price)));
       } catch {
       }
-      rt(!1), St(null), qe(!1);
+      rt(!1), Pt(null), qe(!1);
     }
-  }, vn = () => {
-    const o = pt() ?? zt();
+  }, bn = () => {
+    const o = pt() ?? Vt();
     o && (n == null || n.createOverlay(_t({
       name: "horizontalStraightLine",
       points: [{
         value: o.price
       }],
       lock: !1
-    })), rt(!1), St(null), qe(!1));
-  }, N1 = (o) => {
-    var y, k, T, P, oe, ae;
-    const i = (k = (y = t == null ? void 0 : t.parentElement) == null ? void 0 : y.getBoundingClientRect) == null ? void 0 : k.call(y), s = (T = t == null ? void 0 : t.getBoundingClientRect) == null ? void 0 : T.call(t), u = o == null ? void 0 : o.overlay, m = (P = u == null ? void 0 : u.points) == null ? void 0 : P[0];
+    })), rt(!1), Pt(null), qe(!1));
+  }, O1 = (o) => {
+    var y, k, A, P, re, ae;
+    const i = (k = (y = t == null ? void 0 : t.parentElement) == null ? void 0 : y.getBoundingClientRect) == null ? void 0 : k.call(y), s = (A = t == null ? void 0 : t.getBoundingClientRect) == null ? void 0 : A.call(t), u = o == null ? void 0 : o.overlay, m = (P = u == null ? void 0 : u.points) == null ? void 0 : P[0];
     let g = 72, f = 40;
     if (i) {
       if (Number.isFinite(o == null ? void 0 : o.pageX) ? g = o.pageX - i.left : Number.isFinite(o == null ? void 0 : o.x) && s && (g = s.left - i.left + o.x), Number.isFinite(o == null ? void 0 : o.pageY))
@@ -5300,13 +5305,13 @@ const Tg = (e) => {
         f = s.top - i.top + o.y;
       else if (Number.isFinite(m == null ? void 0 : m.value))
         try {
-          const ie = (oe = n == null ? void 0 : n.convertToPixel) == null ? void 0 : oe.call(n, [{
+          const ie = (re = n == null ? void 0 : n.convertToPixel) == null ? void 0 : re.call(n, [{
             value: m.value
           }], {
             paneId: "candle_pane",
             absolute: !0
-          }), ee = Number((ae = ie == null ? void 0 : ie[0]) == null ? void 0 : ae.y);
-          Number.isFinite(ee) && (f = ee - i.top);
+          }), J = Number((ae = ie == null ? void 0 : ie[0]) == null ? void 0 : ae.y);
+          Number.isFinite(J) && (f = J - i.top);
         } catch {
         }
     }
@@ -5314,12 +5319,12 @@ const Tg = (e) => {
       x: Math.max(12, Math.min(g - 28, ((i == null ? void 0 : i.width) ?? 360) - 320)),
       y: Math.max(8, f - 52)
     };
-  }, d1 = (o) => {
-    var y, k, T, P, oe, ae, ie, ee;
+  }, h1 = (o) => {
+    var y, k, A, P, re, ae, ie, J;
     const i = o == null ? void 0 : o.overlay;
     if (!(i != null && i.id) || i.name !== "horizontalStraightLine")
       return !1;
-    const s = N1(o), u = Number((k = (y = i.styles) == null ? void 0 : y.line) == null ? void 0 : k.size) || 3, m = ((P = (T = i.styles) == null ? void 0 : T.line) == null ? void 0 : P.style) ?? ze.Solid, g = Array.isArray((ae = (oe = i.styles) == null ? void 0 : oe.line) == null ? void 0 : ae.dashedValue) ? i.styles.line.dashedValue : [], f = ((ee = (ie = i.styles) == null ? void 0 : ie.line) == null ? void 0 : ee.color) ?? "#2f6df6";
+    const s = O1(o), u = Number((k = (y = i.styles) == null ? void 0 : y.line) == null ? void 0 : k.size) || 3, m = ((P = (A = i.styles) == null ? void 0 : A.line) == null ? void 0 : P.style) ?? ze.Solid, g = Array.isArray((ae = (re = i.styles) == null ? void 0 : re.line) == null ? void 0 : ae.dashedValue) ? i.styles.line.dashedValue : [], f = ((J = (ie = i.styles) == null ? void 0 : ie.line) == null ? void 0 : J.color) ?? "#2f6df6";
     return Ke({
       id: i.id,
       x: s.x,
@@ -5331,12 +5336,12 @@ const Tg = (e) => {
       locked: i.lock ?? !1,
       visible: i.visible ?? !0
     }), !1;
-  }, O1 = (o) => {
+  }, I1 = (o) => {
     var s, u;
     const i = (s = o == null ? void 0 : o.overlay) == null ? void 0 : s.id;
     return (!i || ((u = Qe()) == null ? void 0 : u.id) === i) && (Ke(null), He(null)), !1;
   }, _t = (o) => {
-    var f, y, k, T, P, oe, ae, ie, ee;
+    var f, y, k, A, P, re, ae, ie, J;
     if (o.name !== "horizontalStraightLine")
       return o;
     const i = o.onClick, s = o.onSelected, u = o.onDeselected, m = o.onRemoved, g = o.onPressedMoveEnd;
@@ -5347,16 +5352,16 @@ const Tg = (e) => {
         line: {
           ...(f = o.styles) == null ? void 0 : f.line,
           size: Number((k = (y = o.styles) == null ? void 0 : y.line) == null ? void 0 : k.size) || 3,
-          style: ((P = (T = o.styles) == null ? void 0 : T.line) == null ? void 0 : P.style) ?? ze.Solid,
-          dashedValue: ((ae = (oe = o.styles) == null ? void 0 : oe.line) == null ? void 0 : ae.dashedValue) ?? [6, 4],
-          color: ((ee = (ie = o.styles) == null ? void 0 : ie.line) == null ? void 0 : ee.color) ?? "#2f6df6"
+          style: ((P = (A = o.styles) == null ? void 0 : A.line) == null ? void 0 : P.style) ?? ze.Solid,
+          dashedValue: ((ae = (re = o.styles) == null ? void 0 : re.line) == null ? void 0 : ae.dashedValue) ?? [6, 4],
+          color: ((J = (ie = o.styles) == null ? void 0 : ie.line) == null ? void 0 : J.color) ?? "#2f6df6"
         }
       },
-      onClick: (ue) => (d1(ue), (i == null ? void 0 : i(ue)) ?? !1),
-      onSelected: (ue) => (d1(ue), (s == null ? void 0 : s(ue)) ?? !1),
-      onPressedMoveEnd: (ue) => (d1(ue), (g == null ? void 0 : g(ue)) ?? !1),
-      onDeselected: (ue) => (O1(ue), (u == null ? void 0 : u(ue)) ?? !1),
-      onRemoved: (ue) => (O1(ue), (m == null ? void 0 : m(ue)) ?? !1)
+      onClick: (ue) => (h1(ue), (i == null ? void 0 : i(ue)) ?? !1),
+      onSelected: (ue) => (h1(ue), (s == null ? void 0 : s(ue)) ?? !1),
+      onPressedMoveEnd: (ue) => (h1(ue), (g == null ? void 0 : g(ue)) ?? !1),
+      onDeselected: (ue) => (I1(ue), (u == null ? void 0 : u(ue)) ?? !1),
+      onRemoved: (ue) => (I1(ue), (m == null ? void 0 : m(ue)) ?? !1)
     };
   }, $ = () => {
     var i;
@@ -5371,7 +5376,7 @@ const Tg = (e) => {
       id: i.id,
       ...o
     }), setTimeout(() => {
-      ht(i.id), Pt();
+      ht(i.id), Dt();
     }, 0));
   }, Oe = () => {
     const o = Qe();
@@ -5421,7 +5426,7 @@ const Tg = (e) => {
       lineStyle: o,
       dashedValue: i
     }), He(null));
-  }, I1 = () => {
+  }, E1 = () => {
     const o = Qe();
     if (!o)
       return;
@@ -5442,7 +5447,7 @@ const Tg = (e) => {
       dashedValue: u,
       color: m
     }), He(null);
-  }, E1 = (o) => {
+  }, B1 = (o) => {
     const i = Qe();
     i && (S({
       styles: {
@@ -5454,18 +5459,18 @@ const Tg = (e) => {
       ...i,
       color: o
     }));
-  }, B1 = (o) => {
-    var T, P;
+  }, F1 = (o) => {
+    var A, P;
     const i = Qe();
     if (!i || !t)
       return;
     o.preventDefault(), o.stopPropagation(), He(null);
-    const s = (P = (T = t.parentElement) == null ? void 0 : T.getBoundingClientRect) == null ? void 0 : P.call(T);
+    const s = (P = (A = t.parentElement) == null ? void 0 : A.getBoundingClientRect) == null ? void 0 : P.call(A);
     if (!s)
       return;
-    const u = o.clientX, m = o.clientY, g = i.x, f = i.y, y = (oe) => {
-      oe.preventDefault();
-      const ae = g + oe.clientX - u, ie = f + oe.clientY - m;
+    const u = o.clientX, m = o.clientY, g = i.x, f = i.y, y = (re) => {
+      re.preventDefault();
+      const ae = g + re.clientX - u, ie = f + re.clientY - m;
       Ke({
         ...i,
         x: Math.max(8, Math.min(ae, s.width - 320)),
@@ -5475,22 +5480,22 @@ const Tg = (e) => {
       document.removeEventListener("mousemove", y), document.removeEventListener("mouseup", k);
     };
     document.addEventListener("mousemove", y), document.addEventListener("mouseup", k);
-  }, F1 = () => {
-    rt(!1), St(null), qe(!1);
-  }, er = (o) => {
+  }, U1 = () => {
+    rt(!1), Pt(null), qe(!1);
+  }, nr = (o) => {
     var s, u;
-    if (!Mt())
+    if (!St())
       return;
     const i = o.target;
-    (s = i == null ? void 0 : i.closest) != null && s.call(i, ".klinecharts-pro-quick-order-marker") || (u = i == null ? void 0 : i.closest) != null && u.call(i, ".klinecharts-pro-quick-order-menu-anchor") || F1();
+    (s = i == null ? void 0 : i.closest) != null && s.call(i, ".klinecharts-pro-quick-order-marker") || (u = i == null ? void 0 : i.closest) != null && u.call(i, ".klinecharts-pro-quick-order-menu-anchor") || U1();
   };
-  let tr = (Ur = e.orderTools) == null ? void 0 : Ur.quickOrder, nr = (zr = e.orderTools) == null ? void 0 : zr.quickOrderFloatingWindow, rr = (Vr = e.orderTools) == null ? void 0 : Vr.quickOrderPlusButton, or = (Kr = e.orderTools) == null ? void 0 : Kr.openOrders, ir = (Rr = e.orderTools) == null ? void 0 : Rr.openOrdersExtendedPriceLine, ar = (jr = e.orderTools) == null ? void 0 : jr.openOrdersDisplay, sr = (Qr = e.orderTools) == null ? void 0 : Qr.positions, lr = (Zr = e.orderTools) == null ? void 0 : Zr.breakevenPrice, cr = (Hr = e.orderTools) == null ? void 0 : Hr.liquidationPrice, ur = (qr = e.orderTools) == null ? void 0 : qr.priceLine, dr = (Yr = e.orderTools) == null ? void 0 : Yr.marketPriceLine, hr = (Wr = e.orderTools) == null ? void 0 : Wr.countDown, fr = (Gr = e.orderTools) == null ? void 0 : Gr.bidAskPrice, mr = (Xr = e.orderTools) == null ? void 0 : Xr.orderHistory;
+  let rr = (Vr = e.orderTools) == null ? void 0 : Vr.quickOrder, or = (Kr = e.orderTools) == null ? void 0 : Kr.quickOrderFloatingWindow, ir = (Rr = e.orderTools) == null ? void 0 : Rr.quickOrderPlusButton, ar = (jr = e.orderTools) == null ? void 0 : jr.openOrders, sr = (Qr = e.orderTools) == null ? void 0 : Qr.openOrdersExtendedPriceLine, lr = (Zr = e.orderTools) == null ? void 0 : Zr.openOrdersDisplay, cr = (Hr = e.orderTools) == null ? void 0 : Hr.positions, ur = (qr = e.orderTools) == null ? void 0 : qr.breakevenPrice, dr = (Yr = e.orderTools) == null ? void 0 : Yr.liquidationPrice, hr = (Wr = e.orderTools) == null ? void 0 : Wr.priceLine, fr = (Gr = e.orderTools) == null ? void 0 : Gr.marketPriceLine, mr = (Xr = e.orderTools) == null ? void 0 : Xr.countDown, gr = (Jr = e.orderTools) == null ? void 0 : Jr.bidAskPrice, yr = (e0 = e.orderTools) == null ? void 0 : e0.orderHistory;
   Re(() => {
-    var ue, be, Se, X, Ce, me, we, Pe, Xe, Je, it, et, tt, f1;
-    const o = (ue = e.orderTools) == null ? void 0 : ue.quickOrder, i = (be = e.orderTools) == null ? void 0 : be.quickOrderFloatingWindow, s = (Se = e.orderTools) == null ? void 0 : Se.quickOrderPlusButton, u = (X = e.orderTools) == null ? void 0 : X.openOrders, m = (Ce = e.orderTools) == null ? void 0 : Ce.openOrdersExtendedPriceLine, g = (me = e.orderTools) == null ? void 0 : me.openOrdersDisplay, f = (we = e.orderTools) == null ? void 0 : we.positions, y = (Pe = e.orderTools) == null ? void 0 : Pe.breakevenPrice, k = (Xe = e.orderTools) == null ? void 0 : Xe.liquidationPrice, T = (Je = e.orderTools) == null ? void 0 : Je.priceLine, P = (it = e.orderTools) == null ? void 0 : it.marketPriceLine, oe = (et = e.orderTools) == null ? void 0 : et.countDown, ae = (tt = e.orderTools) == null ? void 0 : tt.bidAskPrice, ie = (f1 = e.orderTools) == null ? void 0 : f1.orderHistory, ee = {};
-    typeof o == "boolean" && o !== tr && (tr = o, ee.quickOrder = o, typeof i != "boolean" && (ee.quickOrderFloatingWindow = o), typeof s != "boolean" && (ee.quickOrderPlusButton = o)), typeof i == "boolean" && i !== nr && (nr = i, ee.quickOrderFloatingWindow = i), typeof s == "boolean" && s !== rr && (rr = s, ee.quickOrderPlusButton = s), typeof u == "boolean" && u !== or && (or = u, ee.openOrders = u), typeof m == "boolean" && m !== ir && (ir = m, ee.openOrdersExtendedPriceLine = m), g !== void 0 && g !== ar && (ar = g, ee.openOrdersDisplay = g), typeof f == "boolean" && f !== sr && (sr = f, ee.positions = f), typeof y == "boolean" && y !== lr && (lr = y, ee.breakevenPrice = y), typeof k == "boolean" && k !== cr && (cr = k, ee.liquidationPrice = k), typeof T == "boolean" && T !== ur && (ur = T, ee.priceLine = T, typeof P != "boolean" && (ee.marketPriceLine = T), typeof oe != "boolean" && (ee.countDown = T), typeof ae != "boolean" && (ee.bidAskPrice = T)), typeof P == "boolean" && P !== dr && (dr = P, ee.marketPriceLine = P), typeof oe == "boolean" && oe !== hr && (hr = oe, ee.countDown = oe), typeof ae == "boolean" && ae !== fr && (fr = ae, ee.bidAskPrice = ae), typeof ie == "boolean" && ie !== mr && (mr = ie, ee.orderHistory = ie), Object.keys(ee).length > 0 && c1(ee);
+    var ue, be, Se, G, Ce, me, we, Pe, Xe, Je, it, et, tt, m1;
+    const o = (ue = e.orderTools) == null ? void 0 : ue.quickOrder, i = (be = e.orderTools) == null ? void 0 : be.quickOrderFloatingWindow, s = (Se = e.orderTools) == null ? void 0 : Se.quickOrderPlusButton, u = (G = e.orderTools) == null ? void 0 : G.openOrders, m = (Ce = e.orderTools) == null ? void 0 : Ce.openOrdersExtendedPriceLine, g = (me = e.orderTools) == null ? void 0 : me.openOrdersDisplay, f = (we = e.orderTools) == null ? void 0 : we.positions, y = (Pe = e.orderTools) == null ? void 0 : Pe.breakevenPrice, k = (Xe = e.orderTools) == null ? void 0 : Xe.liquidationPrice, A = (Je = e.orderTools) == null ? void 0 : Je.priceLine, P = (it = e.orderTools) == null ? void 0 : it.marketPriceLine, re = (et = e.orderTools) == null ? void 0 : et.countDown, ae = (tt = e.orderTools) == null ? void 0 : tt.bidAskPrice, ie = (m1 = e.orderTools) == null ? void 0 : m1.orderHistory, J = {};
+    typeof o == "boolean" && o !== rr && (rr = o, J.quickOrder = o, typeof i != "boolean" && (J.quickOrderFloatingWindow = o), typeof s != "boolean" && (J.quickOrderPlusButton = o)), typeof i == "boolean" && i !== or && (or = i, J.quickOrderFloatingWindow = i), typeof s == "boolean" && s !== ir && (ir = s, J.quickOrderPlusButton = s), typeof u == "boolean" && u !== ar && (ar = u, J.openOrders = u), typeof m == "boolean" && m !== sr && (sr = m, J.openOrdersExtendedPriceLine = m), g !== void 0 && g !== lr && (lr = g, J.openOrdersDisplay = g), typeof f == "boolean" && f !== cr && (cr = f, J.positions = f), typeof y == "boolean" && y !== ur && (ur = y, J.breakevenPrice = y), typeof k == "boolean" && k !== dr && (dr = k, J.liquidationPrice = k), typeof A == "boolean" && A !== hr && (hr = A, J.priceLine = A, typeof P != "boolean" && (J.marketPriceLine = A), typeof re != "boolean" && (J.countDown = A), typeof ae != "boolean" && (J.bidAskPrice = A)), typeof P == "boolean" && P !== fr && (fr = P, J.marketPriceLine = P), typeof re == "boolean" && re !== mr && (mr = re, J.countDown = re), typeof ae == "boolean" && ae !== gr && (gr = ae, J.bidAskPrice = ae), typeof ie == "boolean" && ie !== yr && (yr = ie, J.orderHistory = ie), Object.keys(J).length > 0 && u1(J);
   }), Re(() => {
-    Be().marketPriceLine, Be().countDown, U(), N(), n == null || n.setStyles({
+    Be().marketPriceLine, Be().countDown, V(), N(), n == null || n.setStyles({
       candle: {
         priceMark: {
           last: {
@@ -5506,27 +5511,27 @@ const Tg = (e) => {
       }
     }), Ye();
   }), e.ref({
-    setTheme: v,
-    getTheme: () => h(),
-    setStyles: b,
+    setTheme: b,
+    getTheme: () => d(),
+    setStyles: v,
     getStyles: () => n.getStyles(),
     setLocale: B,
     getLocale: () => L(),
     setTimezone: (o) => {
-      A({
+      M({
         key: o,
-        text: R0(e.timezone, L())
+        text: Q0(e.timezone, L())
       });
     },
     getTimezone: () => se().key,
-    setSymbol: Z,
+    setSymbol: oe,
     getSymbol: () => N(),
-    setPeriod: K,
-    getPeriod: () => U(),
-    getMainIndicators: () => J(),
+    setPeriod: R,
+    getPeriod: () => V(),
+    getMainIndicators: () => X(),
     getSubIndicators: () => pe(),
-    setMainIndicators: te,
-    setSubIndicators: H,
+    setMainIndicators: ee,
+    setSubIndicators: Z,
     overrideIndicator: (o, i) => {
       n == null || n.overrideIndicator(o, i);
     },
@@ -5538,23 +5543,23 @@ const Tg = (e) => {
     removeOverlay: (o) => {
       var i;
       if ((i = n == null ? void 0 : n.removeOverlay) == null || i.call(n, o), o.id) {
-        Ae.delete(o.id);
+        Me.delete(o.id);
         const s = Fe.get(o.id);
-        s && (s.checkInterval && clearInterval(s.checkInterval), s.mouseUpHandler && (document.removeEventListener("mouseup", s.mouseUpHandler), document.removeEventListener("touchend", s.mouseUpHandler)), Fe.delete(o.id)), Pt();
+        s && (s.checkInterval && clearInterval(s.checkInterval), s.mouseUpHandler && (document.removeEventListener("mouseup", s.mouseUpHandler), document.removeEventListener("touchend", s.mouseUpHandler)), Fe.delete(o.id)), Dt();
       }
     },
     removeAllOverlay: () => {
-      Ae.forEach((o, i) => {
+      Me.forEach((o, i) => {
         var u;
         (u = n == null ? void 0 : n.removeOverlay) == null || u.call(n, {
           id: i
         });
         const s = Fe.get(i);
         s && (s.checkInterval && clearInterval(s.checkInterval), s.mouseUpHandler && (document.removeEventListener("mouseup", s.mouseUpHandler), document.removeEventListener("touchend", s.mouseUpHandler)));
-      }), Ae.clear(), Fe.clear();
+      }), Me.clear(), Fe.clear();
     },
-    getAllOverlay: () => Array.from(Ae.values()),
-    getOverlay: (o) => Ae.get(o) || null,
+    getAllOverlay: () => Array.from(Me.values()),
+    getOverlay: (o) => Me.get(o) || null,
     overrideOverlay: (o) => {
       n && "overrideOverlay" in n && typeof n.overrideOverlay == "function" ? n.overrideOverlay(o) : console.warn("overrideOverlay method not available on widget");
     },
@@ -5574,23 +5579,23 @@ const Tg = (e) => {
       n && n.unsubscribeAction(o, i);
     },
     setIndicatorModalVisible: j,
-    setTimezoneModalVisible: ne,
-    setSettingModalVisible: W,
+    setTimezoneModalVisible: te,
+    setSettingModalVisible: Y,
     setTimeToolsModalVisible: (o) => {
       o && O(Date.now()), Q(o);
     },
     getOrderToolsState: () => Be(),
     setOrderToolsState: (o) => {
-      c1(o);
+      u1(o);
     },
     dispose: () => {
-      t && n0(t);
+      t && o0(t);
     },
     resize: () => {
       n && "resize" in n && typeof n.resize == "function" ? n.resize() : console.warn("resize method not available on widget");
     },
     getSettings: () => {
-      var s, u, m, g, f, y, k, T, P, oe, ae, ie, ee, ue, be, Se;
+      var s, u, m, g, f, y, k, A, P, re, ae, ie, J, ue, be, Se;
       if (!n)
         return {};
       const o = n.getStyles(), i = (s = o.candle) == null ? void 0 : s.bar;
@@ -5600,10 +5605,10 @@ const Tg = (e) => {
         candleBarStyle: i == null ? void 0 : i.style,
         // bar.style might be LineType
         showLastPrice: (f = (g = (m = o.candle) == null ? void 0 : m.priceMark) == null ? void 0 : g.last) == null ? void 0 : f.show,
-        showHighestPrice: (T = (k = (y = o.candle) == null ? void 0 : y.priceMark) == null ? void 0 : k.high) == null ? void 0 : T.show,
-        showLowestPrice: (ae = (oe = (P = o.candle) == null ? void 0 : P.priceMark) == null ? void 0 : oe.low) == null ? void 0 : ae.show,
+        showHighestPrice: (A = (k = (y = o.candle) == null ? void 0 : y.priceMark) == null ? void 0 : k.high) == null ? void 0 : A.show,
+        showLowestPrice: (ae = (re = (P = o.candle) == null ? void 0 : P.priceMark) == null ? void 0 : re.low) == null ? void 0 : ae.show,
         // Indicator settings
-        showIndicatorLastValue: (ee = (ie = o.indicator) == null ? void 0 : ie.lastValueMark) == null ? void 0 : ee.show,
+        showIndicatorLastValue: (J = (ie = o.indicator) == null ? void 0 : ie.lastValueMark) == null ? void 0 : J.show,
         // Axis settings - yAxis.reverse is boolean according to YAxisStyle interface
         priceAxisType: (ue = o.yAxis) == null ? void 0 : ue.type,
         reverseCoordinate: (be = o.yAxis) == null ? void 0 : be.reverse,
@@ -5613,7 +5618,7 @@ const Tg = (e) => {
       };
     },
     setSettings: (o) => {
-      var s, u, m, g, f, y, k, T, P, oe, ae, ie, ee, ue;
+      var s, u, m, g, f, y, k, A, P, re, ae, ie, J, ue;
       if (!n)
         return;
       const i = {};
@@ -5647,9 +5652,9 @@ const Tg = (e) => {
       }), o.showHighestPrice !== void 0 && (i.candle = {
         ...i.candle,
         priceMark: {
-          ...(T = i.candle) == null ? void 0 : T.priceMark,
+          ...(A = i.candle) == null ? void 0 : A.priceMark,
           high: {
-            ...(oe = (P = i.candle) == null ? void 0 : P.priceMark) == null ? void 0 : oe.high,
+            ...(re = (P = i.candle) == null ? void 0 : P.priceMark) == null ? void 0 : re.high,
             show: o.showHighestPrice
           }
         }
@@ -5658,7 +5663,7 @@ const Tg = (e) => {
         priceMark: {
           ...(ae = i.candle) == null ? void 0 : ae.priceMark,
           low: {
-            ...(ee = (ie = i.candle) == null ? void 0 : ie.priceMark) == null ? void 0 : ee.low,
+            ...(J = (ie = i.candle) == null ? void 0 : ie.priceMark) == null ? void 0 : J.low,
             show: o.showLowestPrice
           }
         }
@@ -5677,7 +5682,7 @@ const Tg = (e) => {
       }), o.showGrids !== void 0 && (i.grid = {
         ...i.grid,
         show: o.showGrids
-      }), It(i), n.setStyles(i);
+      }), Et(i), n.setStyles(i);
     },
     resetSettings: () => {
       var s, u, m, g, f, y, k;
@@ -5686,7 +5691,7 @@ const Tg = (e) => {
       n.getStyles();
       const o = {
         candle: {
-          type: a9.CandleSolid,
+          type: l9.CandleSolid,
           // Default to solid candles
           priceMark: {
             last: {
@@ -5706,7 +5711,7 @@ const Tg = (e) => {
           }
         },
         yAxis: {
-          type: s9.Normal,
+          type: c9.Normal,
           reverse: !1
         },
         grid: {
@@ -5722,9 +5727,9 @@ const Tg = (e) => {
             size: 0.5
           }
         }
-      }, i = R();
+      }, i = K();
       if (i) {
-        const T = {
+        const A = {
           candle: {
             type: (s = i.candle) == null ? void 0 : s.type,
             bar: (u = i.candle) == null ? void 0 : u.bar,
@@ -5741,13 +5746,13 @@ const Tg = (e) => {
             show: (k = i.grid) == null ? void 0 : k.show
           }
         };
-        It(T), n.setStyles(T);
+        Et(A), n.setStyles(A);
       } else
-        It(o), n.setStyles(o);
+        Et(o), n.setStyles(o);
     },
     // === Drawing Methods ===
     saveDrawings: (o) => {
-      const i = Array.from(Ae.values());
+      const i = Array.from(Me.values());
       i.forEach((s, u) => {
         var f;
         const m = vt(s.type), g = ((f = s.points) == null ? void 0 : f.length) || 0;
@@ -5765,9 +5770,9 @@ const Tg = (e) => {
             styles: s.styles,
             visible: s.visible ?? !0,
             lock: s.lock ?? !1,
-            mode: s.mode ?? kn.Normal
+            mode: s.mode ?? xn.Normal
           }, f = n == null ? void 0 : n.createOverlay(g), y = typeof f == "string" ? f : null;
-          y && (Ae.set(y, {
+          y && (Me.set(y, {
             ...s,
             id: y
           }), Fe.set(y, {
@@ -5788,51 +5793,51 @@ const Tg = (e) => {
     enableAutoSave: (o, i = !0) => {
     }
   });
-  const gr = () => {
-    n == null || n.resize(), Ye(), br(), kt();
+  const Cr = () => {
+    n == null || n.resize(), Ye(), _r(), kt();
   };
-  let U1, z1, V1, h1 = !1, yr = 0;
-  const Fo = () => {
-    if (h1 || Date.now() < yr)
+  let z1, V1, K1, f1 = !1, pr = 0;
+  const zo = () => {
+    if (f1 || Date.now() < pr)
       return;
     const o = Le();
     if (!o.enabled || o.anchorPoint === "date")
       return;
-    const i = _r(o.anchorPoint, o.timestamp);
+    const i = xr(o.anchorPoint, o.timestamp);
     if (Number.isFinite(i) && i !== o.timestamp) {
       const s = {
         ...o,
         timestamp: i
       };
-      ye(s), W0(s);
+      ye(s), X0(s);
     }
-  }, Uo = () => {
-    V1 && window.clearTimeout(V1), V1 = window.setTimeout(() => {
-      V1 = void 0, Fo();
+  }, Vo = () => {
+    K1 && window.clearTimeout(K1), K1 = window.setTimeout(() => {
+      K1 = void 0, zo();
     }, 80);
-  }, Cr = () => {
-    Ye(), br(), kt(), Uo();
-  }, pr = [Nt.OnVisibleRangeChange, Nt.OnZoom, Nt.OnScroll], zo = (o) => {
+  }, vr = () => {
+    Ye(), _r(), kt(), Vo();
+  }, br = [Ot.OnVisibleRangeChange, Ot.OnZoom, Ot.OnScroll], Ko = (o) => {
     const i = new Date(o), s = i.getFullYear(), u = `${i.getMonth() + 1}`.padStart(2, "0"), m = `${i.getDate()}`.padStart(2, "0"), g = `${i.getHours()}`.padStart(2, "0"), f = `${i.getMinutes()}`.padStart(2, "0");
     return `${s}/${u}/${m} ${g}:${f}`;
-  }, Vo = (o) => {
+  }, Ro = (o) => {
     var f;
     const i = ((f = n == null ? void 0 : n.getDataList) == null ? void 0 : f.call(n)) ?? [];
     if (i.length === 0)
       return null;
     let s = i[0], u = 0, m = Number(s == null ? void 0 : s.timestamp), g = Math.abs(m - o);
     for (let y = 1; y < i.length; y += 1) {
-      const k = i[y], T = Number(k == null ? void 0 : k.timestamp);
-      if (!Number.isFinite(T))
+      const k = i[y], A = Number(k == null ? void 0 : k.timestamp);
+      if (!Number.isFinite(A))
         continue;
-      const P = Math.abs(T - o);
-      P < g && (s = k, u = y, m = T, g = P);
+      const P = Math.abs(A - o);
+      P < g && (s = k, u = y, m = A, g = P);
     }
     return s && Number.isFinite(m) ? {
       candle: s,
       dataIndex: u
     } : null;
-  }, Ko = (o) => {
+  }, jo = (o) => {
     var s;
     const i = ((s = n == null ? void 0 : n.getDataList) == null ? void 0 : s.call(n)) ?? [];
     if (i.length === 0 || !Number.isFinite(o))
@@ -5846,15 +5851,15 @@ const Tg = (e) => {
         };
     }
     return null;
-  }, K1 = (o) => {
+  }, R1 = (o) => {
     var s;
     const i = ((s = n == null ? void 0 : n.getDataList) == null ? void 0 : s.call(n)) ?? [];
     return i.length === 0 || !Number.isFinite(o) || o < 0 ? -1 : Math.max(0, Math.min(i.length - 1, o + 1));
-  }, vr = (o) => {
-    var ae, ie, ee;
+  }, $r = (o) => {
+    var ae, ie, J;
     if (!n || !t)
       return null;
-    const i = Vo(o), s = i == null ? void 0 : i.candle, u = Number((s == null ? void 0 : s.timestamp) ?? o), m = Number((s == null ? void 0 : s.high) ?? (s == null ? void 0 : s.close) ?? (s == null ? void 0 : s.open)), g = i ? K1(i.dataIndex) : void 0, f = i && Number.isFinite(m) ? {
+    const i = Ro(o), s = i == null ? void 0 : i.candle, u = Number((s == null ? void 0 : s.timestamp) ?? o), m = Number((s == null ? void 0 : s.high) ?? (s == null ? void 0 : s.close) ?? (s == null ? void 0 : s.open)), g = i ? R1(i.dataIndex) : void 0, f = i && Number.isFinite(m) ? {
       dataIndex: g,
       value: m
     } : {
@@ -5862,29 +5867,29 @@ const Tg = (e) => {
     }, y = (ae = n.convertToPixel) == null ? void 0 : ae.call(n, [f], {
       paneId: "candle_pane",
       absolute: !0
-    }), k = Number((ie = y == null ? void 0 : y[0]) == null ? void 0 : ie.x), T = Number((ee = y == null ? void 0 : y[0]) == null ? void 0 : ee.y), P = t.clientWidth, oe = t.clientHeight;
+    }), k = Number((ie = y == null ? void 0 : y[0]) == null ? void 0 : ie.x), A = Number((J = y == null ? void 0 : y[0]) == null ? void 0 : J.y), P = t.clientWidth, re = t.clientHeight;
     return !Number.isFinite(k) || k < -80 || k > P + 80 ? null : {
       timestamp: u,
-      text: zo(u),
+      text: Ko(u),
       left: Math.max(58, Math.min(k, P - 58)),
-      top: Number.isFinite(T) ? Math.max(8, Math.min(T - 42, oe - 38)) : 10
+      top: Number.isFinite(A) ? Math.max(8, Math.min(A - 42, re - 38)) : 10
     };
-  }, br = () => {
-    const o = i1();
+  }, _r = () => {
+    const o = a1();
     if (!o || !n || !t)
       return;
-    const i = vr(o.timestamp);
-    i && L1(i);
-  }, R1 = (o, i = 0) => {
+    const i = $r(o.timestamp);
+    i && w1(i);
+  }, j1 = (o, i = 0) => {
     if (!n || !t)
       return;
-    const s = vr(o);
+    const s = $r(o);
     if (s) {
-      L1(s);
+      w1(s);
       return;
     }
-    i < 6 && (z1 = window.setTimeout(() => R1(o, i + 1), 80));
-  }, bn = (o, i, s) => {
+    i < 6 && (V1 = window.setTimeout(() => j1(o, i + 1), 80));
+  }, $n = (o, i, s) => {
     let u = i, m = u;
     switch (o.timespan) {
       case "minute": {
@@ -5922,14 +5927,14 @@ const Tg = (e) => {
       }
     }
     return [m, u];
-  }, Ro = (o, i = 500) => {
-    const s = X1(U()), u = Math.max(1, Math.floor(i / 2)) * s;
+  }, Qo = (o, i = 500) => {
+    const s = J1(V()), u = Math.max(1, Math.floor(i / 2)) * s;
     return {
       from: o - u,
       to: o + u
     };
-  }, jo = (o, i, s = 600) => {
-    const u = X1(i), m = Math.max(120, s);
+  }, Zo = (o, i, s = 600) => {
+    const u = J1(i), m = Math.max(120, s);
     let g = 0.5;
     o.anchorPoint === "left" ? g = 0.12 : o.anchorPoint === "right" && (g = 0.88);
     const f = Math.max(20, Math.floor(m * g)), y = Math.max(20, m - f);
@@ -5937,19 +5942,19 @@ const Tg = (e) => {
       from: o.timestamp - f * u,
       to: Math.min(Date.now(), o.timestamp + y * u)
     };
-  }, Qo = (o) => {
+  }, Ho = (o) => {
     const i = new Date(o.from), s = new Date(o.to);
     return {
       from: new Date(i.getFullYear(), i.getMonth(), i.getDate(), 0, 0, 0, 0).getTime(),
       to: new Date(s.getFullYear(), s.getMonth(), s.getDate(), 23, 59, 59, 999).getTime()
     };
-  }, Zo = (o, i) => {
+  }, qo = (o, i) => {
     const s = Math.min(i.from, i.to), u = Math.max(i.from, i.to);
     return o.filter((m) => {
       const g = Number(m.timestamp);
       return g >= s && g <= u;
     });
-  }, Ho = (o, i) => {
+  }, Yo = (o, i) => {
     var u;
     const s = Math.max(i.from, i.to);
     for (let m = o.length - 1; m >= 0; m -= 1) {
@@ -5958,7 +5963,7 @@ const Tg = (e) => {
         return g;
     }
     return s;
-  }, qo = (o, i) => {
+  }, Wo = (o, i) => {
     var u;
     const s = Math.max(i.from, i.to);
     for (let m = o.length - 1; m >= 0; m -= 1) {
@@ -5967,50 +5972,50 @@ const Tg = (e) => {
         return m;
     }
     return o.length - 1;
-  }, Yo = (o, i) => {
-    const s = X1(i), u = Math.abs(o.to - o.from), m = Math.max(1, Math.ceil(u / s) + 1), g = Math.max(m, 120) * s;
+  }, Go = (o, i) => {
+    const s = J1(i), u = Math.abs(o.to - o.from), m = Math.max(1, Math.ceil(u / s) + 1), g = Math.max(m, 120) * s;
     return {
       from: o.from,
       to: Math.max(o.to, Math.min(Date.now(), o.to + g))
     };
-  }, Wo = (o) => {
+  }, Xo = (o) => {
     var g, f;
     if (!n || !t || o.length === 0)
       return;
     const i = ((g = n.getSize("candle_pane", at.YAxis)) == null ? void 0 : g.width) ?? 0, s = ((f = n.getSize("candle_pane", at.Main)) == null ? void 0 : f.width) ?? t.clientWidth - i, u = Math.max(1, s - 8), m = Math.max(2, u / Math.max(1, o.length));
     n.setOffsetRightDistance(0), n.setLeftMinVisibleBarCount(0), n.setRightMinVisibleBarCount(0), n.setBarSpace(m);
-  }, $n = (o) => {
+  }, _n = (o) => {
     var i;
-    !n || !Number.isFinite(o) || ((i = n.scrollToTimestamp) == null || i.call(n, o, 250), requestAnimationFrame(() => R1(o)), Ye());
-  }, $r = (o, i = "floor") => {
+    !n || !Number.isFinite(o) || ((i = n.scrollToTimestamp) == null || i.call(n, o, 250), requestAnimationFrame(() => j1(o)), Ye());
+  }, kr = (o, i = "floor") => {
     var g, f, y;
     const s = ((g = n == null ? void 0 : n.getDataList) == null ? void 0 : g.call(n)) ?? [];
     if (s.length === 0 || !Number.isFinite(o))
       return -1;
     if (i === "floor")
       for (let k = s.length - 1; k >= 0; k -= 1) {
-        const T = Number((f = s[k]) == null ? void 0 : f.timestamp);
-        if (Number.isFinite(T) && T <= o)
+        const A = Number((f = s[k]) == null ? void 0 : f.timestamp);
+        if (Number.isFinite(A) && A <= o)
           return k;
       }
     let u = 0, m = 1 / 0;
     for (let k = 0; k < s.length; k += 1) {
-      const T = Number((y = s[k]) == null ? void 0 : y.timestamp);
-      if (!Number.isFinite(T))
+      const A = Number((y = s[k]) == null ? void 0 : y.timestamp);
+      if (!Number.isFinite(A))
         continue;
-      const P = Math.abs(T - o);
-      (P < m || P === m && T > o) && (m = P, u = k);
+      const P = Math.abs(A - o);
+      (P < m || P === m && A > o) && (m = P, u = k);
     }
     return m === 1 / 0 ? -1 : u;
-  }, _n = (o) => {
-    var k, T, P;
+  }, kn = (o) => {
+    var k, A, P;
     if (!n || !t)
       return null;
-    const i = (k = n.getDom) == null ? void 0 : k.call(n, "candle_pane", at.Main), s = (T = i == null ? void 0 : i.getBoundingClientRect) == null ? void 0 : T.call(i), u = (P = r == null ? void 0 : r.getBoundingClientRect) == null ? void 0 : P.call(r), m = t.getBoundingClientRect(), g = s && Number.isFinite(s.left) ? s.left - ((u == null ? void 0 : u.left) ?? m.left) : m.left - ((u == null ? void 0 : u.left) ?? m.left), f = n.getSize("candle_pane", at.Main), y = (s == null ? void 0 : s.width) ?? (f == null ? void 0 : f.width) ?? t.clientWidth;
+    const i = (k = n.getDom) == null ? void 0 : k.call(n, "candle_pane", at.Main), s = (A = i == null ? void 0 : i.getBoundingClientRect) == null ? void 0 : A.call(i), u = (P = r == null ? void 0 : r.getBoundingClientRect) == null ? void 0 : P.call(r), m = t.getBoundingClientRect(), g = s && Number.isFinite(s.left) ? s.left - ((u == null ? void 0 : u.left) ?? m.left) : m.left - ((u == null ? void 0 : u.left) ?? m.left), f = n.getSize("candle_pane", at.Main), y = (s == null ? void 0 : s.width) ?? (f == null ? void 0 : f.width) ?? t.clientWidth;
     return o === "left" ? Math.max(8, g) : o === "center" ? g + y / 2 : o === "right" ? g + y : null;
-  }, _r = (o, i) => {
-    var T, P, oe, ae, ie, ee;
-    const s = _n(o), u = ((T = n == null ? void 0 : n.getDataList) == null ? void 0 : T.call(n)) ?? [];
+  }, xr = (o, i) => {
+    var A, P, re, ae, ie, J;
+    const s = kn(o), u = ((A = n == null ? void 0 : n.getDataList) == null ? void 0 : A.call(n)) ?? [];
     if (!n || s === null || u.length === 0)
       return i;
     const m = (P = n.convertFromPixel) == null ? void 0 : P.call(n, [{
@@ -6019,32 +6024,32 @@ const Tg = (e) => {
     }], {
       paneId: "candle_pane",
       absolute: !0
-    }), g = Number((oe = m == null ? void 0 : m[0]) == null ? void 0 : oe.dataIndex), f = Math.max(0, Math.min(u.length - 1, Number.isFinite(g) ? Math.round(g) : -1)), y = Ko(i);
+    }), g = Number((re = m == null ? void 0 : m[0]) == null ? void 0 : re.dataIndex), f = Math.max(0, Math.min(u.length - 1, Number.isFinite(g) ? Math.round(g) : -1)), y = jo(i);
     if (y) {
-      const ue = K1(y.dataIndex), be = (ae = n.convertToPixel) == null ? void 0 : ae.call(n, [{
+      const ue = R1(y.dataIndex), be = (ae = n.convertToPixel) == null ? void 0 : ae.call(n, [{
         dataIndex: ue
       }], {
         paneId: "candle_pane",
         absolute: !0
-      }), Se = Number((ie = be == null ? void 0 : be[0]) == null ? void 0 : ie.x), X = n.getBarSpace, Ce = typeof X == "function" ? X.call(n) : void 0, me = Number(typeof Ce == "object" ? Ce == null ? void 0 : Ce.bar : Ce), we = Number.isFinite(me) ? Math.max(2, me / 2) : 8;
+      }), Se = Number((ie = be == null ? void 0 : be[0]) == null ? void 0 : ie.x), G = n.getBarSpace, Ce = typeof G == "function" ? G.call(n) : void 0, me = Number(typeof Ce == "object" ? Ce == null ? void 0 : Ce.bar : Ce), we = Number.isFinite(me) ? Math.max(2, me / 2) : 8;
       if (Number.isFinite(Se) && Math.abs(Se - s) <= we)
         return i;
     }
-    const k = Number((ee = u[f]) == null ? void 0 : ee.timestamp);
+    const k = Number((J = u[f]) == null ? void 0 : J.timestamp);
     return Number.isFinite(k) ? k : i;
-  }, kr = (o) => {
+  }, Lr = (o) => {
     if (!n || !Number.isFinite(o.timestamp))
       return;
-    if (h1 = !0, yr = Date.now() + 1e3, o.anchorPoint === "date") {
-      $n(o.timestamp), window.setTimeout(() => {
-        h1 = !1;
+    if (f1 = !0, pr = Date.now() + 1e3, o.anchorPoint === "date") {
+      _n(o.timestamp), window.setTimeout(() => {
+        f1 = !1;
       }, 1e3);
       return;
     }
-    const i = $r(o.timestamp, "nearest"), s = K1(i), u = _n(o.anchorPoint);
+    const i = kr(o.timestamp, "nearest"), s = R1(i), u = kn(o.anchorPoint);
     if (s < 0 || u === null) {
-      $n(o.timestamp), window.setTimeout(() => {
-        h1 = !1;
+      _n(o.timestamp), window.setTimeout(() => {
+        f1 = !1;
       }, 1e3);
       return;
     }
@@ -6057,19 +6062,19 @@ const Tg = (e) => {
         absolute: !0
       }), g = Number((y = m == null ? void 0 : m[0]) == null ? void 0 : y.x);
       Number.isFinite(g) && (n == null || n.scrollByDistance(u - g, 0)), requestAnimationFrame(() => {
-        kt(o), R1(o.timestamp), window.setTimeout(() => {
-          h1 = !1;
+        kt(o), j1(o.timestamp), window.setTimeout(() => {
+          f1 = !1;
         }, 1e3);
       });
     }), Ye();
-  }, Go = (o) => {
+  }, Jo = (o) => {
     var f, y;
     if (!n || !t)
       return null;
-    const i = _n(o.anchorPoint);
+    const i = kn(o.anchorPoint);
     if (i !== null)
       return i;
-    const s = K1($r(o.timestamp, "nearest")), u = s >= 0 ? {
+    const s = R1(kr(o.timestamp, "nearest")), u = s >= 0 ? {
       dataIndex: s
     } : {
       timestamp: o.timestamp
@@ -6079,65 +6084,65 @@ const Tg = (e) => {
     }), g = Number((y = m == null ? void 0 : m[0]) == null ? void 0 : y.x);
     return !Number.isFinite(g) || g < -2 || g > t.clientWidth + 2 ? null : g;
   }, kt = (o) => {
-    var P, oe, ae, ie;
+    var P, re, ae, ie;
     const i = o ?? Le();
     if (!n || !i.enabled || !i.anchorLine) {
-      a1(null);
+      s1(null);
       return;
     }
-    const s = Go(i), u = (P = n.getDom) == null ? void 0 : P.call(n, "candle_pane", at.Main), m = (oe = u == null ? void 0 : u.getBoundingClientRect) == null ? void 0 : oe.call(u), g = (ae = r == null ? void 0 : r.getBoundingClientRect) == null ? void 0 : ae.call(r), f = (ie = t == null ? void 0 : t.getBoundingClientRect) == null ? void 0 : ie.call(t), y = n.getSize("candle_pane", at.Main), k = m && Number.isFinite(m.top) ? m.top - ((g == null ? void 0 : g.top) ?? (f == null ? void 0 : f.top) ?? 0) : 0, T = Math.max(1, (m == null ? void 0 : m.height) ?? (y == null ? void 0 : y.height) ?? 0);
+    const s = Jo(i), u = (P = n.getDom) == null ? void 0 : P.call(n, "candle_pane", at.Main), m = (re = u == null ? void 0 : u.getBoundingClientRect) == null ? void 0 : re.call(u), g = (ae = r == null ? void 0 : r.getBoundingClientRect) == null ? void 0 : ae.call(r), f = (ie = t == null ? void 0 : t.getBoundingClientRect) == null ? void 0 : ie.call(t), y = n.getSize("candle_pane", at.Main), k = m && Number.isFinite(m.top) ? m.top - ((g == null ? void 0 : g.top) ?? (f == null ? void 0 : f.top) ?? 0) : 0, A = Math.max(1, (m == null ? void 0 : m.height) ?? (y == null ? void 0 : y.height) ?? 0);
     if (s === null) {
-      a1(null);
+      s1(null);
       return;
     }
-    a1({
+    s1({
       left: s,
       top: k,
-      height: T
+      height: A
     });
-  }, xr = async (o, i) => {
+  }, wr = async (o, i) => {
     if (n) {
-      d(!0), $e(!0);
+      h(!0), $e(!0);
       try {
-        const s = U(), u = o.from <= o.to ? o : {
+        const s = V(), u = o.from <= o.to ? o : {
           from: o.to,
           to: o.from
-        }, m = Qo(u), g = i ? m : Yo(m, s), f = await e.datafeed.getHistoryKLineData(N(), s, g.from, g.to), y = Zo(f, m);
+        }, m = Ho(u), g = i ? m : Go(m, s), f = await e.datafeed.getHistoryKLineData(N(), s, g.from, g.to), y = qo(f, m);
         n.applyNewData(f, f.length > 0), ve(m), requestAnimationFrame(() => {
-          const k = qo(f, m);
-          i ? $n(i) : (Wo(y), n == null || n.scrollToDataIndex(k, 0), R1(Ho(y, m))), kt();
+          const k = Wo(f, m);
+          i ? _n(i) : (Xo(y), n == null || n.scrollToDataIndex(k, 0), j1(Yo(y, m))), kt();
         });
       } finally {
-        d(!1), $e(!1);
+        h(!1), $e(!1);
       }
     }
-  }, Xo = async (o) => {
-    O(o), await xr(Ro(o), o);
-  }, Jo = (o) => {
+  }, e9 = async (o) => {
+    O(o), await wr(Qo(o), o);
+  }, t9 = (o) => {
     const s = {
       ...o,
-      timestamp: (() => !n || o.anchorPoint === "date" ? o.timestamp : _r(o.anchorPoint, o.timestamp))()
+      timestamp: (() => !n || o.anchorPoint === "date" ? o.timestamp : xr(o.anchorPoint, o.timestamp))()
     };
-    ye(s), W0(s), s.enabled ? (O(s.timestamp), requestAnimationFrame(() => {
-      kr(s), kt(s);
+    ye(s), X0(s), s.enabled ? (O(s.timestamp), requestAnimationFrame(() => {
+      Lr(s), kt(s);
     })) : requestAnimationFrame(() => kt(s));
   };
-  Vn(() => {
-    if (window.addEventListener("resize", gr), n = i9(t, {
+  Rn(() => {
+    if (window.addEventListener("resize", Cr), n = s9(t, {
       customApi: {
-        formatDate: (f, y, k, T) => {
-          switch (U().timespan) {
+        formatDate: (f, y, k, A) => {
+          switch (V().timespan) {
             case "minute":
-              return T === Q1.XAxis ? E.formatDate(f, y, "HH:mm") : E.formatDate(f, y, "YYYY-MM-DD HH:mm");
+              return A === Z1.XAxis ? E.formatDate(f, y, "HH:mm") : E.formatDate(f, y, "YYYY-MM-DD HH:mm");
             case "hour":
-              return T === Q1.XAxis ? E.formatDate(f, y, "MM-DD HH:mm") : E.formatDate(f, y, "YYYY-MM-DD HH:mm");
+              return A === Z1.XAxis ? E.formatDate(f, y, "MM-DD HH:mm") : E.formatDate(f, y, "YYYY-MM-DD HH:mm");
             case "day":
             case "week":
               return E.formatDate(f, y, "YYYY-MM-DD");
             case "month":
-              return T === Q1.XAxis ? E.formatDate(f, y, "YYYY-MM") : E.formatDate(f, y, "YYYY-MM-DD");
+              return A === Z1.XAxis ? E.formatDate(f, y, "YYYY-MM") : E.formatDate(f, y, "YYYY-MM-DD");
             case "year":
-              return T === Q1.XAxis ? E.formatDate(f, y, "YYYY") : E.formatDate(f, y, "YYYY-MM-DD");
+              return A === Z1.XAxis ? E.formatDate(f, y, "YYYY") : E.formatDate(f, y, "YYYY-MM-DD");
           }
           return E.formatDate(f, y, "YYYY-MM-DD HH:mm");
         }
@@ -6147,8 +6152,8 @@ const Tg = (e) => {
       if (f) {
         let k = document.createElement("div");
         if (k.className = "klinecharts-pro-watermark", E.isString(e.watermark)) {
-          const T = e.watermark.replace(/(^\s*)|(\s*$)/g, "");
-          k.innerHTML = T;
+          const A = e.watermark.replace(/(^\s*)|(\s*$)/g, "");
+          k.innerHTML = A;
         } else
           k.appendChild(e.watermark);
         f.appendChild(k);
@@ -6161,7 +6166,7 @@ const Tg = (e) => {
       const f = N();
       if (f != null && f.ticker)
         try {
-          const y = Array.from(Ae.values());
+          const y = Array.from(Me.values());
           ft.saveDrawings(f.ticker, y);
         } catch (y) {
           console.error("âŒ Error refreshing local storage:", y);
@@ -6177,32 +6182,32 @@ const Tg = (e) => {
     const u = n == null ? void 0 : n.removeOverlay;
     n && u && (n.removeOverlay = function(...f) {
       const y = u.apply(this, f), k = f[0];
-      let T;
-      if (typeof k == "string" ? T = k : k && typeof k == "object" && k.id && (T = k.id), T) {
-        Ae.delete(T);
-        const P = Fe.get(T);
-        P && (P.checkInterval && clearInterval(P.checkInterval), P.mouseUpHandler && (document.removeEventListener("mouseup", P.mouseUpHandler), document.removeEventListener("touchend", P.mouseUpHandler)), Fe.delete(T)), i();
+      let A;
+      if (typeof k == "string" ? A = k : k && typeof k == "object" && k.id && (A = k.id), A) {
+        Me.delete(A);
+        const P = Fe.get(A);
+        P && (P.checkInterval && clearInterval(P.checkInterval), P.mouseUpHandler && (document.removeEventListener("mouseup", P.mouseUpHandler), document.removeEventListener("touchend", P.mouseUpHandler)), Fe.delete(A)), i();
       }
       return y;
-    }), J().forEach((f) => {
-      G1(n, f, !0, {
+    }), X().forEach((f) => {
+      X1(n, f, !0, {
         id: "candle_pane"
       });
     });
     const m = {};
     e.subIndicators.forEach((f) => {
-      const y = G1(n, f, !0);
+      const y = X1(n, f, !0);
       y && (m[f] = y);
-    }), H(m), n == null || n.loadMore((f) => {
-      d(!0), (async () => {
+    }), Z(m), n == null || n.loadMore((f) => {
+      h(!0), (async () => {
         try {
-          const k = U(), [T] = bn(k, f, 1), [P] = bn(k, T, 500), oe = await e.datafeed.getHistoryKLineData(N(), k, P, T);
-          n == null || n.applyMoreData(oe, oe.length > 0);
+          const k = V(), [A] = $n(k, f, 1), [P] = $n(k, A, 500), re = await e.datafeed.getHistoryKLineData(N(), k, P, A);
+          n == null || n.applyMoreData(re, re.length > 0);
         } finally {
-          d(!1);
+          h(!1);
         }
       })();
-    }), n == null || n.subscribeAction(Nt.OnTooltipIconClick, (f) => {
+    }), n == null || n.subscribeAction(Ot.OnTooltipIconClick, (f) => {
       if (f.indicatorName)
         switch (f.iconId) {
           case "visible": {
@@ -6225,7 +6230,7 @@ const Tg = (e) => {
           }
           case "setting": {
             const y = n == null ? void 0 : n.getIndicatorByPaneId(f.paneId, f.indicatorName);
-            A1({
+            T1({
               visible: !0,
               indicatorName: f.indicatorName,
               paneId: f.paneId,
@@ -6235,34 +6240,34 @@ const Tg = (e) => {
           }
           case "close":
             if (f.paneId === "candle_pane") {
-              const y = [...J()];
-              n == null || n.removeIndicator("candle_pane", f.indicatorName), y.splice(y.indexOf(f.indicatorName), 1), te(y), Ge(f.indicatorName, "candle_pane", "main", "remove");
+              const y = [...X()];
+              n == null || n.removeIndicator("candle_pane", f.indicatorName), y.splice(y.indexOf(f.indicatorName), 1), ee(y), Ge(f.indicatorName, "candle_pane", "main", "remove");
             } else {
               const y = {
                 ...pe()
               };
-              n == null || n.removeIndicator(f.paneId, f.indicatorName), delete y[f.indicatorName], H(y), Ge(f.indicatorName, f.paneId, "sub", "remove");
+              n == null || n.removeIndicator(f.paneId, f.indicatorName), delete y[f.indicatorName], Z(y), Ge(f.indicatorName, f.paneId, "sub", "remove");
             }
         }
-    }), n == null || n.subscribeAction(Nt.OnCrosshairChange, u1), pr.forEach((f) => {
-      n == null || n.subscribeAction(f, Cr);
-    }), U1 = window.setInterval(() => Ye(), 1e3), Ye(), document.addEventListener("mousedown", er);
+    }), n == null || n.subscribeAction(Ot.OnCrosshairChange, d1), br.forEach((f) => {
+      n == null || n.subscribeAction(f, vr);
+    }), z1 = window.setInterval(() => Ye(), 1e3), Ye(), document.addEventListener("mousedown", nr);
     const g = n == null ? void 0 : n.createOverlay;
     n && g && (n.createOverlay = function(...f) {
-      const y = _t(f[0]), k = g.apply(this, [y, ...f.slice(1)]), T = typeof k == "string" ? k : null;
-      return T && (l1(T, y.name || "unknown"), ht(T), Pt()), k;
+      const y = _t(f[0]), k = g.apply(this, [y, ...f.slice(1)]), A = typeof k == "string" ? k : null;
+      return A && (c1(A, y.name || "unknown"), ht(A), Dt()), k;
     });
-  }), Lt(() => {
-    window.removeEventListener("resize", gr), n == null || n.unsubscribeAction(Nt.OnCrosshairChange, u1), pr.forEach((o) => {
-      n == null || n.unsubscribeAction(o, Cr);
-    }), U1 && (window.clearInterval(U1), U1 = void 0), z1 && (window.clearTimeout(z1), z1 = void 0), document.removeEventListener("mousedown", er), Fe.clear(), Ae.clear(), n0(t);
+  }), wt(() => {
+    window.removeEventListener("resize", Cr), n == null || n.unsubscribeAction(Ot.OnCrosshairChange, d1), br.forEach((o) => {
+      n == null || n.unsubscribeAction(o, vr);
+    }), z1 && (window.clearInterval(z1), z1 = void 0), V1 && (window.clearTimeout(V1), V1 = void 0), document.removeEventListener("mousedown", nr), Fe.clear(), Me.clear(), o0(t);
   }), Re(() => {
     const o = N();
     o != null && o.priceCurrency ? (a.innerHTML = o == null ? void 0 : o.priceCurrency.toLocaleUpperCase(), a.style.display = "flex") : a.style.display = "none", n == null || n.setPriceVolumePrecision((o == null ? void 0 : o.pricePrecision) ?? 2, (o == null ? void 0 : o.volumePrecision) ?? 0);
   });
-  const e9 = (o) => {
+  const n9 = (o) => {
     const i = new Date(o), s = i.getFullYear(), u = `${i.getMonth() + 1}`.padStart(2, "0"), m = `${i.getDate()}`.padStart(2, "0"), g = `${i.getHours()}`.padStart(2, "0"), f = `${i.getMinutes()}`.padStart(2, "0"), y = `${s}-${u}-${m}`;
-    switch (U().timespan) {
+    switch (V().timespan) {
       case "minute":
       case "hour":
         return `${y} ${g}:${f}`;
@@ -6275,18 +6280,18 @@ const Tg = (e) => {
         return y;
     }
     return `${y} ${g}:${f}`;
-  }, t9 = (o, i) => {
-    var k, T;
+  }, r9 = (o, i) => {
+    var k, A;
     const {
       current: s
-    } = o, u = i.tooltip.text.color, m = s.close > s.open ? i.bar.upColor : s.close < s.open ? i.bar.downColor : i.bar.noChangeColor, g = Math.min(Math.max(((k = N()) == null ? void 0 : k.pricePrecision) ?? 2, 0), 8), f = Math.min(Math.max(((T = N()) == null ? void 0 : T.volumePrecision) ?? 0, 0), 8), y = (P) => ({
+    } = o, u = i.tooltip.text.color, m = s.close > s.open ? i.bar.upColor : s.close < s.open ? i.bar.downColor : i.bar.noChangeColor, g = Math.min(Math.max(((k = N()) == null ? void 0 : k.pricePrecision) ?? 2, 0), 8), f = Math.min(Math.max(((A = N()) == null ? void 0 : A.volumePrecision) ?? 0, 0), 8), y = (P) => ({
       text: E.formatPrecision(P, g),
       color: m
     });
     return [{
       title: "time",
       value: {
-        text: e9(s.timestamp),
+        text: n9(s.timestamp),
         color: u
       }
     }, {
@@ -6308,11 +6313,11 @@ const Tg = (e) => {
         color: m
       }
     }];
-  }, j1 = () => {
+  }, Q1 = () => {
     n == null || n.setStyles({
       candle: {
         tooltip: {
-          custom: t9,
+          custom: r9,
           rect: {
             offsetLeft: 0,
             paddingLeft: 0
@@ -6322,41 +6327,41 @@ const Tg = (e) => {
     });
   };
   return Re((o) => {
-    const i = N(), s = U();
+    const i = N(), s = V();
     let u = !0;
-    return Lt(() => {
+    return wt(() => {
       u = !1;
-    }), o && e.datafeed.unsubscribe(o.symbol, o.period), d(!0), $e(!0), (async () => {
+    }), o && e.datafeed.unsubscribe(o.symbol, o.period), h(!0), $e(!0), (async () => {
       try {
-        const g = lt(Le), f = g.enabled && (!o || o.symbol.ticker === i.ticker || g.acrossTokens), y = f ? jo(g, s) : null, [k, T] = y ? [y.from, y.to] : bn(s, (/* @__PURE__ */ new Date()).getTime(), 500), P = await e.datafeed.getHistoryKLineData(i, s, k, T);
+        const g = lt(Le), f = g.enabled && (!o || o.symbol.ticker === i.ticker || g.acrossTokens), y = f ? Zo(g, s) : null, [k, A] = y ? [y.from, y.to] : $n(s, (/* @__PURE__ */ new Date()).getTime(), 500), P = await e.datafeed.getHistoryKLineData(i, s, k, A);
         if (!u)
           return;
         n == null || n.applyNewData(P, P.length > 0), f ? requestAnimationFrame(() => {
-          kr(g), kt(g);
+          Lr(g), kt(g);
         }) : kt(), Ye(), setTimeout(() => {
-          u && (P1(i == null ? void 0 : i.ticker), Ye());
-        }, 0), e.datafeed.subscribe(i, s, (oe) => {
-          n == null || n.updateData(oe), Ye();
+          u && (D1(i == null ? void 0 : i.ticker), Ye());
+        }, 0), e.datafeed.subscribe(i, s, (re) => {
+          n == null || n.updateData(re), Ye();
         });
       } finally {
-        u && (d(!1), $e(!1));
+        u && (h(!1), $e(!1));
       }
     })(), {
       symbol: i,
       period: s
     };
   }), Re(() => {
-    const o = h();
+    const o = d();
     n == null || n.setStyles(o);
     const i = o === "dark" ? "#929AA5" : "#76808F";
-    j1(), n == null || n.setStyles({
+    Q1(), n == null || n.setStyles({
       indicator: {
         tooltip: {
           icons: [{
             id: "visible",
-            position: Z1.Middle,
-            marginLeft: z().visibleMarginLeft,
-            marginTop: z().marginTop,
+            position: H1.Middle,
+            marginLeft: U().visibleMarginLeft,
+            marginTop: U().marginTop,
             marginRight: 0,
             marginBottom: 0,
             paddingLeft: 0,
@@ -6365,16 +6370,16 @@ const Tg = (e) => {
             paddingBottom: 0,
             icon: "",
             fontFamily: "icomoon",
-            size: z().size,
+            size: U().size,
             color: i,
             activeColor: i,
             backgroundColor: "transparent",
             activeBackgroundColor: "rgba(22, 119, 255, 0.15)"
           }, {
             id: "invisible",
-            position: Z1.Middle,
-            marginLeft: z().secondaryMarginLeft,
-            marginTop: z().marginTop,
+            position: H1.Middle,
+            marginLeft: U().secondaryMarginLeft,
+            marginTop: U().marginTop,
             marginRight: 0,
             marginBottom: 0,
             paddingLeft: 0,
@@ -6383,16 +6388,16 @@ const Tg = (e) => {
             paddingBottom: 0,
             icon: "",
             fontFamily: "icomoon",
-            size: z().size,
+            size: U().size,
             color: i,
             activeColor: i,
             backgroundColor: "transparent",
             activeBackgroundColor: "rgba(22, 119, 255, 0.15)"
           }, {
             id: "setting",
-            position: Z1.Middle,
-            marginLeft: z().secondaryMarginLeft,
-            marginTop: z().marginTop,
+            position: H1.Middle,
+            marginLeft: U().secondaryMarginLeft,
+            marginTop: U().marginTop,
             marginBottom: 0,
             marginRight: 0,
             paddingLeft: 0,
@@ -6401,16 +6406,16 @@ const Tg = (e) => {
             paddingBottom: 0,
             icon: "",
             fontFamily: "icomoon",
-            size: z().size,
+            size: U().size,
             color: i,
             activeColor: i,
             backgroundColor: "transparent",
             activeBackgroundColor: "rgba(22, 119, 255, 0.15)"
           }, {
             id: "close",
-            position: Z1.Middle,
-            marginLeft: z().secondaryMarginLeft,
-            marginTop: z().marginTop,
+            position: H1.Middle,
+            marginLeft: U().secondaryMarginLeft,
+            marginTop: U().marginTop,
             marginRight: 0,
             marginBottom: 0,
             paddingLeft: 0,
@@ -6419,7 +6424,7 @@ const Tg = (e) => {
             paddingBottom: 0,
             icon: "",
             fontFamily: "icomoon",
-            size: z().size,
+            size: U().size,
             color: i,
             activeColor: i,
             backgroundColor: "transparent",
@@ -6433,8 +6438,8 @@ const Tg = (e) => {
   }), Re(() => {
     n == null || n.setTimezone(se().key);
   }), Re(() => {
-    x() && (It(x()), n == null || n.setStyles(x()), j1(), de(gl(n.getStyles())));
-  }), [ug.cloneNode(!0), w(Ah, {
+    x() && (Et(x()), n == null || n.setStyles(x()), Q1(), de(Cl(n.getStyles())));
+  }), [hg.cloneNode(!0), w(Sh, {
     get locale() {
       return e.locale;
     },
@@ -6442,17 +6447,17 @@ const Tg = (e) => {
       return N();
     },
     get spread() {
-      return Me();
+      return Te();
     },
     get period() {
-      return U();
+      return V();
     },
     get periods() {
       return e.periods;
     },
     onMenuClick: async () => {
       try {
-        await P9(() => _(!Me())), n == null || n.resize();
+        await N9(() => _(!Te())), n == null || n.resize();
       } catch {
       }
     },
@@ -6465,7 +6470,7 @@ const Tg = (e) => {
     onMobileMoreClick: () => {
       e.onMobileMoreClick ? e.onMobileMoreClick() : dt(!0);
     },
-    onPeriodChange: K,
+    onPeriodChange: R,
     onTimeToolsClick: () => {
       O(Date.now()), Q(!0);
     },
@@ -6473,15 +6478,15 @@ const Tg = (e) => {
       j((o) => !o);
     },
     onTimezoneClick: () => {
-      ne((o) => !o);
+      te((o) => !o);
     },
     onSettingClick: () => {
-      W((o) => !o);
+      Y((o) => !o);
     },
     onScreenshotClick: () => {
       if (n) {
         const o = e.screenshotBackgroundColor || (e.theme === "dark" ? "#11131E" : "#ffffff"), i = n.getConvertPictureUrl(!0, "jpeg", o);
-        re(i);
+        ne(i);
       }
     },
     get chartViewToggle() {
@@ -6494,24 +6499,24 @@ const Tg = (e) => {
     get orderToolsState() {
       return Be();
     },
-    onOrderToolsStateChange: c1
+    onOrderToolsStateChange: u1
   }), (() => {
-    const o = dg.cloneNode(!0), i = o.firstChild;
+    const o = fg.cloneNode(!0), i = o.firstChild;
     return o.addEventListener("mouseleave", () => {
-      At(null), qe(!1);
-    }), xt((s) => r = s, o), C(o, w(le, {
+      Tt(null), qe(!1);
+    }), Lt((s) => r = s, o), C(o, w(le, {
       get when() {
         return ut();
       },
       get children() {
-        return w(Oo, {});
+        return w(Eo, {});
       }
     }), i), C(o, w(le, {
       get when() {
-        return Me();
+        return Te();
       },
       get children() {
-        return w(im, {
+        return w(sm, {
           get locale() {
             return e.locale;
           },
@@ -6540,14 +6545,14 @@ const Tg = (e) => {
           }
         });
       }
-    }), i), xt((s) => t = s, i), C(o, w(le, {
+    }), i), Lt((s) => t = s, i), C(o, w(le, {
       get when() {
-        return w1();
+        return A1();
       },
       keyed: !0,
       children: (s) => (() => {
-        const u = hg.cloneNode(!0);
-        return V((m) => {
+        const u = mg.cloneNode(!0);
+        return z((m) => {
           const g = `${s.left}px`, f = `${s.top}px`, y = `${s.height}px`;
           return g !== m._v$ && u.style.setProperty("left", m._v$ = g), f !== m._v$2 && u.style.setProperty("top", m._v$2 = f), y !== m._v$3 && u.style.setProperty("height", m._v$3 = y), m;
         }, {
@@ -6558,12 +6563,12 @@ const Tg = (e) => {
       })()
     }), null), C(o, w(le, {
       get when() {
-        return i1();
+        return a1();
       },
       keyed: !0,
       children: (s) => (() => {
-        const u = fg.cloneNode(!0);
-        return C(u, () => s.text), V((m) => {
+        const u = gg.cloneNode(!0);
+        return C(u, () => s.text), z((m) => {
           const g = `${s.left}px`, f = `${s.top}px`;
           return g !== m._v$4 && u.style.setProperty("left", m._v$4 = g), f !== m._v$5 && u.style.setProperty("top", m._v$5 = f), m;
         }, {
@@ -6573,14 +6578,14 @@ const Tg = (e) => {
       })()
     }), null), C(o, w(le, {
       get when() {
-        return x1();
+        return L1();
       },
       keyed: !0,
       children: (s) => (() => {
-        const u = mg.cloneNode(!0), m = u.firstChild, g = m.nextSibling;
-        return u.style.setProperty("right", "0px"), C(m, () => s.priceText), C(g, () => s.text), V((f) => {
-          const y = `${s.top}px`, k = `${s.width}px`, T = s.color, P = `${s.borderRadius}px`, oe = s.textFamily, ae = s.textWeight, ie = `${s.paddingLeft}px`, ee = `${s.paddingRight}px`, ue = `${s.paddingTop}px`, be = `${s.paddingBottom}px`, Se = `${s.textSize}px`, X = `${Math.max(10, s.textSize - 1)}px`;
-          return y !== f._v$6 && u.style.setProperty("top", f._v$6 = y), k !== f._v$7 && u.style.setProperty("width", f._v$7 = k), T !== f._v$8 && u.style.setProperty("background", f._v$8 = T), P !== f._v$9 && u.style.setProperty("border-radius", f._v$9 = P), oe !== f._v$10 && u.style.setProperty("font-family", f._v$10 = oe), ae !== f._v$11 && u.style.setProperty("font-weight", f._v$11 = ae), ie !== f._v$12 && u.style.setProperty("padding-left", f._v$12 = ie), ee !== f._v$13 && u.style.setProperty("padding-right", f._v$13 = ee), ue !== f._v$14 && u.style.setProperty("padding-top", f._v$14 = ue), be !== f._v$15 && u.style.setProperty("padding-bottom", f._v$15 = be), Se !== f._v$16 && m.style.setProperty("font-size", f._v$16 = Se), X !== f._v$17 && g.style.setProperty("font-size", f._v$17 = X), f;
+        const u = yg.cloneNode(!0), m = u.firstChild, g = m.nextSibling;
+        return u.style.setProperty("right", "0px"), C(m, () => s.priceText), C(g, () => s.text), z((f) => {
+          const y = `${s.top}px`, k = `${s.width}px`, A = s.color, P = `${s.borderRadius}px`, re = s.textFamily, ae = s.textWeight, ie = `${s.paddingLeft}px`, J = `${s.paddingRight}px`, ue = `${s.paddingTop}px`, be = `${s.paddingBottom}px`, Se = `${s.textSize}px`, G = `${Math.max(10, s.textSize - 1)}px`;
+          return y !== f._v$6 && u.style.setProperty("top", f._v$6 = y), k !== f._v$7 && u.style.setProperty("width", f._v$7 = k), A !== f._v$8 && u.style.setProperty("background", f._v$8 = A), P !== f._v$9 && u.style.setProperty("border-radius", f._v$9 = P), re !== f._v$10 && u.style.setProperty("font-family", f._v$10 = re), ae !== f._v$11 && u.style.setProperty("font-weight", f._v$11 = ae), ie !== f._v$12 && u.style.setProperty("padding-left", f._v$12 = ie), J !== f._v$13 && u.style.setProperty("padding-right", f._v$13 = J), ue !== f._v$14 && u.style.setProperty("padding-top", f._v$14 = ue), be !== f._v$15 && u.style.setProperty("padding-bottom", f._v$15 = be), Se !== f._v$16 && m.style.setProperty("font-size", f._v$16 = Se), G !== f._v$17 && g.style.setProperty("font-size", f._v$17 = G), f;
         }, {
           _v$6: void 0,
           _v$7: void 0,
@@ -6602,46 +6607,46 @@ const Tg = (e) => {
       },
       keyed: !0,
       children: (s) => (() => {
-        const u = pg.cloneNode(!0), m = u.firstChild, g = m.nextSibling, f = g.nextSibling, y = f.firstChild, k = f.nextSibling, T = k.firstChild, P = T.firstChild, oe = P.nextSibling, ae = oe.firstChild, ie = k.nextSibling, ee = ie.firstChild, ue = ie.nextSibling, be = ue.nextSibling, Se = be.nextSibling;
-        return u.$$click = (X) => {
-          X.stopPropagation();
-        }, u.$$mousedown = (X) => {
-          X.preventDefault(), X.stopPropagation();
-        }, m.$$mousedown = B1, g.$$click = I1, y.$$click = () => He(Ze() === "color" ? null : "color"), C(f, w(le, {
+        const u = bg.cloneNode(!0), m = u.firstChild, g = m.nextSibling, f = g.nextSibling, y = f.firstChild, k = f.nextSibling, A = k.firstChild, P = A.firstChild, re = P.nextSibling, ae = re.firstChild, ie = k.nextSibling, J = ie.firstChild, ue = ie.nextSibling, be = ue.nextSibling, Se = be.nextSibling;
+        return u.$$click = (G) => {
+          G.stopPropagation();
+        }, u.$$mousedown = (G) => {
+          G.preventDefault(), G.stopPropagation();
+        }, m.$$mousedown = F1, g.$$click = E1, y.$$click = () => He(Ze() === "color" ? null : "color"), C(f, w(le, {
           get when() {
             return Ze() === "color";
           },
           get children() {
-            const X = gg.cloneNode(!0), Ce = X.firstChild;
-            return C(Ce, w(b1, {
-              each: T1,
+            const G = Cg.cloneNode(!0), Ce = G.firstChild;
+            return C(Ce, w($1, {
+              each: M1,
               children: (me) => (() => {
-                const we = vg.cloneNode(!0);
-                return we.$$click = () => E1(me), we.style.setProperty("background", me), V(() => fe(we, `overlay-toolbar-color-swatch ${s.color.toLowerCase() === me.toLowerCase() ? "selected" : ""}`)), we;
+                const we = $g.cloneNode(!0);
+                return we.$$click = () => B1(me), we.style.setProperty("background", me), z(() => fe(we, `overlay-toolbar-color-swatch ${s.color.toLowerCase() === me.toLowerCase() ? "selected" : ""}`)), we;
               })()
-            })), X;
+            })), G;
           }
-        }), null), T.$$click = () => He(Ze() === "width" ? null : "width"), C(oe, () => s.lineSize, ae), C(k, w(le, {
+        }), null), A.$$click = () => He(Ze() === "width" ? null : "width"), C(re, () => s.lineSize, ae), C(k, w(le, {
           get when() {
             return Ze() === "width";
           },
           get children() {
-            const X = yg.cloneNode(!0);
-            return C(X, w(b1, {
+            const G = pg.cloneNode(!0);
+            return C(G, w($1, {
               each: [1, 2, 3, 4],
               children: (Ce) => (() => {
-                const me = bg.cloneNode(!0), we = me.firstChild;
-                return me.$$click = () => ot(Ce), we.style.setProperty("height", `${Ce}px`), V(() => fe(me, s.lineSize === Ce ? "selected" : "")), me;
+                const me = _g.cloneNode(!0), we = me.firstChild;
+                return me.$$click = () => ot(Ce), we.style.setProperty("height", `${Ce}px`), z(() => fe(me, s.lineSize === Ce ? "selected" : "")), me;
               })()
-            })), X;
+            })), G;
           }
-        }), null), ee.$$click = () => He(Ze() === "style" ? null : "style"), C(ie, w(le, {
+        }), null), J.$$click = () => He(Ze() === "style" ? null : "style"), C(ie, w(le, {
           get when() {
             return Ze() === "style";
           },
           get children() {
-            const X = Cg.cloneNode(!0), Ce = X.firstChild, me = Ce.nextSibling, we = me.nextSibling;
-            return Ce.$$click = () => mt(ze.Solid, []), me.$$click = () => mt(ze.Dashed, [6, 4]), we.$$click = () => mt(ze.Dashed, [2, 4]), V((Pe) => {
+            const G = vg.cloneNode(!0), Ce = G.firstChild, me = Ce.nextSibling, we = me.nextSibling;
+            return Ce.$$click = () => mt(ze.Solid, []), me.$$click = () => mt(ze.Dashed, [6, 4]), we.$$click = () => mt(ze.Dashed, [2, 4]), z((Pe) => {
               var et, tt;
               const Xe = s.lineStyle === ze.Solid ? "selected" : "", Je = s.lineStyle === ze.Dashed && ((et = s.dashedValue) == null ? void 0 : et[0]) === 6 ? "selected" : "", it = s.lineStyle === ze.Dashed && ((tt = s.dashedValue) == null ? void 0 : tt[0]) === 2 ? "selected" : "";
               return Xe !== Pe._v$18 && fe(Ce, Pe._v$18 = Xe), Je !== Pe._v$19 && fe(me, Pe._v$19 = Je), it !== Pe._v$20 && fe(we, Pe._v$20 = it), Pe;
@@ -6649,11 +6654,11 @@ const Tg = (e) => {
               _v$18: void 0,
               _v$19: void 0,
               _v$20: void 0
-            }), X;
+            }), G;
           }
-        }), null), ue.$$click = Ue, be.$$click = Oe, Se.$$click = $, V((X) => {
+        }), null), ue.$$click = Ue, be.$$click = Oe, Se.$$click = $, z((G) => {
           const Ce = `${s.x}px`, me = `${s.y}px`, we = `overlay-toolbar-icon edit ${Ze() === "color" ? "active" : ""}`, Pe = `overlay-toolbar-line-size ${Ze() === "width" ? "active" : ""}`, Xe = `overlay-toolbar-icon minus ${Ze() === "style" ? "active" : ""}`, Je = `overlay-toolbar-icon visibility ${s.visible ? "" : "muted"}`, it = s.visible ? "Hide" : "Show", et = `overlay-toolbar-icon lock ${s.locked ? "active" : ""}`, tt = s.locked ? "Unlock" : "Lock";
-          return Ce !== X._v$21 && u.style.setProperty("left", X._v$21 = Ce), me !== X._v$22 && u.style.setProperty("top", X._v$22 = me), we !== X._v$23 && fe(y, X._v$23 = we), Pe !== X._v$24 && fe(T, X._v$24 = Pe), Xe !== X._v$25 && fe(ee, X._v$25 = Xe), Je !== X._v$26 && fe(ue, X._v$26 = Je), it !== X._v$27 && Ie(ue, "title", X._v$27 = it), et !== X._v$28 && fe(be, X._v$28 = et), tt !== X._v$29 && Ie(be, "title", X._v$29 = tt), X;
+          return Ce !== G._v$21 && u.style.setProperty("left", G._v$21 = Ce), me !== G._v$22 && u.style.setProperty("top", G._v$22 = me), we !== G._v$23 && fe(y, G._v$23 = we), Pe !== G._v$24 && fe(A, G._v$24 = Pe), Xe !== G._v$25 && fe(J, G._v$25 = Xe), Je !== G._v$26 && fe(ue, G._v$26 = Je), it !== G._v$27 && Ie(ue, "title", G._v$27 = it), et !== G._v$28 && fe(be, G._v$28 = et), tt !== G._v$29 && Ie(be, "title", G._v$29 = tt), G;
         }, {
           _v$21: void 0,
           _v$22: void 0,
@@ -6668,36 +6673,36 @@ const Tg = (e) => {
       })()
     }), null), C(o, w(le, {
       get when() {
-        return zt();
+        return Vt();
       },
       keyed: !0,
       children: (s) => (() => {
-        const u = $g.cloneNode(!0), m = u.firstChild;
+        const u = kg.cloneNode(!0), m = u.firstChild;
         return u.addEventListener("mouseleave", () => {
-          Mt() || qe(!1);
+          St() || qe(!1);
         }), u.$$mousemove = (g) => {
           g.stopPropagation(), $t();
         }, u.addEventListener("mouseenter", () => {
           qe(!0), $t();
         }), m.$$click = (g) => {
-          g.stopPropagation(), qe(!0), St({
+          g.stopPropagation(), qe(!0), Pt({
             y: s.y,
             price: s.price,
-            yAxisWidth: n1()
+            yAxisWidth: r1()
           }), rt(!0), $t();
         }, m.$$mousedown = (g) => {
           g.preventDefault(), g.stopPropagation(), $t();
         }, C(m, (() => {
-          const g = G(() => {
+          const g = W(() => {
             var f;
             return !!((f = e.orderTools) != null && f.quickOrderPlusIcon);
           });
           return () => g() ? (() => {
-            const f = _g.cloneNode(!0);
-            return V(() => f.innerHTML = e.orderTools.quickOrderPlusIcon), f;
-          })() : kg.cloneNode(!0);
-        })()), V((g) => {
-          const f = `${Math.max(0, s.y - 12)}px`, y = `${n1()}px`, k = Be().quickOrderPlusButton ? "block" : "none";
+            const f = xg.cloneNode(!0);
+            return z(() => f.innerHTML = e.orderTools.quickOrderPlusIcon), f;
+          })() : Lg.cloneNode(!0);
+        })()), z((g) => {
+          const f = `${Math.max(0, s.y - 12)}px`, y = `${r1()}px`, k = Be().quickOrderPlusButton ? "block" : "none";
           return f !== g._v$30 && u.style.setProperty("top", g._v$30 = f), y !== g._v$31 && u.style.setProperty("right", g._v$31 = y), k !== g._v$32 && u.style.setProperty("display", g._v$32 = k), g;
         }, {
           _v$30: void 0,
@@ -6707,36 +6712,36 @@ const Tg = (e) => {
       })()
     }), null), C(o, w(le, {
       get when() {
-        return G(() => !!Mt())() && pt();
+        return W(() => !!St())() && pt();
       },
       keyed: !0,
       children: (s) => (() => {
-        const u = xg.cloneNode(!0), m = u.firstChild, g = m.firstChild, f = g.firstChild, y = f.nextSibling, k = y.nextSibling, T = k.nextSibling;
-        T.nextSibling;
-        const P = g.nextSibling, oe = P.firstChild, ae = oe.nextSibling, ie = ae.nextSibling, ee = ie.nextSibling;
-        ee.nextSibling;
-        const ue = P.nextSibling, be = ue.nextSibling, Se = be.firstChild, X = Se.nextSibling;
-        X.nextSibling;
+        const u = wg.cloneNode(!0), m = u.firstChild, g = m.firstChild, f = g.firstChild, y = f.nextSibling, k = y.nextSibling, A = k.nextSibling;
+        A.nextSibling;
+        const P = g.nextSibling, re = P.firstChild, ae = re.nextSibling, ie = ae.nextSibling, J = ie.nextSibling;
+        J.nextSibling;
+        const ue = P.nextSibling, be = ue.nextSibling, Se = be.firstChild, G = Se.nextSibling;
+        G.nextSibling;
         const Ce = be.nextSibling;
         return Ce.firstChild, u.addEventListener("mouseleave", () => qe(!1)), u.addEventListener("mouseenter", () => qe(!0)), m.$$mousemove = () => {
           $t();
         }, m.$$mousedown = (me) => {
           me.preventDefault(), me.stopPropagation(), $t();
-        }, g.$$click = () => Rt("limit"), C(g, () => N().shortName ?? N().name ?? N().ticker, y), C(g, () => Dt(s.price), T), P.$$click = () => Rt("stop"), C(P, () => N().shortName ?? N().name ?? N().ticker, ae), C(P, () => Dt(s.price), ee), ue.$$click = () => Rt("create"), be.$$click = pn, C(be, () => Dt(s.price), X), Ce.$$click = vn, C(Ce, () => Dt(s.price), null), V((me) => {
-          const we = `${Math.max(0, s.y + 24)}px`, Pe = `${s.yAxisWidth + o1}px`;
+        }, g.$$click = () => jt("limit"), C(g, () => N().shortName ?? N().name ?? N().ticker, y), C(g, () => Nt(s.price), A), P.$$click = () => jt("stop"), C(P, () => N().shortName ?? N().name ?? N().ticker, ae), C(P, () => Nt(s.price), J), ue.$$click = () => jt("create"), be.$$click = vn, C(be, () => Nt(s.price), G), Ce.$$click = bn, C(Ce, () => Nt(s.price), null), z((me) => {
+          const we = `${Math.max(0, s.y + 24)}px`, Pe = `${s.yAxisWidth + i1}px`;
           return we !== me._v$33 && u.style.setProperty("top", me._v$33 = we), Pe !== me._v$34 && u.style.setProperty("right", me._v$34 = Pe), me;
         }, {
           _v$33: void 0,
           _v$34: void 0
         }), u;
       })()
-    }), null), V(() => Ie(i, "data-drawing-bar-visible", Me())), o;
+    }), null), z(() => Ie(i, "data-drawing-bar-visible", Te())), o;
   })(), w(le, {
     get when() {
       return ge();
     },
     get children() {
-      return w(Rm, {
+      return w(Qm, {
         get locale() {
           return e.locale;
         },
@@ -6744,7 +6749,7 @@ const Tg = (e) => {
           return e.datafeed;
         },
         onSymbolSelected: (o) => {
-          Z(o);
+          oe(o);
         },
         onClose: () => {
           Ne(!1);
@@ -6756,12 +6761,12 @@ const Tg = (e) => {
       return ce();
     },
     get children() {
-      return w(am, {
+      return w(lm, {
         get locale() {
           return e.locale;
         },
         get mainIndicators() {
-          return J();
+          return X();
         },
         get subIndicators() {
           return pe();
@@ -6770,30 +6775,30 @@ const Tg = (e) => {
           j(!1);
         },
         onMainIndicatorChange: (o) => {
-          const i = [...J()];
-          o.added ? (G1(n, o.name, !0, {
+          const i = [...X()];
+          o.added ? (X1(n, o.name, !0, {
             id: "candle_pane"
-          }), i.push(o.name), Ge(o.name, "candle_pane", "main", "add")) : (n == null || n.removeIndicator("candle_pane", o.name), i.splice(i.indexOf(o.name), 1), Ge(o.name, "candle_pane", "main", "remove")), te(i);
+          }), i.push(o.name), Ge(o.name, "candle_pane", "main", "add")) : (n == null || n.removeIndicator("candle_pane", o.name), i.splice(i.indexOf(o.name), 1), Ge(o.name, "candle_pane", "main", "remove")), ee(i);
         },
         onSubIndicatorChange: (o) => {
           const i = {
             ...pe()
           };
           if (o.added) {
-            const s = G1(n, o.name);
+            const s = X1(n, o.name);
             s && (i[o.name] = s, Ge(o.name, s, "sub", "add"));
           } else
             o.paneId && (n == null || n.removeIndicator(o.paneId, o.name), delete i[o.name], Ge(o.name, o.paneId, "sub", "remove"));
-          H(i);
+          Z(i);
         }
       });
     }
   }), w(le, {
     get when() {
-      return q();
+      return H();
     },
     get children() {
-      return w(lm, {
+      return w(um, {
         get locale() {
           return e.locale;
         },
@@ -6801,17 +6806,17 @@ const Tg = (e) => {
           return se();
         },
         onClose: () => {
-          ne(!1);
+          te(!1);
         },
-        onConfirm: A
+        onConfirm: M
       });
     }
   }), w(le, {
     get when() {
-      return Y();
+      return q();
     },
     get children() {
-      return w(Nm, {
+      return w(Im, {
         get locale() {
           return e.locale;
         },
@@ -6819,20 +6824,20 @@ const Tg = (e) => {
           return E.clone(n.getStyles());
         },
         get defaultStyles() {
-          return R();
+          return K();
         },
         onClose: () => {
-          W(!1);
+          Y(!1);
         },
         onChange: (o) => {
-          It(o), n == null || n.setStyles(o), n == null || n.resize(), j1();
+          Et(o), n == null || n.setStyles(o), n == null || n.resize(), Q1();
         },
         onRestoreDefault: (o) => {
           const i = {};
           o.forEach((s) => {
             const u = s.key;
-            nt(i, u, E.formatValue(R(), u));
-          }), It(i), n == null || n.setStyles(i), n == null || n.resize(), j1();
+            nt(i, u, E.formatValue(K(), u));
+          }), Et(i), n == null || n.setStyles(i), n == null || n.resize(), Q1();
         }
       });
     }
@@ -6841,7 +6846,7 @@ const Tg = (e) => {
       return he().length > 0;
     },
     get children() {
-      return w(Im, {
+      return w(Bm, {
         get locale() {
           return e.locale;
         },
@@ -6849,7 +6854,7 @@ const Tg = (e) => {
           return he();
         },
         onClose: () => {
-          re("");
+          ne("");
         }
       });
     }
@@ -6858,7 +6863,7 @@ const Tg = (e) => {
       return I();
     },
     get children() {
-      return w(cg, {
+      return w(dg, {
         get initialTimestamp() {
           return D();
         },
@@ -6871,27 +6876,27 @@ const Tg = (e) => {
         onClose: () => {
           Q(!1);
         },
-        onGoToDate: Xo,
+        onGoToDate: e9,
         onTimeRange: (o) => {
-          xr(o);
+          wr(o);
         },
-        onTimeAnchorChange: Jo
+        onTimeAnchorChange: t9
       });
     }
   }), w(le, {
     get when() {
-      return Kt().visible;
+      return Rt().visible;
     },
     get children() {
-      return w(Um, {
+      return w(Vm, {
         get locale() {
           return e.locale;
         },
         get params() {
-          return Kt();
+          return Rt();
         },
         onClose: () => {
-          A1({
+          T1({
             visible: !1,
             indicatorName: "",
             paneId: "",
@@ -6899,7 +6904,7 @@ const Tg = (e) => {
           });
         },
         onConfirm: (o) => {
-          const i = Kt();
+          const i = Rt();
           n == null || n.overrideIndicator({
             name: i.indicatorName,
             calcParams: o
@@ -6914,7 +6919,7 @@ const Tg = (e) => {
       return Ct();
     },
     get children() {
-      return w(Qm, {
+      return w(Hm, {
         get locale() {
           return e.locale;
         },
@@ -6922,10 +6927,10 @@ const Tg = (e) => {
           j(!0);
         },
         onTimezoneClick: () => {
-          ne(!0);
+          te(!0);
         },
         onSettingClick: () => {
-          W(!0);
+          Y(!0);
         },
         onTimeToolsClick: () => {
           O(Date.now()), Q(!0);
@@ -6938,10 +6943,10 @@ const Tg = (e) => {
   })];
 };
 je(["mousedown", "click", "mousemove"]);
-const Ag = /* @__PURE__ */ p('<svg class="logo" viewBox="0 0 80 92"><path d="M28.148808359375,51.7280513671875L22.963588359375,51.7280513671875C21.572648359375002,51.7280513671875,20.445068359375,52.6220613671875,20.445068359375,53.7248813671875L20.445068359375,72.3979013671875C20.445068359375,73.5007013671875,21.572648359375002,74.39470136718751,22.963588359375,74.39470136718751L33.926568359375,74.39470136718751C35.317468359375,74.39470136718751,36.445068359375,73.5007013671875,36.445068359375,72.3979013671875L36.445068359375,53.7248813671875C36.445068359375,52.6220613671875,35.317468359375,51.7280513671875,33.926568359375,51.7280513671875L28.741398359374998,51.7280513671875L28.741398359374998,46.2963223671875C28.741398359374998,46.1665793671875,28.608748359375,46.0614013671875,28.445108359375,46.0614013671875C28.281468359375,46.0614013671875,28.148808359375,46.1665793671875,28.148808359375,46.2963223671875L28.148808359375,51.7280513671875ZM28.741398359374998,74.3948013671875L28.741398359374998,79.82650136718749C28.741398359374998,79.9563013671875,28.608748359375,80.0614013671875,28.445108359375,80.0614013671875C28.281468359375,80.0614013671875,28.148808359375,79.9563013671875,28.148808359375,79.82650136718749L28.148808359375,74.3948013671875L28.741398359374998,74.3948013671875Z"></path><path d="M51.148808359374996,44.7280513671875L45.963588359375,44.7280513671875C44.572648359375,44.7280513671875,43.445068359375,45.6220613671875,43.445068359375,46.7248813671875L43.445068359375,65.3979013671875C43.445068359375,66.5007013671875,44.572648359375,67.39470136718751,45.963588359375,67.39470136718751L56.926568359375,67.39470136718751C58.317468359375,67.39470136718751,59.445068359375,66.5007013671875,59.445068359375,65.3979013671875L59.445068359375,46.7248813671875C59.445068359375,45.6220613671875,58.317468359375,44.7280513671875,56.926568359375,44.7280513671875L51.741398359375,44.7280513671875L51.741398359375,39.2963223671875C51.741398359375,39.1665793671875,51.608748359375,39.0614013671875,51.445108359375,39.0614013671875C51.281468359375,39.0614013671875,51.148808359374996,39.1665793671875,51.148808359374996,39.2963223671875L51.148808359374996,44.7280513671875ZM51.741398359375,67.3948013671875L51.741398359375,72.82650136718749C51.741398359375,72.9563013671875,51.608748359375,73.0614013671875,51.445108359375,73.0614013671875C51.281468359375,73.0614013671875,51.148808359374996,72.9563013671875,51.148808359374996,72.82650136718749L51.148808359374996,67.3948013671875L51.741398359375,67.3948013671875Z"></path><path d="M17.7274,90.6541C17.5901,90.6541,17.4517,90.6436,17.3121,90.6225C9.93219,89.5095,4.80718,86.7136,2.07787,82.3084C-1.1223,77.1437,0.241766,71.6314,0.56829,70.5137C5.37624,46.647,15.0785,38.4945,21.5025,33.0957C22.9683,31.8633,24.2342,30.7995,25.1676,29.7672C25.4105,29.4984,25.6051,29.2154,25.7556,28.9202C24.7465,29.2231,24.1971,29.4326,24.1703,29.4429C22.908,29.9368,21.4777,29.3247,20.9761,28.076C20.4756,26.8272,21.0897,25.4146,22.352,24.9172C22.5042,24.8571,23.5312,24.4607,25.3073,23.9616C24.087,21.4425,21.7693,18.7949,19.7125,16.6431L19.2819,16.1902C16.2438,12.9776,14.6017,4.80159,14.3036,3.19471C14.1306,2.26212,14.4636,1.30796,15.1814,0.679657C15.8995,0.0512175,16.8976,-0.159672,17.8125,0.123747C22.7731,1.66274,24.2638,1.81255,27.2321,2.11098C28.7357,2.26195,29.83,3.59029,29.6762,5.07662C29.5236,6.56295,28.182,7.64786,26.6784,7.49454C24.4992,7.27569,22.9517,7.09896,20.724,6.56646C21.4493,9.09088,22.3803,11.5427,23.2771,12.4919L23.6876,12.9237C25.3757,14.69,28.9691,18.45,30.7016,22.7299C35.0392,21.9433,40.8791,21.3359,47.7817,21.7249C48.2004,20.7386,48.8054,19.7953,49.5907,18.9135C49.7137,18.7754,49.8498,18.6502,49.9988,18.539C53.6142,15.8508,57.5491,12.857,59.7803,11.0758C58.1028,11.2502,56.1034,11.0278,53.9124,9.70882C53.2439,9.30622,52.5992,8.89427,51.9662,8.48933C48.4668,6.25164,46.497,5.12109,43.4234,5.94853C41.9647,6.34058,40.4622,5.48975,40.0659,4.04789C39.6695,2.60604,40.5296,1.11853,41.9871,0.726471C47.5602,-0.773825,51.4796,1.73271,54.9364,3.9434L54.9364,3.9434C55.5284,4.32176,56.1318,4.70797,56.7564,5.08482C58.3843,6.06556,59.4858,5.76127,61.2899,5.13865C62.3511,4.77234,63.5567,4.35687,64.8675,4.53476C66.3321,4.73254,67.4406,5.56933,67.9103,6.83096C68.7444,9.07333,67.1035,11.5533,65.5797,13.2374C64.6729,14.2394,60.0845,17.7606,56.4519,20.4957C56.9477,20.3369,57.4767,20.2511,58.026,20.2511C59.4281,20.2511,60.6982,20.8102,61.621,21.7153C65.4948,20.6901,67.87,17.9563,67.9033,17.9175C68.78,16.8888,70.3322,16.7577,71.3721,17.6226C72.412,18.4886,72.5457,20.0253,71.6702,21.054C71.5221,21.2286,69.5063,23.5492,66.0787,25.233C69.5399,26.8822,72.9993,29.682,74.1841,34.4145C74.5106,35.7206,73.7062,37.0407,72.3859,37.3638C72.1871,37.4117,71.9884,37.4351,71.792,37.4351C70.687,37.4351,69.6826,36.6932,69.4046,35.5848C68.4378,31.7217,64.8144,29.7431,61.7619,28.7456C60.8298,29.7349,59.5009,30.3535,58.026,30.3535C55.8642,30.3535,54.0162,29.0245,53.2713,27.1474C53.2022,27.138,53.1331,27.1287,53.0642,27.1195C54.232,29.5936,57.0851,31.9259,58.1868,32.665C58.3157,32.7516,58.4423,32.8523,58.5547,32.9599C66.5865,40.6151,72.4887,48.8133,76.0971,57.3287C76.6815,58.7074,76.0249,60.2932,74.6313,60.8702C74.2976,61.01,73.9388,61.082,73.576,61.082C72.5065,61.082,71.4914,60.4582,71.0525,59.4213C67.7577,51.6455,62.331,44.1074,54.9203,37.0116C53.6073,36.1009,48.0984,31.9917,47.2065,26.583C40.9421,26.2679,35.6187,26.8278,31.6725,27.5336C31.6197,29.527,30.9225,31.5172,29.2456,33.3731C28.0614,34.6827,26.5968,35.915,25.0446,37.2188C21.9414,39.8269,18.2648,42.9169,14.8104,48.1192C11.356,53.3215,8.12389,60.6361,5.9098,71.6934C5.88732,71.8035,5.85893,71.9123,5.82344,72.0188C5.81634,72.041,4.57886,76.0413,6.77344,79.5289C8.6332,82.4828,12.4557,84.4139,18.1367,85.2705C19.6297,85.4953,20.6566,86.8762,20.4295,88.3532C20.2213,89.6944,19.0559,90.6541,17.7274,90.6541ZM35.1195,7.03101C33.3502,7.03101,31.9158,5.61208,31.9158,3.86173C31.9158,2.11139,33.3502,0.69245,35.1195,0.69245C36.8889,0.69245,38.3233,2.11139,38.3233,3.86173C38.3233,5.61208,36.8889,7.03101,35.1195,7.03101ZM57.6848,23.1892L58.414,24.4754C58.8984,24.3623,59.3923,24.3435,59.8644,24.4203C60.2191,24.5005,60.5087,24.7182,60.6663,25.0229C60.8636,25.3394,60.8993,25.7346,60.7646,26.1094C60.5988,26.5176,60.2972,26.8749,59.9085,27.1235L60.31,27.8316L59.7886,28.1294L59.3994,27.443C58.9257,27.7175,58.399,27.883,57.8664,27.9247L57.3744,27.0569C57.6378,27.0741,57.9071,27.048,58.1704,26.9797C58.4501,26.9251,58.7239,26.8323,58.9829,26.7044L58.2801,25.4647C57.8047,25.5877,57.3167,25.6065,56.8549,25.5197C56.4913,25.4263,56.196,25.1971,56.0328,24.8814C55.8433,24.5561,55.8127,24.1572,55.9484,23.7789C56.088,23.373,56.3763,23.0149,56.7584,22.7726L56.4166,22.1699L56.938,21.8721L57.2727,22.4625C57.6615,22.2376,58.0888,22.0901,58.5254,22.0301L59.0042,22.8746C58.5548,22.8828,58.103,22.9906,57.6848,23.1892ZM56.9319,24.2961Q57.1278,24.6417,57.7863,24.5856L57.1695,23.4978Q56.6982,23.884,56.9319,24.2961ZM58.9077,25.3462L59.4981,26.3875L59.499,26.3891Q59.9965,26.0045,59.7628,25.5923Q59.573,25.2576,58.9077,25.3462ZM73.2212,66.5065C73.2212,68.2569,74.6555,69.6758,76.4249,69.6758C78.1943,69.6758,79.6286,68.2569,79.6286,66.5065C79.6286,64.7562,78.1943,63.3372,76.4249,63.3372C74.6555,63.3372,73.2212,64.7562,73.2212,66.5065ZM35.9465,91.8045C35.0734,91.8045,34.2038,91.7987,33.3378,91.7858C31.827,91.7636,30.6203,90.5359,30.6428,89.0402C30.6653,87.5457,31.9158,86.3297,33.4183,86.3742C49.6344,86.6059,65.7512,84.6175,67.6134,84.037C72.1953,82.4184,74.5295,79.3603,74.5295,74.9575C74.5295,73.463,75.754,72.2517,77.2648,72.2517C78.7755,72.2517,80,73.463,80,74.9575C80,81.5992,76.148,86.7686,69.4317,89.142C67.0041,89.9999,51.0955,91.8046,35.9465,91.8045ZM25.2731,92C23.5037,92,22.0693,90.5811,22.0693,88.8307C22.0693,87.0804,23.5037,85.6615,25.2731,85.6615C27.0424,85.6615,28.4768,87.0804,28.4768,88.8307C28.4768,90.5811,27.0424,92,25.2731,92Z"></path></svg>'), Mg = Ag.cloneNode(!0);
-class Og {
+const Sg = /* @__PURE__ */ p('<svg class="logo" viewBox="0 0 80 92"><path d="M28.148808359375,51.7280513671875L22.963588359375,51.7280513671875C21.572648359375002,51.7280513671875,20.445068359375,52.6220613671875,20.445068359375,53.7248813671875L20.445068359375,72.3979013671875C20.445068359375,73.5007013671875,21.572648359375002,74.39470136718751,22.963588359375,74.39470136718751L33.926568359375,74.39470136718751C35.317468359375,74.39470136718751,36.445068359375,73.5007013671875,36.445068359375,72.3979013671875L36.445068359375,53.7248813671875C36.445068359375,52.6220613671875,35.317468359375,51.7280513671875,33.926568359375,51.7280513671875L28.741398359374998,51.7280513671875L28.741398359374998,46.2963223671875C28.741398359374998,46.1665793671875,28.608748359375,46.0614013671875,28.445108359375,46.0614013671875C28.281468359375,46.0614013671875,28.148808359375,46.1665793671875,28.148808359375,46.2963223671875L28.148808359375,51.7280513671875ZM28.741398359374998,74.3948013671875L28.741398359374998,79.82650136718749C28.741398359374998,79.9563013671875,28.608748359375,80.0614013671875,28.445108359375,80.0614013671875C28.281468359375,80.0614013671875,28.148808359375,79.9563013671875,28.148808359375,79.82650136718749L28.148808359375,74.3948013671875L28.741398359374998,74.3948013671875Z"></path><path d="M51.148808359374996,44.7280513671875L45.963588359375,44.7280513671875C44.572648359375,44.7280513671875,43.445068359375,45.6220613671875,43.445068359375,46.7248813671875L43.445068359375,65.3979013671875C43.445068359375,66.5007013671875,44.572648359375,67.39470136718751,45.963588359375,67.39470136718751L56.926568359375,67.39470136718751C58.317468359375,67.39470136718751,59.445068359375,66.5007013671875,59.445068359375,65.3979013671875L59.445068359375,46.7248813671875C59.445068359375,45.6220613671875,58.317468359375,44.7280513671875,56.926568359375,44.7280513671875L51.741398359375,44.7280513671875L51.741398359375,39.2963223671875C51.741398359375,39.1665793671875,51.608748359375,39.0614013671875,51.445108359375,39.0614013671875C51.281468359375,39.0614013671875,51.148808359374996,39.1665793671875,51.148808359374996,39.2963223671875L51.148808359374996,44.7280513671875ZM51.741398359375,67.3948013671875L51.741398359375,72.82650136718749C51.741398359375,72.9563013671875,51.608748359375,73.0614013671875,51.445108359375,73.0614013671875C51.281468359375,73.0614013671875,51.148808359374996,72.9563013671875,51.148808359374996,72.82650136718749L51.148808359374996,67.3948013671875L51.741398359375,67.3948013671875Z"></path><path d="M17.7274,90.6541C17.5901,90.6541,17.4517,90.6436,17.3121,90.6225C9.93219,89.5095,4.80718,86.7136,2.07787,82.3084C-1.1223,77.1437,0.241766,71.6314,0.56829,70.5137C5.37624,46.647,15.0785,38.4945,21.5025,33.0957C22.9683,31.8633,24.2342,30.7995,25.1676,29.7672C25.4105,29.4984,25.6051,29.2154,25.7556,28.9202C24.7465,29.2231,24.1971,29.4326,24.1703,29.4429C22.908,29.9368,21.4777,29.3247,20.9761,28.076C20.4756,26.8272,21.0897,25.4146,22.352,24.9172C22.5042,24.8571,23.5312,24.4607,25.3073,23.9616C24.087,21.4425,21.7693,18.7949,19.7125,16.6431L19.2819,16.1902C16.2438,12.9776,14.6017,4.80159,14.3036,3.19471C14.1306,2.26212,14.4636,1.30796,15.1814,0.679657C15.8995,0.0512175,16.8976,-0.159672,17.8125,0.123747C22.7731,1.66274,24.2638,1.81255,27.2321,2.11098C28.7357,2.26195,29.83,3.59029,29.6762,5.07662C29.5236,6.56295,28.182,7.64786,26.6784,7.49454C24.4992,7.27569,22.9517,7.09896,20.724,6.56646C21.4493,9.09088,22.3803,11.5427,23.2771,12.4919L23.6876,12.9237C25.3757,14.69,28.9691,18.45,30.7016,22.7299C35.0392,21.9433,40.8791,21.3359,47.7817,21.7249C48.2004,20.7386,48.8054,19.7953,49.5907,18.9135C49.7137,18.7754,49.8498,18.6502,49.9988,18.539C53.6142,15.8508,57.5491,12.857,59.7803,11.0758C58.1028,11.2502,56.1034,11.0278,53.9124,9.70882C53.2439,9.30622,52.5992,8.89427,51.9662,8.48933C48.4668,6.25164,46.497,5.12109,43.4234,5.94853C41.9647,6.34058,40.4622,5.48975,40.0659,4.04789C39.6695,2.60604,40.5296,1.11853,41.9871,0.726471C47.5602,-0.773825,51.4796,1.73271,54.9364,3.9434L54.9364,3.9434C55.5284,4.32176,56.1318,4.70797,56.7564,5.08482C58.3843,6.06556,59.4858,5.76127,61.2899,5.13865C62.3511,4.77234,63.5567,4.35687,64.8675,4.53476C66.3321,4.73254,67.4406,5.56933,67.9103,6.83096C68.7444,9.07333,67.1035,11.5533,65.5797,13.2374C64.6729,14.2394,60.0845,17.7606,56.4519,20.4957C56.9477,20.3369,57.4767,20.2511,58.026,20.2511C59.4281,20.2511,60.6982,20.8102,61.621,21.7153C65.4948,20.6901,67.87,17.9563,67.9033,17.9175C68.78,16.8888,70.3322,16.7577,71.3721,17.6226C72.412,18.4886,72.5457,20.0253,71.6702,21.054C71.5221,21.2286,69.5063,23.5492,66.0787,25.233C69.5399,26.8822,72.9993,29.682,74.1841,34.4145C74.5106,35.7206,73.7062,37.0407,72.3859,37.3638C72.1871,37.4117,71.9884,37.4351,71.792,37.4351C70.687,37.4351,69.6826,36.6932,69.4046,35.5848C68.4378,31.7217,64.8144,29.7431,61.7619,28.7456C60.8298,29.7349,59.5009,30.3535,58.026,30.3535C55.8642,30.3535,54.0162,29.0245,53.2713,27.1474C53.2022,27.138,53.1331,27.1287,53.0642,27.1195C54.232,29.5936,57.0851,31.9259,58.1868,32.665C58.3157,32.7516,58.4423,32.8523,58.5547,32.9599C66.5865,40.6151,72.4887,48.8133,76.0971,57.3287C76.6815,58.7074,76.0249,60.2932,74.6313,60.8702C74.2976,61.01,73.9388,61.082,73.576,61.082C72.5065,61.082,71.4914,60.4582,71.0525,59.4213C67.7577,51.6455,62.331,44.1074,54.9203,37.0116C53.6073,36.1009,48.0984,31.9917,47.2065,26.583C40.9421,26.2679,35.6187,26.8278,31.6725,27.5336C31.6197,29.527,30.9225,31.5172,29.2456,33.3731C28.0614,34.6827,26.5968,35.915,25.0446,37.2188C21.9414,39.8269,18.2648,42.9169,14.8104,48.1192C11.356,53.3215,8.12389,60.6361,5.9098,71.6934C5.88732,71.8035,5.85893,71.9123,5.82344,72.0188C5.81634,72.041,4.57886,76.0413,6.77344,79.5289C8.6332,82.4828,12.4557,84.4139,18.1367,85.2705C19.6297,85.4953,20.6566,86.8762,20.4295,88.3532C20.2213,89.6944,19.0559,90.6541,17.7274,90.6541ZM35.1195,7.03101C33.3502,7.03101,31.9158,5.61208,31.9158,3.86173C31.9158,2.11139,33.3502,0.69245,35.1195,0.69245C36.8889,0.69245,38.3233,2.11139,38.3233,3.86173C38.3233,5.61208,36.8889,7.03101,35.1195,7.03101ZM57.6848,23.1892L58.414,24.4754C58.8984,24.3623,59.3923,24.3435,59.8644,24.4203C60.2191,24.5005,60.5087,24.7182,60.6663,25.0229C60.8636,25.3394,60.8993,25.7346,60.7646,26.1094C60.5988,26.5176,60.2972,26.8749,59.9085,27.1235L60.31,27.8316L59.7886,28.1294L59.3994,27.443C58.9257,27.7175,58.399,27.883,57.8664,27.9247L57.3744,27.0569C57.6378,27.0741,57.9071,27.048,58.1704,26.9797C58.4501,26.9251,58.7239,26.8323,58.9829,26.7044L58.2801,25.4647C57.8047,25.5877,57.3167,25.6065,56.8549,25.5197C56.4913,25.4263,56.196,25.1971,56.0328,24.8814C55.8433,24.5561,55.8127,24.1572,55.9484,23.7789C56.088,23.373,56.3763,23.0149,56.7584,22.7726L56.4166,22.1699L56.938,21.8721L57.2727,22.4625C57.6615,22.2376,58.0888,22.0901,58.5254,22.0301L59.0042,22.8746C58.5548,22.8828,58.103,22.9906,57.6848,23.1892ZM56.9319,24.2961Q57.1278,24.6417,57.7863,24.5856L57.1695,23.4978Q56.6982,23.884,56.9319,24.2961ZM58.9077,25.3462L59.4981,26.3875L59.499,26.3891Q59.9965,26.0045,59.7628,25.5923Q59.573,25.2576,58.9077,25.3462ZM73.2212,66.5065C73.2212,68.2569,74.6555,69.6758,76.4249,69.6758C78.1943,69.6758,79.6286,68.2569,79.6286,66.5065C79.6286,64.7562,78.1943,63.3372,76.4249,63.3372C74.6555,63.3372,73.2212,64.7562,73.2212,66.5065ZM35.9465,91.8045C35.0734,91.8045,34.2038,91.7987,33.3378,91.7858C31.827,91.7636,30.6203,90.5359,30.6428,89.0402C30.6653,87.5457,31.9158,86.3297,33.4183,86.3742C49.6344,86.6059,65.7512,84.6175,67.6134,84.037C72.1953,82.4184,74.5295,79.3603,74.5295,74.9575C74.5295,73.463,75.754,72.2517,77.2648,72.2517C78.7755,72.2517,80,73.463,80,74.9575C80,81.5992,76.148,86.7686,69.4317,89.142C67.0041,89.9999,51.0955,91.8046,35.9465,91.8045ZM25.2731,92C23.5037,92,22.0693,90.5811,22.0693,88.8307C22.0693,87.0804,23.5037,85.6615,25.2731,85.6615C27.0424,85.6615,28.4768,87.0804,28.4768,88.8307C28.4768,90.5811,27.0424,92,25.2731,92Z"></path></svg>'), Pg = Sg.cloneNode(!0);
+class Eg {
   constructor(t) {
-    m1(this, "_chartApi", null);
+    g1(this, "_chartApi", null);
     if (E.isString(t.container)) {
       if (this._container = document.getElementById(t.container), !this._container)
         throw new Error("Container is null");
@@ -6949,7 +6954,7 @@ class Og {
       this._container = t.container;
     this._container.classList.add("klinecharts-pro"), this._container.setAttribute("data-theme", t.theme ?? "light");
     const r = this;
-    z9(() => w(Tg, {
+    K9(() => w(Tg, {
       ref: (n) => {
         r._chartApi = n;
       },
@@ -6957,7 +6962,7 @@ class Og {
         return t.styles ?? {};
       },
       get watermark() {
-        return t.watermark ?? Mg;
+        return t.watermark ?? Pg;
       },
       get theme() {
         return t.theme ?? "light";
@@ -7127,7 +7132,7 @@ class Og {
   }
   setStyles(t) {
     var r, n;
-    It(t), this._chartApi.setStyles(t), (n = (r = this._chartApi).resize) == null || n.call(r);
+    Et(t), this._chartApi.setStyles(t), (n = (r = this._chartApi).resize) == null || n.call(r);
   }
   getStyles() {
     return this._chartApi.getStyles();
@@ -7256,12 +7261,12 @@ class Og {
     (a = (n = this._chartApi) == null ? void 0 : n.unsubscribeAction) == null || a.call(n, t, r);
   }
 }
-w9.forEach((e) => {
-  l9(e);
+M9.forEach((e) => {
+  u9(e);
 });
 export {
-  Dg as DefaultDatafeed,
-  Og as KLineChartPro,
-  Ng as loadLocales
+  Og as DefaultDatafeed,
+  Eg as KLineChartPro,
+  Ig as loadLocales
 };
 //# sourceMappingURL=klinecharts-pro.js.map
