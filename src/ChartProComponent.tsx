@@ -3931,6 +3931,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
         <SettingModal
           locale={props.locale}
           currentStyles={utils.clone(widget!.getStyles())}
+          defaultStyles={widgetDefaultStyles()}
           onClose={() => {
             setSettingModalVisible(false);
           }}

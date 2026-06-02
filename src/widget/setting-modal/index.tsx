@@ -13,7 +13,7 @@
  */
 
 import { Component, createEffect, For, createSignal, onMount, onCleanup } from 'solid-js'
-import { Styles, utils, DeepPartial } from 'klinecharts'
+import { Styles, utils, DeepPartial, LineType } from 'klinecharts'
 
 import lodashSet from 'lodash/set'
 
@@ -26,15 +26,72 @@ import { getOptions } from './data'
 export interface SettingModalProps {
   locale: string
   currentStyles: Styles
+  defaultStyles?: Styles
   onClose: () => void
   onChange: (style: DeepPartial<Styles>) => void
   onRestoreDefault: (options: SelectDataSourceItem[]) => void
 }
 
+type ModalTab = 'settings' | 'chartStyle'
+type ChartStyleTab = 'symbol' | 'background'
+
+const colorPalette = [
+  '#f6465d', '#f59e0b', '#fcd535', '#2ebd85', '#4098a8', '#22c1dc', '#3861fb', '#7b3fe4',
+  '#ec8aa4', '#f7c56b', '#fff0a3', '#9ed4a4', '#83c7bb', '#8bdce6', '#8bb9f7', '#b7a1dc',
+  '#c9343e', '#e76f20', '#f0b93a', '#3f8d3a', '#236e5a', '#237c88', '#1d3fbf', '#3a209f',
+  '#ffffff', '#cbd5e1', '#9ca3af', '#6b7280', '#374151', '#111827', '#000000'
+]
+
+const chartTypeOptions: SelectDataSourceItem[] = [
+  { key: 'candle_solid', text: 'Candle' },
+  { key: 'ohlc', text: 'OHLC' },
+  { key: 'area', text: 'Area' }
+]
+
+const candleStyleOptions: SelectDataSourceItem[] = [
+  { key: 'candle_solid', text: 'Solid' },
+  { key: 'candle_stroke', text: 'Stroke' },
+  { key: 'candle_up_stroke', text: 'Up Stroke' },
+  { key: 'candle_down_stroke', text: 'Down Stroke' }
+]
+
+const lineStyleOptions: SelectDataSourceItem[] = [
+  { key: LineType.Solid, text: 'Solid' },
+  { key: LineType.Dashed, text: 'Dashed' }
+]
+
+const chartStyleRestoreOptions: SelectDataSourceItem[] = [
+  { key: 'candle.type', text: 'Candle Type' },
+  { key: 'candle.bar.upColor', text: 'Up Color' },
+  { key: 'candle.bar.downColor', text: 'Down Color' },
+  { key: 'candle.bar.noChangeColor', text: 'No Change Color' },
+  { key: 'grid.horizontal.show', text: 'Horizontal Grids' },
+  { key: 'grid.horizontal.color', text: 'Horizontal Grid Color' },
+  { key: 'grid.horizontal.style', text: 'Horizontal Grid Style' },
+  { key: 'grid.horizontal.size', text: 'Horizontal Grid Size' },
+  { key: 'grid.horizontal.dashedValue', text: 'Horizontal Grid Dash' },
+  { key: 'grid.vertical.show', text: 'Vertical Grids' },
+  { key: 'grid.vertical.color', text: 'Vertical Grid Color' },
+  { key: 'grid.vertical.style', text: 'Vertical Grid Style' },
+  { key: 'grid.vertical.size', text: 'Vertical Grid Size' },
+  { key: 'grid.vertical.dashedValue', text: 'Vertical Grid Dash' }
+]
+
+const chartStyleUiRestoreOptions: SelectDataSourceItem[] = [
+  { key: 'chartStyleUi.border.upColor', text: 'Border Up Color' },
+  { key: 'chartStyleUi.border.downColor', text: 'Border Down Color' },
+  { key: 'chartStyleUi.wick.upColor', text: 'Wick Up Color' },
+  { key: 'chartStyleUi.wick.downColor', text: 'Wick Down Color' }
+]
+
 const SettingModal: Component<SettingModalProps> = props => {
   const [styles, setStyles] = createSignal(props.currentStyles)
+  const [draftStyles, setDraftStyles] = createSignal(utils.clone(props.currentStyles))
   const [options, setOptions] = createSignal(getOptions(props.locale))
   const [isMobile, setIsMobile] = createSignal(false)
+  const [activeTab, setActiveTab] = createSignal<ModalTab>('settings')
+  const [activeChartStyleTab, setActiveChartStyleTab] = createSignal<ChartStyleTab>('symbol')
+  const [activeColorKey, setActiveColorKey] = createSignal<string | null>(null)
 
   // Check if device is mobile
   const checkMobile = () => {
@@ -64,73 +121,339 @@ const SettingModal: Component<SettingModalProps> = props => {
     props.onChange(style)
   }
 
+  const formatDraftValue = (key: string, fallback?: unknown) => {
+    return utils.formatValue(draftStyles(), key, fallback)
+  }
+
+  const updateDraft = (key: string, newValue: any) => {
+    const nextStyles = utils.clone(draftStyles())
+    lodashSet(nextStyles, key, newValue)
+    setDraftStyles(nextStyles)
+    props.onChange(buildChartStyleUpdate(nextStyles))
+  }
+
+  const buildChartStyleUpdate = (source: Styles): DeepPartial<Styles> => {
+    return {
+      candle: {
+        type: utils.formatValue(source, 'candle.type') as any,
+        bar: {
+          upColor: utils.formatValue(source, 'candle.bar.upColor') as string,
+          downColor: utils.formatValue(source, 'candle.bar.downColor') as string,
+          noChangeColor: utils.formatValue(source, 'candle.bar.noChangeColor') as string
+        }
+      },
+      grid: {
+        horizontal: {
+          show: !!utils.formatValue(source, 'grid.horizontal.show'),
+          color: utils.formatValue(source, 'grid.horizontal.color') as string,
+          style: utils.formatValue(source, 'grid.horizontal.style') as LineType,
+          size: Number(utils.formatValue(source, 'grid.horizontal.size', 1)),
+          dashedValue: utils.formatValue(source, 'grid.horizontal.dashedValue', [2, 2]) as number[]
+        },
+        vertical: {
+          show: !!utils.formatValue(source, 'grid.vertical.show'),
+          color: utils.formatValue(source, 'grid.vertical.color') as string,
+          style: utils.formatValue(source, 'grid.vertical.style') as LineType,
+          size: Number(utils.formatValue(source, 'grid.vertical.size', 1)),
+          dashedValue: utils.formatValue(source, 'grid.vertical.dashedValue', [2, 2]) as number[]
+        }
+      }
+    }
+  }
+
+  const saveChartStyle = () => {
+    const updateStyle = buildChartStyleUpdate(draftStyles())
+    setStyles(utils.clone(draftStyles()))
+    props.onChange(updateStyle)
+    props.onClose()
+  }
+
+  const resetChartStyle = () => {
+    const defaultStyles = props.defaultStyles
+    if (defaultStyles) {
+      const nextDraft = utils.clone(draftStyles())
+      chartStyleRestoreOptions.forEach(option => {
+        lodashSet(nextDraft, option.key, utils.formatValue(defaultStyles, option.key))
+      })
+      chartStyleUiRestoreOptions.forEach(option => {
+        const fallbackKey = option.key.includes('downColor') ? 'candle.bar.downColor' : 'candle.bar.upColor'
+        lodashSet(nextDraft, option.key, utils.formatValue(defaultStyles, fallbackKey))
+      })
+      setDraftStyles(nextDraft)
+      setStyles(utils.clone(nextDraft))
+      props.onChange(buildChartStyleUpdate(nextDraft))
+    } else {
+      props.onRestoreDefault(chartStyleRestoreOptions)
+      setDraftStyles(utils.clone(props.currentStyles))
+    }
+  }
+
+  const renderColorPicker = (key: string, pickerId = key, fallbackKey?: string) => {
+    const fallbackValue = fallbackKey ? formatDraftValue(fallbackKey, '#ffffff') : '#ffffff'
+    const value = formatDraftValue(key, fallbackValue) as string
+    return (
+      <div class="chart-style-color-picker">
+        <button
+          type="button"
+          class="chart-style-color-swatch"
+          style={{ background: value }}
+          onClick={() => {
+            setActiveColorKey(activeColorKey() === pickerId ? null : pickerId)
+          }}/>
+        {activeColorKey() === pickerId && (
+          <div class="chart-style-color-popover">
+            <div class="chart-style-color-grid">
+              <For each={colorPalette}>
+                {color => (
+                  <button
+                    type="button"
+                    class="chart-style-palette-color"
+                    classList={{ selected: color.toLowerCase() === value.toLowerCase() }}
+                    style={{ background: color }}
+                    onClick={() => {
+                      updateDraft(key, color)
+                      setActiveColorKey(null)
+                    }}/>
+                )}
+              </For>
+            </div>
+          </div>
+        )}
+      </div>
+    )
+  }
+
+  const renderLineControl = (prefix: string) => {
+    const styleKey = `${prefix}.style`
+    const colorKey = `${prefix}.color`
+    const sizeKey = `${prefix}.size`
+    const lineStyle = formatDraftValue(styleKey, LineType.Dashed) as string
+    return (
+      <div class="chart-style-line-control">
+        <Select
+          style={{ width: isMobile() ? '100%' : '134px' }}
+          value={lineStyle === LineType.Solid ? 'Solid' : 'Dashed'}
+          dataSource={lineStyleOptions}
+          onSelected={(data) => {
+            const newValue = (data as SelectDataSourceItem).key
+            updateDraft(styleKey, newValue)
+            updateDraft(`${prefix}.dashedValue`, newValue === LineType.Solid ? [] : [2, 2])
+          }}/>
+        <button
+          type="button"
+          class="chart-style-size-button"
+          onClick={() => {
+            const size = Number(formatDraftValue(sizeKey, 1))
+            updateDraft(sizeKey, size >= 3 ? 1 : size + 1)
+          }}>
+          <span style={{ height: `${Math.max(1, Number(formatDraftValue(sizeKey, 1)))}px` }}/>
+        </button>
+        {renderColorPicker(colorKey)}
+      </div>
+    )
+  }
+
+  const modalTitle = (
+    <div class="klinecharts-pro-setting-modal-title-tabs">
+      <button
+        type="button"
+        classList={{ active: activeTab() === 'settings' }}
+        onClick={() => setActiveTab('settings')}>
+        {i18n('setting', props.locale)}
+      </button>
+      <button
+        type="button"
+        classList={{ active: activeTab() === 'chartStyle' }}
+        onClick={() => setActiveTab('chartStyle')}>
+        Chart Style
+      </button>
+    </div>
+  )
+
   return (
     <Modal
-      title={i18n('setting', props.locale)}
-      width={690}
-        btnParentStyle={{
-          "display": "flex",
-          "justify-content": "center",
-  }}
-
-      minButtonWidth={200}
+      title={modalTitle}
+      width={activeTab() === 'chartStyle' ? 760 : 690}
+      btnParentStyle={{
+        'display': 'flex',
+        'justify-content': activeTab() === 'chartStyle' ? 'flex-end' : 'center'
+      }}
+      minButtonWidth={activeTab() === 'chartStyle' ? 170 : 200}
       isMobile={isMobile()}
-      buttons={[
-        {
-          children: i18n('restore_default', props.locale),
-          onClick: () => {
-            props.onRestoreDefault(options())
-            props.onClose()
-          }
-        }
-      ]}
+      buttons={activeTab() === 'settings'
+        ? [
+            {
+              children: i18n('restore_default', props.locale),
+              onClick: () => {
+                props.onRestoreDefault(options())
+                props.onClose()
+              }
+            }
+          ]
+        : [
+            {
+              type: 'cancel',
+              children: 'Reset',
+              onClick: resetChartStyle
+            },
+            {
+              children: 'Save',
+              onClick: saveChartStyle
+            }
+          ]}
       onClose={props.onClose}>
-      <div
-        class="klinecharts-pro-setting-modal-content"
-        classList={{ 'mobile-layout': isMobile() }}>
-        <For each={options()}>
-          {
-            option => {
-              let component
-              const value = utils.formatValue(styles(), option.key)
-              switch (option.component) {
-                case 'select': {
-                  const selectWidth = option.key === 'candle.type' ? '170px' : '120px'
-                  component = (
-                    <Select
-                      style={{ width: isMobile() ? '100%' : selectWidth, 'min-width': isMobile() ? 'auto' : selectWidth }}
-                      value={i18n(value as string, props.locale)}
-                      dataSource={option.dataSource}
-                      onSelected={(data) => {
-                        const newValue = (data as SelectDataSourceItem).key
-                        update(option, newValue)
-                      }}/>
+      {activeTab() === 'settings'
+        ? (
+          <div
+            class="klinecharts-pro-setting-modal-content"
+            classList={{ 'mobile-layout': isMobile() }}>
+            <For each={options()}>
+              {
+                option => {
+                  let component
+                  const value = utils.formatValue(styles(), option.key)
+                  switch (option.component) {
+                    case 'select': {
+                      const selectWidth = option.key === 'candle.type' ? '170px' : '120px'
+                      component = (
+                        <Select
+                          style={{ width: isMobile() ? '100%' : selectWidth, 'min-width': isMobile() ? 'auto' : selectWidth }}
+                          value={i18n(value as string, props.locale)}
+                          dataSource={option.dataSource}
+                          onSelected={(data) => {
+                            const newValue = (data as SelectDataSourceItem).key
+                            update(option, newValue)
+                          }}/>
+                      )
+                      break
+                    }
+                    case 'switch': {
+                      const open = !!value
+                      component = (
+                        <Switch
+                          open={open}
+                          onChange={() => {
+                            const newValue = !open
+                            update(option, newValue)
+                          }}/>
+                      )
+                      break
+                    }
+                  }
+                  return (
+                    <div class="setting-item" classList={{ 'mobile-item': isMobile() }}>
+                      <span class="setting-label">{option.text}</span>
+                      <div class="setting-control">{component}</div>
+                    </div>
                   )
-                  break
-                }
-                case 'switch': {
-                  const open = !!value
-                  component = (
-                    <Switch
-                      open={open}
-                      onChange={() => {
-                        const newValue = !open
-                        update(option, newValue)
-                      }}/>
-                  )
-                  break
                 }
               }
-              return (
-                <div class="setting-item" classList={{ 'mobile-item': isMobile() }}>
-                  <span class="setting-label">{option.text}</span>
-                  <div class="setting-control">{component}</div>
-                </div>
-              )
-            }
-          }
-        </For>
-      </div> 
+            </For>
+          </div>
+          )
+        : (
+          <div class="klinecharts-pro-chart-style-content" classList={{ 'mobile-layout': isMobile() }}>
+            <div class="chart-style-sidebar">
+              <button
+                type="button"
+                classList={{ active: activeChartStyleTab() === 'symbol' }}
+                onClick={() => setActiveChartStyleTab('symbol')}>
+                Symbol
+              </button>
+              <button
+                type="button"
+                classList={{ active: activeChartStyleTab() === 'background' }}
+                onClick={() => setActiveChartStyleTab('background')}>
+                Background
+              </button>
+            </div>
+            <div class="chart-style-panel">
+              {activeChartStyleTab() === 'symbol'
+                ? (
+                  <>
+                    <h3>Symbol</h3>
+                    <div class="chart-style-row">
+                      <span>Chart</span>
+                      <Select
+                        style={{ width: isMobile() ? '100%' : '170px' }}
+                        value={chartTypeOptions.find(option => option.key === formatDraftValue('candle.type'))?.text ?? 'Candle'}
+                        dataSource={chartTypeOptions}
+                        onSelected={(data) => {
+                          updateDraft('candle.type', (data as SelectDataSourceItem).key)
+                        }}/>
+                    </div>
+                    <div class="chart-style-row">
+                      <span>Bullish Candle Stick</span>
+                      <Select
+                        style={{ width: isMobile() ? '100%' : '170px' }}
+                        value={candleStyleOptions.find(option => option.key === formatDraftValue('candle.type'))?.text ?? 'Solid'}
+                        dataSource={candleStyleOptions}
+                        onSelected={(data) => {
+                          updateDraft('candle.type', (data as SelectDataSourceItem).key)
+                        }}/>
+                    </div>
+                    <div class="chart-style-row">
+                      <span>Candle Stick</span>
+                      <div class="chart-style-color-pair">
+                        {renderColorPicker('candle.bar.upColor', 'candle-stick-up')}
+                        {renderColorPicker('candle.bar.downColor', 'candle-stick-down')}
+                      </div>
+                    </div>
+                    <div class="chart-style-row">
+                      <span>Borders</span>
+                      <div class="chart-style-color-pair">
+                        {renderColorPicker('chartStyleUi.border.upColor', 'border-up', 'candle.bar.upColor')}
+                        {renderColorPicker('chartStyleUi.border.downColor', 'border-down', 'candle.bar.downColor')}
+                      </div>
+                    </div>
+                    <div class="chart-style-row">
+                      <span>Wick</span>
+                      <div class="chart-style-color-pair">
+                        {renderColorPicker('chartStyleUi.wick.upColor', 'wick-up', 'candle.bar.upColor')}
+                        {renderColorPicker('chartStyleUi.wick.downColor', 'wick-down', 'candle.bar.downColor')}
+                      </div>
+                    </div>
+                  </>
+                  )
+                : (
+                  <>
+                    <h3>Background</h3>
+                    <div class="chart-style-row">
+                      <span>Color</span>
+                      <button
+                        type="button"
+                        class="chart-style-color-swatch disabled"
+                        style={{ background: 'var(--klinecharts-pro-background-color)' }}
+                        title="Chart background is controlled by the active app theme."/>
+                    </div>
+                    <div class="chart-style-row">
+                      <label class="chart-style-check-row">
+                        <input
+                          type="checkbox"
+                          checked={!!formatDraftValue('grid.vertical.show')}
+                          onChange={(event) => updateDraft('grid.vertical.show', event.currentTarget.checked)}/>
+                        <span>Vert Grid Lines</span>
+                      </label>
+                      {renderLineControl('grid.vertical')}
+                    </div>
+                    <div class="chart-style-row">
+                      <label class="chart-style-check-row">
+                        <input
+                          type="checkbox"
+                          checked={!!formatDraftValue('grid.horizontal.show')}
+                          onChange={(event) => updateDraft('grid.horizontal.show', event.currentTarget.checked)}/>
+                        <span>Horz Grid Lines</span>
+                      </label>
+                      {renderLineControl('grid.horizontal')}
+                    </div>
+                  </>
+                  )}
+              <p class="chart-style-note">
+                * Chart Style takes precedence over default chart settings. Click Reset to align with the default theme.
+              </p>
+            </div>
+          </div>
+          )}
     </Modal>
   )
 }
