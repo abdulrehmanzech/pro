@@ -2366,16 +2366,23 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     if (!widget || !widgetRef) {
       return null;
     }
+    const mainDom = widget.getDom?.("candle_pane", DomPosition.Main);
+    const mainRect = mainDom?.getBoundingClientRect?.();
+    const widgetRect = widgetRef.getBoundingClientRect();
+    const paneLeft =
+      mainRect && Number.isFinite(mainRect.left)
+        ? mainRect.left - widgetRect.left
+        : 0;
     const mainSize = widget.getSize("candle_pane", DomPosition.Main);
-    const paneWidth = mainSize?.width ?? widgetRef.clientWidth;
+    const paneWidth = mainRect?.width ?? mainSize?.width ?? widgetRef.clientWidth;
     if (anchorPoint === "left") {
-      return 0;
+      return paneLeft;
     }
     if (anchorPoint === "center") {
-      return paneWidth / 2;
+      return paneLeft + paneWidth / 2;
     }
     if (anchorPoint === "right") {
-      return paneWidth;
+      return paneLeft + paneWidth;
     }
     return null;
   };

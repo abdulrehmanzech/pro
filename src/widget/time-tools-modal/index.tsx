@@ -210,7 +210,7 @@ const DateTimePicker: Component<{
     <div class="klinecharts-pro-time-tools-picker">
       {props.showInput !== false && (
         <label class="klinecharts-pro-time-tools-field">
-          <span>{props.label}</span>
+          {props.label && <span>{props.label}</span>}
           <button
             type="button"
             class="klinecharts-pro-time-tools-input"
@@ -462,7 +462,7 @@ const TimeToolsModal: Component<TimeToolsModalProps> = (props) => {
     >
       <div class="klinecharts-pro-time-tools-content">
         {activeTab() === "goToDate" && (
-          <DateTimePicker label="Date and time" value={goToDate()} onChange={setGoToDate} />
+          <DateTimePicker label="" value={goToDate()} onChange={setGoToDate} />
         )}
 
         {activeTab() === "timeRange" && (
@@ -475,7 +475,12 @@ const TimeToolsModal: Component<TimeToolsModalProps> = (props) => {
               >
                 {formatDisplayValue(rangeFrom())}
               </button>
-              <span class="klinecharts-pro-time-tools-range-arrow">{"->"}</span>
+              <span class="klinecharts-pro-time-tools-range-arrow" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path d="M5 12h14" />
+                  <path d="m13 6 6 6-6 6" />
+                </svg>
+              </span>
               <button
                 type="button"
                 class={activeRangeSide() === "to" ? "active" : ""}
