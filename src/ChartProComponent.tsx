@@ -187,6 +187,7 @@ function formatCountdownDuration(ms: number): string {
 
 const ChartProComponent: Component<ChartProComponentProps> = (props) => {
   let widgetRef: HTMLDivElement | undefined = undefined;
+  let contentRef: HTMLDivElement | undefined = undefined;
   let widget: Nullable<Chart> = null;
 
   let priceUnitDom: HTMLElement;
@@ -232,8 +233,8 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       enabled: false,
       timestamp: Date.now(),
       anchorPoint: "date",
-      anchorLine: false,
-      acrossTokens: false,
+      anchorLine: true,
+      acrossTokens: true,
     });
   let timeAnchorLineOverlayId: string | null = null;
 
@@ -2368,15 +2369,16 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     }
     const mainDom = widget.getDom?.("candle_pane", DomPosition.Main);
     const mainRect = mainDom?.getBoundingClientRect?.();
+    const contentRect = contentRef?.getBoundingClientRect?.();
     const widgetRect = widgetRef.getBoundingClientRect();
     const paneLeft =
       mainRect && Number.isFinite(mainRect.left)
-        ? mainRect.left - widgetRect.left
-        : 0;
+        ? mainRect.left - (contentRect?.left ?? widgetRect.left)
+        : widgetRect.left - (contentRect?.left ?? widgetRect.left);
     const mainSize = widget.getSize("candle_pane", DomPosition.Main);
     const paneWidth = mainRect?.width ?? mainSize?.width ?? widgetRef.clientWidth;
     if (anchorPoint === "left") {
-      return paneLeft;
+      return Math.max(8, paneLeft);
     }
     if (anchorPoint === "center") {
       return paneLeft + paneWidth / 2;
@@ -3352,6 +3354,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
         onOrderToolsStateChange={applyOrderToolsState}
       />
       <div
+        ref={(el) => (contentRef = el as HTMLDivElement)}
         class="klinecharts-pro-content"
         onMouseLeave={() => {
           setQuickOrderMarker(null);

@@ -413,6 +413,8 @@ const TimeToolsModal: Component<TimeToolsModalProps> = (props) => {
   const [activeRangeSide, setActiveRangeSide] = createSignal<"from" | "to">("from");
   const [anchorSettings, setAnchorSettings] = createSignal<TimeAnchorSettings>({
     ...props.anchorSettings,
+    anchorLine: props.anchorSettings.anchorLine ?? true,
+    acrossTokens: props.anchorSettings.acrossTokens ?? true,
   });
 
   const updateAnchor = (partial: Partial<TimeAnchorSettings>) => {
@@ -553,7 +555,7 @@ const TimeToolsModal: Component<TimeToolsModalProps> = (props) => {
                 <DateTimePicker label="Anchor date" value={goToDate()} onChange={setGoToDate} />
               </div>
             )}
-            <div class="klinecharts-pro-time-tools-row with-divider">
+            <div class={`klinecharts-pro-time-tools-row with-divider${anchorSettings().enabled ? "" : " disabled"}`}>
               <div>
                 <strong>Anchor line</strong>
                 <span>Mark the anchored time on the chart with a vertical line</span>
@@ -561,12 +563,13 @@ const TimeToolsModal: Component<TimeToolsModalProps> = (props) => {
               <button
                 type="button"
                 class={`klinecharts-pro-time-tools-switch${anchorSettings().anchorLine ? " on" : ""}`}
+                disabled={!anchorSettings().enabled}
                 onClick={() => updateAnchor({ anchorLine: !anchorSettings().anchorLine })}
               >
                 <span />
               </button>
             </div>
-            <div class="klinecharts-pro-time-tools-row with-divider">
+            <div class={`klinecharts-pro-time-tools-row with-divider${anchorSettings().enabled ? "" : " disabled"}`}>
               <div>
                 <strong>Across Tokens</strong>
                 <span>Retain onscreen chart range when switching symbols</span>
@@ -574,6 +577,7 @@ const TimeToolsModal: Component<TimeToolsModalProps> = (props) => {
               <button
                 type="button"
                 class={`klinecharts-pro-time-tools-switch${anchorSettings().acrossTokens ? " on" : ""}`}
+                disabled={!anchorSettings().enabled}
                 onClick={() => updateAnchor({ acrossTokens: !anchorSettings().acrossTokens })}
               >
                 <span />
