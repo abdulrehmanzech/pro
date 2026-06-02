@@ -5438,7 +5438,7 @@ const Um = (e) => {
   }, fn = (r) => {
     var a;
     const i = ((a = t == null ? void 0 : t.getDataList) == null ? void 0 : a.call(t)) ?? [];
-    return i.length === 0 || !Number.isFinite(r) || r < 0 ? -1 : Math.max(0, Math.min(i.length - 1, r + 1));
+    return i.length === 0 || !Number.isFinite(r) || r < 0 ? -1 : Math.max(0, Math.min(i.length - 1, r));
   }, h0 = (r) => {
     var te, J, Q;
     if (!t || !n)

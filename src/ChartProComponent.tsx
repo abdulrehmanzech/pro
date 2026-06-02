@@ -2028,7 +2028,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     if (dataList.length === 0 || !Number.isFinite(dataIndex) || dataIndex < 0) {
       return -1;
     }
-    return Math.max(0, Math.min(dataList.length - 1, dataIndex + 1));
+    return Math.max(0, Math.min(dataList.length - 1, dataIndex));
   };
 
   const resolveTimeNavigationTooltipTarget = (timestamp: number) => {
