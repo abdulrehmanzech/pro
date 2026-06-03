@@ -38,6 +38,7 @@ import {
   ChartProOptions,
   OverlayInfo,
   ChartSettings,
+  OrderPreviewLineOptions,
 } from "./types";
 
 const Logo = (
@@ -114,6 +115,7 @@ export default class KLineChartPro implements ChartPro {
               marketPriceLine: true,
               countDown: true,
               bidAskPrice: true,
+              orderPreviewLine: true,
               orderHistory: true,
             }
           }
@@ -302,6 +304,7 @@ export default class KLineChartPro implements ChartPro {
       marketPriceLine: true,
       countDown: true,
       bidAskPrice: true,
+      orderPreviewLine: true,
       orderHistory: true,
     };
   }
@@ -320,9 +323,18 @@ export default class KLineChartPro implements ChartPro {
     marketPriceLine?: boolean;
     countDown?: boolean;
     bidAskPrice?: boolean;
+    orderPreviewLine?: boolean;
     orderHistory?: boolean;
   }): void {
     this._chartApi?.setOrderToolsState?.(state);
+  }
+
+  setOrderPreviewLine(options: OrderPreviewLineOptions): void {
+    this._chartApi?.setOrderPreviewLine?.(options);
+  }
+
+  clearOrderPreviewLine(): void {
+    this._chartApi?.clearOrderPreviewLine?.();
   }
 
   // Forwarded klinecharts chart methods for synchronizing DOM overlays

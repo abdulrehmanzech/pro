@@ -20,7 +20,7 @@ const orderLine: OverlayTemplate = {
   totalStep: 2,
   needDefaultPointFigure: true,
   needDefaultXAxisFigure: false,
-  needDefaultYAxisFigure: false,
+  needDefaultYAxisFigure: true,
   createPointFigures: ({ overlay, coordinates, bounding, precision }) => {
     if (coordinates.length === 0) {
       return [];

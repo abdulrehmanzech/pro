@@ -133,6 +133,7 @@ export interface OrderToolsState {
   marketPriceLine: boolean;
   countDown: boolean;
   bidAskPrice: boolean;
+  orderPreviewLine: boolean;
   orderHistory: boolean;
 }
 
@@ -141,6 +142,18 @@ export type QuickOrderMenuAction = "limit" | "stop" | "create";
 export interface QuickOrderMenuEvent {
   action: QuickOrderMenuAction;
   price: number;
+  symbol: SymbolInfo;
+}
+
+export interface OrderPreviewLineOptions {
+  price: number;
+  side?: "buy" | "sell";
+  label?: string;
+}
+
+export interface OrderPreviewLineEvent {
+  price: number;
+  side: "buy" | "sell";
   symbol: SymbolInfo;
 }
 
@@ -160,9 +173,11 @@ export interface OrderToolsOptions {
   marketPriceLine?: boolean;
   countDown?: boolean;
   bidAskPrice?: boolean;
+  orderPreviewLine?: boolean;
   orderHistory?: boolean;
   onChange?: (state: OrderToolsState) => void;
   onQuickOrderAction?: (event: QuickOrderMenuEvent) => void;
+  onOrderPreviewLineChange?: (event: OrderPreviewLineEvent) => void;
 }
 
 export interface IndicatorTooltipIconStyles {
@@ -292,6 +307,8 @@ export interface ChartPro {
   setTimeToolsModalVisible(visible: boolean): void;
   getOrderToolsState(): OrderToolsState;
   setOrderToolsState(state: Partial<OrderToolsState>): void;
+  setOrderPreviewLine(options: OrderPreviewLineOptions): void;
+  clearOrderPreviewLine(): void;
 
   // Underlying klinecharts chart methods forwarded so consumers can build
   // DOM overlays synchronized with the canvas (price-pixel conversions,

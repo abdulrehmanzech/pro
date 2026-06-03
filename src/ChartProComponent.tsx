@@ -91,6 +91,7 @@ import {
   IndicatorInfo,
   IndicatorEventCallback,
   OrderToolsState,
+  OrderPreviewLineOptions,
   QuickOrderMenuAction,
   IndicatorTooltipIconStyles,
   ChartViewToggleOptions,
@@ -407,6 +408,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     marketPriceLine: props.orderTools?.marketPriceLine ?? true,
     countDown: props.orderTools?.countDown ?? true,
     bidAskPrice: props.orderTools?.bidAskPrice ?? true,
+    orderPreviewLine: props.orderTools?.orderPreviewLine ?? true,
     orderHistory: props.orderTools?.orderHistory ?? true,
   });
   const [quickOrderMarker, setQuickOrderMarker] = createSignal<{
@@ -421,6 +423,8 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     price: number;
     yAxisWidth: number;
   } | null>(null);
+  const [orderPreviewOverlayId, setOrderPreviewOverlayId] = createSignal<string | null>(null);
+  const [orderPreviewSide, setOrderPreviewSide] = createSignal<"buy" | "sell">("buy");
   const QUICK_ORDER_MENU_SCALE_GAP = 6;
   const [countdownPriceMark, setCountdownPriceMark] = createSignal<{
     top: number;
@@ -960,7 +964,84 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
         mergedState.bidAskPrice;
     }
     setOrderToolsState(mergedState);
+    if (nextState.orderPreviewLine === false) {
+      clearOrderPreviewLine();
+    }
     props.orderTools?.onChange?.(mergedState);
+  };
+
+  const emitOrderPreviewLineChange = (overlay: any) => {
+    const price = Number(overlay?.points?.[0]?.value);
+    if (!Number.isFinite(price) || price <= 0) {
+      return;
+    }
+    const side =
+      overlay?.extendData?.side === "sell" || overlay?.extendData?.side === "buy"
+        ? overlay.extendData.side
+        : orderPreviewSide();
+    props.orderTools?.onOrderPreviewLineChange?.({
+      price,
+      side,
+      symbol: symbol(),
+    });
+  };
+
+  const clearOrderPreviewLine = () => {
+    const overlayId = orderPreviewOverlayId();
+    if (!overlayId) {
+      return;
+    }
+    widget?.removeOverlay?.({ id: overlayId });
+    overlayTracker.delete(overlayId);
+    drawingStates.delete(overlayId);
+    setOrderPreviewOverlayId(null);
+  };
+
+  const setOrderPreviewLine = (options: OrderPreviewLineOptions) => {
+    const price = Number(options.price);
+    if (!widget || !Number.isFinite(price) || price <= 0 || !orderToolsState().orderPreviewLine) {
+      clearOrderPreviewLine();
+      return;
+    }
+
+    const side = options.side === "sell" ? "sell" : "buy";
+    setOrderPreviewSide(side);
+    const extendData = {
+      side,
+      label: options.label ?? "New Limit",
+      showDragHint: false,
+      isOrderPreviewLine: true,
+    };
+    const overlayId = orderPreviewOverlayId();
+    if (overlayId) {
+      widget.overrideOverlay?.({
+        id: overlayId,
+        points: [{ value: price }],
+        extendData,
+      });
+      return;
+    }
+
+    const createdId = widget.createOverlay?.({
+      name: "orderLine",
+      points: [{ value: price }],
+      extendData,
+      lock: false,
+      onPressedMoving: (event: any) => {
+        emitOrderPreviewLineChange(event.overlay);
+        return false;
+      },
+      onPressedMoveEnd: (event: any) => {
+        emitOrderPreviewLineChange(event.overlay);
+        return false;
+      },
+    });
+    const nextId = typeof createdId === "string" ? createdId : null;
+    if (nextId) {
+      overlayTracker.delete(nextId);
+      drawingStates.delete(nextId);
+      setOrderPreviewOverlayId(nextId);
+    }
   };
 
   const formatQuickOrderPrice = (price: number): string => {
@@ -1776,6 +1857,8 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     setOrderToolsState: (state: Partial<OrderToolsState>) => {
       applyOrderToolsState(state);
     },
+    setOrderPreviewLine,
+    clearOrderPreviewLine,
 
     dispose: (): void => {
       // Note: We already have a global dispose function from klinecharts
@@ -3074,7 +3157,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
         );
         const overlayId = typeof result === "string" ? result : null;
 
-        if (overlayId) {
+        if (overlayId && !(overlayConfig.extendData as any)?.isOrderPreviewLine) {
 
           // Start monitoring this overlay for completion
           monitorOverlayCompletion(overlayId, overlayConfig.name || "unknown");
