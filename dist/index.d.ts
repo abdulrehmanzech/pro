@@ -89,12 +89,23 @@ export interface OrderToolsState {
 	marketPriceLine: boolean;
 	countDown: boolean;
 	bidAskPrice: boolean;
+	orderPreviewLine: boolean;
 	orderHistory: boolean;
 }
 export type QuickOrderMenuAction = "limit" | "stop" | "create";
 export interface QuickOrderMenuEvent {
 	action: QuickOrderMenuAction;
 	price: number;
+	symbol: SymbolInfo;
+}
+export interface OrderPreviewLineOptions {
+	price: number;
+	side?: "buy" | "sell";
+	label?: string;
+}
+export interface OrderPreviewLineEvent {
+	price: number;
+	side: "buy" | "sell";
 	symbol: SymbolInfo;
 }
 export interface OrderToolsOptions {
@@ -113,9 +124,11 @@ export interface OrderToolsOptions {
 	marketPriceLine?: boolean;
 	countDown?: boolean;
 	bidAskPrice?: boolean;
+	orderPreviewLine?: boolean;
 	orderHistory?: boolean;
 	onChange?: (state: OrderToolsState) => void;
 	onQuickOrderAction?: (event: QuickOrderMenuEvent) => void;
+	onOrderPreviewLineChange?: (event: OrderPreviewLineEvent) => void;
 }
 export interface IndicatorTooltipIconStyles {
 	visibleMarginLeft?: number;
@@ -221,6 +234,8 @@ export interface ChartPro {
 	setTimeToolsModalVisible(visible: boolean): void;
 	getOrderToolsState(): OrderToolsState;
 	setOrderToolsState(state: Partial<OrderToolsState>): void;
+	setOrderPreviewLine(options: OrderPreviewLineOptions): void;
+	clearOrderPreviewLine(): void;
 	convertToPixel(points: Partial<Point> | Array<Partial<Point>>, finder: ChartConvertFinder): Partial<Coordinate> | Array<Partial<Coordinate>>;
 	convertFromPixel(coordinates: Array<Partial<Coordinate>>, finder: ChartConvertFinder): Partial<Point> | Array<Partial<Point>>;
 	getVisibleRange(): VisibleRange;
@@ -308,8 +323,11 @@ export declare class KLineChartPro implements ChartPro {
 		marketPriceLine?: boolean;
 		countDown?: boolean;
 		bidAskPrice?: boolean;
+		orderPreviewLine?: boolean;
 		orderHistory?: boolean;
 	}): void;
+	setOrderPreviewLine(options: OrderPreviewLineOptions): void;
+	clearOrderPreviewLine(): void;
 	convertToPixel(points: Partial<Point> | Array<Partial<Point>>, finder: {
 		paneId?: string;
 		absolute?: boolean;
