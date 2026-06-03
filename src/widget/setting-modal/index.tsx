@@ -42,19 +42,6 @@ const colorPalette = [
   '#ffffff', '#cbd5e1', '#9ca3af', '#6b7280', '#374151', '#111827', '#000000'
 ]
 
-const chartTypeOptions: SelectDataSourceItem[] = [
-  { key: 'candle_solid', text: 'Candle' },
-  { key: 'ohlc', text: 'OHLC' },
-  { key: 'area', text: 'Area' }
-]
-
-const candleStyleOptions: SelectDataSourceItem[] = [
-  { key: 'candle_solid', text: 'Solid' },
-  { key: 'candle_stroke', text: 'Stroke' },
-  { key: 'candle_up_stroke', text: 'Up Stroke' },
-  { key: 'candle_down_stroke', text: 'Down Stroke' }
-]
-
 const lineStyleOptions: SelectDataSourceItem[] = [
   { key: LineType.Solid, text: 'Solid' },
   { key: LineType.Dashed, text: 'Dashed' }
@@ -67,12 +54,12 @@ const chartStyleRestoreOptions: SelectDataSourceItem[] = [
   { key: 'candle.bar.upColor', text: 'Up Color' },
   { key: 'candle.bar.downColor', text: 'Down Color' },
   { key: 'candle.bar.noChangeColor', text: 'No Change Color' },
-  { key: 'candle.bar.borderUpColor', text: 'Border Up Color' },
-  { key: 'candle.bar.borderDownColor', text: 'Border Down Color' },
-  { key: 'candle.bar.borderNoChangeColor', text: 'Border No Change Color' },
-  { key: 'candle.bar.wickUpColor', text: 'Wick Up Color' },
-  { key: 'candle.bar.wickDownColor', text: 'Wick Down Color' },
-  { key: 'candle.bar.wickNoChangeColor', text: 'Wick No Change Color' },
+  { key: 'candle.bar.upBorderColor', text: 'Border Up Color' },
+  { key: 'candle.bar.downBorderColor', text: 'Border Down Color' },
+  { key: 'candle.bar.noChangeBorderColor', text: 'Border No Change Color' },
+  { key: 'candle.bar.upWickColor', text: 'Wick Up Color' },
+  { key: 'candle.bar.downWickColor', text: 'Wick Down Color' },
+  { key: 'candle.bar.noChangeWickColor', text: 'Wick No Change Color' },
   { key: 'grid.horizontal.show', text: 'Horizontal Grids' },
   { key: 'grid.horizontal.color', text: 'Horizontal Grid Color' },
   { key: 'grid.horizontal.style', text: 'Horizontal Grid Style' },
@@ -91,12 +78,12 @@ const createChartStyleDraft = (styles: Styles): Styles => {
   const downColor = utils.formatValue(draft, 'candle.bar.downColor') as string
   const noChangeColor = utils.formatValue(draft, 'candle.bar.noChangeColor') as string
 
-  lodashSet(draft, 'candle.bar.borderUpColor', utils.formatValue(draft, 'candle.bar.borderUpColor', upColor))
-  lodashSet(draft, 'candle.bar.borderDownColor', utils.formatValue(draft, 'candle.bar.borderDownColor', downColor))
-  lodashSet(draft, 'candle.bar.borderNoChangeColor', utils.formatValue(draft, 'candle.bar.borderNoChangeColor', noChangeColor))
-  lodashSet(draft, 'candle.bar.wickUpColor', utils.formatValue(draft, 'candle.bar.wickUpColor', upColor))
-  lodashSet(draft, 'candle.bar.wickDownColor', utils.formatValue(draft, 'candle.bar.wickDownColor', downColor))
-  lodashSet(draft, 'candle.bar.wickNoChangeColor', utils.formatValue(draft, 'candle.bar.wickNoChangeColor', noChangeColor))
+  lodashSet(draft, 'candle.bar.upBorderColor', utils.formatValue(draft, 'candle.bar.upBorderColor', upColor))
+  lodashSet(draft, 'candle.bar.downBorderColor', utils.formatValue(draft, 'candle.bar.downBorderColor', downColor))
+  lodashSet(draft, 'candle.bar.noChangeBorderColor', utils.formatValue(draft, 'candle.bar.noChangeBorderColor', noChangeColor))
+  lodashSet(draft, 'candle.bar.upWickColor', utils.formatValue(draft, 'candle.bar.upWickColor', upColor))
+  lodashSet(draft, 'candle.bar.downWickColor', utils.formatValue(draft, 'candle.bar.downWickColor', downColor))
+  lodashSet(draft, 'candle.bar.noChangeWickColor', utils.formatValue(draft, 'candle.bar.noChangeWickColor', noChangeColor))
 
   return draft
 }
@@ -179,12 +166,12 @@ const SettingModal: Component<SettingModalProps> = props => {
           upColor: utils.formatValue(source, 'candle.bar.upColor') as string,
           downColor: utils.formatValue(source, 'candle.bar.downColor') as string,
           noChangeColor: utils.formatValue(source, 'candle.bar.noChangeColor') as string,
-          borderUpColor: utils.formatValue(source, 'candle.bar.borderUpColor', utils.formatValue(source, 'candle.bar.upColor')) as string,
-          borderDownColor: utils.formatValue(source, 'candle.bar.borderDownColor', utils.formatValue(source, 'candle.bar.downColor')) as string,
-          borderNoChangeColor: utils.formatValue(source, 'candle.bar.borderNoChangeColor', utils.formatValue(source, 'candle.bar.noChangeColor')) as string,
-          wickUpColor: utils.formatValue(source, 'candle.bar.wickUpColor', utils.formatValue(source, 'candle.bar.upColor')) as string,
-          wickDownColor: utils.formatValue(source, 'candle.bar.wickDownColor', utils.formatValue(source, 'candle.bar.downColor')) as string,
-          wickNoChangeColor: utils.formatValue(source, 'candle.bar.wickNoChangeColor', utils.formatValue(source, 'candle.bar.noChangeColor')) as string
+          upBorderColor: utils.formatValue(source, 'candle.bar.upBorderColor', utils.formatValue(source, 'candle.bar.upColor')) as string,
+          downBorderColor: utils.formatValue(source, 'candle.bar.downBorderColor', utils.formatValue(source, 'candle.bar.downColor')) as string,
+          noChangeBorderColor: utils.formatValue(source, 'candle.bar.noChangeBorderColor', utils.formatValue(source, 'candle.bar.noChangeColor')) as string,
+          upWickColor: utils.formatValue(source, 'candle.bar.upWickColor', utils.formatValue(source, 'candle.bar.upColor')) as string,
+          downWickColor: utils.formatValue(source, 'candle.bar.downWickColor', utils.formatValue(source, 'candle.bar.downColor')) as string,
+          noChangeWickColor: utils.formatValue(source, 'candle.bar.noChangeWickColor', utils.formatValue(source, 'candle.bar.noChangeColor')) as string
         } as any
       },
       grid: {
@@ -437,26 +424,6 @@ const SettingModal: Component<SettingModalProps> = props => {
                   <>
                     <h3>Symbol</h3>
                     <div class="chart-style-row">
-                      <span>Chart</span>
-                      <Select
-                        style={{ width: isMobile() ? '100%' : '170px' }}
-                        value={chartTypeOptions.find(option => option.key === formatDraftValue('candle.type'))?.text ?? 'Candle'}
-                        dataSource={chartTypeOptions}
-                        onSelected={(data) => {
-                          updateDraft('candle.type', (data as SelectDataSourceItem).key)
-                        }}/>
-                    </div>
-                    <div class="chart-style-row">
-                      <span>Bullish Candle Stick</span>
-                      <Select
-                        style={{ width: isMobile() ? '100%' : '170px' }}
-                        value={candleStyleOptions.find(option => option.key === formatDraftValue('candle.type'))?.text ?? 'Solid'}
-                        dataSource={candleStyleOptions}
-                        onSelected={(data) => {
-                          updateDraft('candle.type', (data as SelectDataSourceItem).key)
-                        }}/>
-                    </div>
-                    <div class="chart-style-row">
                       <span>Candle Stick</span>
                       <div class="chart-style-color-pair">
                         {renderColorPicker('candle.bar.upColor', 'candle-stick-up')}
@@ -466,15 +433,15 @@ const SettingModal: Component<SettingModalProps> = props => {
                     <div class="chart-style-row">
                       <span>Borders</span>
                       <div class="chart-style-color-pair">
-                        {renderColorPicker('candle.bar.borderUpColor', 'border-up')}
-                        {renderColorPicker('candle.bar.borderDownColor', 'border-down')}
+                        {renderColorPicker('candle.bar.upBorderColor', 'border-up')}
+                        {renderColorPicker('candle.bar.downBorderColor', 'border-down')}
                       </div>
                     </div>
                     <div class="chart-style-row">
                       <span>Wick</span>
                       <div class="chart-style-color-pair">
-                        {renderColorPicker('candle.bar.wickUpColor', 'wick-up')}
-                        {renderColorPicker('candle.bar.wickDownColor', 'wick-down')}
+                        {renderColorPicker('candle.bar.upWickColor', 'wick-up')}
+                        {renderColorPicker('candle.bar.downWickColor', 'wick-down')}
                       </div>
                     </div>
                   </>

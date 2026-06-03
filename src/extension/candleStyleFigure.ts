@@ -25,14 +25,21 @@ type ExtendedCandleBarStyle = Styles["candle"]["bar"] & {
   wickUpColor?: string;
   wickDownColor?: string;
   wickNoChangeColor?: string;
+  upBorderColor?: string;
+  downBorderColor?: string;
+  noChangeBorderColor?: string;
+  upWickColor?: string;
+  downWickColor?: string;
+  noChangeWickColor?: string;
 };
 
 type CandleDirection = "up" | "down" | "noChange";
 
 let activeCandleBarStyle: ExtendedCandleBarStyle | null = null;
 let candleStyleFigureRegistered = false;
-let activeCandleCenter: number | null = null;
-let activeCandleRectPhase = 0;
+const candleBodyWidthByCenter = new Map<number, number>();
+const MAX_TRACKED_CANDLE_CENTERS = 500;
+const MIN_WICK_WIDTH_THRESHOLD = 3;
 
 function normalizeColor(color?: string): string | undefined {
   return color?.trim().toLowerCase();
@@ -79,23 +86,23 @@ function resolveDirectionColor(
   const resolvedDirection = direction ?? resolveDirectionFromColor(sourceColor);
   if (resolvedDirection === "up") {
     return colorType === "border"
-      ? bar.borderUpColor ?? sourceColor
+      ? bar.upBorderColor ?? bar.borderUpColor ?? sourceColor
       : colorType === "wick"
-        ? bar.wickUpColor ?? sourceColor
+        ? bar.upWickColor ?? bar.wickUpColor ?? sourceColor
         : bar.upColor ?? sourceColor;
   }
   if (resolvedDirection === "down") {
     return colorType === "border"
-      ? bar.borderDownColor ?? sourceColor
+      ? bar.downBorderColor ?? bar.borderDownColor ?? sourceColor
       : colorType === "wick"
-        ? bar.wickDownColor ?? sourceColor
+        ? bar.downWickColor ?? bar.wickDownColor ?? sourceColor
         : bar.downColor ?? sourceColor;
   }
   if (resolvedDirection === "noChange") {
     return colorType === "border"
-      ? bar.borderNoChangeColor ?? sourceColor
+      ? bar.noChangeBorderColor ?? bar.borderNoChangeColor ?? sourceColor
       : colorType === "wick"
-        ? bar.wickNoChangeColor ?? sourceColor
+        ? bar.noChangeWickColor ?? bar.wickNoChangeColor ?? sourceColor
         : bar.noChangeColor ?? sourceColor;
   }
   return sourceColor;
@@ -105,14 +112,32 @@ function getCandleRectCenter(attrs: RectAttrs): number {
   return Math.round((attrs.x + attrs.width / 2) * 1000) / 1000;
 }
 
-function getCandleRectPhase(attrs: RectAttrs): number {
-  const center = getCandleRectCenter(attrs);
-  if (activeCandleCenter !== center || activeCandleRectPhase >= 3) {
-    activeCandleCenter = center;
-    activeCandleRectPhase = 0;
+function getCandleRectWidth(attrs: RectAttrs): number {
+  return Math.round(Math.abs(attrs.width) * 1000) / 1000;
+}
+
+function isWickRect(attrs: RectAttrs, isStrokeOnlyBody: boolean): boolean {
+  if (isStrokeOnlyBody) {
+    return false;
   }
-  activeCandleRectPhase += 1;
-  return activeCandleRectPhase;
+
+  const center = getCandleRectCenter(attrs);
+  const width = getCandleRectWidth(attrs);
+  const trackedBodyWidth = candleBodyWidthByCenter.get(center) ?? 0;
+
+  if (width > Math.max(MIN_WICK_WIDTH_THRESHOLD, trackedBodyWidth)) {
+    candleBodyWidthByCenter.set(center, width);
+    if (candleBodyWidthByCenter.size > MAX_TRACKED_CANDLE_CENTERS) {
+      const firstKey = candleBodyWidthByCenter.keys().next().value;
+      if (firstKey !== undefined) {
+        candleBodyWidthByCenter.delete(firstKey);
+      }
+    }
+    return false;
+  }
+
+  const wickThreshold = Math.max(MIN_WICK_WIDTH_THRESHOLD, trackedBodyWidth * 0.35);
+  return width <= wickThreshold;
 }
 
 function drawRoundedRectPath(ctx: CanvasRenderingContext2D, attrs: RectAttrs, radius: number): void {
@@ -133,9 +158,7 @@ function drawRect(ctx: CanvasRenderingContext2D, attrs: RectAttrs, styles: RectS
   const rawColor = styles.color ?? "currentColor";
   const direction = resolveDirectionFromColor(styles.color) ?? resolveDirectionFromColor(styles.borderColor);
   const isStrokeOnlyBody = style === PolygonType.Stroke;
-  const isThinCandlePart = Math.abs(attrs.width) <= 1.5;
-  const rectPhase = direction ? getCandleRectPhase(attrs) : 0;
-  const isWickLike = !isStrokeOnlyBody && isThinCandlePart && rectPhase !== 2;
+  const isWickLike = direction ? isWickRect(attrs, isStrokeOnlyBody) : false;
   const color = resolveDirectionColor(rawColor, isWickLike ? "wick" : "body", direction)!;
   const borderSize = styles.borderSize ?? 1;
   const borderColor = resolveDirectionColor(styles.borderColor ?? rawColor, "border", direction)!;
@@ -189,11 +212,11 @@ export function syncExtendedCandleBarStyle(styles?: DeepPartial<Styles> | Styles
   activeCandleBarStyle = {
     ...(activeCandleBarStyle ?? {}),
     ...bar,
-    borderUpColor: bar.borderUpColor ?? bar.upColor ?? activeCandleBarStyle?.borderUpColor,
-    borderDownColor: bar.borderDownColor ?? bar.downColor ?? activeCandleBarStyle?.borderDownColor,
-    borderNoChangeColor: bar.borderNoChangeColor ?? bar.noChangeColor ?? activeCandleBarStyle?.borderNoChangeColor,
-    wickUpColor: bar.wickUpColor ?? bar.upColor ?? activeCandleBarStyle?.wickUpColor,
-    wickDownColor: bar.wickDownColor ?? bar.downColor ?? activeCandleBarStyle?.wickDownColor,
-    wickNoChangeColor: bar.wickNoChangeColor ?? bar.noChangeColor ?? activeCandleBarStyle?.wickNoChangeColor,
+    upBorderColor: bar.upBorderColor ?? bar.borderUpColor ?? bar.upColor ?? activeCandleBarStyle?.upBorderColor ?? activeCandleBarStyle?.borderUpColor,
+    downBorderColor: bar.downBorderColor ?? bar.borderDownColor ?? bar.downColor ?? activeCandleBarStyle?.downBorderColor ?? activeCandleBarStyle?.borderDownColor,
+    noChangeBorderColor: bar.noChangeBorderColor ?? bar.borderNoChangeColor ?? bar.noChangeColor ?? activeCandleBarStyle?.noChangeBorderColor ?? activeCandleBarStyle?.borderNoChangeColor,
+    upWickColor: bar.upWickColor ?? bar.wickUpColor ?? bar.upColor ?? activeCandleBarStyle?.upWickColor ?? activeCandleBarStyle?.wickUpColor,
+    downWickColor: bar.downWickColor ?? bar.wickDownColor ?? bar.downColor ?? activeCandleBarStyle?.downWickColor ?? activeCandleBarStyle?.wickDownColor,
+    noChangeWickColor: bar.noChangeWickColor ?? bar.wickNoChangeColor ?? bar.noChangeColor ?? activeCandleBarStyle?.noChangeWickColor ?? activeCandleBarStyle?.wickNoChangeColor,
   } as ExtendedCandleBarStyle;
 }
