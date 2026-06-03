@@ -116,10 +116,13 @@ const getDefaultChartStyleValue = (
     'candle.bar.noChangeWickColor': 'candle.bar.noChangeColor'
   }
   const fallbackKey = fallbackByKey[key]
+  if (fallbackKey) {
+    return utils.formatValue(styles, fallbackKey)
+  }
   return utils.formatValue(
     styles,
     key,
-    fallbackKey ? utils.formatValue(styles, fallbackKey) : utils.formatValue(createChartStyleDraft(styles), key)
+    utils.formatValue(createChartStyleDraft(styles), key)
   )
 }
 

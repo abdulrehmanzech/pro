@@ -3877,7 +3877,7 @@ const Mg = /* @__PURE__ */ p('<div class="chart-style-color-picker"><button type
     "candle.bar.downWickColor": "candle.bar.downColor",
     "candle.bar.noChangeWickColor": "candle.bar.noChangeColor"
   }[t];
-  return N.formatValue(e, t, a ? N.formatValue(e, a) : N.formatValue(Qo(e), t));
+  return a ? N.formatValue(e, a) : N.formatValue(e, t, N.formatValue(Qo(e), t));
 }, Yg = (e) => {
   const [t, r] = T(e.currentStyles), [n, a] = T(Qo(e.currentStyles, e.currentBackgroundColor ?? dn)), [l, d] = T(eo(e.locale)), [h, b] = T(!1), [x, v] = T("settings"), [L, B] = T("symbol"), [D, re] = T(null), [U, R] = T(null), F = () => {
     b(window.innerWidth <= 768);

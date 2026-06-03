@@ -10,7 +10,14 @@
   --klinecharts-pro-popover-background-color: @c-popover-background-light;
   --klinecharts-pro-text-color: @c-text-light;
   --klinecharts-pro-text-second-color: @c-text-second-light;
-  --klinecharts-pro-border-color: @c-border-light;
+  --klinecharts-pro-border-color: var(
+    --color-interactive-field-border,
+    color-mix(
+      in srgb,
+      var(--color-primary-default, @c-primary) 22%,
+      var(--color-border-light, @c-border-light)
+    )
+  );
   --klinecharts-pro-selected-color: fade(@c-primary, 15%);
   &[data-theme="dark"] {
     --klinecharts-pro-hover-background-color: @c-hover-background-dark;
@@ -18,7 +25,14 @@
     --klinecharts-pro-popover-background-color: @c-popover-background-dark;
     --klinecharts-pro-text-color: @c-text-dark;
     --klinecharts-pro-text-second-color: @c-text-second-dark;
-    --klinecharts-pro-border-color: @c-border-dark;
+    --klinecharts-pro-border-color: var(
+      --color-interactive-field-border,
+      color-mix(
+        in srgb,
+        var(--color-primary-default, @c-primary) 22%,
+        var(--color-border-light, @c-border-dark)
+      )
+    );
   }
   position: relative;
   display: flex;
