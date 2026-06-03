@@ -74,8 +74,17 @@ const Select: Component<SelectProps> = (props) => {
     if (containerRef && relatedTarget && containerRef.contains(relatedTarget)) {
       return;
     }
-    setOpen(false);
-    setSearchQuery("");
+    setTimeout(() => {
+      if (
+        containerRef &&
+        document.activeElement &&
+        containerRef.contains(document.activeElement)
+      ) {
+        return;
+      }
+      setOpen(false);
+      setSearchQuery("");
+    }, 0);
   };
 
   return (
@@ -88,6 +97,9 @@ const Select: Component<SelectProps> = (props) => {
       tabIndex={0}
       onClick={(e) => {
         e.stopPropagation();
+        if ((e.target as HTMLElement).closest(".drop-down-container")) {
+          return;
+        }
         handleToggle();
       }}
       onBlur={handleBlur}
@@ -99,7 +111,11 @@ const Select: Component<SelectProps> = (props) => {
       {props.dataSource && props.dataSource.length > 0 && (
         <div
           class="drop-down-container"
-          onMouseDown={(e) => e.preventDefault()}
+          onMouseDown={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          }}
+          onClick={(e) => e.stopPropagation()}
         >
           {props.searchable && (
             <div style={{ padding: "8px", "border-bottom": "1px solid #333" }}>

@@ -27,6 +27,8 @@ export interface SettingModalProps {
   locale: string
   currentStyles: Styles
   defaultStyles?: Styles
+  currentBackgroundColor?: string
+  defaultBackgroundColor?: string
   onClose: () => void
   onChange: (style: DeepPartial<Styles>) => void
   onRestoreDefault: (options: SelectDataSourceItem[]) => void
@@ -34,6 +36,10 @@ export interface SettingModalProps {
 
 type ModalTab = 'settings' | 'chartStyle'
 type ChartStyleTab = 'symbol' | 'background'
+type ChartStyleUpdate = DeepPartial<Styles> & { chart?: { backgroundColor?: string } }
+
+const chartBackgroundColorKey = 'chart.backgroundColor'
+const fallbackBackgroundColor = '#0f1420'
 
 const colorPalette = [
   '#f6465d', '#f59e0b', '#fcd535', '#2ebd85', '#4098a8', '#22c1dc', '#3861fb', '#7b3fe4',
@@ -60,6 +66,7 @@ const chartStyleRestoreOptions: SelectDataSourceItem[] = [
   { key: 'candle.bar.upWickColor', text: 'Wick Up Color' },
   { key: 'candle.bar.downWickColor', text: 'Wick Down Color' },
   { key: 'candle.bar.noChangeWickColor', text: 'Wick No Change Color' },
+  { key: chartBackgroundColorKey, text: 'Background Color' },
   { key: 'grid.horizontal.show', text: 'Horizontal Grids' },
   { key: 'grid.horizontal.color', text: 'Horizontal Grid Color' },
   { key: 'grid.horizontal.style', text: 'Horizontal Grid Style' },
@@ -72,7 +79,7 @@ const chartStyleRestoreOptions: SelectDataSourceItem[] = [
   { key: 'grid.vertical.dashedValue', text: 'Vertical Grid Dash' }
 ]
 
-const createChartStyleDraft = (styles: Styles): Styles => {
+const createChartStyleDraft = (styles: Styles, backgroundColor = fallbackBackgroundColor): Styles => {
   const draft = utils.clone(styles)
   const upColor = utils.formatValue(draft, 'candle.bar.upColor') as string
   const downColor = utils.formatValue(draft, 'candle.bar.downColor') as string
@@ -84,13 +91,16 @@ const createChartStyleDraft = (styles: Styles): Styles => {
   lodashSet(draft, 'candle.bar.upWickColor', utils.formatValue(draft, 'candle.bar.upWickColor', upColor))
   lodashSet(draft, 'candle.bar.downWickColor', utils.formatValue(draft, 'candle.bar.downWickColor', downColor))
   lodashSet(draft, 'candle.bar.noChangeWickColor', utils.formatValue(draft, 'candle.bar.noChangeWickColor', noChangeColor))
+  lodashSet(draft, chartBackgroundColorKey, backgroundColor)
 
   return draft
 }
 
 const SettingModal: Component<SettingModalProps> = props => {
   const [styles, setStyles] = createSignal(props.currentStyles)
-  const [draftStyles, setDraftStyles] = createSignal(createChartStyleDraft(props.currentStyles))
+  const [draftStyles, setDraftStyles] = createSignal(
+    createChartStyleDraft(props.currentStyles, props.currentBackgroundColor ?? fallbackBackgroundColor)
+  )
   const [options, setOptions] = createSignal(getOptions(props.locale))
   const [isMobile, setIsMobile] = createSignal(false)
   const [activeTab, setActiveTab] = createSignal<ModalTab>('settings')
@@ -158,8 +168,11 @@ const SettingModal: Component<SettingModalProps> = props => {
     props.onChange(buildChartStyleUpdate(nextStyles))
   }
 
-  const buildChartStyleUpdate = (source: Styles): DeepPartial<Styles> => {
+  const buildChartStyleUpdate = (source: Styles): ChartStyleUpdate => {
     return {
+      chart: {
+        backgroundColor: utils.formatValue(source, chartBackgroundColorKey, fallbackBackgroundColor) as string
+      },
       candle: {
         type: utils.formatValue(source, 'candle.type') as any,
         bar: {
@@ -209,8 +222,13 @@ const SettingModal: Component<SettingModalProps> = props => {
           ? 'candle.bar.downColor'
           : option.key.includes('NoChangeColor')
             ? 'candle.bar.noChangeColor'
-            : 'candle.bar.upColor'
-        lodashSet(nextDraft, option.key, utils.formatValue(defaultStyles, option.key, utils.formatValue(defaultStyles, fallbackKey)))
+            : option.key === chartBackgroundColorKey
+              ? chartBackgroundColorKey
+              : 'candle.bar.upColor'
+        const fallback = option.key === chartBackgroundColorKey
+          ? props.defaultBackgroundColor ?? props.currentBackgroundColor ?? fallbackBackgroundColor
+          : utils.formatValue(defaultStyles, fallbackKey)
+        lodashSet(nextDraft, option.key, utils.formatValue(defaultStyles, option.key, fallback))
       })
       setDraftStyles(nextDraft)
       setStyles(utils.clone(nextDraft))
@@ -451,11 +469,7 @@ const SettingModal: Component<SettingModalProps> = props => {
                     <h3>Background</h3>
                     <div class="chart-style-row">
                       <span>Color</span>
-                      <button
-                        type="button"
-                        class="chart-style-color-swatch disabled"
-                        style={{ background: 'var(--klinecharts-pro-background-color)' }}
-                        title="Chart background is controlled by the active app theme."/>
+                      {renderColorPicker(chartBackgroundColorKey, 'chart-background')}
                     </div>
                     <div class="chart-style-row">
                       <label class="chart-style-check-row">

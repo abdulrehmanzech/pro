@@ -278,12 +278,12 @@ const p9 = {
             break;
           }
         }
-        const oe = D + Math.PI / 2, z = p1({ x, y: v }, e[0], l);
+        const re = D + Math.PI / 2, z = p1({ x, y: v }, e[0], l);
         b.push({
           ...z,
           r: B,
           startAngle: D,
-          endAngle: oe
+          endAngle: re
         });
       }
       return [
@@ -737,7 +737,7 @@ function U9(e, t, r) {
   let n, a, l;
   arguments.length === 2 && typeof t == "object" || arguments.length === 1 ? (n = !0, a = e, l = t || {}) : (n = e, a = t, l = r || {});
   let d = null, h = An, b = null, x = !1, v = "initialValue" in l, L = typeof n == "function" && W(n);
-  const B = /* @__PURE__ */ new Set(), [D, oe] = (l.storage || T)(l.initialValue), [z, K] = T(void 0), [E, ue] = T(void 0, {
+  const B = /* @__PURE__ */ new Set(), [D, re] = (l.storage || T)(l.initialValue), [z, K] = T(void 0), [E, ue] = T(void 0, {
     equals: !1
   }), [j, X] = T(v ? "ready" : "unresolved");
   if (Be.context) {
@@ -752,7 +752,7 @@ function U9(e, t, r) {
   }
   function be(ee, se) {
     At(() => {
-      se === void 0 && oe(() => ee), X(se !== void 0 ? "errored" : "ready"), K(se);
+      se === void 0 && re(() => ee), X(se !== void 0 ? "errored" : "ready"), K(se);
       for (const A of B.keys())
         A.decrement();
       B.clear();
@@ -808,7 +808,7 @@ function U9(e, t, r) {
     }
   }), L ? c0(() => Z(!1)) : Z(!1), [H, {
     refetch: Z,
-    mutate: oe
+    mutate: re
   }];
 }
 function dt(e) {
@@ -998,7 +998,7 @@ function Z9(e, t, r = {}) {
   return wt(() => u0(l)), () => {
     let b = e() || [], x, v;
     return b[F9], dt(() => {
-      let B = b.length, D, oe, z, K, E, ue, j, X, J;
+      let B = b.length, D, re, z, K, E, ue, j, X, J;
       if (B === 0)
         d !== 0 && (u0(l), l = [], n = [], a = [], d = 0, h && (h = [])), r.fallback && (n = [Q9], a[0] = v1((be) => (l[0] = be, r.fallback())), d = 1);
       else if (d === 0) {
@@ -1010,10 +1010,10 @@ function Z9(e, t, r = {}) {
           ;
         for (j = d - 1, X = B - 1; j >= ue && X >= ue && n[j] === b[X]; j--, X--)
           z[X] = a[j], K[X] = l[j], h && (E[X] = h[j]);
-        for (D = /* @__PURE__ */ new Map(), oe = new Array(X + 1), v = X; v >= ue; v--)
-          J = b[v], x = D.get(J), oe[v] = x === void 0 ? -1 : x, D.set(J, v);
+        for (D = /* @__PURE__ */ new Map(), re = new Array(X + 1), v = X; v >= ue; v--)
+          J = b[v], x = D.get(J), re[v] = x === void 0 ? -1 : x, D.set(J, v);
         for (x = ue; x <= j; x++)
-          J = n[x], v = D.get(J), v !== void 0 && v !== -1 ? (z[v] = a[x], K[v] = l[x], h && (E[v] = h[x]), v = oe[v], D.set(J, v)) : l[x]();
+          J = n[x], v = D.get(J), v !== void 0 && v !== -1 ? (z[v] = a[x], K[v] = l[x], h && (E[v] = h[x]), v = re[v], D.set(J, v)) : l[x]();
         for (v = ue; v < B; v++)
           v in z ? (a[v] = z[v], l[v] = K[v], h && (h[v] = E[v], h[v](v))) : a[v] = v1(L);
         a = a.slice(0, d = B), n = b.slice(0);
@@ -1022,8 +1022,8 @@ function Z9(e, t, r = {}) {
     });
     function L(B) {
       if (l[v] = B, h) {
-        const [D, oe] = T(v);
-        return h[v] = oe, t(b[v], D);
+        const [D, re] = T(v);
+        return h[v] = re, t(b[v], D);
       }
       return t(b[v]);
     }
@@ -1161,9 +1161,9 @@ function q9(e, t, r) {
           for (; ++L < a && L < l && !((D = x.get(t[L])) == null || D !== v + B); )
             B++;
           if (B > v - h) {
-            const oe = t[d];
+            const re = t[d];
             for (; h < v; )
-              e.insertBefore(r[h++], oe);
+              e.insertBefore(r[h++], re);
           } else
             e.replaceChild(r[h++], t[d++]);
         } else
@@ -2109,7 +2109,7 @@ function X1(e, t, r, n, a, l) {
   }) : V7(e) && e.forEach(function(K, E) {
     d.set(E, X1(K, t, r, E, e, l));
   });
-  var oe = x ? b ? O7 : N7 : b ? Q7 : j7, z = v ? void 0 : oe(e);
+  var re = x ? b ? O7 : N7 : b ? Q7 : j7, z = v ? void 0 : re(e);
   return L7(z || e, function(K, E) {
     z && (E = K, K = e[E]), w7(d, E, X1(K, t, r, E, e, l));
   }), d;
@@ -2251,8 +2251,8 @@ const zl = /* @__PURE__ */ p('<div tabindex="0"><div class="selector-container">
     const v = n().toLowerCase().trim();
     return v ? typeof e.dataSource[0] == "string" ? e.dataSource.filter((B) => B.toLowerCase().includes(v)) : e.dataSource.filter((B) => {
       var z, K;
-      const D = ((z = B.text) == null ? void 0 : z.toString().toLowerCase()) || "", oe = ((K = B.key) == null ? void 0 : K.toLowerCase()) || "";
-      return D.includes(v) || oe.includes(v);
+      const D = ((z = B.text) == null ? void 0 : z.toString().toLowerCase()) || "", re = ((K = B.key) == null ? void 0 : K.toLowerCase()) || "";
+      return D.includes(v) || re.includes(v);
     }) : e.dataSource;
   }), b = () => {
     const v = !t();
@@ -2265,13 +2265,13 @@ const zl = /* @__PURE__ */ p('<div tabindex="0"><div class="selector-container">
   };
   return (() => {
     const v = zl.cloneNode(!0), L = v.firstChild, B = L.firstChild;
-    v.addEventListener("blur", x), v.$$click = (oe) => {
-      oe.stopPropagation(), !oe.target.closest(".drop-down-container") && b();
+    v.addEventListener("blur", x), v.$$click = (re) => {
+      re.stopPropagation(), !re.target.closest(".drop-down-container") && b();
     };
     const D = d;
     return typeof D == "function" ? Lt(D, v) : d = v, C(B, () => e.value), C(v, (() => {
-      const oe = W(() => !!(e.dataSource && e.dataSource.length > 0));
-      return () => oe() && (() => {
+      const re = W(() => !!(e.dataSource && e.dataSource.length > 0));
+      return () => re() && (() => {
         const z = Vl.cloneNode(!0), K = z.firstChild;
         return z.$$click = (E) => E.stopPropagation(), z.$$mousedown = (E) => {
           E.preventDefault(), E.stopPropagation();
@@ -2297,9 +2297,9 @@ const zl = /* @__PURE__ */ p('<div tabindex="0"><div class="selector-container">
           });
         }), z;
       })();
-    })(), null), V((oe) => {
+    })(), null), V((re) => {
       const z = e.style, K = `klinecharts-pro-select ${e.class ?? ""} ${t() ? "klinecharts-pro-select-show" : ""}`;
-      return oe._v$ = It(v, z, oe._v$), K !== oe._v$2 && ge(v, oe._v$2 = K), oe;
+      return re._v$ = It(v, z, re._v$), K !== re._v$2 && ge(v, re._v$2 = K), re;
     }, {
       _v$: void 0,
       _v$2: void 0
@@ -2421,8 +2421,8 @@ function Pn(e, t, r) {
   e.beginPath(), e.moveTo(n + h, a), e.arcTo(n + l, a, n + l, a + d, h), e.arcTo(n + l, a + d, n, a + d, h), e.arcTo(n, a + d, n, a, h), e.arcTo(n, a, n + l, a, h), e.closePath();
 }
 function ec(e, t, r) {
-  const n = r.style ?? Wt.Fill, a = r.color ?? "currentColor", l = Rn(r.color) ?? Rn(r.borderColor), d = n === Wt.Stroke, h = l ? Jl(t, d) : !1, b = Sn(a, h ? "wick" : "body", l), x = r.borderSize ?? 1, v = Sn(r.borderColor ?? a, "border", l), L = r.borderStyle ?? Ue.Solid, B = r.borderRadius ?? 0, D = r.borderDashedValue ?? [2, 2], oe = n === Wt.Fill || r.style === Wt.StrokeFill, z = n === Wt.Stroke || r.style === Wt.StrokeFill;
-  if (oe) {
+  const n = r.style ?? Wt.Fill, a = r.color ?? "currentColor", l = Rn(r.color) ?? Rn(r.borderColor), d = n === Wt.Stroke, h = l ? Jl(t, d) : !1, b = Sn(a, h ? "wick" : "body", l), x = r.borderSize ?? 1, v = Sn(r.borderColor ?? a, "border", l), L = r.borderStyle ?? Ue.Solid, B = r.borderRadius ?? 0, D = r.borderDashedValue ?? [2, 2], re = n === Wt.Fill || r.style === Wt.StrokeFill, z = n === Wt.Stroke || r.style === Wt.StrokeFill;
+  if (re) {
     e.fillStyle = b, Pn(e, t, B), e.fill();
     const K = Sn(a, "border", l);
     !h && l && K && (e.strokeStyle = K, e.lineWidth = Math.max(1, x), e.setLineDash([]), Pn(e, t, B), e.stroke());
@@ -2694,7 +2694,7 @@ const c = (e, t) => {
   return ((r = Vo[t]) == null ? void 0 : r[e]) ?? e;
 }, ph = /* @__PURE__ */ p('<div class="scroll-indicator left"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg></div>'), vh = /* @__PURE__ */ p('<img alt="symbol">'), bh = /* @__PURE__ */ p('<div class="symbol"><span></span></div>'), $h = /* @__PURE__ */ p('<span class="down-arrow-icon mobile-separate-arrow"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9L12 15L18 9"></path></svg></span>'), _h = /* @__PURE__ */ p('<span class="mobile-more-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"></path><circle cx="12" cy="12" r="3"></circle></svg></span>'), kh = /* @__PURE__ */ p('<div class="item tools" title="Time Tools"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M16 3v4"></path><path d="M8 3v4"></path><path d="M3 10h18"></path><path d="M12 14v4"></path><path d="M10 16h4"></path></svg></div>'), xh = /* @__PURE__ */ p('<div class="item tools"><svg viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="20" height="20" rx="4" ry="4" fill="none" stroke="currentColor" stroke-width="2"></rect><path d="m15.92 13.9-3.65-3.55a.773.773 0 0 1 0-1.12c.32-.33.79-.33 1.11 0l3.02 3.38c.31.32.31.81 0 1.13-.16.16-.48.16-.48.16Z" fill="currentColor" stroke="1"></path><path d="m12.43 14.23-.48-.17q-.48-.48 0-.96l4.13-4.36c.31-.32.63-.32.95 0s.32.65 0 .97l-4.13 4.35c-.15.17-.31.17-.47.17Zm-1.11-9.52c.31 0 1.11.16 1.11.97 0 .64-.95.48-1.27.48-1.43 0-1.91.81-2.07 1.45l-.31 1.94h1.58c.32 0 .64.32.64.64 0 .33-.32.65-.64.65H8.62l-1.11 4.99c-.16 1.46-1.11 1.46-1.59 0L7.03 11H5.6c-.31 0-.63-.32-.63-.65 0-.64.32-.8.63-.8h1.75l.48-2.1c.31-2.74 2.69-2.9 3.49-2.74Z" fill="noncurrentColore" stroke="1"></path></svg><span></span></div>'), Lh = /* @__PURE__ */ p('<div class="klinecharts-pro-order-tools-display-menu"></div>'), wh = /* @__PURE__ */ p('<div class="klinecharts-pro-order-tools-popover"><div><button type="button" class="klinecharts-pro-order-tools-item klinecharts-pro-order-tools-group-title"><span class="klinecharts-pro-order-tools-title-left"><label class="klinecharts-pro-order-tools-checkbox-box"><input class="klinecharts-pro-order-tools-checkbox-input" type="checkbox"><span class="klinecharts-pro-order-tools-checkbox-fill"></span></label><span class="klinecharts-pro-order-tools-label">Quick Order</span></span><span class="klinecharts-pro-order-tools-chevron">›</span></button><div class="klinecharts-pro-order-tools-submenu"><label class="klinecharts-pro-order-tools-item"><span class="klinecharts-pro-order-tools-checkbox-box"><input class="klinecharts-pro-order-tools-checkbox-input" type="checkbox"><span class="klinecharts-pro-order-tools-checkbox-fill"></span></span><span class="klinecharts-pro-order-tools-label">Floating Window</span></label><label class="klinecharts-pro-order-tools-item"><span class="klinecharts-pro-order-tools-checkbox-box"><input class="klinecharts-pro-order-tools-checkbox-input" type="checkbox"><span class="klinecharts-pro-order-tools-checkbox-fill"></span></span><span class="klinecharts-pro-order-tools-label">Plus Button</span></label></div></div><div><button type="button" class="klinecharts-pro-order-tools-item klinecharts-pro-order-tools-group-title"><span class="klinecharts-pro-order-tools-title-left"><label class="klinecharts-pro-order-tools-checkbox-box"><input class="klinecharts-pro-order-tools-checkbox-input" type="checkbox"><span class="klinecharts-pro-order-tools-checkbox-fill"></span></label><span class="klinecharts-pro-order-tools-label">Open Orders</span></span><span class="klinecharts-pro-order-tools-chevron">&rsaquo;</span></button><div class="klinecharts-pro-order-tools-submenu"><div class="klinecharts-pro-order-tools-setting-row"><span class="klinecharts-pro-order-tools-label">Extended Price Line</span><button type="button"><span></span></button></div><div class="klinecharts-pro-order-tools-setting-row"><span class="klinecharts-pro-order-tools-label">Display</span><div class="klinecharts-pro-order-tools-display"><button type="button" class="klinecharts-pro-order-tools-display-button"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4"></path></svg></button></div></div></div></div><label class="klinecharts-pro-order-tools-item"><span class="klinecharts-pro-order-tools-checkbox-box"><input class="klinecharts-pro-order-tools-checkbox-input" type="checkbox"><span class="klinecharts-pro-order-tools-checkbox-fill"></span></span><span class="klinecharts-pro-order-tools-label">Positions</span></label> <label class="klinecharts-pro-order-tools-item"><span class="klinecharts-pro-order-tools-checkbox-box"><input class="klinecharts-pro-order-tools-checkbox-input" type="checkbox"><span class="klinecharts-pro-order-tools-checkbox-fill"></span></span><span class="klinecharts-pro-order-tools-label">Breakeven Price</span></label> <label class="klinecharts-pro-order-tools-item"><span class="klinecharts-pro-order-tools-checkbox-box"><input class="klinecharts-pro-order-tools-checkbox-input" type="checkbox"><span class="klinecharts-pro-order-tools-checkbox-fill"></span></span><span class="klinecharts-pro-order-tools-label">Liquidation Price</span></label><div><button type="button" class="klinecharts-pro-order-tools-item klinecharts-pro-order-tools-group-title"><span class="klinecharts-pro-order-tools-title-left"><label class="klinecharts-pro-order-tools-checkbox-box"><input class="klinecharts-pro-order-tools-checkbox-input" type="checkbox"><span class="klinecharts-pro-order-tools-checkbox-fill"></span></label><span class="klinecharts-pro-order-tools-label">Price Line</span></span><span class="klinecharts-pro-order-tools-chevron">&rsaquo;</span></button><div class="klinecharts-pro-order-tools-submenu"><label class="klinecharts-pro-order-tools-item"><span class="klinecharts-pro-order-tools-checkbox-box"><input class="klinecharts-pro-order-tools-checkbox-input" type="checkbox"><span class="klinecharts-pro-order-tools-checkbox-fill"></span></span><span class="klinecharts-pro-order-tools-label">Market Price Line</span></label><label class="klinecharts-pro-order-tools-item"><span class="klinecharts-pro-order-tools-checkbox-box"><input class="klinecharts-pro-order-tools-checkbox-input" type="checkbox"><span class="klinecharts-pro-order-tools-checkbox-fill"></span></span><span class="klinecharts-pro-order-tools-label">Count Down</span></label><label class="klinecharts-pro-order-tools-item"><span class="klinecharts-pro-order-tools-checkbox-box"><input class="klinecharts-pro-order-tools-checkbox-input" type="checkbox"><span class="klinecharts-pro-order-tools-checkbox-fill"></span></span><span class="klinecharts-pro-order-tools-label">Bid & Ask Price</span></label></div></div><label class="klinecharts-pro-order-tools-item"><span class="klinecharts-pro-order-tools-checkbox-box"><input class="klinecharts-pro-order-tools-checkbox-input" type="checkbox"><span class="klinecharts-pro-order-tools-checkbox-fill"></span></span><span class="klinecharts-pro-order-tools-label">Order History</span></label></div>'), Ah = /* @__PURE__ */ p('<div><div class="item tools order-tools-trigger"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Orders"><path d="M4 7h10"></path><path d="M4 12h8"></path><path d="M4 17h6"></path><path d="M18 6v12"></path><path d="M15 15l3 3 3-3"></path></svg><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9L12 15L18 9"></path></svg></div></div>'), Mh = /* @__PURE__ */ p('<div class="item tools"><svg width="20" height="20" viewBox="0 0 20 20"><path d="M18.5446,9.09091C18.3333,6.61616,17.2887,4.31818,15.5751,2.63889C13.8498,0.94697,11.6197,0,9.28404,0C8.02817,0,6.81925,0.265151,5.66901,0.782828C5.65728,0.782828,5.65728,0.795454,5.64554,0.795454C5.6338,0.795454,5.6338,0.808081,5.62207,0.808081C4.53052,1.31313,3.55634,2.0202,2.71127,2.92929C1.85446,3.85101,1.18545,4.91162,0.715963,6.11111C0.246479,7.33586,0,8.64899,0,10C0,10.8712,0.105634,11.7172,0.305164,12.5379C0.305164,12.5631,0.316901,12.5884,0.328638,12.6136C0.739437,14.2298,1.51408,15.7197,2.62911,16.9571C4.07277,18.548,5.92723,19.5581,7.93427,19.8737C7.95775,19.8737,7.96948,19.8864,7.99296,19.8864C8.3216,19.9369,8.66197,19.9747,9.00235,19.9747L9.21362,19.9747C9.61268,19.9747,10.3756,19.9369,11.0094,19.697C11.1737,19.6338,11.3028,19.5076,11.3732,19.3434C11.4437,19.1793,11.4554,18.9899,11.3967,18.8131C11.3028,18.5354,11.0563,18.346,10.7864,18.346C10.716,18.346,10.6338,18.3586,10.5634,18.3838C10.0939,18.5606,9.46009,18.5859,9.20188,18.5859L9.09624,18.5859C9.20188,18.2702,9.23709,17.9167,9.15493,17.5505C9.00235,16.8939,8.50939,16.3384,7.58216,15.7955L7.19484,15.5682C6.57277,15.2146,6.23239,15.0253,6.03286,14.7348C5.83333,14.4444,5.69249,13.9899,5.51643,12.9798C5.38732,12.298,5.04695,11.7677,4.50704,11.4646C4.14319,11.2626,3.70892,11.149,3.19249,11.149C2.82864,11.149,2.42958,11.1995,2.00704,11.3005C1.79578,11.351,1.59624,11.4141,1.42019,11.4646C1.33803,10.9848,1.30282,10.4798,1.30282,9.97475C1.30282,6.93182,2.76995,4.26768,4.98826,2.72727C5,3.00505,5.05869,3.29545,5.17606,3.57323C5.48122,4.26768,6.10329,4.7096,7.01878,4.89899C7.06573,4.91162,7.10094,4.91162,7.13615,4.91162L7.1831,4.91162C7.26526,4.91162,7.57042,4.92424,7.88732,5.0505C8.3216,5.2399,8.56808,5.55555,8.65023,6.04798C8.84977,7.61364,9.07277,10.4293,8.79108,11.3384C8.76761,11.4141,8.75587,11.4899,8.75587,11.5657C8.75587,11.9444,9.0493,12.2601,9.40141,12.2601C9.57747,12.2601,9.74179,12.1843,9.85915,12.0581C9.97653,11.9318,12.6174,9.05303,13.3216,8.09343C13.4038,7.97979,13.4859,7.87878,13.5798,7.76515C13.9202,7.33586,14.2723,6.90656,14.4014,6.26262C14.554,5.56818,14.4014,4.79798,13.9437,3.85101C13.615,3.16919,13.5563,2.86616,13.5446,2.75252C13.5563,2.7399,13.5798,2.72727,13.6033,2.71464C15.6221,4.10353,17.0188,6.43939,17.2535,9.19192C17.2887,9.55808,17.5587,9.82323,17.8991,9.82323L17.9577,9.82323C18.3099,9.8106,18.5681,9.48232,18.5446,9.09091ZM3.19249,12.5631C3.48592,12.5631,3.72066,12.6136,3.89671,12.7146C4.08451,12.8283,4.19014,12.9924,4.23709,13.2702C4.43662,14.3434,4.61268,15.0631,5,15.6061C5.37559,16.1364,5.85681,16.4015,6.58451,16.8182L6.60798,16.8308C6.71362,16.8939,6.84272,16.9571,6.96009,17.0328C7.69953,17.4621,7.86385,17.7525,7.89906,17.8914C7.93427,18.0303,7.85211,18.2323,7.74648,18.4343C4.91784,17.8535,2.65258,15.6944,1.73709,12.8283C2.15962,12.702,2.71127,12.5631,3.19249,12.5631ZM12.7934,4.5202C13.4272,5.83333,13.1455,6.18687,12.5822,6.89394C12.4883,7.00758,12.3944,7.12121,12.3005,7.24747C11.9484,7.72727,11.0211,8.77525,10.2113,9.68434C10.2113,9.24242,10.1878,8.73737,10.1526,8.19444C10.0704,6.95707,9.92958,5.90909,9.92958,5.87121L9.92958,5.83333C9.75352,4.83586,9.20188,4.11616,8.3216,3.76263C7.82864,3.56061,7.37089,3.53535,7.19484,3.53535C6.73709,3.43434,6.4554,3.24495,6.33803,2.99242C6.19718,2.68939,6.29108,2.24747,6.38498,1.9697C7.28873,1.59091,8.26291,1.37626,9.28404,1.37626C10.3873,1.37626,11.4437,1.61616,12.4061,2.04545C12.3357,2.18434,12.277,2.34848,12.2535,2.5505C12.2066,3.04293,12.3709,3.64899,12.7934,4.5202Z"></path><path d="M15.22299772857666,9.722223632261718C12.59389772857666,9.722223632261718,10.44600772857666,12.020201374511718,10.44600772857666,14.861111374511719C10.44600772857666,17.70202137451172,12.58215772857666,20.000021374511718,15.223007728576661,20.000021374511718C17.86384772857666,20.000021374511718,19.99999772857666,17.70202137451172,19.99999772857666,14.861111374511719C19.99999772857666,12.020201374511718,17.85211772857666,9.72222212709572,15.22299772857666,9.722223632261718ZM15.22299772857666,18.598491374511717C13.30985772857666,18.598491374511717,11.737087728576661,16.91919137451172,11.737087728576661,14.848481374511719C11.737087728576661,12.777781374511719,13.29811772857666,11.098491374511719,15.22299772857666,11.098491374511719C17.14787772857666,11.098491374511719,18.708917728576658,12.777781374511719,18.708917728576658,14.848481374511719C18.708917728576658,16.91919137451172,17.13614772857666,18.59848137451172,15.22299772857666,18.598491374511717Z"></path><path d="M15.692486288146974,15.050496970825195L15.692486288146974,12.676760970825196C15.692486288146974,12.297972970825196,15.399058288146973,11.982316970825195,15.046945288146972,11.982316970825195C14.694833288146972,11.982316970825195,14.401406288146973,12.297972970825196,14.401406288146973,12.676760970825196L14.401406288146973,15.340896970825195C14.401406288146973,15.530296970825194,14.471829288146973,15.694436970825196,14.589200288146973,15.833326970825196L15.751176288146972,17.095956970825195C15.868546288146973,17.222216970825194,16.032866288146973,17.297976970825196,16.208916288146973,17.297976970825196C16.384976288146973,17.297976970825196,16.537556288146973,17.222216970825194,16.666666288146974,17.095956970825195C16.78403628814697,16.969686970825194,16.854456288146974,16.792916970825196,16.854456288146974,16.603526970825193C16.854456288146974,16.414136970825197,16.78403628814697,16.237366970825196,16.666666288146974,16.111106970825197L15.692486288146974,15.050496970825195Z"></path></svg></div>'), Th = /* @__PURE__ */ p('<div class="item tools"><svg viewBox="0 0 20 20"><path d="M19.7361,12.542L18.1916,11.2919C18.2647,10.8678,18.3025,10.4347,18.3025,10.0017C18.3025,9.56861,18.2647,9.13555,18.1916,8.71142L19.7361,7.46135C19.9743,7.26938,20.0615,6.95686,19.9554,6.6756L19.9342,6.61756C19.5074,5.49026,18.8755,4.45449,18.0549,3.53926L18.0124,3.49238C17.8096,3.26692,17.4819,3.1821,17.1848,3.28032L15.2677,3.92544C14.5603,3.3763,13.7704,2.94324,12.9168,2.63966L12.5466,0.742229C12.49,0.449802,12.2472,0.222111,11.9383,0.168536L11.8746,0.157375C10.6461,-0.0524583,9.35391,-0.0524583,8.1254,0.157375L8.06174,0.168536C7.75284,0.222111,7.50997,0.449802,7.45338,0.742229L7.08082,2.64859C6.2343,2.95217,5.44909,3.383,4.74641,3.92991L2.81522,3.28032C2.52047,3.1821,2.19036,3.26469,1.98757,3.49238L1.94513,3.53926C1.12455,4.45672,0.492609,5.49249,0.0658141,6.61756L0.0445921,6.6756C-0.0615171,6.95463,0.0257283,7.26715,0.263885,7.46135L1.82723,8.72482C1.75413,9.14448,1.71876,9.57308,1.71876,9.99944C1.71876,10.428,1.75413,10.8566,1.82723,11.2741L0.263885,12.5375C0.025729,12.7295,-0.0615164,13.042,0.0445929,13.3233L0.0658148,13.3813C0.49261,14.5064,1.12455,15.5444,1.94513,16.4596L1.98757,16.5065C2.19036,16.732,2.51812,16.8168,2.81522,16.7186L4.74641,16.069C5.44909,16.6159,6.2343,17.0489,7.08082,17.3503L7.45338,19.2567C7.50997,19.5491,7.75284,19.7768,8.06174,19.8303L8.1254,19.8415C8.74084,19.9464,9.37042,20,10,20C10.6296,20,11.2615,19.9464,11.8746,19.8415L11.9383,19.8303C12.2472,19.7768,12.49,19.5491,12.5466,19.2567L12.9168,17.3592C13.7704,17.0556,14.5603,16.6248,15.2677,16.0734L17.1848,16.7186C17.4795,16.8168,17.8096,16.7342,18.0124,16.5065L18.0549,16.4596C18.8755,15.5422,19.5074,14.5064,19.9342,13.3813L19.9554,13.3233C20.0615,13.0487,19.9743,12.7362,19.7361,12.542ZM16.5175,8.97483C16.5764,9.3119,16.6071,9.65791,16.6071,10.0039C16.6071,10.3499,16.5764,10.6959,16.5175,11.033L16.3618,11.9281L18.1233,13.3545C17.8568,13.9372,17.5196,14.4863,17.1188,14.9975L14.9305,14.2631L14.1901,14.839C13.6266,15.2765,12.9994,15.6203,12.3203,15.8614L11.4219,16.1806L10.9998,18.3459C10.3372,18.4173,9.66045,18.4173,8.9955,18.3459L8.57342,16.1761L7.6821,15.8524C7.01008,15.6114,6.38521,15.2676,5.82637,14.8323L5.08596,14.2541L2.88361,14.9953C2.48275,14.4841,2.14791,13.9327,1.8791,13.3523L3.65938,11.9125L3.50611,11.0196C3.44952,10.687,3.41887,10.3432,3.41887,10.0039C3.41887,9.66237,3.44716,9.32083,3.50611,8.98822L3.65938,8.09531L1.8791,6.6555C2.14556,6.07288,2.48275,5.52374,2.88361,5.01255L5.08596,5.75367L5.82637,5.17551C6.38521,4.74022,7.01008,4.39645,7.6821,4.15536L8.57578,3.83615L8.99786,1.66638C9.66045,1.59495,10.3372,1.59495,11.0021,1.66638L11.4242,3.83168L12.3226,4.1509C12.9994,4.39198,13.6289,4.73575,14.1925,5.17328L14.9329,5.7492L17.1211,5.01479C17.522,5.52598,17.8568,6.07734,18.1256,6.65773L16.3642,8.08416L16.5175,8.97483ZM10.0024,5.85189C7.7104,5.85189,5.85231,7.61092,5.85231,9.78068C5.85231,11.9504,7.7104,13.7095,10.0024,13.7095C12.2943,13.7095,14.1524,11.9504,14.1524,9.78068C14.1524,7.61092,12.2943,5.85189,10.0024,5.85189ZM11.8699,11.5486C11.37,12.0196,10.7074,12.2808,10.0024,12.2808C9.29732,12.2808,8.63473,12.0196,8.13483,11.5486C7.6373,11.0754,7.36142,10.4481,7.36142,9.78068C7.36142,9.11323,7.6373,8.48596,8.13483,8.01272C8.63473,7.53948,9.29732,7.28054,10.0024,7.28054C10.7074,7.28054,11.37,7.53948,11.8699,8.01272C12.3674,8.48596,12.6433,9.11323,12.6433,9.78068C12.6433,10.4481,12.3674,11.0754,11.8699,11.5486Z"></path></svg></div>'), Sh = /* @__PURE__ */ p('<div class="item tools"><svg viewBox="0 0 20 20"><path d="M6.50977,1L13.4902,1C13.6406,1,13.7695,1.1104910000000001,13.7969,1.2631700000000001L14.0273,2.52277C14.1387,3.13147,14.6543,3.57143,15.2559,3.57143L17.5,3.57143C18.8809,3.57143,20,4.72254,20,6.14286L20,16.4286C20,17.8489,18.8809,19,17.5,19L2.5,19C1.11914,19,0,17.8489,0,16.4286L0,6.14286C0,4.72254,1.11914,3.57143,2.5,3.57143L4.74414,3.57143C5.3457,3.57143,5.86133,3.13147,5.97266,2.52277L6.20312,1.2631700000000001C6.23047,1.1104910000000001,6.35937,1,6.50977,1ZM15.2559,4.857139999999999C14.0547,4.857139999999999,13.0215,3.97522,12.7988,2.75982L12.7129,2.28571L7.28711,2.28571L7.20117,2.75982C6.98047,3.97522,5.94727,4.857139999999999,4.74414,4.857139999999999L2.5,4.857139999999999C1.81055,4.857139999999999,1.25,5.43371,1.25,6.14286L1.25,16.4286C1.25,17.1377,1.81055,17.7143,2.5,17.7143L17.5,17.7143C18.1895,17.7143,18.75,17.1377,18.75,16.4286L18.75,6.14286C18.75,5.43371,18.1895,4.857139999999999,17.5,4.857139999999999L15.2559,4.857139999999999ZM4.375,6.78571L3.125,6.78571C2.7793,6.78571,2.5,6.49844,2.5,6.14286C2.5,5.78728,2.7793,5.5,3.125,5.5L4.375,5.5C4.7207,5.5,5,5.78728,5,6.14286C5,6.49844,4.7207,6.78571,4.375,6.78571ZM10,6.14286C7.06641,6.14286,4.6875,8.58973,4.6875,11.6071C4.6875,14.6246,7.06641,17.0714,10,17.0714C12.9336,17.0714,15.3125,14.6246,15.3125,11.6071C15.3125,8.58973,12.9336,6.14286,10,6.14286ZM10,7.42857C11.0859,7.42857,12.1055,7.8625,12.873,8.65201C13.6406,9.44152,14.0625,10.49018,14.0625,11.6071C14.0625,12.7241,13.6406,13.7728,12.873,14.5623C12.1055,15.3518,11.0859,15.7857,10,15.7857C8.91406,15.7857,7.89453,15.3518,7.12695,14.5623C6.35937,13.7728,5.9375,12.7241,5.9375,11.6071C5.9375,10.49018,6.35938,9.44152,7.12695,8.65201C7.89453,7.8625,8.91406,7.42857,10,7.42857ZM10,9.67857C8.96484,9.67857,8.125,10.54241,8.125,11.6071C8.125,12.6719,8.96484,13.5357,10,13.5357C11.0352,13.5357,11.875,12.6719,11.875,11.6071C11.875,10.54241,11.0352,9.67857,10,9.67857ZM10,10.96429C10.3438,10.96429,10.625,11.2536,10.625,11.6071C10.625,11.9607,10.3438,12.25,10,12.25C9.65625,12.25,9.375,11.9607,9.375,11.6071C9.375,11.2536,9.65625,10.96429,10,10.96429Z"></path></svg></div>'), Ph = /* @__PURE__ */ p('<div class="item tools chart-view-toggle"></div>'), Dh = /* @__PURE__ */ p('<div class="scroll-indicator right"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"></path></svg></div>'), Nh = /* @__PURE__ */ p('<div><div class="klinecharts-pro-period-bar"><div class="menu-container"><svg viewBox="0 0 1024 1024"><path d="M192.037 287.953h640.124c17.673 0 32-14.327 32-32s-14.327-32-32-32H192.037c-17.673 0-32 14.327-32 32s14.327 32 32 32zM832.161 479.169H438.553c-17.673 0-32 14.327-32 32s14.327 32 32 32h393.608c17.673 0 32-14.327 32-32s-14.327-32-32-32zM832.161 735.802H192.037c-17.673 0-32 14.327-32 32s14.327 32 32 32h640.124c17.673 0 32-14.327 32-32s-14.327-32-32-32zM319.028 351.594l-160 160 160 160z"></path></svg></div><div><div class="item tools fullscreen-toggle"></div></div></div></div>'), Oh = /* @__PURE__ */ p("<span></span>"), Ih = /* @__PURE__ */ p('<button type="button"></button>'), Bh = /* @__PURE__ */ p('<svg viewBox="0 0 20 20"><path d="M1.08108,0L0,1.079L4.18919,5.27938L2.54826,6.91715L6.9112,6.91715L6.9112,2.56262L5.28957,4.18112L1.08108,0ZM15.8108,5.27938L20,1.079L18.9189,0L14.7104,4.18112L13.0888,2.56262L13.0888,6.91715L17.4517,6.91715L15.8108,5.27938ZM4.16988,14.7014L0.07722,18.8054L1.1583,20L5.27027,15.7996L6.9112,17.4374L6.9112,13.0829L2.54826,13.0829L4.16988,14.7014ZM17.4517,13.0829L13.0888,13.0829L13.0888,17.4374L14.7297,15.7996L18.8417,20L19.9228,18.8054L15.8301,14.7013L17.4517,13.0829Z"></path></svg>'), Eh = /* @__PURE__ */ p('<svg viewBox="0 0 20 20"><path d="M2.93444,1.76899L7.57544,6.40999L6.38918,7.59626L1.76899,2.93444L0,4.70343L0,0L4.70343,0L2.93444,1.76899ZM6.40999,12.4037L1.76899,17.0447L0,15.2758L0,19.9792L4.70343,19.9792L2.93444,18.2102L7.57544,13.5692L6.40999,12.4037ZM15.2758,0L17.0447,1.76899L12.4037,6.40999L13.59,7.59626L18.231,2.95526L20,4.72425L20,0L15.2758,0ZM13.5692,12.4037L12.3829,13.59L17.0239,18.231L15.2549,20L19.9792,20L19.9792,15.2758L18.2102,17.0447L13.5692,12.4037Z"></path></svg>'), Fh = /* @__PURE__ */ p('<svg viewBox="0 0 24 24"><path d="M3 20V7l4 3 5-7 5 4h4v13H3Zm5-3 4-5.5 7 5.45V9h-2.7l-3.9-3.1-4.95 6.95L5 10.4V14l3 3Z"></path></svg>'), Uh = /* @__PURE__ */ p('<svg viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"></path><path d="M9 4H7v2H5v12h2v2h2v-2h2V6H9zM19 8h-2V4h-2v4h-2v7h2v5h2v-5h2z"></path></svg>'), Q0 = (e) => e.charAt(0).toUpperCase() + e.slice(1), zh = (e) => {
   let t, r, n;
-  const [a, l] = T(window.innerWidth < 768), [d, h] = T(localStorage.getItem("klinechart_secondary_period") || ""), [b, x] = T(!1), [v, L] = T(!1), [B, D] = T(!1), [oe, z] = T(!1), [K, E] = T(!1), [ue, j] = T({
+  const [a, l] = T(window.innerWidth < 768), [d, h] = T(localStorage.getItem("klinechart_secondary_period") || ""), [b, x] = T(!1), [v, L] = T(!1), [B, D] = T(!1), [re, z] = T(!1), [K, E] = T(!1), [ue, j] = T({
     top: 0,
     left: 0,
     minWidth: 220
@@ -2718,12 +2718,12 @@ const c = (e, t) => {
       const U = !O;
       return U ? queueMicrotask(Q) : R(), U;
     });
-  }, fe = (O) => {
+  }, he = (O) => {
     if (!b())
       return;
     const U = O.target;
     U && (r != null && r.contains(U) || n != null && n.contains(U) || (R(), x(!1)));
-  }, te = () => {
+  }, oe = () => {
     b() && Q();
   }, F = () => {
     if (!t) {
@@ -2734,11 +2734,11 @@ const c = (e, t) => {
     se(U && O.scrollLeft > 2), q(U && O.scrollLeft + O.clientWidth < O.scrollWidth - 2);
   };
   Hn(() => {
-    window.addEventListener("resize", X), document.addEventListener("fullscreenchange", Z), document.addEventListener("mousedown", fe), window.addEventListener("scroll", te, !0), document.addEventListener("mozfullscreenchange", Z), document.addEventListener("webkitfullscreenchange", Z), document.addEventListener("msfullscreenchange", Z), t && (t.addEventListener("scroll", F), setTimeout(F, 100));
+    window.addEventListener("resize", X), document.addEventListener("fullscreenchange", Z), document.addEventListener("mousedown", he), window.addEventListener("scroll", oe, !0), document.addEventListener("mozfullscreenchange", Z), document.addEventListener("webkitfullscreenchange", Z), document.addEventListener("msfullscreenchange", Z), t && (t.addEventListener("scroll", F), setTimeout(F, 100));
   }), wt(() => {
-    window.removeEventListener("resize", X), document.removeEventListener("fullscreenchange", Z), document.removeEventListener("mousedown", fe), window.removeEventListener("scroll", te, !0), document.removeEventListener("mozfullscreenchange", Z), document.removeEventListener("webkitfullscreenchange", Z), document.removeEventListener("msfullscreenchange", Z), t && t.removeEventListener("scroll", F);
+    window.removeEventListener("resize", X), document.removeEventListener("fullscreenchange", Z), document.removeEventListener("mousedown", he), window.removeEventListener("scroll", oe, !0), document.removeEventListener("mozfullscreenchange", Z), document.removeEventListener("webkitfullscreenchange", Z), document.removeEventListener("msfullscreenchange", Z), t && t.removeEventListener("scroll", F);
   });
-  const ne = W(() => {
+  const te = W(() => {
     const O = e.periods.filter((U) => {
       if (!a() || J())
         return !0;
@@ -2796,7 +2796,7 @@ const c = (e, t) => {
           }
         }), ye), C(ye, () => e.symbol.shortName ?? e.symbol.name ?? e.symbol.ticker), _;
       }
-    }), me), C(U, () => ne().map((_, ye) => {
+    }), me), C(U, () => te().map((_, ye) => {
       const Oe = _.text === e.period.text;
       return (() => {
         const We = Oh.cloneNode(!0);
@@ -2806,7 +2806,7 @@ const c = (e, t) => {
       })();
     }), me), C(U, w(ce, {
       get when() {
-        return W(() => !!(a() && !J()))() && ne().length > 1;
+        return W(() => !!(a() && !J()))() && te().length > 1;
       },
       get children() {
         const _ = $h.cloneNode(!0);
@@ -2900,7 +2900,7 @@ const c = (e, t) => {
                   return Q0((($ = e.orderToolsState) == null ? void 0 : $.openOrdersDisplay) ?? "right");
                 }, jt), C(s1, w(ce, {
                   get when() {
-                    return oe();
+                    return re();
                   },
                   get children() {
                     const $ = Lh.cloneNode(!0);
@@ -2961,7 +2961,7 @@ const c = (e, t) => {
                   });
                 }), V(($) => {
                   var qt;
-                  const P = `${ue().top}px`, Se = `${ue().left}px`, Te = `${ue().minWidth}px`, st = `klinecharts-pro-order-tools-group${v() ? " klinecharts-pro-order-tools-group-open" : ""}`, Je = `klinecharts-pro-order-tools-group${B() ? " klinecharts-pro-order-tools-group-open" : ""}`, O1 = `klinecharts-pro-order-tools-switch${((qt = e.orderToolsState) == null ? void 0 : qt.openOrdersExtendedPriceLine) ?? !0 ? " klinecharts-pro-order-tools-switch-on" : ""}`, I1 = `klinecharts-pro-order-tools-display-arrow${oe() ? " klinecharts-pro-order-tools-display-arrow-open" : ""}`, B1 = `klinecharts-pro-order-tools-group${K() ? " klinecharts-pro-order-tools-group-open" : ""}`;
+                  const P = `${ue().top}px`, Se = `${ue().left}px`, Te = `${ue().minWidth}px`, st = `klinecharts-pro-order-tools-group${v() ? " klinecharts-pro-order-tools-group-open" : ""}`, Je = `klinecharts-pro-order-tools-group${B() ? " klinecharts-pro-order-tools-group-open" : ""}`, O1 = `klinecharts-pro-order-tools-switch${((qt = e.orderToolsState) == null ? void 0 : qt.openOrdersExtendedPriceLine) ?? !0 ? " klinecharts-pro-order-tools-switch-on" : ""}`, I1 = `klinecharts-pro-order-tools-display-arrow${re() ? " klinecharts-pro-order-tools-display-arrow-open" : ""}`, B1 = `klinecharts-pro-order-tools-group${K() ? " klinecharts-pro-order-tools-group-open" : ""}`;
                   return P !== $._v$ && Le.style.setProperty("top", $._v$ = P), Se !== $._v$2 && Le.style.setProperty("left", $._v$2 = Se), Te !== $._v$3 && Le.style.setProperty("width", $._v$3 = Te), st !== $._v$4 && ge(ft, $._v$4 = st), Je !== $._v$5 && ge(tt, $._v$5 = Je), O1 !== $._v$6 && ge(w1, $._v$6 = O1), I1 !== $._v$7 && Ie(jt, "class", $._v$7 = I1), B1 !== $._v$8 && ge(Ze, $._v$8 = B1), $;
                 }, {
                   _v$: void 0,
@@ -3185,7 +3185,7 @@ function gg(e) {
   ];
 }
 const et = (e) => lg[e.name](e.class), mg = /* @__PURE__ */ p('<div class="klinecharts-pro-drawing-bar"><span class="split-line"></span><div class="item" tabindex="0"><span style="width:32px;height:32px"></span><div class="icon-arrow"><svg viewBox="0 0 4 6"><path d="M1.07298,0.159458C0.827521,-0.0531526,0.429553,-0.0531526,0.184094,0.159458C-0.0613648,0.372068,-0.0613648,0.716778,0.184094,0.929388L2.61275,3.03303L0.260362,5.07061C0.0149035,5.28322,0.0149035,5.62793,0.260362,5.84054C0.505822,6.05315,0.903789,6.05315,1.14925,5.84054L3.81591,3.53075C4.01812,3.3556,4.05374,3.0908,3.92279,2.88406C3.93219,2.73496,3.87113,2.58315,3.73964,2.46925L1.07298,0.159458Z" stroke="none" stroke-opacity="0"></path></svg></div></div><div class="item"><span style="width:32px;height:32px"></span></div><div class="item"><span style="width:32px;height:32px"></span></div><span class="split-line"></span><div class="item"><span style="width:32px;height:32px"></span></div></div>'), yg = /* @__PURE__ */ p('<div class="item" tabindex="0"><span style="width:32px;height:32px"></span><div class="icon-arrow"><svg viewBox="0 0 4 6"><path d="M1.07298,0.159458C0.827521,-0.0531526,0.429553,-0.0531526,0.184094,0.159458C-0.0613648,0.372068,-0.0613648,0.716778,0.184094,0.929388L2.61275,3.03303L0.260362,5.07061C0.0149035,5.28322,0.0149035,5.62793,0.260362,5.84054C0.505822,6.05315,0.903789,6.05315,1.14925,5.84054L3.81591,3.53075C4.01812,3.3556,4.05374,3.0908,3.92279,2.88406C3.93219,2.73496,3.87113,2.58315,3.73964,2.46925L1.07298,0.159458Z" stroke="none" stroke-opacity="0"></path></svg></div></div>'), Z0 = /* @__PURE__ */ p('<li><span style="padding-left:8px"></span></li>'), H0 = "drawing_tools", Cg = (e) => {
-  const [t, r] = T("horizontalStraightLine"), [n, a] = T("priceChannelLine"), [l, d] = T("circle"), [h, b] = T("fibonacciLine"), [x, v] = T("xabcd"), [L, B] = T("weak_magnet"), [D, oe] = T("normal"), [z, K] = T(!1), [E, ue] = T(!0), [j, X] = T(""), J = W(() => [{
+  const [t, r] = T("horizontalStraightLine"), [n, a] = T("priceChannelLine"), [l, d] = T("circle"), [h, b] = T("fibonacciLine"), [x, v] = T("xabcd"), [L, B] = T("weak_magnet"), [D, re] = T("normal"), [z, K] = T(!1), [E, ue] = T(!0), [j, X] = T(""), J = W(() => [{
     key: "singleLine",
     icon: t(),
     list: cg(e.locale),
@@ -3212,7 +3212,7 @@ const et = (e) => lg[e.name](e.class), mg = /* @__PURE__ */ p('<div class="kline
     setter: v
   }]), be = W(() => gg(e.locale));
   return (() => {
-    const H = mg.cloneNode(!0), Z = H.firstChild, ee = Z.nextSibling, se = ee.firstChild, A = se.nextSibling, q = A.firstChild, Q = ee.nextSibling, R = Q.firstChild, de = Q.nextSibling, fe = de.firstChild, te = de.nextSibling, F = te.nextSibling, ne = F.firstChild;
+    const H = mg.cloneNode(!0), Z = H.firstChild, ee = Z.nextSibling, se = ee.firstChild, A = se.nextSibling, q = A.firstChild, Q = ee.nextSibling, R = Q.firstChild, de = Q.nextSibling, he = de.firstChild, oe = de.nextSibling, F = oe.nextSibling, te = F.firstChild;
     return C(H, () => J().map((N) => (() => {
       const O = yg.cloneNode(!0), U = O.firstChild, pe = U.nextSibling, Ae = pe.firstChild;
       return O.addEventListener("blur", () => {
@@ -3257,7 +3257,7 @@ const et = (e) => lg[e.name](e.class), mg = /* @__PURE__ */ p('<div class="kline
       X("");
     }), se.$$click = () => {
       let N = L();
-      D() !== "normal" && (N = "normal"), oe(N), e.onModeChange(N);
+      D() !== "normal" && (N = "normal"), re(N), e.onModeChange(N);
     }, C(se, (() => {
       const N = W(() => L() === "weak_magnet");
       return () => N() ? (() => {
@@ -3287,7 +3287,7 @@ const et = (e) => lg[e.name](e.class), mg = /* @__PURE__ */ p('<div class="kline
           return be().map((O) => (() => {
             const U = Z0.cloneNode(!0), pe = U.firstChild;
             return U.$$click = () => {
-              B(O.key), oe(O.key), e.onModeChange(O.key), X("");
+              B(O.key), re(O.key), e.onModeChange(O.key), X("");
             }, C(U, w(et, {
               get name() {
                 return O.key;
@@ -3306,19 +3306,19 @@ const et = (e) => lg[e.name](e.class), mg = /* @__PURE__ */ p('<div class="kline
       }) : w(et, {
         name: "unlock"
       });
-    })()), fe.$$click = () => {
+    })()), he.$$click = () => {
       const N = !E();
       ue(N), e.onVisibleChange(N);
-    }, C(fe, (() => {
+    }, C(he, (() => {
       const N = W(() => !!E());
       return () => N() ? w(et, {
         name: "visible"
       }) : w(et, {
         name: "invisible"
       });
-    })()), ne.$$click = () => {
+    })()), te.$$click = () => {
       e.onRemoveClick(H0);
-    }, C(ne, w(et, {
+    }, C(te, w(et, {
       name: "remove"
     })), V(() => Ie(q, "class", j() === "mode" ? "rotate" : "")), H;
   })();
@@ -3867,13 +3867,13 @@ const $g = /* @__PURE__ */ p('<div class="chart-style-color-picker"><button type
   const r = I.clone(e), n = I.formatValue(r, "candle.bar.upColor"), a = I.formatValue(r, "candle.bar.downColor"), l = I.formatValue(r, "candle.bar.noChangeColor");
   return qe(r, "candle.bar.upBorderColor", I.formatValue(r, "candle.bar.upBorderColor", n)), qe(r, "candle.bar.downBorderColor", I.formatValue(r, "candle.bar.downBorderColor", a)), qe(r, "candle.bar.noChangeBorderColor", I.formatValue(r, "candle.bar.noChangeBorderColor", l)), qe(r, "candle.bar.upWickColor", I.formatValue(r, "candle.bar.upWickColor", n)), qe(r, "candle.bar.downWickColor", I.formatValue(r, "candle.bar.downWickColor", a)), qe(r, "candle.bar.noChangeWickColor", I.formatValue(r, "candle.bar.noChangeWickColor", l)), qe(r, Nt, t), r;
 }, Rg = (e) => {
-  const [t, r] = T(e.currentStyles), [n, a] = T(Kg(e.currentStyles, e.currentBackgroundColor ?? J1)), [l, d] = T(G0(e.locale)), [h, b] = T(!1), [x, v] = T("settings"), [L, B] = T("symbol"), [D, oe] = T(null), [z, K] = T(null), E = () => {
+  const [t, r] = T(e.currentStyles), [n, a] = T(Kg(e.currentStyles, e.currentBackgroundColor ?? J1)), [l, d] = T(G0(e.locale)), [h, b] = T(!1), [x, v] = T("settings"), [L, B] = T("symbol"), [D, re] = T(null), [z, K] = T(null), E = () => {
     b(window.innerWidth <= 768);
   };
   Hn(() => {
     const A = (q) => {
       const Q = q.target;
-      Q instanceof Element && (Q.closest(".chart-style-color-picker") || Q.closest(".chart-style-width-picker") || Q.closest(".klinecharts-pro-select") || (oe(null), K(null)));
+      Q instanceof Element && (Q.closest(".chart-style-color-picker") || Q.closest(".chart-style-width-picker") || Q.closest(".klinecharts-pro-select") || (re(null), K(null)));
     };
     E(), window.addEventListener("resize", E), document.addEventListener("mousedown", A), wt(() => {
       document.removeEventListener("mousedown", A);
@@ -3945,28 +3945,28 @@ const $g = /* @__PURE__ */ p('<div class="chart-style-color-picker"><button type
     return (() => {
       const R = $g.cloneNode(!0), de = R.firstChild;
       return de.$$click = () => {
-        oe(D() === q ? null : q);
+        re(D() === q ? null : q);
       }, de.style.setProperty("background", Q), C(R, (() => {
-        const fe = W(() => D() === q);
-        return () => fe() && (() => {
-          const te = _g.cloneNode(!0), F = te.firstChild;
+        const he = W(() => D() === q);
+        return () => he() && (() => {
+          const oe = _g.cloneNode(!0), F = oe.firstChild;
           return C(F, w(b1, {
             each: Ug,
-            children: (ne) => (() => {
+            children: (te) => (() => {
               const N = kg.cloneNode(!0);
               return N.$$click = () => {
-                X(A, ne), oe(null);
-              }, N.style.setProperty("background", ne), V(() => N.classList.toggle("selected", ne.toLowerCase() === Q.toLowerCase())), N;
+                X(A, te), re(null);
+              }, N.style.setProperty("background", te), V(() => N.classList.toggle("selected", te.toLowerCase() === Q.toLowerCase())), N;
             })()
-          })), te;
+          })), oe;
         })();
       })(), null), R;
     })();
   }, ee = (A) => {
-    const q = `${A}.style`, Q = `${A}.color`, R = `${A}.size`, de = j(q, Ue.Dashed), fe = Math.max(1, Number(j(R, 1)));
+    const q = `${A}.style`, Q = `${A}.color`, R = `${A}.size`, de = j(q, Ue.Dashed), he = Math.max(1, Number(j(R, 1)));
     return (() => {
-      const te = xg.cloneNode(!0), F = te.firstChild, ne = F.firstChild, N = ne.firstChild;
-      return C(te, w(Kn, {
+      const oe = xg.cloneNode(!0), F = oe.firstChild, te = F.firstChild, N = te.firstChild;
+      return C(oe, w(Kn, {
         get style() {
           return {
             width: h() ? "100%" : "134px"
@@ -3980,9 +3980,9 @@ const $g = /* @__PURE__ */ p('<div class="chart-style-color-picker"><button type
           const U = O.key;
           X(q, U), X(`${A}.dashedValue`, U === Ue.Solid ? [] : [2, 2]);
         }
-      }), F), ne.$$click = () => {
+      }), F), te.$$click = () => {
         K(z() === R ? null : R);
-      }, N.style.setProperty("height", `${fe}px`), C(F, (() => {
+      }, N.style.setProperty("height", `${he}px`), C(F, (() => {
         const O = W(() => z() === R);
         return () => O() && (() => {
           const U = Lg.cloneNode(!0);
@@ -3992,17 +3992,17 @@ const $g = /* @__PURE__ */ p('<div class="chart-style-color-picker"><button type
               const Ae = wg.cloneNode(!0), me = Ae.firstChild;
               return Ae.$$click = () => {
                 X(R, pe), K(null);
-              }, Ae.classList.toggle("selected", fe === pe), me.style.setProperty("height", `${pe}px`), Ae;
+              }, Ae.classList.toggle("selected", he === pe), me.style.setProperty("height", `${pe}px`), Ae;
             })()
           })), U;
         })();
-      })(), null), C(te, () => Z(Q), null), te;
+      })(), null), C(oe, () => Z(Q), null), oe;
     })();
   }, se = (() => {
     const A = Ag.cloneNode(!0), q = A.firstChild, Q = q.nextSibling;
     return q.$$click = () => v("settings"), C(q, () => c("setting", e.locale)), Q.$$click = () => v("chartStyle"), V((R) => {
-      const de = x() === "settings", fe = x() === "chartStyle";
-      return de !== R._v$ && q.classList.toggle("active", R._v$ = de), fe !== R._v$2 && Q.classList.toggle("active", R._v$2 = fe), R;
+      const de = x() === "settings", he = x() === "chartStyle";
+      return de !== R._v$ && q.classList.toggle("active", R._v$ = de), he !== R._v$2 && Q.classList.toggle("active", R._v$2 = he), R;
     }, {
       _v$: void 0,
       _v$2: void 0
@@ -4069,9 +4069,9 @@ const $g = /* @__PURE__ */ p('<div class="chart-style-color-picker"><button type
                   get dataSource() {
                     return q.dataSource;
                   },
-                  onSelected: (fe) => {
-                    const te = fe.key;
-                    ue(q, te);
+                  onSelected: (he) => {
+                    const oe = he.key;
+                    ue(q, oe);
                   }
                 });
                 break;
@@ -4088,37 +4088,37 @@ const $g = /* @__PURE__ */ p('<div class="chart-style-color-picker"><button type
               }
             }
             return (() => {
-              const de = Tg.cloneNode(!0), fe = de.firstChild, te = fe.nextSibling;
-              return C(fe, () => q.text), C(te, Q), V(() => de.classList.toggle("mobile-item", !!h())), de;
+              const de = Tg.cloneNode(!0), he = de.firstChild, oe = he.nextSibling;
+              return C(he, () => q.text), C(oe, Q), V(() => de.classList.toggle("mobile-item", !!h())), de;
             })();
           }
         })), V(() => A.classList.toggle("mobile-layout", !!h())), A;
       })() : (() => {
-        const A = Sg.cloneNode(!0), q = A.firstChild, Q = q.firstChild, R = Q.nextSibling, de = q.nextSibling, fe = de.firstChild;
+        const A = Sg.cloneNode(!0), q = A.firstChild, Q = q.firstChild, R = Q.nextSibling, de = q.nextSibling, he = de.firstChild;
         return Q.$$click = () => B("symbol"), R.$$click = () => B("background"), C(de, (() => {
-          const te = W(() => L() === "symbol");
-          return () => te() ? [Pg.cloneNode(!0), (() => {
-            const F = Dg.cloneNode(!0), ne = F.firstChild, N = ne.nextSibling;
+          const oe = W(() => L() === "symbol");
+          return () => oe() ? [Pg.cloneNode(!0), (() => {
+            const F = Dg.cloneNode(!0), te = F.firstChild, N = te.nextSibling;
             return C(N, () => Z("candle.bar.upColor", "candle-stick-up"), null), C(N, () => Z("candle.bar.downColor", "candle-stick-down"), null), F;
           })(), (() => {
-            const F = Ng.cloneNode(!0), ne = F.firstChild, N = ne.nextSibling;
+            const F = Ng.cloneNode(!0), te = F.firstChild, N = te.nextSibling;
             return C(N, () => Z("candle.bar.upBorderColor", "border-up"), null), C(N, () => Z("candle.bar.downBorderColor", "border-down"), null), F;
           })(), (() => {
-            const F = Og.cloneNode(!0), ne = F.firstChild, N = ne.nextSibling;
+            const F = Og.cloneNode(!0), te = F.firstChild, N = te.nextSibling;
             return C(N, () => Z("candle.bar.upWickColor", "wick-up"), null), C(N, () => Z("candle.bar.downWickColor", "wick-down"), null), F;
           })()] : [Ig.cloneNode(!0), (() => {
             const F = Bg.cloneNode(!0);
             return F.firstChild, C(F, () => Z(Nt, "chart-background"), null), F;
           })(), (() => {
-            const F = Eg.cloneNode(!0), ne = F.firstChild, N = ne.firstChild;
+            const F = Eg.cloneNode(!0), te = F.firstChild, N = te.firstChild;
             return N.addEventListener("change", (O) => X("grid.vertical.show", O.currentTarget.checked)), C(F, () => ee("grid.vertical"), null), V(() => N.checked = !!j("grid.vertical.show")), F;
           })(), (() => {
-            const F = Fg.cloneNode(!0), ne = F.firstChild, N = ne.firstChild;
+            const F = Fg.cloneNode(!0), te = F.firstChild, N = te.firstChild;
             return N.addEventListener("change", (O) => X("grid.horizontal.show", O.currentTarget.checked)), C(F, () => ee("grid.horizontal"), null), V(() => N.checked = !!j("grid.horizontal.show")), F;
           })()];
-        })(), fe), V((te) => {
-          const F = !!h(), ne = L() === "symbol", N = L() === "background";
-          return F !== te._v$3 && A.classList.toggle("mobile-layout", te._v$3 = F), ne !== te._v$4 && Q.classList.toggle("active", te._v$4 = ne), N !== te._v$5 && R.classList.toggle("active", te._v$5 = N), te;
+        })(), he), V((oe) => {
+          const F = !!h(), te = L() === "symbol", N = L() === "background";
+          return F !== oe._v$3 && A.classList.toggle("mobile-layout", oe._v$3 = F), te !== oe._v$4 && Q.classList.toggle("active", oe._v$4 = te), N !== oe._v$5 && R.classList.toggle("active", oe._v$5 = N), oe;
         }, {
           _v$3: void 0,
           _v$4: void 0,
@@ -4443,7 +4443,7 @@ const nm = /* @__PURE__ */ p('<div class="klinecharts-pro-time-tools-picker"></d
 }, W1 = (e) => {
   const [t, r] = T(!0), [n, a] = T("date"), [l, d] = T(e.value.year), [h, b] = T(e.value.month), x = W(() => pm(l(), h())), v = W(() => Math.floor(l() / 10) * 10), L = W(() => Array.from({
     length: 12
-  }, (H, Z) => v() - 1 + Z)), B = W(() => e.value.hour % 12 || 12), D = W(() => e.value.hour >= 12 ? "PM" : "AM"), oe = Array.from({
+  }, (H, Z) => v() - 1 + Z)), B = W(() => e.value.hour % 12 || 12), D = W(() => e.value.hour >= 12 ? "PM" : "AM"), re = Array.from({
     length: 12
   }, (H, Z) => Z + 1), z = Array.from({
     length: 60
@@ -4509,25 +4509,25 @@ const nm = /* @__PURE__ */ p('<div class="klinecharts-pro-time-tools-picker"></d
         }, q.$$click = () => {
           n() === "year" ? d(l() - 10) : n() === "month" ? d(l() - 1) : K(-1);
         }, Q.$$click = E, C(Q, (() => {
-          const fe = W(() => n() === "year");
-          return () => fe() ? `${v()}-${v() + 9}` : (() => {
-            const te = W(() => n() === "month");
-            return () => te() ? l() : `${J0[h()]} ${l()}`;
+          const he = W(() => n() === "year");
+          return () => he() ? `${v()}-${v() + 9}` : (() => {
+            const oe = W(() => n() === "month");
+            return () => oe() ? l() : `${J0[h()]} ${l()}`;
           })();
         })()), R.$$click = () => {
           n() === "year" ? d(l() + 10) : n() === "month" ? d(l() + 1) : K(1);
         }, de.$$click = () => {
           n() === "year" ? d(l() + 10) : n() === "month" ? d(l() + 1) : K(12);
         }, C(ee, (() => {
-          const fe = W(() => n() === "date");
-          return () => fe() && (() => {
-            const te = am.cloneNode(!0);
-            return C(te, () => Cm.map((F) => (() => {
-              const ne = sm.cloneNode(!0);
-              return C(ne, F), ne;
-            })()), null), C(te, () => x().map(({
+          const he = W(() => n() === "date");
+          return () => he() && (() => {
+            const oe = am.cloneNode(!0);
+            return C(oe, () => Cm.map((F) => (() => {
+              const te = sm.cloneNode(!0);
+              return C(te, F), te;
+            })()), null), C(oe, () => x().map(({
               date: F,
-              current: ne
+              current: te
             }) => {
               const N = Nn({
                 year: F.getFullYear(),
@@ -4536,36 +4536,36 @@ const nm = /* @__PURE__ */ p('<div class="klinecharts-pro-time-tools-picker"></d
               }), O = e.range ? Nn(e.range.from) : NaN, U = e.range ? Nn(e.range.to) : NaN, pe = Math.min(O, U), Ae = Math.max(O, U), me = Number.isFinite(pe) && N >= pe && N <= Ae, Ee = Number.isFinite(pe) && (N === pe || N === Ae), _ = F.getFullYear() === e.value.year && F.getMonth() === e.value.month && F.getDate() === e.value.day;
               return (() => {
                 const ye = Dt.cloneNode(!0);
-                return ye.$$click = () => ue(F), ge(ye, `${ne ? "" : "muted"} ${me ? "in-range" : ""} ${Ee || _ ? "selected" : ""}`), C(ye, () => F.getDate()), ye;
+                return ye.$$click = () => ue(F), ge(ye, `${te ? "" : "muted"} ${me ? "in-range" : ""} ${Ee || _ ? "selected" : ""}`), C(ye, () => F.getDate()), ye;
               })();
-            }), null), te;
+            }), null), oe;
           })();
         })(), null), C(ee, (() => {
-          const fe = W(() => n() === "month");
-          return () => fe() && (() => {
-            const te = lm.cloneNode(!0);
-            return C(te, () => J0.map((F, ne) => (() => {
+          const he = W(() => n() === "month");
+          return () => he() && (() => {
+            const oe = lm.cloneNode(!0);
+            return C(oe, () => J0.map((F, te) => (() => {
               const N = Dt.cloneNode(!0);
-              return N.$$click = () => j(ne), C(N, F), V(() => ge(N, ne === e.value.month && l() === e.value.year ? "selected" : "")), N;
-            })())), te;
+              return N.$$click = () => j(te), C(N, F), V(() => ge(N, te === e.value.month && l() === e.value.year ? "selected" : "")), N;
+            })())), oe;
           })();
         })(), null), C(ee, (() => {
-          const fe = W(() => n() === "year");
-          return () => fe() && (() => {
-            const te = cm.cloneNode(!0);
-            return C(te, () => L().map((F) => (() => {
-              const ne = Dt.cloneNode(!0);
-              return ne.$$click = () => X(F), C(ne, F), V(() => ge(ne, `${F < v() || F > v() + 9 ? "muted" : ""} ${F === e.value.year ? "selected" : ""}`)), ne;
-            })())), te;
+          const he = W(() => n() === "year");
+          return () => he() && (() => {
+            const oe = cm.cloneNode(!0);
+            return C(oe, () => L().map((F) => (() => {
+              const te = Dt.cloneNode(!0);
+              return te.$$click = () => X(F), C(te, F), V(() => ge(te, `${F < v() || F > v() + 9 ? "muted" : ""} ${F === e.value.year ? "selected" : ""}`)), te;
+            })())), oe;
           })();
         })(), null), C(ee, (() => {
-          const fe = W(() => n() === "date");
-          return () => fe() && (() => {
-            const te = um.cloneNode(!0), F = te.firstChild, ne = F.nextSibling, N = ne.nextSibling;
-            return C(F, () => oe.map((O) => (() => {
+          const he = W(() => n() === "date");
+          return () => he() && (() => {
+            const oe = um.cloneNode(!0), F = oe.firstChild, te = F.nextSibling, N = te.nextSibling;
+            return C(F, () => re.map((O) => (() => {
               const U = Dt.cloneNode(!0);
               return U.$$click = () => J(O), C(U, () => Gt(O)), V(() => ge(U, O === B() ? "selected" : "")), U;
-            })())), C(ne, () => z.map((O) => (() => {
+            })())), C(te, () => z.map((O) => (() => {
               const U = Dt.cloneNode(!0);
               return U.$$click = () => e.onChange({
                 ...e.value,
@@ -4574,7 +4574,7 @@ const nm = /* @__PURE__ */ p('<div class="klinecharts-pro-time-tools-picker"></d
             })())), C(N, () => ["AM", "PM"].map((O) => (() => {
               const U = Dt.cloneNode(!0);
               return U.$$click = () => be(O), C(U, O), V(() => ge(U, O === D() ? "selected" : "")), U;
-            })())), te;
+            })())), oe;
           })();
         })(), null), ee;
       })();
@@ -4590,7 +4590,7 @@ const nm = /* @__PURE__ */ p('<div class="klinecharts-pro-time-tools-picker"></d
       ...K,
       ...z
     }));
-  }, oe = () => {
+  }, re = () => {
     const z = t();
     if (z === "goToDate")
       e.onGoToDate(q1(n()));
@@ -4630,7 +4630,7 @@ const nm = /* @__PURE__ */ p('<div class="klinecharts-pro-time-tools-picker"></d
         onClick: e.onClose
       }, {
         children: "Confirm",
-        onClick: oe
+        onClick: re
       }];
     },
     get onClose() {
@@ -4715,8 +4715,8 @@ const nm = /* @__PURE__ */ p('<div class="klinecharts-pro-time-tools-picker"></d
           }), Q.$$click = () => D({
             acrossTokens: !L().acrossTokens
           }), V((R) => {
-            const de = `klinecharts-pro-time-tools-switch${L().enabled ? " on" : ""}`, fe = `klinecharts-pro-time-tools-row${L().enabled ? "" : " disabled"}`, te = !L().enabled, F = `klinecharts-pro-time-tools-row with-divider${L().enabled ? "" : " disabled"}`, ne = `klinecharts-pro-time-tools-switch${L().anchorLine ? " on" : ""}`, N = !L().enabled, O = `klinecharts-pro-time-tools-row with-divider${L().enabled ? "" : " disabled"}`, U = `klinecharts-pro-time-tools-switch${L().acrossTokens ? " on" : ""}`, pe = !L().enabled;
-            return de !== R._v$3 && ge(X, R._v$3 = de), fe !== R._v$4 && ge(J, R._v$4 = fe), te !== R._v$5 && (H.disabled = R._v$5 = te), F !== R._v$6 && ge(Z, R._v$6 = F), ne !== R._v$7 && ge(se, R._v$7 = ne), N !== R._v$8 && (se.disabled = R._v$8 = N), O !== R._v$9 && ge(A, R._v$9 = O), U !== R._v$10 && ge(Q, R._v$10 = U), pe !== R._v$11 && (Q.disabled = R._v$11 = pe), R;
+            const de = `klinecharts-pro-time-tools-switch${L().enabled ? " on" : ""}`, he = `klinecharts-pro-time-tools-row${L().enabled ? "" : " disabled"}`, oe = !L().enabled, F = `klinecharts-pro-time-tools-row with-divider${L().enabled ? "" : " disabled"}`, te = `klinecharts-pro-time-tools-switch${L().anchorLine ? " on" : ""}`, N = !L().enabled, O = `klinecharts-pro-time-tools-row with-divider${L().enabled ? "" : " disabled"}`, U = `klinecharts-pro-time-tools-switch${L().acrossTokens ? " on" : ""}`, pe = !L().enabled;
+            return de !== R._v$3 && ge(X, R._v$3 = de), he !== R._v$4 && ge(J, R._v$4 = he), oe !== R._v$5 && (H.disabled = R._v$5 = oe), F !== R._v$6 && ge(Z, R._v$6 = F), te !== R._v$7 && ge(se, R._v$7 = te), N !== R._v$8 && (se.disabled = R._v$8 = N), O !== R._v$9 && ge(A, R._v$9 = O), U !== R._v$10 && ge(Q, R._v$10 = U), pe !== R._v$11 && (Q.disabled = R._v$11 = pe), R;
           }, {
             _v$3: void 0,
             _v$4: void 0,
@@ -4834,7 +4834,7 @@ function Bm(e) {
 const Em = (e) => {
   var Pr, Dr, Nr, Or, Ir, Br, Er, Fr, Ur, zr, Vr, Kr, Rr, jr, Qr, Zr, Hr, qr, Wr, Yr, Gr, Xr, Jr, e0, t0, n0, r0, o0;
   let t, r, n = null, a;
-  const [l, d] = T(!1), [h, b] = T(e.theme), [x, v] = T(e.styles), [L, B] = T(e.locale), [D, oe] = T(e.symbol), [z, K] = T(e.period), E = () => {
+  const [l, d] = T(!1), [h, b] = T(e.theme), [x, v] = T(e.styles), [L, B] = T(e.locale), [D, re] = T(e.symbol), [z, K] = T(e.period), E = () => {
     var o, i, s, u;
     return {
       visibleMarginLeft: ((o = e.indicatorTooltipIconStyles) == null ? void 0 : o.visibleMarginLeft) ?? 7,
@@ -4845,15 +4845,14 @@ const Em = (e) => {
   }, [ue, j] = T(!1), [X, J] = T([...e.mainIndicators]), [be, H] = T({}), [Z, ee] = T(!1), [se, A] = T({
     key: e.timezone,
     text: Y0(e.timezone, e.locale)
-  }), [q, Q] = T(!1), [R, de] = T(), fe = () => r == null ? void 0 : r.closest(".klinecharts-pro"), te = () => {
-    const o = fe();
-    if (o)
-      return getComputedStyle(o).getPropertyValue("--klinecharts-pro-background-color").trim();
-  }, F = (o) => {
-    var s, u;
+  }), [q, Q] = T(!1), [R, de] = T(), he = () => {
+    const o = r == null ? void 0 : r.closest(".klinecharts-pro");
+    return o ? getComputedStyle(o).getPropertyValue("--klinecharts-pro-background-color").trim() : void 0;
+  }, oe = () => t && getComputedStyle(t).getPropertyValue("--klinecharts-pro-chart-background-color").trim() || he(), F = (o) => {
+    var s;
     const i = (s = o.chart) == null ? void 0 : s.backgroundColor;
-    i && ((u = fe()) == null || u.style.setProperty("--klinecharts-pro-background-color", i));
-  }, ne = (o) => {
+    !i || !t || t.style.setProperty("--klinecharts-pro-chart-background-color", i);
+  }, te = (o) => {
     const {
       chart: i,
       ...s
@@ -5182,13 +5181,13 @@ const Em = (e) => {
     const k = Math.min(Math.max(((a0 = D()) == null ? void 0 : a0.pricePrecision) ?? 2, 0), 8), M = u.toLocaleString(void 0, {
       minimumFractionDigits: k,
       maximumFractionDigits: k
-    }), S = (s0 = n.getSize) == null ? void 0 : s0.call(n, "candle_pane", ct.YAxis), re = S != null && S.width && Number.isFinite(S.width) ? Math.max(74, Math.floor(S.width) - 2) : 96, ae = G1(z()), ie = o % ae, G = ie === 0 ? ae : ae - ie, he = Number(s.close), $e = Number(s.open), Pe = n.getStyles().candle.priceMark.last, Y = Pe.text, ve = Number(Y.size) || 12, Ce = Number(Y.paddingTop) || 2, we = Number(Y.paddingBottom) || 2, De = Math.min(Number(Y.paddingLeft) || 4, 3), nt = Math.min(Number(Y.paddingRight) || 4, 3), rt = Math.max(34, ve * 2 + Ce + we + 6), lt = Math.max(0, Math.min(m - rt / 2, y - rt));
+    }), S = (s0 = n.getSize) == null ? void 0 : s0.call(n, "candle_pane", ct.YAxis), ne = S != null && S.width && Number.isFinite(S.width) ? Math.max(74, Math.floor(S.width) - 2) : 96, ae = G1(z()), ie = o % ae, G = ie === 0 ? ae : ae - ie, fe = Number(s.close), $e = Number(s.open), Pe = n.getStyles().candle.priceMark.last, Y = Pe.text, ve = Number(Y.size) || 12, Ce = Number(Y.paddingTop) || 2, we = Number(Y.paddingBottom) || 2, De = Math.min(Number(Y.paddingLeft) || 4, 3), nt = Math.min(Number(Y.paddingRight) || 4, 3), rt = Math.max(34, ve * 2 + Ce + we + 6), lt = Math.max(0, Math.min(m - rt / 2, y - rt));
     Rt({
       top: lt,
-      width: Math.min(re, Math.max(62, M.length * (ve * 0.56) + De + nt + 4)),
+      width: Math.min(ne, Math.max(62, M.length * (ve * 0.56) + De + nt + 4)),
       priceText: M,
       text: Bm(G),
-      color: Number.isFinite(he) && Number.isFinite($e) && he < $e ? Pe.downColor : Pe.upColor,
+      color: Number.isFinite(fe) && Number.isFinite($e) && fe < $e ? Pe.downColor : Pe.upColor,
       textSize: ve,
       textFamily: Y.family,
       textWeight: Y.weight,
@@ -5285,7 +5284,7 @@ const Em = (e) => {
       lock: !1
     })), tt(!1), $t(null), Ye(!1));
   }, $ = (o) => {
-    var y, k, M, S, re, ae;
+    var y, k, M, S, ne, ae;
     const i = (k = (y = t == null ? void 0 : t.parentElement) == null ? void 0 : y.getBoundingClientRect) == null ? void 0 : k.call(y), s = (M = t == null ? void 0 : t.getBoundingClientRect) == null ? void 0 : M.call(t), u = o == null ? void 0 : o.overlay, g = (S = u == null ? void 0 : u.points) == null ? void 0 : S[0];
     let m = 72, f = 40;
     if (i) {
@@ -5295,7 +5294,7 @@ const Em = (e) => {
         f = s.top - i.top + o.y;
       else if (Number.isFinite(g == null ? void 0 : g.value))
         try {
-          const ie = (re = n == null ? void 0 : n.convertToPixel) == null ? void 0 : re.call(n, [{
+          const ie = (ne = n == null ? void 0 : n.convertToPixel) == null ? void 0 : ne.call(n, [{
             value: g.value
           }], {
             paneId: "candle_pane",
@@ -5310,11 +5309,11 @@ const Em = (e) => {
       y: Math.max(8, f - 52)
     };
   }, P = (o) => {
-    var y, k, M, S, re, ae, ie, G;
+    var y, k, M, S, ne, ae, ie, G;
     const i = o == null ? void 0 : o.overlay;
     if (!(i != null && i.id) || i.name !== "horizontalStraightLine")
       return !1;
-    const s = $(o), u = Number((k = (y = i.styles) == null ? void 0 : y.line) == null ? void 0 : k.size) || 3, g = ((S = (M = i.styles) == null ? void 0 : M.line) == null ? void 0 : S.style) ?? Ue.Solid, m = Array.isArray((ae = (re = i.styles) == null ? void 0 : re.line) == null ? void 0 : ae.dashedValue) ? i.styles.line.dashedValue : [], f = ((G = (ie = i.styles) == null ? void 0 : ie.line) == null ? void 0 : G.color) ?? "#2f6df6";
+    const s = $(o), u = Number((k = (y = i.styles) == null ? void 0 : y.line) == null ? void 0 : k.size) || 3, g = ((S = (M = i.styles) == null ? void 0 : M.line) == null ? void 0 : S.style) ?? Ue.Solid, m = Array.isArray((ae = (ne = i.styles) == null ? void 0 : ne.line) == null ? void 0 : ae.dashedValue) ? i.styles.line.dashedValue : [], f = ((G = (ie = i.styles) == null ? void 0 : ie.line) == null ? void 0 : G.color) ?? "#2f6df6";
     return Qe({
       id: i.id,
       x: s.x,
@@ -5331,7 +5330,7 @@ const Em = (e) => {
     const i = (s = o == null ? void 0 : o.overlay) == null ? void 0 : s.id;
     return (!i || ((u = Ke()) == null ? void 0 : u.id) === i) && (Qe(null), Xe(null)), !1;
   }, Te = (o) => {
-    var f, y, k, M, S, re, ae, ie, G;
+    var f, y, k, M, S, ne, ae, ie, G;
     if (o.name !== "horizontalStraightLine")
       return o;
     const i = o.onClick, s = o.onSelected, u = o.onDeselected, g = o.onRemoved, m = o.onPressedMoveEnd;
@@ -5343,15 +5342,15 @@ const Em = (e) => {
           ...(f = o.styles) == null ? void 0 : f.line,
           size: Number((k = (y = o.styles) == null ? void 0 : y.line) == null ? void 0 : k.size) || 3,
           style: ((S = (M = o.styles) == null ? void 0 : M.line) == null ? void 0 : S.style) ?? Ue.Solid,
-          dashedValue: ((ae = (re = o.styles) == null ? void 0 : re.line) == null ? void 0 : ae.dashedValue) ?? [6, 4],
+          dashedValue: ((ae = (ne = o.styles) == null ? void 0 : ne.line) == null ? void 0 : ae.dashedValue) ?? [6, 4],
           color: ((G = (ie = o.styles) == null ? void 0 : ie.line) == null ? void 0 : G.color) ?? "#2f6df6"
         }
       },
-      onClick: (he) => (P(he), (i == null ? void 0 : i(he)) ?? !1),
-      onSelected: (he) => (P(he), (s == null ? void 0 : s(he)) ?? !1),
-      onPressedMoveEnd: (he) => (P(he), (m == null ? void 0 : m(he)) ?? !1),
-      onDeselected: (he) => (Se(he), (u == null ? void 0 : u(he)) ?? !1),
-      onRemoved: (he) => (Se(he), (g == null ? void 0 : g(he)) ?? !1)
+      onClick: (fe) => (P(fe), (i == null ? void 0 : i(fe)) ?? !1),
+      onSelected: (fe) => (P(fe), (s == null ? void 0 : s(fe)) ?? !1),
+      onPressedMoveEnd: (fe) => (P(fe), (m == null ? void 0 : m(fe)) ?? !1),
+      onDeselected: (fe) => (Se(fe), (u == null ? void 0 : u(fe)) ?? !1),
+      onRemoved: (fe) => (Se(fe), (g == null ? void 0 : g(fe)) ?? !1)
     };
   }, st = () => {
     var i;
@@ -5458,9 +5457,9 @@ const Em = (e) => {
     const s = (S = (M = t.parentElement) == null ? void 0 : M.getBoundingClientRect) == null ? void 0 : S.call(M);
     if (!s)
       return;
-    const u = o.clientX, g = o.clientY, m = i.x, f = i.y, y = (re) => {
-      re.preventDefault();
-      const ae = m + re.clientX - u, ie = f + re.clientY - g;
+    const u = o.clientX, g = o.clientY, m = i.x, f = i.y, y = (ne) => {
+      ne.preventDefault();
+      const ae = m + ne.clientX - u, ie = f + ne.clientY - g;
       Qe({
         ...i,
         x: Math.max(8, Math.min(ae, s.width - 320)),
@@ -5481,9 +5480,9 @@ const Em = (e) => {
   };
   let sr = (Qr = e.orderTools) == null ? void 0 : Qr.quickOrder, lr = (Zr = e.orderTools) == null ? void 0 : Zr.quickOrderFloatingWindow, cr = (Hr = e.orderTools) == null ? void 0 : Hr.quickOrderPlusButton, ur = (qr = e.orderTools) == null ? void 0 : qr.openOrders, dr = (Wr = e.orderTools) == null ? void 0 : Wr.openOrdersExtendedPriceLine, hr = (Yr = e.orderTools) == null ? void 0 : Yr.openOrdersDisplay, fr = (Gr = e.orderTools) == null ? void 0 : Gr.positions, gr = (Xr = e.orderTools) == null ? void 0 : Xr.breakevenPrice, mr = (Jr = e.orderTools) == null ? void 0 : Jr.liquidationPrice, yr = (e0 = e.orderTools) == null ? void 0 : e0.priceLine, Cr = (t0 = e.orderTools) == null ? void 0 : t0.marketPriceLine, pr = (n0 = e.orderTools) == null ? void 0 : n0.countDown, vr = (r0 = e.orderTools) == null ? void 0 : r0.bidAskPrice, br = (o0 = e.orderTools) == null ? void 0 : o0.orderHistory;
   Re(() => {
-    var he, $e, Pe, Y, ve, Ce, we, De, nt, rt, lt, ot, it, g1;
-    const o = (he = e.orderTools) == null ? void 0 : he.quickOrder, i = ($e = e.orderTools) == null ? void 0 : $e.quickOrderFloatingWindow, s = (Pe = e.orderTools) == null ? void 0 : Pe.quickOrderPlusButton, u = (Y = e.orderTools) == null ? void 0 : Y.openOrders, g = (ve = e.orderTools) == null ? void 0 : ve.openOrdersExtendedPriceLine, m = (Ce = e.orderTools) == null ? void 0 : Ce.openOrdersDisplay, f = (we = e.orderTools) == null ? void 0 : we.positions, y = (De = e.orderTools) == null ? void 0 : De.breakevenPrice, k = (nt = e.orderTools) == null ? void 0 : nt.liquidationPrice, M = (rt = e.orderTools) == null ? void 0 : rt.priceLine, S = (lt = e.orderTools) == null ? void 0 : lt.marketPriceLine, re = (ot = e.orderTools) == null ? void 0 : ot.countDown, ae = (it = e.orderTools) == null ? void 0 : it.bidAskPrice, ie = (g1 = e.orderTools) == null ? void 0 : g1.orderHistory, G = {};
-    typeof o == "boolean" && o !== sr && (sr = o, G.quickOrder = o, typeof i != "boolean" && (G.quickOrderFloatingWindow = o), typeof s != "boolean" && (G.quickOrderPlusButton = o)), typeof i == "boolean" && i !== lr && (lr = i, G.quickOrderFloatingWindow = i), typeof s == "boolean" && s !== cr && (cr = s, G.quickOrderPlusButton = s), typeof u == "boolean" && u !== ur && (ur = u, G.openOrders = u), typeof g == "boolean" && g !== dr && (dr = g, G.openOrdersExtendedPriceLine = g), m !== void 0 && m !== hr && (hr = m, G.openOrdersDisplay = m), typeof f == "boolean" && f !== fr && (fr = f, G.positions = f), typeof y == "boolean" && y !== gr && (gr = y, G.breakevenPrice = y), typeof k == "boolean" && k !== mr && (mr = k, G.liquidationPrice = k), typeof M == "boolean" && M !== yr && (yr = M, G.priceLine = M, typeof S != "boolean" && (G.marketPriceLine = M), typeof re != "boolean" && (G.countDown = M), typeof ae != "boolean" && (G.bidAskPrice = M)), typeof S == "boolean" && S !== Cr && (Cr = S, G.marketPriceLine = S), typeof re == "boolean" && re !== pr && (pr = re, G.countDown = re), typeof ae == "boolean" && ae !== vr && (vr = ae, G.bidAskPrice = ae), typeof ie == "boolean" && ie !== br && (br = ie, G.orderHistory = ie), Object.keys(G).length > 0 && Zt(G);
+    var fe, $e, Pe, Y, ve, Ce, we, De, nt, rt, lt, ot, it, g1;
+    const o = (fe = e.orderTools) == null ? void 0 : fe.quickOrder, i = ($e = e.orderTools) == null ? void 0 : $e.quickOrderFloatingWindow, s = (Pe = e.orderTools) == null ? void 0 : Pe.quickOrderPlusButton, u = (Y = e.orderTools) == null ? void 0 : Y.openOrders, g = (ve = e.orderTools) == null ? void 0 : ve.openOrdersExtendedPriceLine, m = (Ce = e.orderTools) == null ? void 0 : Ce.openOrdersDisplay, f = (we = e.orderTools) == null ? void 0 : we.positions, y = (De = e.orderTools) == null ? void 0 : De.breakevenPrice, k = (nt = e.orderTools) == null ? void 0 : nt.liquidationPrice, M = (rt = e.orderTools) == null ? void 0 : rt.priceLine, S = (lt = e.orderTools) == null ? void 0 : lt.marketPriceLine, ne = (ot = e.orderTools) == null ? void 0 : ot.countDown, ae = (it = e.orderTools) == null ? void 0 : it.bidAskPrice, ie = (g1 = e.orderTools) == null ? void 0 : g1.orderHistory, G = {};
+    typeof o == "boolean" && o !== sr && (sr = o, G.quickOrder = o, typeof i != "boolean" && (G.quickOrderFloatingWindow = o), typeof s != "boolean" && (G.quickOrderPlusButton = o)), typeof i == "boolean" && i !== lr && (lr = i, G.quickOrderFloatingWindow = i), typeof s == "boolean" && s !== cr && (cr = s, G.quickOrderPlusButton = s), typeof u == "boolean" && u !== ur && (ur = u, G.openOrders = u), typeof g == "boolean" && g !== dr && (dr = g, G.openOrdersExtendedPriceLine = g), m !== void 0 && m !== hr && (hr = m, G.openOrdersDisplay = m), typeof f == "boolean" && f !== fr && (fr = f, G.positions = f), typeof y == "boolean" && y !== gr && (gr = y, G.breakevenPrice = y), typeof k == "boolean" && k !== mr && (mr = k, G.liquidationPrice = k), typeof M == "boolean" && M !== yr && (yr = M, G.priceLine = M, typeof S != "boolean" && (G.marketPriceLine = M), typeof ne != "boolean" && (G.countDown = M), typeof ae != "boolean" && (G.bidAskPrice = M)), typeof S == "boolean" && S !== Cr && (Cr = S, G.marketPriceLine = S), typeof ne == "boolean" && ne !== pr && (pr = ne, G.countDown = ne), typeof ae == "boolean" && ae !== vr && (vr = ae, G.bidAskPrice = ae), typeof ie == "boolean" && ie !== br && (br = ie, G.orderHistory = ie), Object.keys(G).length > 0 && Zt(G);
   }), Re(() => {
     Ve().marketPriceLine, Ve().countDown, z(), D(), n == null || n.setStyles({
       candle: {
@@ -5514,7 +5513,7 @@ const Em = (e) => {
       });
     },
     getTimezone: () => se().key,
-    setSymbol: oe,
+    setSymbol: re,
     getSymbol: () => D(),
     setPeriod: K,
     getPeriod: () => z(),
@@ -5585,7 +5584,7 @@ const Em = (e) => {
       n && "resize" in n && typeof n.resize == "function" ? n.resize() : console.warn("resize method not available on widget");
     },
     getSettings: () => {
-      var s, u, g, m, f, y, k, M, S, re, ae, ie, G, he, $e, Pe;
+      var s, u, g, m, f, y, k, M, S, ne, ae, ie, G, fe, $e, Pe;
       if (!n)
         return {};
       const o = n.getStyles(), i = (s = o.candle) == null ? void 0 : s.bar;
@@ -5596,11 +5595,11 @@ const Em = (e) => {
         // bar.style might be LineType
         showLastPrice: (f = (m = (g = o.candle) == null ? void 0 : g.priceMark) == null ? void 0 : m.last) == null ? void 0 : f.show,
         showHighestPrice: (M = (k = (y = o.candle) == null ? void 0 : y.priceMark) == null ? void 0 : k.high) == null ? void 0 : M.show,
-        showLowestPrice: (ae = (re = (S = o.candle) == null ? void 0 : S.priceMark) == null ? void 0 : re.low) == null ? void 0 : ae.show,
+        showLowestPrice: (ae = (ne = (S = o.candle) == null ? void 0 : S.priceMark) == null ? void 0 : ne.low) == null ? void 0 : ae.show,
         // Indicator settings
         showIndicatorLastValue: (G = (ie = o.indicator) == null ? void 0 : ie.lastValueMark) == null ? void 0 : G.show,
         // Axis settings - yAxis.reverse is boolean according to YAxisStyle interface
-        priceAxisType: (he = o.yAxis) == null ? void 0 : he.type,
+        priceAxisType: (fe = o.yAxis) == null ? void 0 : fe.type,
         reverseCoordinate: ($e = o.yAxis) == null ? void 0 : $e.reverse,
         // Grid settings
         showGrids: (Pe = o.grid) == null ? void 0 : Pe.show,
@@ -5608,7 +5607,7 @@ const Em = (e) => {
       };
     },
     setSettings: (o) => {
-      var s, u, g, m, f, y, k, M, S, re, ae, ie, G, he;
+      var s, u, g, m, f, y, k, M, S, ne, ae, ie, G, fe;
       if (!n)
         return;
       const i = {};
@@ -5644,7 +5643,7 @@ const Em = (e) => {
         priceMark: {
           ...(M = i.candle) == null ? void 0 : M.priceMark,
           high: {
-            ...(re = (S = i.candle) == null ? void 0 : S.priceMark) == null ? void 0 : re.high,
+            ...(ne = (S = i.candle) == null ? void 0 : S.priceMark) == null ? void 0 : ne.high,
             show: o.showHighestPrice
           }
         }
@@ -5660,7 +5659,7 @@ const Em = (e) => {
       }), o.showIndicatorLastValue !== void 0 && (i.indicator = {
         ...i.indicator,
         lastValueMark: {
-          ...(he = i.indicator) == null ? void 0 : he.lastValueMark,
+          ...(fe = i.indicator) == null ? void 0 : fe.lastValueMark,
           show: o.showIndicatorLastValue
         }
       }), o.priceAxisType !== void 0 && (i.yAxis = {
@@ -5857,12 +5856,12 @@ const Em = (e) => {
     }, y = (ae = n.convertToPixel) == null ? void 0 : ae.call(n, [f], {
       paneId: "candle_pane",
       absolute: !0
-    }), k = Number((ie = y == null ? void 0 : y[0]) == null ? void 0 : ie.x), M = Number((G = y == null ? void 0 : y[0]) == null ? void 0 : G.y), S = t.clientWidth, re = t.clientHeight;
+    }), k = Number((ie = y == null ? void 0 : y[0]) == null ? void 0 : ie.x), M = Number((G = y == null ? void 0 : y[0]) == null ? void 0 : G.y), S = t.clientWidth, ne = t.clientHeight;
     return !Number.isFinite(k) || k < -80 || k > S + 80 ? null : {
       timestamp: u,
       text: Wo(u),
       left: Math.max(58, Math.min(k, S - 58)),
-      top: Number.isFinite(M) ? Math.max(8, Math.min(M - 42, re - 38)) : 10
+      top: Number.isFinite(M) ? Math.max(8, Math.min(M - 42, ne - 38)) : 10
     };
   }, wr = () => {
     const o = A1();
@@ -6004,7 +6003,7 @@ const Em = (e) => {
     const i = (k = n.getDom) == null ? void 0 : k.call(n, "candle_pane", ct.Main), s = (M = i == null ? void 0 : i.getBoundingClientRect) == null ? void 0 : M.call(i), u = (S = r == null ? void 0 : r.getBoundingClientRect) == null ? void 0 : S.call(r), g = t.getBoundingClientRect(), m = s && Number.isFinite(s.left) ? s.left - ((u == null ? void 0 : u.left) ?? g.left) : g.left - ((u == null ? void 0 : u.left) ?? g.left), f = n.getSize("candle_pane", ct.Main), y = (s == null ? void 0 : s.width) ?? (f == null ? void 0 : f.width) ?? t.clientWidth;
     return o === "left" ? Math.max(8, m) : o === "center" ? m + y / 2 : o === "right" ? m + y : null;
   }, Mr = (o, i) => {
-    var M, S, re, ae, ie, G;
+    var M, S, ne, ae, ie, G;
     const s = Ln(o), u = ((M = n == null ? void 0 : n.getDataList) == null ? void 0 : M.call(n)) ?? [];
     if (!n || s === null || u.length === 0)
       return i;
@@ -6014,10 +6013,10 @@ const Em = (e) => {
     }], {
       paneId: "candle_pane",
       absolute: !0
-    }), m = Number((re = g == null ? void 0 : g[0]) == null ? void 0 : re.dataIndex), f = Math.max(0, Math.min(u.length - 1, Number.isFinite(m) ? Math.round(m) : -1)), y = Go(i);
+    }), m = Number((ne = g == null ? void 0 : g[0]) == null ? void 0 : ne.dataIndex), f = Math.max(0, Math.min(u.length - 1, Number.isFinite(m) ? Math.round(m) : -1)), y = Go(i);
     if (y) {
-      const he = z1(y.dataIndex), $e = (ae = n.convertToPixel) == null ? void 0 : ae.call(n, [{
-        dataIndex: he
+      const fe = z1(y.dataIndex), $e = (ae = n.convertToPixel) == null ? void 0 : ae.call(n, [{
+        dataIndex: fe
       }], {
         paneId: "candle_pane",
         absolute: !0
@@ -6074,13 +6073,13 @@ const Em = (e) => {
     }), m = Number((y = g == null ? void 0 : g[0]) == null ? void 0 : y.x);
     return !Number.isFinite(m) || m < -2 || m > t.clientWidth + 2 ? null : m;
   }, xt = (o) => {
-    var S, re, ae, ie;
+    var S, ne, ae, ie;
     const i = o ?? ye();
     if (!n || !i.enabled || !i.anchorLine) {
       jt(null);
       return;
     }
-    const s = a9(i), u = (S = n.getDom) == null ? void 0 : S.call(n, "candle_pane", ct.Main), g = (re = u == null ? void 0 : u.getBoundingClientRect) == null ? void 0 : re.call(u), m = (ae = r == null ? void 0 : r.getBoundingClientRect) == null ? void 0 : ae.call(r), f = (ie = t == null ? void 0 : t.getBoundingClientRect) == null ? void 0 : ie.call(t), y = n.getSize("candle_pane", ct.Main), k = g && Number.isFinite(g.top) ? g.top - ((m == null ? void 0 : m.top) ?? (f == null ? void 0 : f.top) ?? 0) : 0, M = Math.max(1, (g == null ? void 0 : g.height) ?? (y == null ? void 0 : y.height) ?? 0);
+    const s = a9(i), u = (S = n.getDom) == null ? void 0 : S.call(n, "candle_pane", ct.Main), g = (ne = u == null ? void 0 : u.getBoundingClientRect) == null ? void 0 : ne.call(u), m = (ae = r == null ? void 0 : r.getBoundingClientRect) == null ? void 0 : ae.call(r), f = (ie = t == null ? void 0 : t.getBoundingClientRect) == null ? void 0 : ie.call(t), y = n.getSize("candle_pane", ct.Main), k = g && Number.isFinite(g.top) ? g.top - ((m == null ? void 0 : m.top) ?? (f == null ? void 0 : f.top) ?? 0) : 0, M = Math.max(1, (g == null ? void 0 : g.height) ?? (y == null ? void 0 : y.height) ?? 0);
     if (s === null) {
       jt(null);
       return;
@@ -6191,8 +6190,8 @@ const Em = (e) => {
     }), H(g), n == null || n.loadMore((f) => {
       d(!0), (async () => {
         try {
-          const k = z(), [M] = kn(k, f, 1), [S] = kn(k, M, 500), re = await e.datafeed.getHistoryKLineData(D(), k, S, M);
-          n == null || n.applyMoreData(re, re.length > 0);
+          const k = z(), [M] = kn(k, f, 1), [S] = kn(k, M, 500), ne = await e.datafeed.getHistoryKLineData(D(), k, S, M);
+          n == null || n.applyMoreData(ne, ne.length > 0);
         } finally {
           d(!1);
         }
@@ -6330,8 +6329,8 @@ const Em = (e) => {
           Tr(m), xt(m);
         }) : xt(), He(), setTimeout(() => {
           u && (P1(i == null ? void 0 : i.ticker), He());
-        }, 0), e.datafeed.subscribe(i, s, (re) => {
-          n == null || n.updateData(re), He();
+        }, 0), e.datafeed.subscribe(i, s, (ne) => {
+          n == null || n.updateData(ne), He();
         });
       } finally {
         u && (d(!1), vt(!1));
@@ -6574,8 +6573,8 @@ const Em = (e) => {
       children: (s) => (() => {
         const u = xm.cloneNode(!0), g = u.firstChild, m = g.nextSibling;
         return u.style.setProperty("right", "0px"), C(g, () => s.priceText), C(m, () => s.text), V((f) => {
-          const y = `${s.top}px`, k = `${s.width}px`, M = s.color, S = `${s.borderRadius}px`, re = s.textFamily, ae = s.textWeight, ie = `${s.paddingLeft}px`, G = `${s.paddingRight}px`, he = `${s.paddingTop}px`, $e = `${s.paddingBottom}px`, Pe = `${s.textSize}px`, Y = `${Math.max(10, s.textSize - 1)}px`;
-          return y !== f._v$6 && u.style.setProperty("top", f._v$6 = y), k !== f._v$7 && u.style.setProperty("width", f._v$7 = k), M !== f._v$8 && u.style.setProperty("background", f._v$8 = M), S !== f._v$9 && u.style.setProperty("border-radius", f._v$9 = S), re !== f._v$10 && u.style.setProperty("font-family", f._v$10 = re), ae !== f._v$11 && u.style.setProperty("font-weight", f._v$11 = ae), ie !== f._v$12 && u.style.setProperty("padding-left", f._v$12 = ie), G !== f._v$13 && u.style.setProperty("padding-right", f._v$13 = G), he !== f._v$14 && u.style.setProperty("padding-top", f._v$14 = he), $e !== f._v$15 && u.style.setProperty("padding-bottom", f._v$15 = $e), Pe !== f._v$16 && g.style.setProperty("font-size", f._v$16 = Pe), Y !== f._v$17 && m.style.setProperty("font-size", f._v$17 = Y), f;
+          const y = `${s.top}px`, k = `${s.width}px`, M = s.color, S = `${s.borderRadius}px`, ne = s.textFamily, ae = s.textWeight, ie = `${s.paddingLeft}px`, G = `${s.paddingRight}px`, fe = `${s.paddingTop}px`, $e = `${s.paddingBottom}px`, Pe = `${s.textSize}px`, Y = `${Math.max(10, s.textSize - 1)}px`;
+          return y !== f._v$6 && u.style.setProperty("top", f._v$6 = y), k !== f._v$7 && u.style.setProperty("width", f._v$7 = k), M !== f._v$8 && u.style.setProperty("background", f._v$8 = M), S !== f._v$9 && u.style.setProperty("border-radius", f._v$9 = S), ne !== f._v$10 && u.style.setProperty("font-family", f._v$10 = ne), ae !== f._v$11 && u.style.setProperty("font-weight", f._v$11 = ae), ie !== f._v$12 && u.style.setProperty("padding-left", f._v$12 = ie), G !== f._v$13 && u.style.setProperty("padding-right", f._v$13 = G), fe !== f._v$14 && u.style.setProperty("padding-top", f._v$14 = fe), $e !== f._v$15 && u.style.setProperty("padding-bottom", f._v$15 = $e), Pe !== f._v$16 && g.style.setProperty("font-size", f._v$16 = Pe), Y !== f._v$17 && m.style.setProperty("font-size", f._v$17 = Y), f;
         }, {
           _v$6: void 0,
           _v$7: void 0,
@@ -6597,7 +6596,7 @@ const Em = (e) => {
       },
       keyed: !0,
       children: (s) => (() => {
-        const u = Mm.cloneNode(!0), g = u.firstChild, m = g.nextSibling, f = m.nextSibling, y = f.firstChild, k = f.nextSibling, M = k.firstChild, S = M.firstChild, re = S.nextSibling, ae = re.firstChild, ie = k.nextSibling, G = ie.firstChild, he = ie.nextSibling, $e = he.nextSibling, Pe = $e.nextSibling;
+        const u = Mm.cloneNode(!0), g = u.firstChild, m = g.nextSibling, f = m.nextSibling, y = f.firstChild, k = f.nextSibling, M = k.firstChild, S = M.firstChild, ne = S.nextSibling, ae = ne.firstChild, ie = k.nextSibling, G = ie.firstChild, fe = ie.nextSibling, $e = fe.nextSibling, Pe = $e.nextSibling;
         return u.$$click = (Y) => {
           Y.stopPropagation();
         }, u.$$mousedown = (Y) => {
@@ -6616,7 +6615,7 @@ const Em = (e) => {
               })()
             })), Y;
           }
-        }), null), M.$$click = () => Xe(Ge() === "width" ? null : "width"), C(re, () => s.lineSize, ae), C(k, w(ce, {
+        }), null), M.$$click = () => Xe(Ge() === "width" ? null : "width"), C(ne, () => s.lineSize, ae), C(k, w(ce, {
           get when() {
             return Ge() === "width";
           },
@@ -6646,9 +6645,9 @@ const Em = (e) => {
               _v$20: void 0
             }), Y;
           }
-        }), null), he.$$click = I1, $e.$$click = O1, Pe.$$click = st, V((Y) => {
+        }), null), fe.$$click = I1, $e.$$click = O1, Pe.$$click = st, V((Y) => {
           const ve = `${s.x}px`, Ce = `${s.y}px`, we = `overlay-toolbar-icon edit ${Ge() === "color" ? "active" : ""}`, De = `overlay-toolbar-line-size ${Ge() === "width" ? "active" : ""}`, nt = `overlay-toolbar-icon minus ${Ge() === "style" ? "active" : ""}`, rt = `overlay-toolbar-icon visibility ${s.visible ? "" : "muted"}`, lt = s.visible ? "Hide" : "Show", ot = `overlay-toolbar-icon lock ${s.locked ? "active" : ""}`, it = s.locked ? "Unlock" : "Lock";
-          return ve !== Y._v$21 && u.style.setProperty("left", Y._v$21 = ve), Ce !== Y._v$22 && u.style.setProperty("top", Y._v$22 = Ce), we !== Y._v$23 && ge(y, Y._v$23 = we), De !== Y._v$24 && ge(M, Y._v$24 = De), nt !== Y._v$25 && ge(G, Y._v$25 = nt), rt !== Y._v$26 && ge(he, Y._v$26 = rt), lt !== Y._v$27 && Ie(he, "title", Y._v$27 = lt), ot !== Y._v$28 && ge($e, Y._v$28 = ot), it !== Y._v$29 && Ie($e, "title", Y._v$29 = it), Y;
+          return ve !== Y._v$21 && u.style.setProperty("left", Y._v$21 = ve), Ce !== Y._v$22 && u.style.setProperty("top", Y._v$22 = Ce), we !== Y._v$23 && ge(y, Y._v$23 = we), De !== Y._v$24 && ge(M, Y._v$24 = De), nt !== Y._v$25 && ge(G, Y._v$25 = nt), rt !== Y._v$26 && ge(fe, Y._v$26 = rt), lt !== Y._v$27 && Ie(fe, "title", Y._v$27 = lt), ot !== Y._v$28 && ge($e, Y._v$28 = ot), it !== Y._v$29 && Ie($e, "title", Y._v$29 = it), Y;
         }, {
           _v$21: void 0,
           _v$22: void 0,
@@ -6708,16 +6707,16 @@ const Em = (e) => {
       children: (s) => (() => {
         const u = Om.cloneNode(!0), g = u.firstChild, m = g.firstChild, f = m.firstChild, y = f.nextSibling, k = y.nextSibling, M = k.nextSibling;
         M.nextSibling;
-        const S = m.nextSibling, re = S.firstChild, ae = re.nextSibling, ie = ae.nextSibling, G = ie.nextSibling;
+        const S = m.nextSibling, ne = S.firstChild, ae = ne.nextSibling, ie = ae.nextSibling, G = ie.nextSibling;
         G.nextSibling;
-        const he = S.nextSibling, $e = he.nextSibling, Pe = $e.firstChild, Y = Pe.nextSibling;
+        const fe = S.nextSibling, $e = fe.nextSibling, Pe = $e.firstChild, Y = Pe.nextSibling;
         Y.nextSibling;
         const ve = $e.nextSibling;
         return ve.firstChild, u.addEventListener("mouseleave", () => Ye(!1)), u.addEventListener("mouseenter", () => Ye(!0)), g.$$mousemove = () => {
           yt();
         }, g.$$mousedown = (Ce) => {
           Ce.preventDefault(), Ce.stopPropagation(), yt();
-        }, m.$$click = () => h1("limit"), C(m, () => D().shortName ?? D().name ?? D().ticker, y), C(m, () => Ht(s.price), M), S.$$click = () => h1("stop"), C(S, () => D().shortName ?? D().name ?? D().ticker, ae), C(S, () => Ht(s.price), G), he.$$click = () => h1("create"), $e.$$click = _n, C($e, () => Ht(s.price), Y), ve.$$click = N1, C(ve, () => Ht(s.price), null), V((Ce) => {
+        }, m.$$click = () => h1("limit"), C(m, () => D().shortName ?? D().name ?? D().ticker, y), C(m, () => Ht(s.price), M), S.$$click = () => h1("stop"), C(S, () => D().shortName ?? D().name ?? D().ticker, ae), C(S, () => Ht(s.price), G), fe.$$click = () => h1("create"), $e.$$click = _n, C($e, () => Ht(s.price), Y), ve.$$click = N1, C(ve, () => Ht(s.price), null), V((Ce) => {
           const we = `${Math.max(0, s.y + 24)}px`, De = `${s.yAxisWidth + vn}px`;
           return we !== Ce._v$33 && u.style.setProperty("top", Ce._v$33 = we), De !== Ce._v$34 && u.style.setProperty("right", Ce._v$34 = De), Ce;
         }, {
@@ -6739,7 +6738,7 @@ const Em = (e) => {
           return e.datafeed;
         },
         onSymbolSelected: (o) => {
-          oe(o);
+          re(o);
         },
         onClose: () => {
           gt(!1);
@@ -6817,10 +6816,10 @@ const Em = (e) => {
           return R();
         },
         get currentBackgroundColor() {
-          return te();
+          return oe();
         },
         get defaultBackgroundColor() {
-          return te();
+          return he();
         },
         onClose: () => {
           Q(!1);
@@ -6828,7 +6827,7 @@ const Em = (e) => {
         onChange: (o) => {
           const i = o;
           F(i);
-          const s = ne(i);
+          const s = te(i);
           Pt(s), n == null || n.setStyles(s), n == null || n.resize(), K1();
         },
         onRestoreDefault: (o) => {
@@ -6836,12 +6835,12 @@ const Em = (e) => {
           o.forEach((u) => {
             const g = u.key;
             if (g === "chart.backgroundColor") {
-              qe(i, g, te());
+              qe(i, g, he());
               return;
             }
             qe(i, g, I.formatValue(R(), g));
           }), F(i);
-          const s = ne(i);
+          const s = te(i);
           Pt(s), n == null || n.setStyles(s), n == null || n.resize(), K1();
         }
       });

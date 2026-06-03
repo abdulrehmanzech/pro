@@ -114,6 +114,12 @@ interface PrevSymbolPeriod {
   period: Period;
 }
 
+type ChartStyleUpdate = DeepPartial<Styles> & {
+  chart?: {
+    backgroundColor?: string;
+  };
+};
+
 const TIME_ANCHOR_SETTINGS_STORAGE_KEY = "klinecharts_pro_time_anchor_settings";
 
 function createDefaultTimeAnchorSettings(): TimeAnchorSettings {
@@ -282,6 +288,38 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
 
   const [settingModalVisible, setSettingModalVisible] = createSignal(false);
   const [widgetDefaultStyles, setWidgetDefaultStyles] = createSignal<Styles>();
+
+  const getDefaultChartBackgroundColor = () => {
+    const root = contentRef?.closest(".klinecharts-pro") as HTMLElement | null;
+    return root
+      ? getComputedStyle(root)
+        .getPropertyValue("--klinecharts-pro-background-color")
+        .trim()
+      : undefined;
+  };
+
+  const getChartBackgroundColor = () => {
+    if (!widgetRef) {
+      return getDefaultChartBackgroundColor();
+    }
+    const chartBackgroundColor = getComputedStyle(widgetRef)
+      .getPropertyValue("--klinecharts-pro-chart-background-color")
+      .trim();
+    return chartBackgroundColor || getDefaultChartBackgroundColor();
+  };
+
+  const applyChartBackgroundColor = (style: ChartStyleUpdate) => {
+    const backgroundColor = style.chart?.backgroundColor;
+    if (!backgroundColor || !widgetRef) {
+      return;
+    }
+    widgetRef.style.setProperty("--klinecharts-pro-chart-background-color", backgroundColor);
+  };
+
+  const getKLineStyles = (style: ChartStyleUpdate): DeepPartial<Styles> => {
+    const { chart: _chart, ...klineStyles } = style;
+    return klineStyles;
+  };
 
   const [screenshotUrl, setScreenshotUrl] = createSignal("");
   const [timeToolsModalVisible, setTimeToolsModalVisible] = createSignal(false);
@@ -3942,27 +3980,38 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
           locale={props.locale}
           currentStyles={utils.clone(widget!.getStyles())}
           defaultStyles={widgetDefaultStyles()}
+          currentBackgroundColor={getChartBackgroundColor()}
+          defaultBackgroundColor={getDefaultChartBackgroundColor()}
           onClose={() => {
             setSettingModalVisible(false);
           }}
           onChange={(style) => {
-            syncExtendedCandleBarStyle(style);
-            widget?.setStyles(style);
+            const styleUpdate = style as ChartStyleUpdate;
+            applyChartBackgroundColor(styleUpdate);
+            const klineStyles = getKLineStyles(styleUpdate);
+            syncExtendedCandleBarStyle(klineStyles);
+            widget?.setStyles(klineStyles);
             widget?.resize();
             applyCandleTooltipStyles();
           }}
           onRestoreDefault={(options: SelectDataSourceItem[]) => {
-            const style = {};
+            const style = {} as ChartStyleUpdate;
             options.forEach((option) => {
               const key = option.key;
+              if (key === "chart.backgroundColor") {
+                lodashSet(style, key, getDefaultChartBackgroundColor());
+                return;
+              }
               lodashSet(
                 style,
                 key,
                 utils.formatValue(widgetDefaultStyles(), key)
               );
             });
-            syncExtendedCandleBarStyle(style);
-            widget?.setStyles(style);
+            applyChartBackgroundColor(style);
+            const klineStyles = getKLineStyles(style);
+            syncExtendedCandleBarStyle(klineStyles);
+            widget?.setStyles(klineStyles);
             widget?.resize();
             applyCandleTooltipStyles();
           }}
