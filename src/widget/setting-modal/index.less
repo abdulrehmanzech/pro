@@ -16,14 +16,14 @@
   min-width: 0;
 
   button {
-    height: 34px;
-    padding: 0 12px;
+    height: 32px;
+    padding: 0 10px;
     border: 0;
     border-radius: 6px;
     background: transparent;
     color: color-mix(in srgb, var(--klinecharts-pro-text-color) 62%, transparent);
     font: inherit;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 600;
     cursor: pointer;
     white-space: nowrap;
@@ -43,7 +43,7 @@
 .@{prefix-cls}-chart-style-content {
   display: grid;
   grid-template-columns: 170px minmax(0, 1fr);
-  min-height: 430px;
+  min-height: 340px;
   margin: 0 -26px;
   color: var(--klinecharts-pro-text-color);
 }
@@ -56,12 +56,12 @@
   background: color-mix(in srgb, var(--klinecharts-pro-background-color) 40%, transparent);
 
   button {
-    height: 54px;
+    height: 50px;
     padding: 0 20px;
     border: 0;
     background: transparent;
     color: color-mix(in srgb, var(--klinecharts-pro-text-color) 58%, transparent);
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 600;
     text-align: left;
     cursor: pointer;
@@ -77,12 +77,12 @@
 .chart-style-panel {
   position: relative;
   min-width: 0;
-  padding: 28px 30px 12px;
+  padding: 22px 30px 8px;
 
   h3 {
-    margin: 0 0 22px;
-    font-size: 16px;
-    font-weight: 700;
+    margin: 0 0 18px;
+    font-size: 15px;
+    font-weight: 600;
   }
 }
 
@@ -91,9 +91,9 @@
   grid-template-columns: minmax(170px, 1fr) auto;
   align-items: center;
   gap: 22px;
-  min-height: 56px;
+  min-height: 52px;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .chart-style-color-pair,
@@ -293,19 +293,25 @@
 }
 
 .chart-style-note {
-  margin: 28px 0 0;
+  margin: 22px 0 0;
   max-width: 520px;
   color: color-mix(in srgb, var(--klinecharts-pro-text-color) 58%, transparent);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 400;
-  line-height: 1.6;
+  line-height: 1.55;
+}
+
+.chart-style-action-button {
+  height: 34px;
+  font-size: 14px;
+  font-weight: 500;
 }
 
 @media (max-width: 768px) {
   .@{prefix-cls}-setting-modal-title-tabs {
     button {
       padding: 0 8px;
-      font-size: 15px;
+      font-size: 14px;
     }
   }
 
@@ -324,8 +330,9 @@
     border-bottom: 1px solid var(--klinecharts-pro-border-color);
 
     button {
-      height: 48px;
+      height: 44px;
       padding: 0 14px;
+      font-size: 14px;
     }
   }
 

@@ -98,6 +98,31 @@ const createChartStyleDraft = (styles: Styles, backgroundColor = fallbackBackgro
   return draft
 }
 
+const getDefaultChartStyleValue = (
+  styles: Styles,
+  key: string,
+  defaultBackgroundColor?: string
+) => {
+  if (key === chartBackgroundColorKey) {
+    return defaultBackgroundColor ?? fallbackBackgroundColor
+  }
+
+  const fallbackByKey: Record<string, string> = {
+    'candle.bar.upBorderColor': 'candle.bar.upColor',
+    'candle.bar.downBorderColor': 'candle.bar.downColor',
+    'candle.bar.noChangeBorderColor': 'candle.bar.noChangeColor',
+    'candle.bar.upWickColor': 'candle.bar.upColor',
+    'candle.bar.downWickColor': 'candle.bar.downColor',
+    'candle.bar.noChangeWickColor': 'candle.bar.noChangeColor'
+  }
+  const fallbackKey = fallbackByKey[key]
+  return utils.formatValue(
+    styles,
+    key,
+    fallbackKey ? utils.formatValue(styles, fallbackKey) : utils.formatValue(createChartStyleDraft(styles), key)
+  )
+}
+
 const SettingModal: Component<SettingModalProps> = props => {
   const [styles, setStyles] = createSignal(props.currentStyles)
   const [draftStyles, setDraftStyles] = createSignal(
@@ -222,17 +247,11 @@ const SettingModal: Component<SettingModalProps> = props => {
     if (defaultStyles) {
       const nextDraft = utils.clone(draftStyles())
       chartStyleRestoreOptions.forEach(option => {
-        const fallbackKey = option.key.includes('downColor')
-          ? 'candle.bar.downColor'
-          : option.key.includes('NoChangeColor')
-            ? 'candle.bar.noChangeColor'
-            : option.key === chartBackgroundColorKey
-              ? chartBackgroundColorKey
-              : 'candle.bar.upColor'
-        const fallback = option.key === chartBackgroundColorKey
-          ? props.defaultBackgroundColor ?? props.currentBackgroundColor ?? fallbackBackgroundColor
-          : utils.formatValue(defaultStyles, fallbackKey)
-        lodashSet(nextDraft, option.key, utils.formatValue(defaultStyles, option.key, fallback))
+        lodashSet(
+          nextDraft,
+          option.key,
+          getDefaultChartStyleValue(defaultStyles, option.key, props.defaultBackgroundColor)
+        )
       })
       setDraftStyles(nextDraft)
       setStyles(utils.clone(nextDraft))
@@ -349,7 +368,10 @@ const SettingModal: Component<SettingModalProps> = props => {
       width={activeTab() === 'chartStyle' ? 760 : 690}
       btnParentStyle={{
         'display': 'flex',
-        'justify-content': activeTab() === 'chartStyle' ? 'flex-end' : 'center'
+        'justify-content': activeTab() === 'chartStyle' ? 'flex-end' : 'center',
+        ...(activeTab() === 'chartStyle'
+          ? { 'padding': '12px 20px 18px 20px' }
+          : {})
       }}
       minButtonWidth={activeTab() === 'chartStyle' ? 170 : 200}
       isMobile={isMobile()}
@@ -366,10 +388,12 @@ const SettingModal: Component<SettingModalProps> = props => {
         : [
             {
               type: 'cancel',
+              class: 'chart-style-action-button',
               children: 'Reset',
               onClick: resetChartStyle
             },
             {
+              class: 'chart-style-action-button',
               children: 'Save',
               onClick: saveChartStyle
             }
