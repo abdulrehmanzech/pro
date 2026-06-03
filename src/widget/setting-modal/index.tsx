@@ -93,6 +93,12 @@ const createChartStyleDraft = (styles: Styles, backgroundColor = fallbackBackgro
   lodashSet(draft, 'candle.bar.upWickColor', utils.formatValue(draft, 'candle.bar.upWickColor', upColor))
   lodashSet(draft, 'candle.bar.downWickColor', utils.formatValue(draft, 'candle.bar.downWickColor', downColor))
   lodashSet(draft, 'candle.bar.noChangeWickColor', utils.formatValue(draft, 'candle.bar.noChangeWickColor', noChangeColor))
+  lodashSet(draft, 'candle.bar.borderUpColor', utils.formatValue(draft, 'candle.bar.borderUpColor', utils.formatValue(draft, 'candle.bar.upBorderColor')))
+  lodashSet(draft, 'candle.bar.borderDownColor', utils.formatValue(draft, 'candle.bar.borderDownColor', utils.formatValue(draft, 'candle.bar.downBorderColor')))
+  lodashSet(draft, 'candle.bar.borderNoChangeColor', utils.formatValue(draft, 'candle.bar.borderNoChangeColor', utils.formatValue(draft, 'candle.bar.noChangeBorderColor')))
+  lodashSet(draft, 'candle.bar.wickUpColor', utils.formatValue(draft, 'candle.bar.wickUpColor', utils.formatValue(draft, 'candle.bar.upWickColor')))
+  lodashSet(draft, 'candle.bar.wickDownColor', utils.formatValue(draft, 'candle.bar.wickDownColor', utils.formatValue(draft, 'candle.bar.downWickColor')))
+  lodashSet(draft, 'candle.bar.wickNoChangeColor', utils.formatValue(draft, 'candle.bar.wickNoChangeColor', utils.formatValue(draft, 'candle.bar.noChangeWickColor')))
   lodashSet(draft, chartBackgroundColorKey, backgroundColor)
 
   return draft
@@ -113,7 +119,13 @@ const getDefaultChartStyleValue = (
     'candle.bar.noChangeBorderColor': 'candle.bar.noChangeColor',
     'candle.bar.upWickColor': 'candle.bar.upColor',
     'candle.bar.downWickColor': 'candle.bar.downColor',
-    'candle.bar.noChangeWickColor': 'candle.bar.noChangeColor'
+    'candle.bar.noChangeWickColor': 'candle.bar.noChangeColor',
+    'candle.bar.borderUpColor': 'candle.bar.upBorderColor',
+    'candle.bar.borderDownColor': 'candle.bar.downBorderColor',
+    'candle.bar.borderNoChangeColor': 'candle.bar.noChangeBorderColor',
+    'candle.bar.wickUpColor': 'candle.bar.upWickColor',
+    'candle.bar.wickDownColor': 'candle.bar.downWickColor',
+    'candle.bar.wickNoChangeColor': 'candle.bar.noChangeWickColor'
   }
   const fallbackKey = fallbackByKey[key]
   if (fallbackKey) {
@@ -199,6 +211,16 @@ const SettingModal: Component<SettingModalProps> = props => {
   }
 
   const buildChartStyleUpdate = (source: Styles): ChartStyleUpdate => {
+    const upColor = utils.formatValue(source, 'candle.bar.upColor') as string
+    const downColor = utils.formatValue(source, 'candle.bar.downColor') as string
+    const noChangeColor = utils.formatValue(source, 'candle.bar.noChangeColor') as string
+    const upBorderColor = utils.formatValue(source, 'candle.bar.upBorderColor', upColor) as string
+    const downBorderColor = utils.formatValue(source, 'candle.bar.downBorderColor', downColor) as string
+    const noChangeBorderColor = utils.formatValue(source, 'candle.bar.noChangeBorderColor', noChangeColor) as string
+    const upWickColor = utils.formatValue(source, 'candle.bar.upWickColor', upColor) as string
+    const downWickColor = utils.formatValue(source, 'candle.bar.downWickColor', downColor) as string
+    const noChangeWickColor = utils.formatValue(source, 'candle.bar.noChangeWickColor', noChangeColor) as string
+
     return {
       chart: {
         backgroundColor: utils.formatValue(source, chartBackgroundColorKey, fallbackBackgroundColor) as string
@@ -206,15 +228,21 @@ const SettingModal: Component<SettingModalProps> = props => {
       candle: {
         type: utils.formatValue(source, 'candle.type') as any,
         bar: {
-          upColor: utils.formatValue(source, 'candle.bar.upColor') as string,
-          downColor: utils.formatValue(source, 'candle.bar.downColor') as string,
-          noChangeColor: utils.formatValue(source, 'candle.bar.noChangeColor') as string,
-          upBorderColor: utils.formatValue(source, 'candle.bar.upBorderColor', utils.formatValue(source, 'candle.bar.upColor')) as string,
-          downBorderColor: utils.formatValue(source, 'candle.bar.downBorderColor', utils.formatValue(source, 'candle.bar.downColor')) as string,
-          noChangeBorderColor: utils.formatValue(source, 'candle.bar.noChangeBorderColor', utils.formatValue(source, 'candle.bar.noChangeColor')) as string,
-          upWickColor: utils.formatValue(source, 'candle.bar.upWickColor', utils.formatValue(source, 'candle.bar.upColor')) as string,
-          downWickColor: utils.formatValue(source, 'candle.bar.downWickColor', utils.formatValue(source, 'candle.bar.downColor')) as string,
-          noChangeWickColor: utils.formatValue(source, 'candle.bar.noChangeWickColor', utils.formatValue(source, 'candle.bar.noChangeColor')) as string
+          upColor,
+          downColor,
+          noChangeColor,
+          upBorderColor,
+          downBorderColor,
+          noChangeBorderColor,
+          upWickColor,
+          downWickColor,
+          noChangeWickColor,
+          borderUpColor: upBorderColor,
+          borderDownColor: downBorderColor,
+          borderNoChangeColor: noChangeBorderColor,
+          wickUpColor: upWickColor,
+          wickDownColor: downWickColor,
+          wickNoChangeColor: noChangeWickColor
         } as any
       },
       grid: {
