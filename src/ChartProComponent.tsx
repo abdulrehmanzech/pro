@@ -120,6 +120,8 @@ type ChartStyleUpdate = DeepPartial<Styles> & {
   };
 };
 
+const CHART_STYLE_STORAGE_KEY = "klinecharts_pro_chart_style";
+const CHART_BACKGROUND_COLOR_STORAGE_KEY = "klinecharts_pro_chart_background_color";
 const TIME_ANCHOR_SETTINGS_STORAGE_KEY = "klinecharts_pro_time_anchor_settings";
 
 function createDefaultTimeAnchorSettings(): TimeAnchorSettings {
@@ -289,28 +291,70 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
   const [settingModalVisible, setSettingModalVisible] = createSignal(false);
   const [widgetDefaultStyles, setWidgetDefaultStyles] = createSignal<Styles>();
 
+  const getSavedChartStyle = (): ChartStyleUpdate | undefined => {
+    try {
+      const value = window.localStorage.getItem(CHART_STYLE_STORAGE_KEY);
+      if (!value) {
+        return undefined;
+      }
+      const parsed = JSON.parse(value);
+      return parsed && typeof parsed === "object" ? parsed as ChartStyleUpdate : undefined;
+    } catch (error) {
+      return undefined;
+    }
+  };
+
+  const saveChartStyle = (style: ChartStyleUpdate) => {
+    try {
+      window.localStorage.setItem(CHART_STYLE_STORAGE_KEY, JSON.stringify(style));
+      window.localStorage.removeItem(CHART_BACKGROUND_COLOR_STORAGE_KEY);
+    } catch (error) {}
+  };
+
+  const clearSavedChartStyle = () => {
+    try {
+      window.localStorage.removeItem(CHART_STYLE_STORAGE_KEY);
+      window.localStorage.removeItem(CHART_BACKGROUND_COLOR_STORAGE_KEY);
+    } catch (error) {}
+  };
+
+  const getSavedChartBackgroundColor = () => {
+    const savedChartStyle = getSavedChartStyle();
+    if (savedChartStyle?.chart?.backgroundColor) {
+      return savedChartStyle.chart.backgroundColor;
+    }
+    try {
+      return window.localStorage.getItem(CHART_BACKGROUND_COLOR_STORAGE_KEY) ?? undefined;
+    } catch (error) {
+      return undefined;
+    }
+  };
+
   const getDefaultChartBackgroundColor = () => {
     const root = contentRef?.closest(".klinecharts-pro") as HTMLElement | null;
-    return root
-      ? getComputedStyle(root)
-        .getPropertyValue("--klinecharts-pro-background-color")
-        .trim()
-      : undefined;
+    if (root) {
+      return getComputedStyle(root).backgroundColor || "#171a27";
+    }
+    return "#171a27";
   };
 
   const getChartBackgroundColor = () => {
     if (!widgetRef) {
-      return getDefaultChartBackgroundColor();
+      return getSavedChartBackgroundColor() ?? getDefaultChartBackgroundColor();
     }
     const chartBackgroundColor = getComputedStyle(widgetRef)
       .getPropertyValue("--klinecharts-pro-chart-background-color")
       .trim();
-    return chartBackgroundColor || getDefaultChartBackgroundColor();
+    return chartBackgroundColor || getSavedChartBackgroundColor() || getDefaultChartBackgroundColor();
   };
 
   const applyChartBackgroundColor = (style: ChartStyleUpdate) => {
     const backgroundColor = style.chart?.backgroundColor;
     if (!backgroundColor || !widgetRef) {
+      return;
+    }
+    if (backgroundColor.toLowerCase() === getDefaultChartBackgroundColor().toLowerCase()) {
+      widgetRef.style.removeProperty("--klinecharts-pro-chart-background-color");
       return;
     }
     widgetRef.style.setProperty("--klinecharts-pro-chart-background-color", backgroundColor);
@@ -3409,8 +3453,15 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     if (styles()) {
       syncExtendedCandleBarStyle(styles());
       widget?.setStyles(styles());
-      applyCandleTooltipStyles();
       setWidgetDefaultStyles(lodashClone(widget!.getStyles()));
+      const savedChartStyle = getSavedChartStyle();
+      if (savedChartStyle) {
+        applyChartBackgroundColor(savedChartStyle);
+        const savedKLineStyles = getKLineStyles(savedChartStyle);
+        syncExtendedCandleBarStyle(savedKLineStyles);
+        widget?.setStyles(savedKLineStyles);
+      }
+      applyCandleTooltipStyles();
     }
   });
 
@@ -3993,6 +4044,13 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
             widget?.setStyles(klineStyles);
             widget?.resize();
             applyCandleTooltipStyles();
+          }}
+          onSaveChartStyle={(style) => {
+            saveChartStyle(style);
+          }}
+          onResetChartStyle={() => {
+            clearSavedChartStyle();
+            widgetRef?.style.removeProperty("--klinecharts-pro-chart-background-color");
           }}
           onRestoreDefault={(options: SelectDataSourceItem[]) => {
             const style = {} as ChartStyleUpdate;

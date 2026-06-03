@@ -31,6 +31,8 @@ export interface SettingModalProps {
   defaultBackgroundColor?: string
   onClose: () => void
   onChange: (style: DeepPartial<Styles>) => void
+  onSaveChartStyle?: (style: ChartStyleUpdate) => void
+  onResetChartStyle?: () => void
   onRestoreDefault: (options: SelectDataSourceItem[]) => void
 }
 
@@ -39,7 +41,7 @@ type ChartStyleTab = 'symbol' | 'background'
 type ChartStyleUpdate = DeepPartial<Styles> & { chart?: { backgroundColor?: string } }
 
 const chartBackgroundColorKey = 'chart.backgroundColor'
-const fallbackBackgroundColor = '#0f1420'
+const fallbackBackgroundColor = '#171a27'
 
 const colorPalette = [
   '#f6465d', '#f59e0b', '#fcd535', '#2ebd85', '#4098a8', '#22c1dc', '#3861fb', '#7b3fe4',
@@ -210,10 +212,12 @@ const SettingModal: Component<SettingModalProps> = props => {
     const updateStyle = buildChartStyleUpdate(draftStyles())
     setStyles(utils.clone(draftStyles()))
     props.onChange(updateStyle)
+    props.onSaveChartStyle?.(updateStyle)
     props.onClose()
   }
 
   const resetChartStyle = () => {
+    props.onResetChartStyle?.()
     const defaultStyles = props.defaultStyles
     if (defaultStyles) {
       const nextDraft = utils.clone(draftStyles())
