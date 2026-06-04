@@ -222,6 +222,7 @@ export interface ChartPro {
 	getSettings(): ChartSettings;
 	setSettings(settings: Partial<ChartSettings>): void;
 	resetSettings(): void;
+	autoScalePriceAxis(): void;
 	saveDrawings?(ticker: string): void;
 	loadDrawings?(ticker: string): void;
 	getDrawings?(ticker: string): OverlayInfo[];
@@ -299,6 +300,7 @@ export declare class KLineChartPro implements ChartPro {
 	getSettings(): ChartSettings;
 	setSettings(settings: Partial<ChartSettings>): void;
 	resetSettings(): void;
+	autoScalePriceAxis(): void;
 	saveDrawings(ticker: string): void;
 	loadDrawings(ticker: string): void;
 	getDrawings(ticker: string): OverlayInfo[];
