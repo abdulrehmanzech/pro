@@ -290,6 +290,7 @@ export interface ChartPro {
   getSettings(): ChartSettings
   setSettings(settings: Partial<ChartSettings>): void
   resetSettings(): void
+  autoScalePriceAxis(): void
 
 
     // Drawing storage methods

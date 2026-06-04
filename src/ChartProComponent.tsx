@@ -1052,6 +1052,19 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     });
   };
 
+  const autoScaleChart = () => {
+    if (!widget) return;
+
+    const currentType = widget.getStyles().yAxis?.type ?? YAxisType.Normal;
+    widget.setStyles({
+      yAxis: {
+        type: currentType,
+      },
+    });
+    widget.setBarSpace?.(6);
+    widget.resize?.();
+    updateCountdownPriceMark();
+  };
   const updateCountdownPriceMark = (now = Date.now()) => {
     if (
       !widget ||
@@ -2076,6 +2089,10 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
         syncExtendedCandleBarStyle(resetStyles);
         widget.setStyles(resetStyles);
       }
+    },
+
+    autoScalePriceAxis: (): void => {
+      autoScaleChart();
     },
 
     // === Drawing Methods ===
@@ -3612,6 +3629,22 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
           setQuickOrderInteracting(false);
         }}
       >
+        <button
+          type="button"
+          class="klinecharts-pro-auto-scale-button"
+          title="Auto Scale (automatically candles resizing)"
+          onMouseDown={(event) => {
+            event.preventDefault();
+            event.stopPropagation();
+          }}
+          onClick={(event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            autoScaleChart();
+          }}
+        >
+          auto
+        </button>
         <Show when={loadingVisible()}>
           <Loading />
         </Show>

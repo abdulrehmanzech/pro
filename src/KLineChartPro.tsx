@@ -253,6 +253,10 @@ export default class KLineChartPro implements ChartPro {
     this._chartApi!.resetSettings();
   }
 
+  autoScalePriceAxis(): void {
+    this._chartApi?.autoScalePriceAxis?.();
+  }
+
   saveDrawings(ticker: string): void {
     this._chartApi?.saveDrawings?.(ticker);
   }

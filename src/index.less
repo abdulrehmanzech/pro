@@ -94,6 +94,34 @@
       width: 100%;
     }
   }
+  &-auto-scale-button {
+    position: absolute;
+    right: 8px;
+    bottom: 6px;
+    z-index: 29;
+    min-width: 36px;
+    height: 28px;
+    padding: 0 8px;
+    border: 1px solid rgba(148, 163, 184, 0.28);
+    border-radius: 4px;
+    color: #f4f7fb;
+    background: rgba(45, 45, 45, 0.94);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.32);
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+    text-transform: lowercase;
+    cursor: pointer;
+    pointer-events: auto;
+    user-select: none;
+  }
+  &-auto-scale-button:hover {
+    background: rgba(62, 62, 62, 0.98);
+    border-color: rgba(203, 213, 225, 0.4);
+  }
+  &-auto-scale-button:active {
+    transform: translateY(1px);
+  }
   &-quick-order-marker {
     position: absolute;
     z-index: 30;
