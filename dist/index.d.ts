@@ -173,6 +173,10 @@ export interface ChartConvertFinder {
 	paneId?: string;
 	absolute?: boolean;
 }
+export interface AutoPriceRange {
+	minPrice: number;
+	maxPrice: number;
+}
 export interface OverlayInfo {
 	id: string;
 	name?: string;
@@ -223,6 +227,11 @@ export interface ChartPro {
 	setSettings(settings: Partial<ChartSettings>): void;
 	resetSettings(): void;
 	autoScalePriceAxis(): void;
+	setAutoScaleEnabled(enabled: boolean): void;
+	getAutoScaleEnabled(): boolean;
+	getCurrentPriceRange(): AutoPriceRange | null;
+	getManualPriceRange(): AutoPriceRange | null;
+	setAutoScalePriceLines(source: string, prices?: number[]): void;
 	saveDrawings?(ticker: string): void;
 	loadDrawings?(ticker: string): void;
 	getDrawings?(ticker: string): OverlayInfo[];
@@ -301,6 +310,11 @@ export declare class KLineChartPro implements ChartPro {
 	setSettings(settings: Partial<ChartSettings>): void;
 	resetSettings(): void;
 	autoScalePriceAxis(): void;
+	setAutoScaleEnabled(enabled: boolean): void;
+	getAutoScaleEnabled(): boolean;
+	getCurrentPriceRange(): AutoPriceRange | null;
+	getManualPriceRange(): AutoPriceRange | null;
+	setAutoScalePriceLines(source: string, prices?: number[]): void;
 	saveDrawings(ticker: string): void;
 	loadDrawings(ticker: string): void;
 	getDrawings(ticker: string): OverlayInfo[];
@@ -348,6 +362,18 @@ export declare class KLineChartPro implements ChartPro {
 	subscribeAction(type: ActionType, callback: ActionCallback): void;
 	unsubscribeAction(type: ActionType, callback?: ActionCallback): void;
 }
+export interface AutoPriceRange {
+	minPrice: number;
+	maxPrice: number;
+}
+export interface AutoPriceRangeInput {
+	visibleCandles?: Array<Partial<Pick<KLineData, "high" | "low" | "open" | "close">>>;
+	visibleIndicators?: Array<unknown>;
+	visiblePriceLines?: Array<unknown>;
+	latestPrice?: unknown;
+	paddingPercent?: number;
+}
+export declare function calculateAutoPriceRange({ visibleCandles, visibleIndicators, visiblePriceLines, latestPrice, paddingPercent, }: AutoPriceRangeInput): AutoPriceRange | null;
 declare function load(key: string, ls: any): void;
 
 export {
