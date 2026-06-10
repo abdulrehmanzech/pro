@@ -230,6 +230,11 @@ export interface ChartConvertFinder {
   absolute?: boolean;
 }
 
+export interface AutoPriceRange {
+  minPrice: number;
+  maxPrice: number;
+}
+
 // Use OverlayCreate directly or create a compatible type
 export type OverlayOptions = OverlayCreate;
 
@@ -291,6 +296,11 @@ export interface ChartPro {
   setSettings(settings: Partial<ChartSettings>): void
   resetSettings(): void
   autoScalePriceAxis(): void
+  setAutoScaleEnabled(enabled: boolean): void
+  getAutoScaleEnabled(): boolean
+  getCurrentPriceRange(): AutoPriceRange | null
+  getManualPriceRange(): AutoPriceRange | null
+  setAutoScalePriceLines(source: string, prices?: number[]): void
 
 
     // Drawing storage methods

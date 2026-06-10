@@ -77,6 +77,10 @@ import type {
   TimeAnchorSettings,
   TimeRangeValue,
 } from "./widget/time-tools-modal";
+import {
+  calculateAutoPriceRange,
+  type AutoPriceRange,
+} from "./utils/autoScale";
 
 import { translateTimezone } from "./widget/timezone-modal/data";
 
@@ -124,6 +128,17 @@ type ChartStyleUpdate = DeepPartial<Styles> & {
 const CHART_STYLE_STORAGE_KEY = "klinecharts_pro_chart_style";
 const CHART_BACKGROUND_COLOR_STORAGE_KEY = "klinecharts_pro_chart_background_color";
 const TIME_ANCHOR_SETTINGS_STORAGE_KEY = "klinecharts_pro_time_anchor_settings";
+const CANDLE_PANE_ID = "candle_pane";
+const AUTO_SCALE_PADDING_PERCENT = 0.08;
+const AUTO_SCALE_THROTTLE_MS = 80;
+const AUTO_SCALE_APPLY_EPSILON = 0.002;
+const AUTO_SCALE_PRICE_LINE_OVERLAY_TYPES = new Set([
+  "horizontalRayLine",
+  "horizontalSegment",
+  "horizontalStraightLine",
+  "orderLine",
+  "priceLine",
+]);
 
 function createDefaultTimeAnchorSettings(): TimeAnchorSettings {
   return {
@@ -537,6 +552,16 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       calcParams: [] as Array<any>,
     });
   let overlayTracker = new Map<string, OverlayInfo>();
+  let externalAutoScalePriceLines = new Map<string, number[]>();
+  let autoScaleTimer: number | undefined;
+  let autoScaleFrame: number | undefined;
+  let lastAppliedAutoRange: AutoPriceRange | null = null;
+  let cleanupYAxisManualScaleDetection: (() => void) | undefined;
+  const [isAutoScaleEnabled, setIsAutoScaleEnabled] = createSignal(true);
+  const [manualPriceRange, setManualPriceRange] =
+    createSignal<AutoPriceRange | null>(null);
+  const [currentPriceRange, setCurrentPriceRange] =
+    createSignal<AutoPriceRange | null>(null);
 
   // Track drawing states for each overlay
   let drawingStates = new Map<
@@ -595,6 +620,283 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       };
       props.onIndicatorChange({ action, indicator });
     }
+  };
+
+  const getCandlePane = (): any => (widget as any)?.getPaneById?.(CANDLE_PANE_ID);
+
+  const getCandleYAxis = (): any => getCandlePane()?.getAxisComponent?.();
+
+  const getCurrentPriceRange = (): AutoPriceRange | null => {
+    const extremum = getCandleYAxis()?.getExtremum?.();
+    const minPrice = Number(extremum?.min);
+    const maxPrice = Number(extremum?.max);
+    if (!Number.isFinite(minPrice) || !Number.isFinite(maxPrice)) {
+      return null;
+    }
+    return { minPrice, maxPrice };
+  };
+
+  const getVisibleIndexBounds = () => {
+    const dataList = widget?.getDataList?.() ?? [];
+    if (dataList.length === 0) {
+      return null;
+    }
+    const visibleRange = widget?.getVisibleRange?.();
+    const rawFrom = Number(visibleRange?.from);
+    const rawTo = Number(visibleRange?.to);
+    if (!Number.isFinite(rawFrom) || !Number.isFinite(rawTo)) {
+      return { from: 0, to: dataList.length - 1, dataList };
+    }
+    const lower = Math.min(rawFrom, rawTo);
+    const upper = Math.max(rawFrom, rawTo);
+    return {
+      from: Math.max(0, Math.floor(lower)),
+      to: Math.min(dataList.length - 1, Math.ceil(upper)),
+      dataList,
+    };
+  };
+
+  const collectVisibleCandles = () => {
+    const bounds = getVisibleIndexBounds();
+    if (!bounds) {
+      return [];
+    }
+    return bounds.dataList.slice(bounds.from, bounds.to + 1);
+  };
+
+  const collectVisibleMainIndicatorValues = (): unknown[] => {
+    const bounds = getVisibleIndexBounds();
+    if (!bounds || !widget?.getIndicatorByPaneId) {
+      return [];
+    }
+    const rawIndicators = widget.getIndicatorByPaneId(CANDLE_PANE_ID) as any;
+    const indicators =
+      rawIndicators instanceof Map
+        ? Array.from(rawIndicators.values())
+        : rawIndicators
+          ? [rawIndicators]
+          : [];
+    const values: unknown[] = [];
+    indicators.forEach((indicator: any) => {
+      if (!indicator || indicator.visible === false || indicator.name === "VOL" || indicator.series === "volume") {
+        return;
+      }
+      const figures = Array.isArray(indicator.figures) ? indicator.figures : [];
+      const result = Array.isArray(indicator.result) ? indicator.result : [];
+      for (let index = bounds.from; index <= bounds.to; index += 1) {
+        const indicatorData = result[index];
+        if (!indicatorData) {
+          continue;
+        }
+        figures.forEach((figure: any) => {
+          if (figure?.key != null) {
+            values.push(indicatorData[figure.key]);
+          }
+        });
+      }
+    });
+    return values;
+  };
+
+  const collectOverlayPriceLines = (): number[] => {
+    const prices: number[] = [];
+    const includeOverlay = (overlay?: OverlayInfo | null) => {
+      if (!overlay || overlay.visible === false) {
+        return;
+      }
+      const type = overlay.type || overlay.name || "";
+      if (!AUTO_SCALE_PRICE_LINE_OVERLAY_TYPES.has(type)) {
+        return;
+      }
+      overlay.points?.forEach((point) => {
+        const value = Number(point.value);
+        if (Number.isFinite(value) && value > 0) {
+          prices.push(value);
+        }
+      });
+    };
+
+    overlayTracker.forEach(includeOverlay);
+    const previewId = orderPreviewOverlayId();
+    if (previewId) {
+      includeOverlay(extractOverlayData(widget?.getOverlayById?.(previewId)));
+    }
+    externalAutoScalePriceLines.forEach((sourcePrices) => {
+      sourcePrices.forEach((price) => {
+        if (Number.isFinite(price) && price > 0) {
+          prices.push(price);
+        }
+      });
+    });
+    return prices;
+  };
+
+  const getLatestVisiblePrice = (): number | undefined => {
+    const lastPriceMark = widget?.getStyles?.()?.candle?.priceMark?.last;
+    if (!lastPriceMark?.show && !lastPriceMark?.line?.show && !orderToolsState().marketPriceLine) {
+      return undefined;
+    }
+    const dataList = widget?.getDataList?.() ?? [];
+    const latest = dataList[dataList.length - 1] as KLineData | undefined;
+    const price = Number(latest?.close);
+    return Number.isFinite(price) && price > 0 ? price : undefined;
+  };
+
+  const calculateCurrentAutoPriceRange = (): AutoPriceRange | null =>
+    calculateAutoPriceRange({
+      visibleCandles: collectVisibleCandles(),
+      visibleIndicators: collectVisibleMainIndicatorValues(),
+      visiblePriceLines: collectOverlayPriceLines(),
+      latestPrice: getLatestVisiblePrice(),
+      paddingPercent: AUTO_SCALE_PADDING_PERCENT,
+    });
+
+  const rangesClose = (a: AutoPriceRange, b: AutoPriceRange): boolean => {
+    const baseRange = Math.max(Math.abs(b.maxPrice - b.minPrice), 1);
+    return (
+      Math.abs(a.minPrice - b.minPrice) <= baseRange * AUTO_SCALE_APPLY_EPSILON &&
+      Math.abs(a.maxPrice - b.maxPrice) <= baseRange * AUTO_SCALE_APPLY_EPSILON
+    );
+  };
+
+  const applyPriceRangeToAxis = (range: AutoPriceRange, keepAutoEnabled: boolean): void => {
+    const yAxis = getCandleYAxis();
+    if (!widget || !yAxis?.setExtremum) {
+      return;
+    }
+    const minPrice = range.minPrice;
+    const maxPrice = range.maxPrice;
+    const realMin = yAxis.convertToRealValue?.(minPrice) ?? minPrice;
+    const realMax = yAxis.convertToRealValue?.(maxPrice) ?? maxPrice;
+    yAxis.setExtremum({
+      min: minPrice,
+      max: maxPrice,
+      range: maxPrice - minPrice,
+      realMin,
+      realMax,
+      realRange: realMax - realMin,
+    });
+    (widget as any).adjustPaneViewport?.(false, true, true, true);
+    if (keepAutoEnabled) {
+      yAxis.setAutoCalcTickFlag?.(true);
+    }
+    setCurrentPriceRange(range);
+  };
+
+  const applyAutoScaleRange = (force = false): void => {
+    if (!widget || !isAutoScaleEnabled()) {
+      return;
+    }
+    const nextRange = calculateCurrentAutoPriceRange();
+    if (!nextRange) {
+      getCandleYAxis()?.setAutoCalcTickFlag?.(true);
+      widget.resize?.();
+      lastAppliedAutoRange = null;
+      return;
+    }
+    if (!force && lastAppliedAutoRange && rangesClose(nextRange, lastAppliedAutoRange)) {
+      return;
+    }
+    applyPriceRangeToAxis(nextRange, true);
+    lastAppliedAutoRange = nextRange;
+    updateCountdownPriceMark();
+  };
+
+  const scheduleAutoScaleRange = (force = false): void => {
+    if (!isAutoScaleEnabled() || typeof window === "undefined") {
+      return;
+    }
+    if (autoScaleTimer) {
+      window.clearTimeout(autoScaleTimer);
+    }
+    autoScaleTimer = window.setTimeout(() => {
+      autoScaleTimer = undefined;
+      if (autoScaleFrame) {
+        window.cancelAnimationFrame(autoScaleFrame);
+      }
+      autoScaleFrame = window.requestAnimationFrame(() => {
+        autoScaleFrame = undefined;
+        applyAutoScaleRange(force);
+      });
+    }, force ? 0 : AUTO_SCALE_THROTTLE_MS);
+  };
+
+  const enableAutoScale = (): void => {
+    setManualPriceRange(null);
+    setIsAutoScaleEnabled(true);
+    getCandleYAxis()?.setAutoCalcTickFlag?.(true);
+    scheduleAutoScaleRange(true);
+  };
+
+  const disableAutoScale = (): void => {
+    const range = getCurrentPriceRange();
+    if (range) {
+      setManualPriceRange(range);
+      applyPriceRangeToAxis(range, false);
+    }
+    setIsAutoScaleEnabled(false);
+  };
+
+  const toggleAutoScale = (): void => {
+    if (isAutoScaleEnabled()) {
+      disableAutoScale();
+    } else {
+      enableAutoScale();
+    }
+  };
+
+  const setupYAxisManualScaleDetection = (): (() => void) | undefined => {
+    const yAxisDom = widget?.getDom?.(CANDLE_PANE_ID, DomPosition.YAxis);
+    if (!yAxisDom || typeof window === "undefined") {
+      return undefined;
+    }
+
+    let pointerDown = false;
+    let startY = 0;
+
+    const endDrag = () => {
+      pointerDown = false;
+    };
+    const startDrag = (event: MouseEvent | TouchEvent) => {
+      pointerDown = true;
+      startY =
+        "touches" in event
+          ? event.touches[0]?.clientY ?? 0
+          : event.clientY;
+    };
+    const moveDrag = (event: MouseEvent | TouchEvent) => {
+      if (!pointerDown || !isAutoScaleEnabled()) {
+        return;
+      }
+      const clientY =
+        "touches" in event
+          ? event.touches[0]?.clientY ?? startY
+          : event.clientY;
+      if (Math.abs(clientY - startY) > 2) {
+        disableAutoScale();
+      }
+    };
+    const doubleClick = () => {
+      window.setTimeout(() => enableAutoScale(), 0);
+    };
+
+    yAxisDom.addEventListener("mousedown", startDrag);
+    yAxisDom.addEventListener("touchstart", startDrag, { passive: true });
+    yAxisDom.addEventListener("dblclick", doubleClick);
+    document.addEventListener("mousemove", moveDrag);
+    document.addEventListener("touchmove", moveDrag, { passive: true });
+    document.addEventListener("mouseup", endDrag);
+    document.addEventListener("touchend", endDrag);
+
+    return () => {
+      yAxisDom.removeEventListener("mousedown", startDrag);
+      yAxisDom.removeEventListener("touchstart", startDrag);
+      yAxisDom.removeEventListener("dblclick", doubleClick);
+      document.removeEventListener("mousemove", moveDrag);
+      document.removeEventListener("touchmove", moveDrag);
+      document.removeEventListener("mouseup", endDrag);
+      document.removeEventListener("touchend", endDrag);
+    };
   };
 
   // Helper function to get required points for each overlay type
@@ -1053,17 +1355,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
   };
 
   const autoScaleChart = () => {
-    if (!widget) return;
-
-    const currentType = widget.getStyles().yAxis?.type ?? YAxisType.Normal;
-    widget.setStyles({
-      yAxis: {
-        type: currentType,
-      },
-    });
-    widget.setBarSpace?.(6);
-    widget.resize?.();
-    updateCountdownPriceMark();
+    enableAutoScale();
   };
   const updateCountdownPriceMark = (now = Date.now()) => {
     if (
@@ -1708,6 +2000,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
         },
       },
     });
+    scheduleAutoScaleRange(true);
     updateCountdownPriceMark();
   });
 
@@ -1738,10 +2031,14 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       paneId: string
     ) => {
       widget?.overrideIndicator(config, paneId);
+      scheduleAutoScaleRange(true);
     },
     createOverlay: (overlay: OverlayCreate): string | null => {
       const result = widget?.createOverlay?.(withOverlayToolbarEvents(overlay));
-      if (typeof result === "string") return result;
+      if (typeof result === "string") {
+        scheduleAutoScaleRange(true);
+        return result;
+      }
       return null;
     },
 
@@ -1766,6 +2063,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
         // âœ… **Auto-sync to storage**
         syncDrawingsToStorage();
       }
+      scheduleAutoScaleRange(true);
     },
 
     removeAllOverlay: (): void => {
@@ -1788,6 +2086,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
 
       overlayTracker.clear();
       drawingStates.clear();
+      scheduleAutoScaleRange(true);
     },
 
     getAllOverlay: (): OverlayInfo[] => {
@@ -1805,6 +2104,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
         typeof widget.overrideOverlay === "function"
       ) {
         widget.overrideOverlay(options);
+        scheduleAutoScaleRange(true);
       } else {
         console.warn("overrideOverlay method not available on widget");
       }
@@ -2094,6 +2394,26 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     autoScalePriceAxis: (): void => {
       autoScaleChart();
     },
+    setAutoScaleEnabled: (enabled: boolean): void => {
+      if (enabled) {
+        enableAutoScale();
+      } else {
+        disableAutoScale();
+      }
+    },
+    getAutoScaleEnabled: (): boolean => isAutoScaleEnabled(),
+    getCurrentPriceRange: (): AutoPriceRange | null => currentPriceRange() ?? getCurrentPriceRange(),
+    getManualPriceRange: (): AutoPriceRange | null => manualPriceRange(),
+    setAutoScalePriceLines: (source: string, prices: number[] = []): void => {
+      const key = `${source || "default"}`;
+      const normalized = prices.filter((price) => Number.isFinite(price) && price > 0);
+      if (normalized.length > 0) {
+        externalAutoScalePriceLines.set(key, normalized);
+      } else {
+        externalAutoScalePriceLines.delete(key);
+      }
+      scheduleAutoScaleRange(true);
+    },
 
     // === Drawing Methods ===
     saveDrawings: (ticker: string) => {
@@ -2188,6 +2508,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
 
   const documentResize = () => {
     widget?.resize();
+    scheduleAutoScaleRange(true);
     updateCountdownPriceMark();
     updateTimeNavigationTooltip();
     syncTimeAnchorLine();
@@ -2226,6 +2547,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
   };
 
   const handleCountdownPriceMarkUpdate: ActionCallback = () => {
+    scheduleAutoScaleRange();
     updateCountdownPriceMark();
     updateTimeNavigationTooltip();
     syncTimeAnchorLine();
@@ -2821,6 +3143,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
         kLineDataList,
         kLineDataList.length > 0,
       );
+      scheduleAutoScaleRange(true);
       setTimeToolsRange(requestRange);
       requestAnimationFrame(() => {
         const rangeEndIndex = resolveRangeEndDataIndex(
@@ -2957,6 +3280,8 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       priceUnitDom = document.createElement("span");
       priceUnitDom.className = "klinecharts-pro-price-unit";
       priceUnitContainer?.appendChild(priceUnitDom);
+      cleanupYAxisManualScaleDetection = setupYAxisManualScaleDetection();
+      scheduleAutoScaleRange(true);
     }
 
 
@@ -3045,6 +3370,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
         
         // Auto-refresh local storage
         refreshLocalStorageForCurrentDrawings();
+        scheduleAutoScaleRange(true);
       }
 
       return result;
@@ -3089,7 +3415,8 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
             from,
             to
           );
-          widget?.applyMoreData(kLineDataList, kLineDataList.length > 0);
+        widget?.applyMoreData(kLineDataList, kLineDataList.length > 0);
+        scheduleAutoScaleRange(true);
         } finally {
           setIsLoading(false);
         }
@@ -3104,6 +3431,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
               { name: data.indicatorName, visible: true },
               data.paneId
             );
+            scheduleAutoScaleRange(true);
             const type = data.paneId === "candle_pane" ? "main" : "sub";
             emitIndicatorEvent(data.indicatorName, data.paneId, type, "change");
             break;
@@ -3113,6 +3441,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
               { name: data.indicatorName, visible: false },
               data.paneId
             );
+            scheduleAutoScaleRange(true);
             const type = data.paneId === "candle_pane" ? "main" : "sub";
             emitIndicatorEvent(data.indicatorName, data.paneId, type, "change");
             break;
@@ -3134,6 +3463,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
             if (data.paneId === "candle_pane") {
               const newMainIndicators = [...mainIndicators()];
               widget?.removeIndicator("candle_pane", data.indicatorName);
+              scheduleAutoScaleRange(true);
               newMainIndicators.splice(
                 newMainIndicators.indexOf(data.indicatorName),
                 1
@@ -3143,6 +3473,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
             } else {
               const newIndicators = { ...subIndicators() };
               widget?.removeIndicator(data.paneId, data.indicatorName);
+              scheduleAutoScaleRange(true);
               // @ts-expect-error
               delete newIndicators[data.indicatorName];
               setSubIndicators(newIndicators);
@@ -3182,6 +3513,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
           // Also update tracking immediately
           updateOverlayTracking(overlayId);
           syncDrawingsToStorage();
+          scheduleAutoScaleRange(true);
 
         }
 
@@ -3257,6 +3589,16 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       window.clearTimeout(timeNavigationTooltipRetryTimer);
       timeNavigationTooltipRetryTimer = undefined;
     }
+    if (autoScaleTimer) {
+      window.clearTimeout(autoScaleTimer);
+      autoScaleTimer = undefined;
+    }
+    if (autoScaleFrame) {
+      window.cancelAnimationFrame(autoScaleFrame);
+      autoScaleFrame = undefined;
+    }
+    cleanupYAxisManualScaleDetection?.();
+    cleanupYAxisManualScaleDetection = undefined;
     document.removeEventListener("mousedown", handleQuickOrderDocumentPointerDown);
 
     // Cleanup all monitoring intervals
@@ -3420,6 +3762,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
         if (!isCurrent) return;
         
         widget?.applyNewData(kLineDataList, kLineDataList.length > 0);
+        scheduleAutoScaleRange(true);
         if (shouldUseAnchor) {
           requestAnimationFrame(() => {
             scrollToAnchorPosition(anchor);
@@ -3437,6 +3780,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
         }, 0);
         props.datafeed.subscribe(s, p, (data) => {
           widget?.updateData(data);
+          scheduleAutoScaleRange();
           updateCountdownPriceMark();
         });
       } finally {
@@ -3631,8 +3975,10 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       >
         <button
           type="button"
-          class="klinecharts-pro-auto-scale-button"
-          title="Auto Scale (automatically candles resizing)"
+          class={`klinecharts-pro-auto-scale-button${isAutoScaleEnabled() ? " active" : ""}`}
+          data-active={isAutoScaleEnabled()}
+          aria-pressed={isAutoScaleEnabled()}
+          title={isAutoScaleEnabled() ? "Auto scale on" : "Auto scale off"}
           onMouseDown={(event) => {
             event.preventDefault();
             event.stopPropagation();
@@ -3640,7 +3986,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
           onClick={(event) => {
             event.preventDefault();
             event.stopPropagation();
-            autoScaleChart();
+            toggleAutoScale();
           }}
         >
           auto
@@ -4110,6 +4456,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
               emitIndicatorEvent(data.name, "candle_pane", "main", "remove");
             }
             setMainIndicators(newMainIndicators);
+            scheduleAutoScaleRange(true);
           }}
           onSubIndicatorChange={(data) => {
             const newSubIndicators = { ...subIndicators() };
@@ -4129,6 +4476,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
               }
             }
             setSubIndicators(newSubIndicators);
+            scheduleAutoScaleRange(true);
           }}
         />
       </Show>
@@ -4233,6 +4581,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
               { name: modalParams.indicatorName, calcParams: params },
               modalParams.paneId
             );
+            scheduleAutoScaleRange(true);
             const type = modalParams.paneId === "candle_pane" ? "main" : "sub";
             emitIndicatorEvent(
               modalParams.indicatorName,

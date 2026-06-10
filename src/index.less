@@ -119,6 +119,12 @@
     background: rgba(62, 62, 62, 0.98);
     border-color: rgba(203, 213, 225, 0.4);
   }
+  &-auto-scale-button.active,
+  &-auto-scale-button[data-active="true"] {
+    color: #ffffff;
+    border-color: color-mix(in srgb, var(--klinecharts-pro-primary-color) 72%, #ffffff);
+    background: color-mix(in srgb, var(--klinecharts-pro-primary-color) 34%, rgba(45, 45, 45, 0.94));
+  }
   &-auto-scale-button:active {
     transform: translateY(1px);
   }

@@ -18,6 +18,7 @@ import overlays from './extension'
 
 import DefaultDatafeed from './DefaultDatafeed'
 import KLineChartPro from './KLineChartPro'
+import { calculateAutoPriceRange } from './utils/autoScale'
 
 import { load } from './i18n'
 
@@ -30,9 +31,15 @@ overlays.forEach(o => { registerOverlay(o) })
 export {
   DefaultDatafeed,
   KLineChartPro,
-  load as loadLocales
+  load as loadLocales,
+  calculateAutoPriceRange
 }
 
 export type {
   Datafeed, SymbolInfo, Period, DatafeedSubscribeCallback, ChartProOptions, ChartPro
 }
+
+export type {
+  AutoPriceRange,
+  AutoPriceRangeInput
+} from './utils/autoScale'

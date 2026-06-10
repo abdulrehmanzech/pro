@@ -39,6 +39,7 @@ import {
   OverlayInfo,
   ChartSettings,
   OrderPreviewLineOptions,
+  AutoPriceRange,
 } from "./types";
 
 const Logo = (
@@ -255,6 +256,26 @@ export default class KLineChartPro implements ChartPro {
 
   autoScalePriceAxis(): void {
     this._chartApi?.autoScalePriceAxis?.();
+  }
+
+  setAutoScaleEnabled(enabled: boolean): void {
+    this._chartApi?.setAutoScaleEnabled?.(enabled);
+  }
+
+  getAutoScaleEnabled(): boolean {
+    return this._chartApi?.getAutoScaleEnabled?.() ?? true;
+  }
+
+  getCurrentPriceRange(): AutoPriceRange | null {
+    return this._chartApi?.getCurrentPriceRange?.() ?? null;
+  }
+
+  getManualPriceRange(): AutoPriceRange | null {
+    return this._chartApi?.getManualPriceRange?.() ?? null;
+  }
+
+  setAutoScalePriceLines(source: string, prices: number[] = []): void {
+    this._chartApi?.setAutoScalePriceLines?.(source, prices);
   }
 
   saveDrawings(ticker: string): void {
