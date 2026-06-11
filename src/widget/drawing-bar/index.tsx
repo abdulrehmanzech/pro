@@ -51,6 +51,10 @@ const DrawingBar: Component<DrawingBarProps> = props => {
 
   const [popoverKey, setPopoverKey] = createSignal('')
 
+  const togglePopover = (key: string) => {
+    setPopoverKey(currentKey => currentKey === key ? '' : key)
+  }
+
   const overlays = createMemo(() => {
     return [
       { key: 'singleLine', icon: singleLineIcon(), list: createSingleLineOptions(props.locale), setter: setSingleLineIcon },
@@ -71,21 +75,14 @@ const DrawingBar: Component<DrawingBarProps> = props => {
           <div
             class="item"
             tabIndex={0}
+            onClick={() => { togglePopover(item.key) }}
             onBlur={() => { setPopoverKey('') }}>
             <span
-              style="width:32px;height:32px"
-              onClick={() => { props.onDrawingItemClick({ groupId: GROUP_ID, name: item.icon, visible: visible(), lock: lock(), mode: mode() as OverlayMode }) }}>
+              style="width:32px;height:32px">
               <Icon name={item.icon} />
             </span>
             <div
-              class="icon-arrow"
-              onClick={() => {
-                if (item.key === popoverKey()) {
-                  setPopoverKey('')
-                } else {
-                  setPopoverKey(item.key)
-                }
-              }}>
+              class="icon-arrow">
               <svg
                 class={item.key === popoverKey() ? 'rotate' : ''}
                 viewBox="0 0 4 6">
@@ -98,7 +95,8 @@ const DrawingBar: Component<DrawingBarProps> = props => {
                   {
                     item.list.map(data => (
                       <li
-                        onClick={() => {
+                        onClick={(event) => {
+                          event.stopPropagation()
                           item.setter(data.key)
                           props.onDrawingItemClick({ name: data.key, lock: lock(), mode: mode() as OverlayMode })
                           setPopoverKey('')
@@ -118,17 +116,10 @@ const DrawingBar: Component<DrawingBarProps> = props => {
       <div
         class="item"
         tabIndex={0}
+        onClick={() => { togglePopover('mode') }}
         onBlur={() => { setPopoverKey('') }}>
         <span
-          style="width:32px;height:32px"
-          onClick={() => {
-            let currentMode = modeIcon()
-            if (mode() !== 'normal') {
-              currentMode = 'normal'
-            }
-            setMode(currentMode)
-            props.onModeChange(currentMode)
-          }}>
+          style="width:32px;height:32px">
           {
             modeIcon() === 'weak_magnet'
               ? (mode() === 'weak_magnet' ? <Icon name="weak_magnet" class="selected"/> : <Icon name="weak_magnet"/>) 
@@ -136,14 +127,7 @@ const DrawingBar: Component<DrawingBarProps> = props => {
           }
         </span>
         <div
-          class="icon-arrow"
-          onClick={() => {
-            if (popoverKey() === 'mode') {
-              setPopoverKey('')
-            } else {
-              setPopoverKey('mode')
-            }
-          }}>
+          class="icon-arrow">
           <svg
             class={popoverKey() === 'mode' ? 'rotate' : ''}
             viewBox="0 0 4 6">
@@ -156,7 +140,8 @@ const DrawingBar: Component<DrawingBarProps> = props => {
               {
                 modes().map(data => (
                   <li
-                    onClick={() => {
+                    onClick={(event) => {
+                      event.stopPropagation()
                       setModeIcon(data.key)
                       setMode(data.key)
                       props.onModeChange(data.key)
