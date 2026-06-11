@@ -24,6 +24,7 @@ import {
 import { Portal } from "solid-js/web";
 
 import { SymbolInfo, Period, OrderToolsState } from "../../types";
+import { Switch } from "../../component";
 
 import i18n from "../../i18n";
 
@@ -678,17 +679,12 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
                           <span class="klinecharts-pro-order-tools-label">
                             Extended Price Line
                           </span>
-                          <button
-                            type="button"
-                            class={`klinecharts-pro-order-tools-switch${
+                          <Switch
+                            open={
                               props.orderToolsState?.openOrdersExtendedPriceLine ??
                               true
-                                ? " klinecharts-pro-order-tools-switch-on"
-                                : ""
-                            }`}
-                            onClick={(event) => {
-                              event.preventDefault();
-                              event.stopPropagation();
+                            }
+                            onChange={() => {
                               props.onOrderToolsStateChange?.({
                                 openOrdersExtendedPriceLine: !(
                                   props.orderToolsState?.openOrdersExtendedPriceLine ??
@@ -696,9 +692,7 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
                                 ),
                               });
                             }}
-                          >
-                            <span />
-                          </button>
+                          />
                         </div>
                         <div class="klinecharts-pro-order-tools-setting-row">
                           <span class="klinecharts-pro-order-tools-label">Display</span>
