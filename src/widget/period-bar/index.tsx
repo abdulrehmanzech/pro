@@ -463,6 +463,7 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
           style={{
             display: "flex",
             gap: "4px",
+            height: "100%",
             "margin-left": "auto",
             "align-items": "center",
             flex: "0 0 auto",
