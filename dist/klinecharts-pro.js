@@ -2705,7 +2705,7 @@ const d = (e, t) => {
   }, [J, se] = T(!1), [M, j] = T(!1), Q = () => {
     if (!r)
       return;
-    const O = r.getBoundingClientRect(), I = Math.max(220, Math.ceil(O.width)), ye = window.innerWidth, $e = Math.min(Math.max(8, O.right - I), Math.max(8, ye - I - 8));
+    const O = r.getBoundingClientRect(), I = Math.max(220, Math.ceil(O.width)), ge = window.innerWidth, $e = Math.min(Math.max(8, O.right - I), Math.max(8, ge - I - 8));
     Z({
       top: Math.ceil(O.bottom + 8),
       left: Math.ceil($e),
@@ -2742,12 +2742,12 @@ const d = (e, t) => {
     const O = e.periods.filter((I) => {
       if (!a() || G())
         return !0;
-      const ye = e.period.text, $e = f();
-      if (I.text === ye || $e && I.text === $e)
+      const ge = e.period.text, $e = f();
+      if (I.text === ge || $e && I.text === $e)
         return !0;
-      if (!$e || $e === ye) {
-        const ge = e.periods.find((We) => We.text !== ye);
-        return I.text === (ge == null ? void 0 : ge.text);
+      if (!$e || $e === ge) {
+        const ye = e.periods.find((We) => We.text !== ge);
+        return I.text === (ye == null ? void 0 : ye.text);
       }
       return !1;
     }).slice(0, a() && !G() ? 2 : e.periods.length);
@@ -2766,7 +2766,7 @@ const d = (e, t) => {
     }
     v() && queueMicrotask(Q);
   }), (() => {
-    const O = Af.cloneNode(!0), I = O.firstChild, ye = I.firstChild, $e = ye.firstChild, ge = ye.nextSibling, We = ge.firstChild;
+    const O = Af.cloneNode(!0), I = O.firstChild, ge = I.firstChild, $e = ge.firstChild, ye = ge.nextSibling, We = ye.firstChild;
     return O.style.setProperty("position", "relative"), O.style.setProperty("width", "100%"), O.style.setProperty("display", "flex"), O.style.setProperty("align-items", "center"), C(O, A(de, {
       get when() {
         return J();
@@ -2796,7 +2796,7 @@ const d = (e, t) => {
           }
         }), Ce), C(Ce, () => e.symbol.shortName ?? e.symbol.name ?? e.symbol.ticker), k;
       }
-    }), ge), C(I, () => ne().map((k, Ce) => {
+    }), ye), C(I, () => ne().map((k, Ce) => {
       const Ae = k.text === e.period.text;
       return (() => {
         const Je = Tf.cloneNode(!0);
@@ -2804,7 +2804,7 @@ const d = (e, t) => {
           a() && Ae && !G() ? (e.onMobilePeriodClick ? e.onMobilePeriodClick(k) : e.onMenuClick(), Me.stopPropagation()) : e.onPeriodChange(k);
         }, me(Je, `item period ${Ae ? "selected" : ""}`), C(Je, () => k.text), Je;
       })();
-    }), ge), C(I, A(de, {
+    }), ye), C(I, A(de, {
       get when() {
         return Y(() => !!(a() && !G()))() && ne().length > 1;
       },
@@ -2814,7 +2814,7 @@ const d = (e, t) => {
           Ce.stopPropagation(), e.onMobilePeriodClick ? e.onMobilePeriodClick(e.period) : e.onMenuClick();
         }, k.style.setProperty("margin-left", "4px"), k.style.setProperty("display", "inline-flex"), k.style.setProperty("align-items", "center"), k;
       }
-    }), ge), C(I, A(de, {
+    }), ye), C(I, A(de, {
       get when() {
         return Y(() => !!a())() && !G();
       },
@@ -2825,7 +2825,7 @@ const d = (e, t) => {
           Ce.stopPropagation(), (Ae = e.onMobileMoreClick) == null || Ae.call(e);
         }, k.style.setProperty("margin-left", "8px"), k.style.setProperty("display", "inline-flex"), k.style.setProperty("align-items", "center"), k.style.setProperty("cursor", "pointer"), k.style.setProperty("padding", "0 4px"), k;
       }
-    }), ge), C(I, A(de, {
+    }), ye), C(I, A(de, {
       get when() {
         return !a();
       },
@@ -2833,7 +2833,7 @@ const d = (e, t) => {
         const k = Cf.cloneNode(!0);
         return ht(k, "click", e.onTimeToolsClick, !0), k;
       }
-    }), ge), C(I, A(de, {
+    }), ye), C(I, A(de, {
       get when() {
         return !a();
       },
@@ -2841,7 +2841,7 @@ const d = (e, t) => {
         const k = pf.cloneNode(!0), Ce = k.firstChild, Ae = Ce.nextSibling;
         return ht(k, "click", e.onIndicatorClick, !0), C(Ae, () => d("indicator", e.locale)), k;
       }
-    }), ge), ge.style.setProperty("display", "flex"), ge.style.setProperty("gap", "4px"), ge.style.setProperty("height", "100%"), ge.style.setProperty("margin-left", "auto"), ge.style.setProperty("align-items", "center"), ge.style.setProperty("flex", "0 0 auto"), C(ge, A(de, {
+    }), ye), ye.style.setProperty("display", "flex"), ye.style.setProperty("height", "100%"), ye.style.setProperty("margin-left", "auto"), ye.style.setProperty("align-items", "center"), ye.style.setProperty("flex", "0 0 auto"), C(ye, A(de, {
       get when() {
         return e.showOrderToolsMenu;
       },
@@ -3034,7 +3034,7 @@ const d = (e, t) => {
           _v$9: void 0
         }), k;
       }
-    }), We), C(ge, A(de, {
+    }), We), C(ye, A(de, {
       get when() {
         return !a();
       },
@@ -3047,7 +3047,7 @@ const d = (e, t) => {
           return ht(k, "click", e.onSettingClick, !0), k;
         })()];
       }
-    }), We), C(ge, A(de, {
+    }), We), C(ye, A(de, {
       get when() {
         return !a();
       },
@@ -3065,7 +3065,7 @@ const d = (e, t) => {
     }, C(We, (() => {
       const k = Y(() => !!G());
       return () => k() ? Sf.cloneNode(!0) : Pf.cloneNode(!0);
-    })()), C(ge, A(de, {
+    })()), C(ye, A(de, {
       get when() {
         return Y(() => !!e.chartViewToggle)() && !G();
       },
@@ -3089,7 +3089,7 @@ const d = (e, t) => {
       }
     }), null), z((k) => {
       const Ce = e.spread ? "" : "rotate", Ae = G() ? "0px" : "var(--klinecharts-pro-period-bar-padding-right)";
-      return Ce !== k._v$10 && Ne($e, "class", k._v$10 = Ce), Ae !== k._v$11 && ge.style.setProperty("padding-right", k._v$11 = Ae), k;
+      return Ce !== k._v$10 && Ne($e, "class", k._v$10 = Ce), Ae !== k._v$11 && ye.style.setProperty("padding-right", k._v$11 = Ae), k;
     }, {
       _v$10: void 0,
       _v$11: void 0
@@ -3230,12 +3230,12 @@ const Xe = (e) => tg[e.name](e.class), lg = /* @__PURE__ */ $('<div class="kline
   return (() => {
     const K = lg.cloneNode(!0), J = K.firstChild, se = J.nextSibling, M = se.firstChild, j = M.nextSibling, Q = j.firstChild, F = se.nextSibling, le = F.firstChild, ce = F.nextSibling, ee = ce.firstChild, B = ce.nextSibling, ne = B.nextSibling, H = ne.firstChild;
     return C(K, () => ve().map((O) => (() => {
-      const I = cg.cloneNode(!0), ye = I.firstChild, $e = ye.nextSibling, ge = $e.firstChild;
+      const I = cg.cloneNode(!0), ge = I.firstChild, $e = ge.nextSibling, ye = $e.firstChild;
       return I.addEventListener("blur", () => {
         re("");
       }), I.$$click = () => {
         G(O.key);
-      }, C(ye, A(Xe, {
+      }, C(ge, A(Xe, {
         get name() {
           return O.icon;
         }
@@ -3260,7 +3260,7 @@ const Xe = (e) => tg[e.name](e.class), lg = /* @__PURE__ */ $('<div class="kline
             })());
           }
         });
-      })(), null), z(() => Ne(ge, "class", O.key === Z() ? "rotate" : "")), I;
+      })(), null), z(() => Ne(ye, "class", O.key === Z() ? "rotate" : "")), I;
     })()), J), se.addEventListener("blur", () => {
       re("");
     }), se.$$click = () => {
@@ -3290,14 +3290,14 @@ const Xe = (e) => tg[e.name](e.class), lg = /* @__PURE__ */ $('<div class="kline
         class: "list",
         get children() {
           return W().map((I) => (() => {
-            const ye = $0.cloneNode(!0), $e = ye.firstChild;
-            return ye.$$click = (ge) => {
-              ge.stopPropagation(), E(I.key), oe(I.key), e.onModeChange(I.key), re("");
-            }, C(ye, A(Xe, {
+            const ge = $0.cloneNode(!0), $e = ge.firstChild;
+            return ge.$$click = (ye) => {
+              ye.stopPropagation(), E(I.key), oe(I.key), e.onModeChange(I.key), re("");
+            }, C(ge, A(Xe, {
               get name() {
                 return I.key;
               }
-            }), $e), C($e, () => I.text), ye;
+            }), $e), C($e, () => I.text), ge;
           })());
         }
       });
@@ -4022,11 +4022,11 @@ const gg = /* @__PURE__ */ $('<div class="chart-style-color-picker"><button type
           const I = vg.cloneNode(!0);
           return C(I, A(A1, {
             each: Ig,
-            children: (ye) => (() => {
-              const $e = bg.cloneNode(!0), ge = $e.firstChild;
+            children: (ge) => (() => {
+              const $e = bg.cloneNode(!0), ye = $e.firstChild;
               return $e.$$click = () => {
-                re(F, ye), R(null);
-              }, $e.classList.toggle("selected", ce === ye), ge.style.setProperty("height", `${ye}px`), $e;
+                re(F, ge), R(null);
+              }, $e.classList.toggle("selected", ce === ge), ye.style.setProperty("height", `${ge}px`), $e;
             })()
           })), I;
         })();
@@ -4572,10 +4572,10 @@ const qg = /* @__PURE__ */ $('<div class="klinecharts-pro-time-tools-picker"></d
                 year: B.getFullYear(),
                 month: B.getMonth(),
                 day: B.getDate()
-              }), O = e.range ? Xn(e.range.from) : NaN, I = e.range ? Xn(e.range.to) : NaN, ye = Math.min(O, I), $e = Math.max(O, I), ge = Number.isFinite(ye) && H >= ye && H <= $e, We = Number.isFinite(ye) && (H === ye || H === $e), k = B.getFullYear() === e.value.year && B.getMonth() === e.value.month && B.getDate() === e.value.day;
+              }), O = e.range ? Xn(e.range.from) : NaN, I = e.range ? Xn(e.range.to) : NaN, ge = Math.min(O, I), $e = Math.max(O, I), ye = Number.isFinite(ge) && H >= ge && H <= $e, We = Number.isFinite(ge) && (H === ge || H === $e), k = B.getFullYear() === e.value.year && B.getMonth() === e.value.month && B.getDate() === e.value.day;
               return (() => {
                 const Ce = It.cloneNode(!0);
-                return Ce.$$click = () => he(B), me(Ce, `${ne ? "" : "muted"} ${ge ? "in-range" : ""} ${We || k ? "selected" : ""}`), C(Ce, () => B.getDate()), Ce;
+                return Ce.$$click = () => he(B), me(Ce, `${ne ? "" : "muted"} ${ye ? "in-range" : ""} ${We || k ? "selected" : ""}`), C(Ce, () => B.getDate()), Ce;
               })();
             }), null), ee;
           })();
@@ -4754,8 +4754,8 @@ const qg = /* @__PURE__ */ $('<div class="klinecharts-pro-time-tools-picker"></d
           }), Q.$$click = () => P({
             acrossTokens: !w().acrossTokens
           }), z((F) => {
-            const le = `klinecharts-pro-time-tools-switch${w().enabled ? " on" : ""}`, ce = `klinecharts-pro-time-tools-row${w().enabled ? "" : " disabled"}`, ee = !w().enabled, B = `klinecharts-pro-time-tools-row with-divider${w().enabled ? "" : " disabled"}`, ne = `klinecharts-pro-time-tools-switch${w().anchorLine ? " on" : ""}`, H = !w().enabled, O = `klinecharts-pro-time-tools-row with-divider${w().enabled ? "" : " disabled"}`, I = `klinecharts-pro-time-tools-switch${w().acrossTokens ? " on" : ""}`, ye = !w().enabled;
-            return le !== F._v$3 && me(re, F._v$3 = le), ce !== F._v$4 && me(G, F._v$4 = ce), ee !== F._v$5 && (W.disabled = F._v$5 = ee), B !== F._v$6 && me(K, F._v$6 = B), ne !== F._v$7 && me(se, F._v$7 = ne), H !== F._v$8 && (se.disabled = F._v$8 = H), O !== F._v$9 && me(M, F._v$9 = O), I !== F._v$10 && me(Q, F._v$10 = I), ye !== F._v$11 && (Q.disabled = F._v$11 = ye), F;
+            const le = `klinecharts-pro-time-tools-switch${w().enabled ? " on" : ""}`, ce = `klinecharts-pro-time-tools-row${w().enabled ? "" : " disabled"}`, ee = !w().enabled, B = `klinecharts-pro-time-tools-row with-divider${w().enabled ? "" : " disabled"}`, ne = `klinecharts-pro-time-tools-switch${w().anchorLine ? " on" : ""}`, H = !w().enabled, O = `klinecharts-pro-time-tools-row with-divider${w().enabled ? "" : " disabled"}`, I = `klinecharts-pro-time-tools-switch${w().acrossTokens ? " on" : ""}`, ge = !w().enabled;
+            return le !== F._v$3 && me(re, F._v$3 = le), ce !== F._v$4 && me(G, F._v$4 = ce), ee !== F._v$5 && (W.disabled = F._v$5 = ee), B !== F._v$6 && me(K, F._v$6 = B), ne !== F._v$7 && me(se, F._v$7 = ne), H !== F._v$8 && (se.disabled = F._v$8 = H), O !== F._v$9 && me(M, F._v$9 = O), I !== F._v$10 && me(Q, F._v$10 = I), ge !== F._v$11 && (Q.disabled = F._v$11 = ge), F;
           }, {
             _v$3: void 0,
             _v$4: void 0,
@@ -4988,13 +4988,13 @@ const Fy = (e) => {
       }
       t.style.setProperty("--klinecharts-pro-chart-background-color", i);
     }
-  }, ye = (o) => {
+  }, ge = (o) => {
     const {
       chart: i,
       ...s
     } = o;
     return s;
-  }, [$e, ge] = T(""), [We, k] = T(!1), [Ce, Ae] = T(Date.now()), [Je, Me] = T({
+  }, [$e, ye] = T(""), [We, k] = T(!1), [Ce, Ae] = T(Date.now()), [Je, Me] = T({
     from: Date.now() - 30 * 24 * 60 * 60 * 1e3,
     to: Date.now()
   }), [et, gt] = T(Ey() ?? pi()), [Ut, s1] = T(e.drawingBarVisible), [l1, S1] = T(!1), [P1, zt] = T(!1), [D1, N1] = T(!1), c1 = ((oo = e.orderTools) == null ? void 0 : oo.quickOrder) ?? !0, [Ue, u1] = T({
@@ -6793,7 +6793,7 @@ const Fy = (e) => {
       const o = ce();
       if (o) {
         I(o);
-        const i = ye(o);
+        const i = ge(o);
         kt(i), n == null || n.setStyles(i);
       }
       J1();
@@ -6845,7 +6845,7 @@ const Fy = (e) => {
     onScreenshotClick: () => {
       if (n) {
         const o = e.screenshotBackgroundColor || (e.theme === "dark" ? "#11131E" : "#ffffff"), i = n.getConvertPictureUrl(!0, "jpeg", o);
-        ge(i);
+        ye(i);
       }
     },
     get chartViewToggle() {
@@ -7210,7 +7210,7 @@ const Fy = (e) => {
         onChange: (o) => {
           const i = o;
           I(i);
-          const s = ye(i);
+          const s = ge(i);
           kt(s), n == null || n.setStyles(s), n == null || n.resize(), J1();
         },
         onSaveChartStyle: (o) => {
@@ -7229,7 +7229,7 @@ const Fy = (e) => {
             }
             Ie(i, u, N.formatValue(F(), u));
           }), I(i);
-          const s = ye(i);
+          const s = ge(i);
           kt(s), n == null || n.setStyles(s), n == null || n.resize(), J1();
         }
       });
@@ -7247,7 +7247,7 @@ const Fy = (e) => {
           return $e();
         },
         onClose: () => {
-          ge("");
+          ye("");
         }
       });
     }
