@@ -475,9 +475,11 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
               ref={(el) => {
                 orderMenuRef = el as HTMLDivElement;
               }}
+              class="order-dropdown-main"
               style={{
                 display: "flex",
                 "align-items": "center",
+                height: "100%",
               }}
             >
               <div
