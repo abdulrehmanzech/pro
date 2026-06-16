@@ -1675,155 +1675,155 @@ function qs(e, t) {
     a[r] = t(e[r], r, e);
   return a;
 }
-var Gs = qs, Wo = Ln, Xs = Gs, Js = e1, e6 = Cr, t6 = 1 / 0, qo = Wo ? Wo.prototype : void 0, Go = qo ? qo.toString : void 0;
+var Gs = qs, Wo = Ln, Xs = Gs, Js = e1, e2 = Cr, t2 = 1 / 0, qo = Wo ? Wo.prototype : void 0, Go = qo ? qo.toString : void 0;
 function q0(e) {
   if (typeof e == "string")
     return e;
   if (Js(e))
     return Xs(e, q0) + "";
-  if (e6(e))
+  if (e2(e))
     return Go ? Go.call(e) : "";
   var t = e + "";
-  return t == "0" && 1 / e == -t6 ? "-0" : t;
+  return t == "0" && 1 / e == -t2 ? "-0" : t;
 }
-var n6 = q0, r6 = n6;
-function o6(e) {
-  return e == null ? "" : r6(e);
+var n2 = q0, r2 = n2;
+function o2(e) {
+  return e == null ? "" : r2(e);
 }
-var i6 = o6, a6 = e1, s6 = m5, l6 = Ws, c6 = i6;
-function u6(e, t) {
-  return a6(e) ? e : s6(e, t) ? [e] : l6(c6(e));
+var i2 = o2, a2 = e1, s2 = m5, l2 = Ws, c2 = i2;
+function u2(e, t) {
+  return a2(e) ? e : s2(e, t) ? [e] : l2(c2(e));
 }
-var d6 = u6, h6 = 9007199254740991, f6 = /^(?:0|[1-9]\d*)$/;
-function m6(e, t) {
+var d2 = u2, h2 = 9007199254740991, f2 = /^(?:0|[1-9]\d*)$/;
+function m2(e, t) {
   var r = typeof e;
-  return t = t ?? h6, !!t && (r == "number" || r != "symbol" && f6.test(e)) && e > -1 && e % 1 == 0 && e < t;
+  return t = t ?? h2, !!t && (r == "number" || r != "symbol" && f2.test(e)) && e > -1 && e % 1 == 0 && e < t;
 }
-var G0 = m6, g6 = Cr, y6 = 1 / 0;
-function C6(e) {
-  if (typeof e == "string" || g6(e))
+var G0 = m2, g2 = Cr, y2 = 1 / 0;
+function C2(e) {
+  if (typeof e == "string" || g2(e))
     return e;
   var t = e + "";
-  return t == "0" && 1 / e == -y6 ? "-0" : t;
+  return t == "0" && 1 / e == -y2 ? "-0" : t;
 }
-var p6 = C6, v6 = yr, b6 = d6, $6 = G0, Xo = Jt, _6 = p6;
-function k6(e, t, r, n) {
+var p2 = C2, v2 = yr, b2 = d2, $2 = G0, Xo = Jt, _2 = p2;
+function k2(e, t, r, n) {
   if (!Xo(e))
     return e;
-  t = b6(t, e);
+  t = b2(t, e);
   for (var a = -1, c = t.length, f = c - 1, h = e; h != null && ++a < c; ) {
-    var v = _6(t[a]), L = r;
+    var v = _2(t[a]), L = r;
     if (v === "__proto__" || v === "constructor" || v === "prototype")
       return e;
     if (a != f) {
       var b = h[v];
-      L = n ? n(b, v, h) : void 0, L === void 0 && (L = Xo(b) ? b : $6(t[a + 1]) ? [] : {});
+      L = n ? n(b, v, h) : void 0, L === void 0 && (L = Xo(b) ? b : $2(t[a + 1]) ? [] : {});
     }
-    v6(h, v, L), h = h[v];
+    v2(h, v, L), h = h[v];
   }
   return e;
 }
-var x6 = k6, L6 = x6;
-function w6(e, t, r) {
-  return e == null ? e : L6(e, t, r);
+var x2 = k2, L2 = x2;
+function w2(e, t, r) {
+  return e == null ? e : L2(e, t, r);
 }
-var A6 = w6;
-const Ie = /* @__PURE__ */ V0(A6);
-var T6 = Tn;
-function M6() {
-  this.__data__ = new T6(), this.size = 0;
+var A2 = w2;
+const Ie = /* @__PURE__ */ V0(A2);
+var T2 = Tn;
+function M2() {
+  this.__data__ = new T2(), this.size = 0;
 }
-var S6 = M6;
-function P6(e) {
+var S2 = M2;
+function P2(e) {
   var t = this.__data__, r = t.delete(e);
   return this.size = t.size, r;
 }
-var D6 = P6;
-function N6(e) {
+var D2 = P2;
+function N2(e) {
   return this.__data__.get(e);
 }
-var O6 = N6;
-function I6(e) {
+var O2 = N2;
+function I2(e) {
   return this.__data__.has(e);
 }
-var E6 = I6, B6 = Tn, F6 = pr, U6 = Y0, z6 = 200;
-function V6(e, t) {
+var E2 = I2, B2 = Tn, F2 = pr, U2 = Y0, z2 = 200;
+function V2(e, t) {
   var r = this.__data__;
-  if (r instanceof B6) {
+  if (r instanceof B2) {
     var n = r.__data__;
-    if (!F6 || n.length < z6 - 1)
+    if (!F2 || n.length < z2 - 1)
       return n.push([e, t]), this.size = ++r.size, this;
-    r = this.__data__ = new U6(n);
+    r = this.__data__ = new U2(n);
   }
   return r.set(e, t), this.size = r.size, this;
 }
-var R6 = V6, K6 = Tn, j6 = S6, Q6 = D6, Z6 = O6, H6 = E6, Y6 = R6;
+var R2 = V2, K2 = Tn, j2 = S2, Q2 = D2, Z2 = O2, H2 = E2, Y2 = R2;
 function i1(e) {
-  var t = this.__data__ = new K6(e);
+  var t = this.__data__ = new K2(e);
   this.size = t.size;
 }
-i1.prototype.clear = j6;
-i1.prototype.delete = Q6;
-i1.prototype.get = Z6;
-i1.prototype.has = H6;
-i1.prototype.set = Y6;
-var W6 = i1;
-function q6(e, t) {
+i1.prototype.clear = j2;
+i1.prototype.delete = Q2;
+i1.prototype.get = Z2;
+i1.prototype.has = H2;
+i1.prototype.set = Y2;
+var W2 = i1;
+function q2(e, t) {
   for (var r = -1, n = e == null ? 0 : e.length; ++r < n && t(e[r], r, e) !== !1; )
     ;
   return e;
 }
-var G6 = q6, X6 = yr, J6 = Z0;
-function e2(e, t, r, n) {
+var G2 = q2, X2 = yr, J2 = Z0;
+function e6(e, t, r, n) {
   var a = !r;
   r || (r = {});
   for (var c = -1, f = t.length; ++c < f; ) {
     var h = t[c], v = n ? n(r[h], e[h], h, r, e) : void 0;
-    v === void 0 && (v = e[h]), a ? J6(r, h, v) : X6(r, h, v);
+    v === void 0 && (v = e[h]), a ? J2(r, h, v) : X2(r, h, v);
   }
   return r;
 }
-var Sn = e2;
-function t2(e, t) {
+var Sn = e6;
+function t6(e, t) {
   for (var r = -1, n = Array(e); ++r < e; )
     n[r] = t(r);
   return n;
 }
-var n2 = t2, r2 = M1, o2 = t1, i2 = "[object Arguments]";
-function a2(e) {
-  return o2(e) && r2(e) == i2;
+var n6 = t6, r6 = M1, o6 = t1, i6 = "[object Arguments]";
+function a6(e) {
+  return o6(e) && r6(e) == i6;
 }
-var s2 = a2, Jo = s2, l2 = t1, X0 = Object.prototype, c2 = X0.hasOwnProperty, u2 = X0.propertyIsEnumerable, d2 = Jo(function() {
+var s6 = a6, Jo = s6, l6 = t1, X0 = Object.prototype, c6 = X0.hasOwnProperty, u6 = X0.propertyIsEnumerable, d6 = Jo(function() {
   return arguments;
 }()) ? Jo : function(e) {
-  return l2(e) && c2.call(e, "callee") && !u2.call(e, "callee");
-}, h2 = d2, Cn = { exports: {} };
-function f2() {
+  return l6(e) && c6.call(e, "callee") && !u6.call(e, "callee");
+}, h6 = d6, Cn = { exports: {} };
+function f6() {
   return !1;
 }
-var m2 = f2;
+var m6 = f6;
 Cn.exports;
 (function(e, t) {
-  var r = mt, n = m2, a = t && !t.nodeType && t, c = a && !0 && e && !e.nodeType && e, f = c && c.exports === a, h = f ? r.Buffer : void 0, v = h ? h.isBuffer : void 0, L = v || n;
+  var r = mt, n = m6, a = t && !t.nodeType && t, c = a && !0 && e && !e.nodeType && e, f = c && c.exports === a, h = f ? r.Buffer : void 0, v = h ? h.isBuffer : void 0, L = v || n;
   e.exports = L;
 })(Cn, Cn.exports);
-var J0 = Cn.exports, g2 = 9007199254740991;
-function y2(e) {
-  return typeof e == "number" && e > -1 && e % 1 == 0 && e <= g2;
+var J0 = Cn.exports, g6 = 9007199254740991;
+function y6(e) {
+  return typeof e == "number" && e > -1 && e % 1 == 0 && e <= g6;
 }
-var ei = y2, C2 = M1, p2 = ei, v2 = t1, b2 = "[object Arguments]", $2 = "[object Array]", _2 = "[object Boolean]", k2 = "[object Date]", x2 = "[object Error]", L2 = "[object Function]", w2 = "[object Map]", A2 = "[object Number]", T2 = "[object Object]", M2 = "[object RegExp]", S2 = "[object Set]", P2 = "[object String]", D2 = "[object WeakMap]", N2 = "[object ArrayBuffer]", O2 = "[object DataView]", I2 = "[object Float32Array]", E2 = "[object Float64Array]", B2 = "[object Int8Array]", F2 = "[object Int16Array]", U2 = "[object Int32Array]", z2 = "[object Uint8Array]", V2 = "[object Uint8ClampedArray]", R2 = "[object Uint16Array]", K2 = "[object Uint32Array]", Le = {};
-Le[I2] = Le[E2] = Le[B2] = Le[F2] = Le[U2] = Le[z2] = Le[V2] = Le[R2] = Le[K2] = !0;
-Le[b2] = Le[$2] = Le[N2] = Le[_2] = Le[O2] = Le[k2] = Le[x2] = Le[L2] = Le[w2] = Le[A2] = Le[T2] = Le[M2] = Le[S2] = Le[P2] = Le[D2] = !1;
-function j2(e) {
-  return v2(e) && p2(e.length) && !!Le[C2(e)];
+var ei = y6, C6 = M1, p6 = ei, v6 = t1, b6 = "[object Arguments]", $6 = "[object Array]", _6 = "[object Boolean]", k6 = "[object Date]", x6 = "[object Error]", L6 = "[object Function]", w6 = "[object Map]", A6 = "[object Number]", T6 = "[object Object]", M6 = "[object RegExp]", S6 = "[object Set]", P6 = "[object String]", D6 = "[object WeakMap]", N6 = "[object ArrayBuffer]", O6 = "[object DataView]", I6 = "[object Float32Array]", E6 = "[object Float64Array]", B6 = "[object Int8Array]", F6 = "[object Int16Array]", U6 = "[object Int32Array]", z6 = "[object Uint8Array]", V6 = "[object Uint8ClampedArray]", R6 = "[object Uint16Array]", K6 = "[object Uint32Array]", Le = {};
+Le[I6] = Le[E6] = Le[B6] = Le[F6] = Le[U6] = Le[z6] = Le[V6] = Le[R6] = Le[K6] = !0;
+Le[b6] = Le[$6] = Le[N6] = Le[_6] = Le[O6] = Le[k6] = Le[x6] = Le[L6] = Le[w6] = Le[A6] = Le[T6] = Le[M6] = Le[S6] = Le[P6] = Le[D6] = !1;
+function j6(e) {
+  return v6(e) && p6(e.length) && !!Le[C6(e)];
 }
-var Q2 = j2;
-function Z2(e) {
+var Q6 = j6;
+function Z6(e) {
   return function(t) {
     return e(t);
   };
 }
-var br = Z2, pn = { exports: {} };
+var br = Z6, pn = { exports: {} };
 pn.exports;
 (function(e, t) {
   var r = R0, n = t && !t.nodeType && t, a = n && !0 && e && !e.nodeType && e, c = a && a.exports === n, f = c && r.process, h = function() {
@@ -1835,9 +1835,9 @@ pn.exports;
   }();
   e.exports = h;
 })(pn, pn.exports);
-var $r = pn.exports, H2 = Q2, Y2 = br, e0 = $r, t0 = e0 && e0.isTypedArray, W2 = t0 ? Y2(t0) : H2, q2 = W2, G2 = n2, X2 = h2, J2 = e1, e3 = J0, t3 = G0, n3 = q2, r3 = Object.prototype, o3 = r3.hasOwnProperty;
+var $r = pn.exports, H6 = Q6, Y6 = br, e0 = $r, t0 = e0 && e0.isTypedArray, W6 = t0 ? Y6(t0) : H6, q6 = W6, G6 = n6, X6 = h6, J6 = e1, e3 = J0, t3 = G0, n3 = q6, r3 = Object.prototype, o3 = r3.hasOwnProperty;
 function i3(e, t) {
-  var r = J2(e), n = !r && X2(e), a = !r && !n && e3(e), c = !r && !n && !a && n3(e), f = r || n || a || c, h = f ? G2(e.length, String) : [], v = h.length;
+  var r = J6(e), n = !r && X6(e), a = !r && !n && e3(e), c = !r && !n && !a && n3(e), f = r || n || a || c, h = f ? G6(e.length, String) : [], v = h.length;
   for (var L in e)
     (t || o3.call(e, L)) && !(f && // Safari 9 has enumerable `arguments.length` in strict mode.
     (L == "length" || // Node.js 0.10 has enumerable non-index properties on buffers.
@@ -2074,7 +2074,7 @@ var o7 = r7, i7 = o7, a7 = br, f0 = $r, m0 = f0 && f0.isMap, s7 = m0 ? a7(m0) : 
 function h7(e) {
   return u7(e) && c7(e) == d7;
 }
-var f7 = h7, m7 = f7, g7 = br, g0 = $r, y0 = g0 && g0.isSet, y7 = y0 ? g7(y0) : m7, C7 = y7, p7 = W6, v7 = G6, b7 = yr, $7 = T3, _7 = Q3, k7 = Z3, x7 = Y3, L7 = al, w7 = vl, A7 = Al, T7 = Dl, M7 = wr, S7 = o8, P7 = Q8, D7 = J8, N7 = e1, O7 = J0, I7 = l7, E7 = Jt, B7 = C7, F7 = kr, U7 = xr, z7 = 1, V7 = 2, R7 = 4, ui = "[object Arguments]", K7 = "[object Array]", j7 = "[object Boolean]", Q7 = "[object Date]", Z7 = "[object Error]", di = "[object Function]", H7 = "[object GeneratorFunction]", Y7 = "[object Map]", W7 = "[object Number]", hi = "[object Object]", q7 = "[object RegExp]", G7 = "[object Set]", X7 = "[object String]", J7 = "[object Symbol]", ec = "[object WeakMap]", tc = "[object ArrayBuffer]", nc = "[object DataView]", rc = "[object Float32Array]", oc = "[object Float64Array]", ic = "[object Int8Array]", ac = "[object Int16Array]", sc = "[object Int32Array]", lc = "[object Uint8Array]", cc = "[object Uint8ClampedArray]", uc = "[object Uint16Array]", dc = "[object Uint32Array]", be = {};
+var f7 = h7, m7 = f7, g7 = br, g0 = $r, y0 = g0 && g0.isSet, y7 = y0 ? g7(y0) : m7, C7 = y7, p7 = W2, v7 = G2, b7 = yr, $7 = T3, _7 = Q3, k7 = Z3, x7 = Y3, L7 = al, w7 = vl, A7 = Al, T7 = Dl, M7 = wr, S7 = o8, P7 = Q8, D7 = J8, N7 = e1, O7 = J0, I7 = l7, E7 = Jt, B7 = C7, F7 = kr, U7 = xr, z7 = 1, V7 = 2, R7 = 4, ui = "[object Arguments]", K7 = "[object Array]", j7 = "[object Boolean]", Q7 = "[object Date]", Z7 = "[object Error]", di = "[object Function]", H7 = "[object GeneratorFunction]", Y7 = "[object Map]", W7 = "[object Number]", hi = "[object Object]", q7 = "[object RegExp]", G7 = "[object Set]", X7 = "[object String]", J7 = "[object Symbol]", ec = "[object WeakMap]", tc = "[object ArrayBuffer]", nc = "[object DataView]", rc = "[object Float32Array]", oc = "[object Float64Array]", ic = "[object Int8Array]", ac = "[object Int16Array]", sc = "[object Int32Array]", lc = "[object Uint8Array]", cc = "[object Uint8ClampedArray]", uc = "[object Uint16Array]", dc = "[object Uint32Array]", be = {};
 be[ui] = be[K7] = be[tc] = be[nc] = be[j7] = be[Q7] = be[rc] = be[oc] = be[ic] = be[ac] = be[sc] = be[Y7] = be[W7] = be[hi] = be[q7] = be[G7] = be[X7] = be[J7] = be[lc] = be[cc] = be[uc] = be[dc] = !0;
 be[Z7] = be[di] = be[ec] = !1;
 function un(e, t, r, n, a, c) {
@@ -4652,7 +4652,7 @@ const qg = /* @__PURE__ */ $('<div class="klinecharts-pro-time-tools-picker"></d
     e.onClose();
   };
   return A(At, {
-    width: 620,
+    width: 520,
     get title() {
       return (() => {
         const V = ay.cloneNode(!0);
