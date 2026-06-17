@@ -1649,7 +1649,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
         ...overlay.styles,
         line: {
           ...(overlay.styles as any)?.line,
-          size: Number((overlay.styles as any)?.line?.size) || 3,
+          size: Number((overlay.styles as any)?.line?.size) || 2,
           style: (overlay.styles as any)?.line?.style ?? LineType.Solid,
           dashedValue: (overlay.styles as any)?.line?.dashedValue ?? [6, 4],
           color: (overlay.styles as any)?.line?.color ?? "#2f6df6",

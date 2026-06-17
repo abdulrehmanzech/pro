@@ -5684,7 +5684,7 @@ const Fy = (e) => {
         ...o.styles,
         line: {
           ...(m = o.styles) == null ? void 0 : m.line,
-          size: Number((p = (g = o.styles) == null ? void 0 : g.line) == null ? void 0 : p.size) || 3,
+          size: Number((p = (g = o.styles) == null ? void 0 : g.line) == null ? void 0 : p.size) || 2,
           style: ((S = (x = o.styles) == null ? void 0 : x.line) == null ? void 0 : S.style) ?? Re.Solid,
           dashedValue: ((ie = (te = o.styles) == null ? void 0 : te.line) == null ? void 0 : ie.dashedValue) ?? [6, 4],
           color: ((q = (ae = o.styles) == null ? void 0 : ae.line) == null ? void 0 : q.color) ?? "#2f6df6"
