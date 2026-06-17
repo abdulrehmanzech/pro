@@ -441,7 +441,7 @@ const TimeToolsModal: Component<TimeToolsModalProps> = (props) => {
 
   return (
     <Modal
-      width={620}
+      width={520}
       title={
         <div class="klinecharts-pro-time-tools-tabs">
           {tabs.map((tab) => (
