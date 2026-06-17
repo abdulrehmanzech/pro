@@ -1605,7 +1605,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       return false;
     }
     const position = resolveOverlayToolbarPosition(event);
-    const lineSize = Number(overlay.styles?.line?.size) || 3;
+    const lineSize = Number(overlay.styles?.line?.size) || 2;
     const lineStyle = overlay.styles?.line?.style ?? LineType.Solid;
     const dashedValue = Array.isArray(overlay.styles?.line?.dashedValue)
       ? overlay.styles.line.dashedValue

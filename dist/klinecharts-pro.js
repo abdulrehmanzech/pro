@@ -5657,7 +5657,7 @@ const Fy = (e) => {
     const i = o == null ? void 0 : o.overlay;
     if (!(i != null && i.id) || i.name !== "horizontalStraightLine")
       return !1;
-    const s = Di(o), l = Number((p = (g = i.styles) == null ? void 0 : g.line) == null ? void 0 : p.size) || 3, u = ((S = (x = i.styles) == null ? void 0 : x.line) == null ? void 0 : S.style) ?? Re.Solid, y = Array.isArray((ie = (te = i.styles) == null ? void 0 : te.line) == null ? void 0 : ie.dashedValue) ? i.styles.line.dashedValue : [], m = ((q = (ae = i.styles) == null ? void 0 : ae.line) == null ? void 0 : q.color) ?? "#2f6df6";
+    const s = Di(o), l = Number((p = (g = i.styles) == null ? void 0 : g.line) == null ? void 0 : p.size) || 2, u = ((S = (x = i.styles) == null ? void 0 : x.line) == null ? void 0 : S.style) ?? Re.Solid, y = Array.isArray((ie = (te = i.styles) == null ? void 0 : te.line) == null ? void 0 : ie.dashedValue) ? i.styles.line.dashedValue : [], m = ((q = (ae = i.styles) == null ? void 0 : ae.line) == null ? void 0 : q.color) ?? "#2f6df6";
     return je({
       id: i.id,
       x: s.x,
