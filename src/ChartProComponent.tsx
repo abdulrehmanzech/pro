@@ -1192,6 +1192,34 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     }
   };
 
+  const cleanupDrawingState = (id: string) => {
+    const state = drawingStates.get(id);
+    if (!state) {
+      return;
+    }
+    if (state.checkInterval) {
+      clearInterval(state.checkInterval);
+    }
+    if (state.mouseUpHandler) {
+      document.removeEventListener("mouseup", state.mouseUpHandler);
+      document.removeEventListener("touchend", state.mouseUpHandler);
+    }
+    drawingStates.delete(id);
+  };
+
+  const removeAllTrackedDrawings = () => {
+    overlayTracker.forEach((_, id) => {
+      widget?.removeOverlay?.({ id });
+      cleanupDrawingState(id);
+    });
+    overlayTracker.clear();
+    drawingStates.clear();
+    setOverlayToolbar(null);
+    setOverlayToolbarDropdown(null);
+    syncDrawingsToStorage();
+    scheduleAutoScaleRange(true);
+  };
+
   const restoreDrawingsForSymbol = (ticker?: string) => {
     if (!ticker || !widget) {
       return;
@@ -4009,8 +4037,8 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
             onVisibleChange={(visible) => {
               widget?.overrideOverlay({ visible });
             }}
-            onRemoveClick={(groupId) => {
-              widget?.removeOverlay({ groupId });
+            onRemoveClick={() => {
+              removeAllTrackedDrawings();
             }}
           />
         </Show>
