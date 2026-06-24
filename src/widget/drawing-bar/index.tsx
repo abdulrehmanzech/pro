@@ -140,14 +140,16 @@ const DrawingBar: Component<DrawingBarProps> = props => {
               {
                 modes().map(data => (
                   <li
+                    class={mode() === data.key ? 'selected' : ''}
                     onClick={(event) => {
                       event.stopPropagation()
+                      const nextMode = mode() === data.key ? 'normal' : data.key
                       setModeIcon(data.key)
-                      setMode(data.key)
-                      props.onModeChange(data.key)
+                      setMode(nextMode)
+                      props.onModeChange(nextMode)
                       setPopoverKey('')
                     }}>
-                    <Icon name={data.key}/>
+                    <Icon name={data.key} class={mode() === data.key ? 'selected' : ''}/>
                     <span style="padding-left:8px">{data.text}</span>
                   </li>
                 ))

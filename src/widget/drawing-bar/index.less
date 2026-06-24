@@ -76,6 +76,12 @@
       max-height: 320px;
       li {
         padding-left: 16px;
+        &.selected {
+          color: var(--klinecharts-pro-primary-color);
+          background-color: var(--klinecharts-pro-selected-color);
+          fill: var(--klinecharts-pro-primary-color);
+          stroke: var(--klinecharts-pro-primary-color);
+        }
         .icon-overlay {
           &:hover {
             background-color: transparent;
