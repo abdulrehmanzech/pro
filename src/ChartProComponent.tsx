@@ -129,6 +129,22 @@ const CHART_STYLE_STORAGE_KEY = "klinecharts_pro_chart_style";
 const CHART_BACKGROUND_COLOR_STORAGE_KEY = "klinecharts_pro_chart_background_color";
 const TIME_ANCHOR_SETTINGS_STORAGE_KEY = "klinecharts_pro_time_anchor_settings";
 const CANDLE_PANE_ID = "candle_pane";
+const DRAG_DRAW_MIN_DISTANCE = 4;
+const DRAG_DRAW_OVERLAY_NAMES = new Set([
+  "rect",
+  "circle",
+  "straightLine",
+  "rayLine",
+  "segment",
+  "arrow",
+  "priceLine",
+  "priceChannelLine",
+  "parallelStraightLine",
+  "horizontalRayLine",
+  "horizontalSegment",
+  "verticalRayLine",
+  "verticalSegment",
+]);
 const AUTO_SCALE_PADDING_PERCENT = 0.08;
 const AUTO_SCALE_THROTTLE_MS = 80;
 const AUTO_SCALE_APPLY_EPSILON = 0.002;
@@ -277,6 +293,17 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
   let widget: Nullable<Chart> = null;
 
   let priceUnitDom: HTMLElement;
+  let pendingDragDrawOverlay: OverlayCreate | null = null;
+  let dragDrawState: {
+    overlay: OverlayCreate;
+    startPoint: Partial<Point>;
+    startClientX: number;
+    startClientY: number;
+    overlayId: string | null;
+    pointerId: number;
+    previousScrollEnabled?: boolean;
+    previousZoomEnabled?: boolean;
+  } | null = null;
 
   const [isLoading, setIsLoading] = createSignal(false);
 
@@ -1218,6 +1245,148 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     setOverlayToolbarDropdown(null);
     syncDrawingsToStorage();
     scheduleAutoScaleRange(true);
+  };
+
+  const isDragDrawOverlay = (overlay: OverlayCreate) =>
+    typeof overlay.name === "string" && DRAG_DRAW_OVERLAY_NAMES.has(overlay.name);
+
+  const getDragDrawPoint = (
+    event: PointerEvent,
+    requireMainTarget = false
+  ): Partial<Point> | null => {
+    if (!widget) {
+      return null;
+    }
+    const mainDom = widget.getDom?.(CANDLE_PANE_ID, DomPosition.Main);
+    const mainRect = mainDom?.getBoundingClientRect?.();
+    if (
+      !mainDom ||
+      !mainRect ||
+      (requireMainTarget && !mainDom.contains(event.target as Node))
+    ) {
+      return null;
+    }
+    const x = event.clientX - mainRect.left;
+    const y = event.clientY - mainRect.top;
+    if (x < 0 || y < 0 || x > mainRect.width || y > mainRect.height) {
+      return null;
+    }
+    const converted = widget.convertFromPixel?.([{ x, y }], {
+      paneId: CANDLE_PANE_ID,
+    });
+    const point = Array.isArray(converted) ? converted[0] : converted;
+    if (
+      !point ||
+      !Number.isFinite(Number(point.dataIndex)) ||
+      !Number.isFinite(Number(point.value))
+    ) {
+      return null;
+    }
+    return {
+      dataIndex: Number(point.dataIndex),
+      timestamp: Number(point.timestamp),
+      value: Number(point.value),
+    };
+  };
+
+  const setChartGestureEnabled = (enabled: boolean) => {
+    widget?.setScrollEnabled?.(enabled);
+    widget?.setZoomEnabled?.(enabled);
+  };
+
+  const beginDragDraw = (event: PointerEvent) => {
+    if (
+      event.button !== 0 ||
+      !pendingDragDrawOverlay ||
+      dragDrawState ||
+      !widget ||
+      !widgetRef
+    ) {
+      return;
+    }
+    const startPoint = getDragDrawPoint(event, true);
+    if (!startPoint) {
+      return;
+    }
+    dragDrawState = {
+      overlay: pendingDragDrawOverlay,
+      startPoint,
+      startClientX: event.clientX,
+      startClientY: event.clientY,
+      overlayId: null,
+      pointerId: event.pointerId,
+      previousScrollEnabled: widget.isScrollEnabled?.(),
+      previousZoomEnabled: widget.isZoomEnabled?.(),
+    };
+    widgetRef.setPointerCapture?.(event.pointerId);
+  };
+
+  const updateDragDraw = (event: PointerEvent) => {
+    const state = dragDrawState;
+    if (!state || state.pointerId !== event.pointerId || !widget) {
+      return;
+    }
+    const nextPoint = getDragDrawPoint(event);
+    if (!nextPoint) {
+      return;
+    }
+    const distance = Math.hypot(
+      event.clientX - state.startClientX,
+      event.clientY - state.startClientY
+    );
+    if (!state.overlayId && distance < DRAG_DRAW_MIN_DISTANCE) {
+      return;
+    }
+    event.preventDefault();
+    event.stopPropagation();
+    if (!state.overlayId) {
+      setChartGestureEnabled(false);
+      const overlayIdRaw = widget.createOverlay?.(
+        withOverlayToolbarEvents({
+          ...state.overlay,
+          points: [state.startPoint, nextPoint],
+        })
+      );
+      state.overlayId = typeof overlayIdRaw === "string" ? overlayIdRaw : null;
+      return;
+    }
+    widget.overrideOverlay?.({
+      id: state.overlayId,
+      points: [state.startPoint, nextPoint],
+    });
+    updateOverlayTracking(state.overlayId);
+  };
+
+  const finishDragDraw = (event: PointerEvent, cancel = false) => {
+    const state = dragDrawState;
+    if (!state || state.pointerId !== event.pointerId) {
+      return;
+    }
+    widgetRef?.releasePointerCapture?.(event.pointerId);
+    if (state.overlayId && cancel) {
+      widget?.removeOverlay?.({ id: state.overlayId });
+      cleanupDrawingState(state.overlayId);
+      overlayTracker.delete(state.overlayId);
+    } else if (state.overlayId) {
+      const endPoint = getDragDrawPoint(event);
+      if (endPoint) {
+        widget?.overrideOverlay?.({
+          id: state.overlayId,
+          points: [state.startPoint, endPoint],
+        });
+      }
+      updateOverlayTracking(state.overlayId);
+      syncDrawingsToStorage();
+      scheduleAutoScaleRange(true);
+      pendingDragDrawOverlay = null;
+    }
+    if (state.previousScrollEnabled !== undefined) {
+      widget?.setScrollEnabled?.(state.previousScrollEnabled);
+    }
+    if (state.previousZoomEnabled !== undefined) {
+      widget?.setZoomEnabled?.(state.previousZoomEnabled);
+    }
+    dragDrawState = null;
   };
 
   const restoreDrawingsForSymbol = (ticker?: string) => {
@@ -3628,6 +3797,20 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     cleanupYAxisManualScaleDetection?.();
     cleanupYAxisManualScaleDetection = undefined;
     document.removeEventListener("mousedown", handleQuickOrderDocumentPointerDown);
+    if (dragDrawState) {
+      const state = dragDrawState;
+      if (state.overlayId) {
+        widget?.removeOverlay?.({ id: state.overlayId });
+      }
+      if (state.previousScrollEnabled !== undefined) {
+        widget?.setScrollEnabled?.(state.previousScrollEnabled);
+      }
+      if (state.previousZoomEnabled !== undefined) {
+        widget?.setZoomEnabled?.(state.previousZoomEnabled);
+      }
+      dragDrawState = null;
+    }
+    pendingDragDrawOverlay = null;
 
     // Cleanup all monitoring intervals
     // drawingStates.forEach((state, overlayId) => {
@@ -4026,6 +4209,11 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
         <DrawingBar
           locale={props.locale}
           onDrawingItemClick={(overlay) => {
+              if (isDragDrawOverlay(overlay)) {
+                pendingDragDrawOverlay = overlay;
+                return;
+              }
+              pendingDragDrawOverlay = null;
               widget?.createOverlay(withOverlayToolbarEvents(overlay));
             }}
             onModeChange={(mode) => {
@@ -4046,6 +4234,11 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
           ref={(el) => (widgetRef = el as HTMLDivElement)}
           class="klinecharts-pro-widget"
           data-drawing-bar-visible={drawingBarVisible()}
+          onPointerDown={beginDragDraw}
+          onPointerMove={updateDragDraw}
+          onPointerUp={(event) => finishDragDraw(event)}
+          onPointerCancel={(event) => finishDragDraw(event, true)}
+          onLostPointerCapture={(event) => finishDragDraw(event as PointerEvent)}
         />
         <Show when={timeAnchorLine()} keyed>
           {(line) => (

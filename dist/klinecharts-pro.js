@@ -5463,7 +5463,7 @@ const qy = (e) => {
         C && ((y = n == null ? void 0 : n.overrideOverlay) == null || y.call(n, {
           id: a.overlayId,
           points: [a.startPoint, C]
-        })), Ot(a.overlayId), _1(), ke(!0);
+        })), Ot(a.overlayId), _1(), ke(!0), c = null;
       }
       a.previousScrollEnabled !== void 0 && ((h = n == null ? void 0 : n.setScrollEnabled) == null || h.call(n, a.previousScrollEnabled)), a.previousZoomEnabled !== void 0 && ((g = n == null ? void 0 : n.setZoomEnabled) == null || g.call(n, a.previousZoomEnabled)), f = null;
     }
