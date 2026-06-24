@@ -114,7 +114,7 @@ const DrawingBar: Component<DrawingBarProps> = props => {
       }
       <span class="split-line"/>
       <div
-        class="item"
+        class="item magnet-mode"
         tabIndex={0}
         onClick={() => { togglePopover('mode') }}
         onBlur={() => { setPopoverKey('') }}>
