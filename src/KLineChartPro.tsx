@@ -109,6 +109,7 @@ export default class KLineChartPro implements ChartPro {
               openOrders: true,
               openOrdersExtendedPriceLine: true,
               openOrdersDisplay: "right",
+              confirmAfterDrag: true,
               positions: true,
               breakevenPrice: true,
               liquidationPrice: true,
@@ -322,6 +323,7 @@ export default class KLineChartPro implements ChartPro {
       openOrders: true,
       openOrdersExtendedPriceLine: true,
       openOrdersDisplay: "right",
+      confirmAfterDrag: true,
       positions: true,
       breakevenPrice: true,
       liquidationPrice: true,
@@ -341,6 +343,7 @@ export default class KLineChartPro implements ChartPro {
     openOrders?: boolean;
     openOrdersExtendedPriceLine?: boolean;
     openOrdersDisplay?: "left" | "center" | "right";
+    confirmAfterDrag?: boolean;
     positions?: boolean;
     breakevenPrice?: boolean;
     liquidationPrice?: boolean;

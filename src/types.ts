@@ -126,6 +126,7 @@ export interface OrderToolsState {
   openOrders: boolean;
   openOrdersExtendedPriceLine: boolean;
   openOrdersDisplay: "left" | "center" | "right";
+  confirmAfterDrag: boolean;
   positions: boolean;
   breakevenPrice: boolean;
   liquidationPrice: boolean;
@@ -166,6 +167,8 @@ export interface OrderToolsOptions {
   openOrders?: boolean;
   openOrdersExtendedPriceLine?: boolean;
   openOrdersDisplay?: "left" | "center" | "right";
+  confirmAfterDrag?: boolean;
+  confirmAfterDragLabel?: string;
   positions?: boolean;
   breakevenPrice?: boolean;
   liquidationPrice?: boolean;

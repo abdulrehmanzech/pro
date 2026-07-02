@@ -50,6 +50,7 @@ export interface PeriodBarProps {
   };
   showOrderToolsMenu?: boolean;
   orderToolsState?: OrderToolsState;
+  orderToolsConfirmAfterDragLabel?: string;
   onOrderToolsStateChange?: (state: Partial<OrderToolsState>) => void;
 }
 
@@ -788,6 +789,25 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
                               </div>
                             </Show>
                           </div>
+                        </div>
+                        <div class="klinecharts-pro-order-tools-setting-row">
+                          <span class="klinecharts-pro-order-tools-label">
+                            {props.orderToolsConfirmAfterDragLabel ??
+                              "Confirm After Drag"}
+                          </span>
+                          <Switch
+                            open={
+                              props.orderToolsState?.confirmAfterDrag ?? true
+                            }
+                            onChange={() => {
+                              props.onOrderToolsStateChange?.({
+                                confirmAfterDrag: !(
+                                  props.orderToolsState?.confirmAfterDrag ??
+                                  true
+                                ),
+                              });
+                            }}
+                          />
                         </div>
                       </div>
                     </div>

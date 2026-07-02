@@ -81,6 +81,7 @@ import {
   calculateAutoPriceRange,
   type AutoPriceRange,
 } from "./utils/autoScale";
+import { shouldEmitOrderPreviewLineChange } from "./utils/orderTools";
 
 import { translateTimezone } from "./widget/timezone-modal/data";
 
@@ -447,6 +448,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     openOrdersExtendedPriceLine:
       props.orderTools?.openOrdersExtendedPriceLine ?? true,
     openOrdersDisplay: props.orderTools?.openOrdersDisplay ?? "right",
+    confirmAfterDrag: props.orderTools?.confirmAfterDrag ?? true,
     positions: props.orderTools?.positions ?? true,
     breakevenPrice: props.orderTools?.breakevenPrice ?? true,
     liquidationPrice: props.orderTools?.liquidationPrice ?? true,
@@ -1474,6 +1476,9 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
   };
 
   const emitOrderPreviewLineChange = (overlay: any) => {
+    if (!shouldEmitOrderPreviewLineChange(orderToolsState().confirmAfterDrag)) {
+      return;
+    }
     const price = Number(overlay?.points?.[0]?.value);
     if (!Number.isFinite(price) || price <= 0) {
       return;
@@ -2037,6 +2042,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
   let lastOrderToolsOpenOrdersExtendedPriceLineProp =
     props.orderTools?.openOrdersExtendedPriceLine;
   let lastOrderToolsOpenOrdersDisplayProp = props.orderTools?.openOrdersDisplay;
+  let lastOrderToolsConfirmAfterDragProp = props.orderTools?.confirmAfterDrag;
   let lastOrderToolsPositionsProp = props.orderTools?.positions;
   let lastOrderToolsBreakevenPriceProp = props.orderTools?.breakevenPrice;
   let lastOrderToolsLiquidationPriceProp = props.orderTools?.liquidationPrice;
@@ -2054,6 +2060,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     const nextOpenOrdersExtendedPriceLine =
       props.orderTools?.openOrdersExtendedPriceLine;
     const nextOpenOrdersDisplay = props.orderTools?.openOrdersDisplay;
+    const nextConfirmAfterDrag = props.orderTools?.confirmAfterDrag;
     const nextPositions = props.orderTools?.positions;
     const nextBreakevenPrice = props.orderTools?.breakevenPrice;
     const nextLiquidationPrice = props.orderTools?.liquidationPrice;
@@ -2114,6 +2121,13 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     ) {
       lastOrderToolsOpenOrdersDisplayProp = nextOpenOrdersDisplay;
       nextState.openOrdersDisplay = nextOpenOrdersDisplay;
+    }
+    if (
+      typeof nextConfirmAfterDrag === "boolean" &&
+      nextConfirmAfterDrag !== lastOrderToolsConfirmAfterDragProp
+    ) {
+      lastOrderToolsConfirmAfterDragProp = nextConfirmAfterDrag;
+      nextState.confirmAfterDrag = nextConfirmAfterDrag;
     }
     if (
       typeof nextPositions === "boolean" &&
@@ -4178,6 +4192,9 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
         chartViewToggle={props.chartViewToggle}
         showOrderToolsMenu={props.orderTools?.visible ?? false}
         orderToolsState={orderToolsState()}
+        orderToolsConfirmAfterDragLabel={
+          props.orderTools?.confirmAfterDragLabel
+        }
         onOrderToolsStateChange={applyOrderToolsState}
       />
       <div
