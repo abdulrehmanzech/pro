@@ -74,7 +74,11 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
     createSignal(false);
   const [priceLineSubmenuVisible, setPriceLineSubmenuVisible] =
     createSignal(false);
-  const [orderMenuPosition, setOrderMenuPosition] = createSignal({ top: 0, left: 0, minWidth: 220 });
+  const [orderMenuPosition, setOrderMenuPosition] = createSignal({
+    top: 0,
+    left: 0,
+    minWidth: 220,
+  });
 
   const handleResize = () => {
     setIsMobile(window.innerWidth < 768);
@@ -139,7 +143,10 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
     if (!target) {
       return;
     }
-    if (orderMenuRef?.contains(target) || orderMenuContentRef?.contains(target)) {
+    if (
+      orderMenuRef?.contains(target) ||
+      orderMenuContentRef?.contains(target)
+    ) {
       return;
     }
     closeOrderToolSubmenus();
@@ -163,7 +170,7 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
     const hasOverflow = el.scrollWidth > el.clientWidth + 2;
     setShowLeftArrow(hasOverflow && el.scrollLeft > 2);
     setShowRightArrow(
-      hasOverflow && el.scrollLeft + el.clientWidth < el.scrollWidth - 2
+      hasOverflow && el.scrollLeft + el.clientWidth < el.scrollWidth - 2,
     );
   };
 
@@ -410,7 +417,11 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
         </Show>
 
         <Show when={!isMobile()}>
-          <div class="item tools" title="Time Tools" onClick={props.onTimeToolsClick}>
+          <div
+            class="item tools"
+            title="Time Tools"
+            onClick={props.onTimeToolsClick}
+          >
             <svg
               viewBox="0 0 24 24"
               fill="none"
@@ -467,7 +478,9 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
             "margin-left": "auto",
             "align-items": "center",
             flex: "0 0 auto",
-            "padding-right": fullScreen() ? "0px" : "var(--klinecharts-pro-period-bar-padding-right)",
+            "padding-right": fullScreen()
+              ? "0px"
+              : "var(--klinecharts-pro-period-bar-padding-right)",
           }}
         >
           <Show when={props.showOrderToolsMenu}>
@@ -520,7 +533,9 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
                   stroke-linecap="round"
                   stroke-linejoin="round"
                   style={{
-                    transform: orderMenuVisible() ? "rotate(180deg)" : "rotate(0deg)",
+                    transform: orderMenuVisible()
+                      ? "rotate(180deg)"
+                      : "rotate(0deg)",
                     transition: "transform 0.2s ease",
                   }}
                 >
@@ -569,7 +584,8 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
                               class="klinecharts-pro-order-tools-checkbox-input"
                               type="checkbox"
                               checked={
-                                (props.orderToolsState?.quickOrderFloatingWindow ??
+                                (props.orderToolsState
+                                  ?.quickOrderFloatingWindow ??
                                   props.orderToolsState?.quickOrder ??
                                   true) ||
                                 (props.orderToolsState?.quickOrderPlusButton ??
@@ -586,54 +602,62 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
                             />
                             <span class="klinecharts-pro-order-tools-checkbox-fill" />
                           </label>
-                          <span class="klinecharts-pro-order-tools-label">Quick Order</span>
+                          <span class="klinecharts-pro-order-tools-label">
+                            Quick Order
+                          </span>
                         </span>
-                        <span class="klinecharts-pro-order-tools-chevron">›</span>
+                        <span class="klinecharts-pro-order-tools-chevron">
+                          ›
+                        </span>
                       </button>
-                      <div
-                        class="klinecharts-pro-order-tools-submenu"
-                      >
-                      <label class="klinecharts-pro-order-tools-item">
-                        <span class="klinecharts-pro-order-tools-checkbox-box">
-                          <input
-                            class="klinecharts-pro-order-tools-checkbox-input"
-                            type="checkbox"
-                            checked={
-                              props.orderToolsState?.quickOrderFloatingWindow ??
-                              props.orderToolsState?.quickOrder ??
-                              true
-                            }
-                            onChange={(event) => {
-                              props.onOrderToolsStateChange?.({
-                                quickOrderFloatingWindow:
-                                  event.currentTarget.checked,
-                              });
-                            }}
-                          />
-                          <span class="klinecharts-pro-order-tools-checkbox-fill" />
-                        </span>
-                        <span class="klinecharts-pro-order-tools-label">Floating Window</span>
-                      </label>
-                      <label class="klinecharts-pro-order-tools-item">
-                        <span class="klinecharts-pro-order-tools-checkbox-box">
-                          <input
-                            class="klinecharts-pro-order-tools-checkbox-input"
-                            type="checkbox"
-                            checked={
-                              props.orderToolsState?.quickOrderPlusButton ??
-                              props.orderToolsState?.quickOrder ??
-                              true
-                            }
-                            onChange={(event) => {
-                              props.onOrderToolsStateChange?.({
-                                quickOrderPlusButton: event.currentTarget.checked,
-                              });
-                            }}
-                          />
-                          <span class="klinecharts-pro-order-tools-checkbox-fill" />
-                        </span>
-                        <span class="klinecharts-pro-order-tools-label">Plus Button</span>
-                      </label>
+                      <div class="klinecharts-pro-order-tools-submenu">
+                        <label class="klinecharts-pro-order-tools-item">
+                          <span class="klinecharts-pro-order-tools-checkbox-box">
+                            <input
+                              class="klinecharts-pro-order-tools-checkbox-input"
+                              type="checkbox"
+                              checked={
+                                props.orderToolsState
+                                  ?.quickOrderFloatingWindow ??
+                                props.orderToolsState?.quickOrder ??
+                                true
+                              }
+                              onChange={(event) => {
+                                props.onOrderToolsStateChange?.({
+                                  quickOrderFloatingWindow:
+                                    event.currentTarget.checked,
+                                });
+                              }}
+                            />
+                            <span class="klinecharts-pro-order-tools-checkbox-fill" />
+                          </span>
+                          <span class="klinecharts-pro-order-tools-label">
+                            Floating Window
+                          </span>
+                        </label>
+                        <label class="klinecharts-pro-order-tools-item">
+                          <span class="klinecharts-pro-order-tools-checkbox-box">
+                            <input
+                              class="klinecharts-pro-order-tools-checkbox-input"
+                              type="checkbox"
+                              checked={
+                                props.orderToolsState?.quickOrderPlusButton ??
+                                props.orderToolsState?.quickOrder ??
+                                true
+                              }
+                              onChange={(event) => {
+                                props.onOrderToolsStateChange?.({
+                                  quickOrderPlusButton:
+                                    event.currentTarget.checked,
+                                });
+                              }}
+                            />
+                            <span class="klinecharts-pro-order-tools-checkbox-fill" />
+                          </span>
+                          <span class="klinecharts-pro-order-tools-label">
+                            Plus Button
+                          </span>
+                        </label>
                       </div>
                     </div>
                     <div
@@ -662,7 +686,9 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
                             <input
                               class="klinecharts-pro-order-tools-checkbox-input"
                               type="checkbox"
-                              checked={props.orderToolsState?.openOrders ?? true}
+                              checked={
+                                props.orderToolsState?.openOrders ?? true
+                              }
                               onChange={(event) => {
                                 event.stopPropagation();
                                 setOpenOrdersSubmenuVisible(true);
@@ -673,9 +699,13 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
                             />
                             <span class="klinecharts-pro-order-tools-checkbox-fill" />
                           </label>
-                          <span class="klinecharts-pro-order-tools-label">Open Orders</span>
+                          <span class="klinecharts-pro-order-tools-label">
+                            Open Orders
+                          </span>
                         </span>
-                        <span class="klinecharts-pro-order-tools-chevron">&rsaquo;</span>
+                        <span class="klinecharts-pro-order-tools-chevron">
+                          &rsaquo;
+                        </span>
                       </button>
                       <div class="klinecharts-pro-order-tools-submenu">
                         <div class="klinecharts-pro-order-tools-setting-row">
@@ -684,21 +714,23 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
                           </span>
                           <Switch
                             open={
-                              props.orderToolsState?.openOrdersExtendedPriceLine ??
-                              true
+                              props.orderToolsState
+                                ?.openOrdersExtendedPriceLine ?? true
                             }
                             onChange={() => {
                               props.onOrderToolsStateChange?.({
                                 openOrdersExtendedPriceLine: !(
-                                  props.orderToolsState?.openOrdersExtendedPriceLine ??
-                                  true
+                                  props.orderToolsState
+                                    ?.openOrdersExtendedPriceLine ?? true
                                 ),
                               });
                             }}
                           />
                         </div>
                         <div class="klinecharts-pro-order-tools-setting-row">
-                          <span class="klinecharts-pro-order-tools-label">Display</span>
+                          <span class="klinecharts-pro-order-tools-label">
+                            Display
+                          </span>
                           <div class="klinecharts-pro-order-tools-display">
                             <button
                               type="button"
@@ -707,12 +739,13 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
                                 event.preventDefault();
                                 event.stopPropagation();
                                 setOpenOrdersDisplayMenuVisible(
-                                  (visible) => !visible
+                                  (visible) => !visible,
                                 );
                               }}
                             >
                               {displayLabel(
-                                props.orderToolsState?.openOrdersDisplay ?? "right"
+                                props.orderToolsState?.openOrdersDisplay ??
+                                  "right",
                               )}
                               <svg
                                 class={`klinecharts-pro-order-tools-display-arrow${
@@ -733,8 +766,9 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
                                     <button
                                       type="button"
                                       class={
-                                        (props.orderToolsState?.openOrdersDisplay ??
-                                          "right") === value
+                                        (props.orderToolsState
+                                          ?.openOrdersDisplay ?? "right") ===
+                                        value
                                           ? "selected"
                                           : ""
                                       }
@@ -749,7 +783,7 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
                                     >
                                       {displayLabel(value)}
                                     </button>
-                                  )
+                                  ),
                                 )}
                               </div>
                             </Show>
@@ -771,13 +805,18 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
                         />
                         <span class="klinecharts-pro-order-tools-checkbox-fill" />
                       </span>
-                      <span class="klinecharts-pro-order-tools-label">Positions</span>
-                    </label>                    <label class="klinecharts-pro-order-tools-item">
+                      <span class="klinecharts-pro-order-tools-label">
+                        Positions
+                      </span>
+                    </label>{" "}
+                    <label class="klinecharts-pro-order-tools-item">
                       <span class="klinecharts-pro-order-tools-checkbox-box">
                         <input
                           class="klinecharts-pro-order-tools-checkbox-input"
                           type="checkbox"
-                          checked={props.orderToolsState?.breakevenPrice ?? true}
+                          checked={
+                            props.orderToolsState?.breakevenPrice ?? true
+                          }
                           onChange={(event) => {
                             props.onOrderToolsStateChange?.({
                               breakevenPrice: event.currentTarget.checked,
@@ -786,13 +825,18 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
                         />
                         <span class="klinecharts-pro-order-tools-checkbox-fill" />
                       </span>
-                      <span class="klinecharts-pro-order-tools-label">Breakeven Price</span>
-                    </label>                    <label class="klinecharts-pro-order-tools-item">
+                      <span class="klinecharts-pro-order-tools-label">
+                        Breakeven Price
+                      </span>
+                    </label>{" "}
+                    <label class="klinecharts-pro-order-tools-item">
                       <span class="klinecharts-pro-order-tools-checkbox-box">
                         <input
                           class="klinecharts-pro-order-tools-checkbox-input"
                           type="checkbox"
-                          checked={props.orderToolsState?.liquidationPrice ?? true}
+                          checked={
+                            props.orderToolsState?.liquidationPrice ?? true
+                          }
                           onChange={(event) => {
                             props.onOrderToolsStateChange?.({
                               liquidationPrice: event.currentTarget.checked,
@@ -801,7 +845,9 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
                         />
                         <span class="klinecharts-pro-order-tools-checkbox-fill" />
                       </span>
-                      <span class="klinecharts-pro-order-tools-label">Liquidation Price</span>
+                      <span class="klinecharts-pro-order-tools-label">
+                        Liquidation Price
+                      </span>
                     </label>
                     <div
                       class={`klinecharts-pro-order-tools-group${
@@ -849,9 +895,13 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
                             />
                             <span class="klinecharts-pro-order-tools-checkbox-fill" />
                           </label>
-                          <span class="klinecharts-pro-order-tools-label">Price Line</span>
+                          <span class="klinecharts-pro-order-tools-label">
+                            Price Line
+                          </span>
                         </span>
-                        <span class="klinecharts-pro-order-tools-chevron">&rsaquo;</span>
+                        <span class="klinecharts-pro-order-tools-chevron">
+                          &rsaquo;
+                        </span>
                       </button>
                       <div class="klinecharts-pro-order-tools-submenu">
                         <label class="klinecharts-pro-order-tools-item">
@@ -872,7 +922,9 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
                             />
                             <span class="klinecharts-pro-order-tools-checkbox-fill" />
                           </span>
-                          <span class="klinecharts-pro-order-tools-label">Market Price Line</span>
+                          <span class="klinecharts-pro-order-tools-label">
+                            Market Price Line
+                          </span>
                         </label>
                         <label class="klinecharts-pro-order-tools-item">
                           <span class="klinecharts-pro-order-tools-checkbox-box">
@@ -892,7 +944,9 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
                             />
                             <span class="klinecharts-pro-order-tools-checkbox-fill" />
                           </span>
-                          <span class="klinecharts-pro-order-tools-label">Count Down</span>
+                          <span class="klinecharts-pro-order-tools-label">
+                            Count Down
+                          </span>
                         </label>
                         <label class="klinecharts-pro-order-tools-item">
                           <span class="klinecharts-pro-order-tools-checkbox-box">
@@ -912,7 +966,9 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
                             />
                             <span class="klinecharts-pro-order-tools-checkbox-fill" />
                           </span>
-                          <span class="klinecharts-pro-order-tools-label">Bid & Ask Price</span>
+                          <span class="klinecharts-pro-order-tools-label">
+                            Bid & Ask Price
+                          </span>
                         </label>
                       </div>
                     </div>
@@ -921,7 +977,9 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
                         <input
                           class="klinecharts-pro-order-tools-checkbox-input"
                           type="checkbox"
-                          checked={props.orderToolsState?.orderPreviewLine ?? true}
+                          checked={
+                            props.orderToolsState?.orderPreviewLine ?? true
+                          }
                           onChange={(event) => {
                             props.onOrderToolsStateChange?.({
                               orderPreviewLine: event.currentTarget.checked,
@@ -930,7 +988,9 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
                         />
                         <span class="klinecharts-pro-order-tools-checkbox-fill" />
                       </span>
-                      <span class="klinecharts-pro-order-tools-label">Order Preview Line</span>
+                      <span class="klinecharts-pro-order-tools-label">
+                        Order Preview Line
+                      </span>
                     </label>
                     <label class="klinecharts-pro-order-tools-item">
                       <span class="klinecharts-pro-order-tools-checkbox-box">
@@ -946,7 +1006,9 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
                         />
                         <span class="klinecharts-pro-order-tools-checkbox-fill" />
                       </span>
-                      <span class="klinecharts-pro-order-tools-label">Order History</span>
+                      <span class="klinecharts-pro-order-tools-label">
+                        Order History
+                      </span>
                     </label>
                   </div>
                 </Portal>
@@ -971,11 +1033,11 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
           </Show>
           <Show when={!isMobile()}>
             <div class="item tools" onClick={props.onScreenshotClick}>
-            <svg viewBox="0 0 20.5 20">
-              <path d="M6.50977,1L13.4902,1C13.6406,1,13.7695,1.1104910000000001,13.7969,1.2631700000000001L14.0273,2.52277C14.1387,3.13147,14.6543,3.57143,15.2559,3.57143L17.5,3.57143C18.8809,3.57143,20,4.72254,20,6.14286L20,16.4286C20,17.8489,18.8809,19,17.5,19L2.5,19C1.11914,19,0,17.8489,0,16.4286L0,6.14286C0,4.72254,1.11914,3.57143,2.5,3.57143L4.74414,3.57143C5.3457,3.57143,5.86133,3.13147,5.97266,2.52277L6.20312,1.2631700000000001C6.23047,1.1104910000000001,6.35937,1,6.50977,1ZM15.2559,4.857139999999999C14.0547,4.857139999999999,13.0215,3.97522,12.7988,2.75982L12.7129,2.28571L7.28711,2.28571L7.20117,2.75982C6.98047,3.97522,5.94727,4.857139999999999,4.74414,4.857139999999999L2.5,4.857139999999999C1.81055,4.857139999999999,1.25,5.43371,1.25,6.14286L1.25,16.4286C1.25,17.1377,1.81055,17.7143,2.5,17.7143L17.5,17.7143C18.1895,17.7143,18.75,17.1377,18.75,16.4286L18.75,6.14286C18.75,5.43371,18.1895,4.857139999999999,17.5,4.857139999999999L15.2559,4.857139999999999ZM4.375,6.78571L3.125,6.78571C2.7793,6.78571,2.5,6.49844,2.5,6.14286C2.5,5.78728,2.7793,5.5,3.125,5.5L4.375,5.5C4.7207,5.5,5,5.78728,5,6.14286C5,6.49844,4.7207,6.78571,4.375,6.78571ZM10,6.14286C7.06641,6.14286,4.6875,8.58973,4.6875,11.6071C4.6875,14.6246,7.06641,17.0714,10,17.0714C12.9336,17.0714,15.3125,14.6246,15.3125,11.6071C15.3125,8.58973,12.9336,6.14286,10,6.14286ZM10,7.42857C11.0859,7.42857,12.1055,7.8625,12.873,8.65201C13.6406,9.44152,14.0625,10.49018,14.0625,11.6071C14.0625,12.7241,13.6406,13.7728,12.873,14.5623C12.1055,15.3518,11.0859,15.7857,10,15.7857C8.91406,15.7857,7.89453,15.3518,7.12695,14.5623C6.35937,13.7728,5.9375,12.7241,5.9375,11.6071C5.9375,10.49018,6.35938,9.44152,7.12695,8.65201C7.89453,7.8625,8.91406,7.42857,10,7.42857ZM10,9.67857C8.96484,9.67857,8.125,10.54241,8.125,11.6071C8.125,12.6719,8.96484,13.5357,10,13.5357C11.0352,13.5357,11.875,12.6719,11.875,11.6071C11.875,10.54241,11.0352,9.67857,10,9.67857ZM10,10.96429C10.3438,10.96429,10.625,11.2536,10.625,11.6071C10.625,11.9607,10.3438,12.25,10,12.25C9.65625,12.25,9.375,11.9607,9.375,11.6071C9.375,11.2536,9.65625,10.96429,10,10.96429Z" />
-            </svg>
-            {/* <span>{i18n('screenshot', props.locale)}</span> */}
-          </div>
+              <svg viewBox="0 0 20.5 20">
+                <path d="M6.50977,1L13.4902,1C13.6406,1,13.7695,1.1104910000000001,13.7969,1.2631700000000001L14.0273,2.52277C14.1387,3.13147,14.6543,3.57143,15.2559,3.57143L17.5,3.57143C18.8809,3.57143,20,4.72254,20,6.14286L20,16.4286C20,17.8489,18.8809,19,17.5,19L2.5,19C1.11914,19,0,17.8489,0,16.4286L0,6.14286C0,4.72254,1.11914,3.57143,2.5,3.57143L4.74414,3.57143C5.3457,3.57143,5.86133,3.13147,5.97266,2.52277L6.20312,1.2631700000000001C6.23047,1.1104910000000001,6.35937,1,6.50977,1ZM15.2559,4.857139999999999C14.0547,4.857139999999999,13.0215,3.97522,12.7988,2.75982L12.7129,2.28571L7.28711,2.28571L7.20117,2.75982C6.98047,3.97522,5.94727,4.857139999999999,4.74414,4.857139999999999L2.5,4.857139999999999C1.81055,4.857139999999999,1.25,5.43371,1.25,6.14286L1.25,16.4286C1.25,17.1377,1.81055,17.7143,2.5,17.7143L17.5,17.7143C18.1895,17.7143,18.75,17.1377,18.75,16.4286L18.75,6.14286C18.75,5.43371,18.1895,4.857139999999999,17.5,4.857139999999999L15.2559,4.857139999999999ZM4.375,6.78571L3.125,6.78571C2.7793,6.78571,2.5,6.49844,2.5,6.14286C2.5,5.78728,2.7793,5.5,3.125,5.5L4.375,5.5C4.7207,5.5,5,5.78728,5,6.14286C5,6.49844,4.7207,6.78571,4.375,6.78571ZM10,6.14286C7.06641,6.14286,4.6875,8.58973,4.6875,11.6071C4.6875,14.6246,7.06641,17.0714,10,17.0714C12.9336,17.0714,15.3125,14.6246,15.3125,11.6071C15.3125,8.58973,12.9336,6.14286,10,6.14286ZM10,7.42857C11.0859,7.42857,12.1055,7.8625,12.873,8.65201C13.6406,9.44152,14.0625,10.49018,14.0625,11.6071C14.0625,12.7241,13.6406,13.7728,12.873,14.5623C12.1055,15.3518,11.0859,15.7857,10,15.7857C8.91406,15.7857,7.89453,15.3518,7.12695,14.5623C6.35937,13.7728,5.9375,12.7241,5.9375,11.6071C5.9375,10.49018,6.35938,9.44152,7.12695,8.65201C7.89453,7.8625,8.91406,7.42857,10,7.42857ZM10,9.67857C8.96484,9.67857,8.125,10.54241,8.125,11.6071C8.125,12.6719,8.96484,13.5357,10,13.5357C11.0352,13.5357,11.875,12.6719,11.875,11.6071C11.875,10.54241,11.0352,9.67857,10,9.67857ZM10,10.96429C10.3438,10.96429,10.625,11.2536,10.625,11.6071C10.625,11.9607,10.3438,12.25,10,12.25C9.65625,12.25,9.375,11.9607,9.375,11.6071C9.375,11.2536,9.65625,10.96429,10,10.96429Z" />
+              </svg>
+              {/* <span>{i18n('screenshot', props.locale)}</span> */}
+            </div>
           </Show>
           <div
             class="item tools fullscreen-toggle"
@@ -1003,16 +1065,124 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
           >
             {fullScreen() ? (
               <>
-                <svg viewBox="0 0 20 20">
+                {/* <svg viewBox="0 0 20 20">
                   <path d="M1.08108,0L0,1.079L4.18919,5.27938L2.54826,6.91715L6.9112,6.91715L6.9112,2.56262L5.28957,4.18112L1.08108,0ZM15.8108,5.27938L20,1.079L18.9189,0L14.7104,4.18112L13.0888,2.56262L13.0888,6.91715L17.4517,6.91715L15.8108,5.27938ZM4.16988,14.7014L0.07722,18.8054L1.1583,20L5.27027,15.7996L6.9112,17.4374L6.9112,13.0829L2.54826,13.0829L4.16988,14.7014ZM17.4517,13.0829L13.0888,13.0829L13.0888,17.4374L14.7297,15.7996L18.8417,20L19.9228,18.8054L15.8301,14.7013L17.4517,13.0829Z" />
+                </svg> */}
+                <svg
+                  width="800px"
+                  height="800px"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  stroke="#ffffff"
+                >
+                  <g id="SVGRepo_bgCarrier" stroke-width="0" />
+
+                  <g
+                    id="SVGRepo_tracerCarrier"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+
+                  <g id="SVGRepo_iconCarrier">
+                    {" "}
+                    <g id="style=linear">
+                      {" "}
+                      <g id="fullscreen">
+                        {" "}
+                        <path
+                          id="vector"
+                          d="M8 2H4C2.89543 2 2 2.89543 2 4V8"
+                          stroke="#ffffff"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                        />{" "}
+                        <path
+                          id="vector_2"
+                          d="M22 8L22 4C22 2.89543 21.1046 2 20 2H16"
+                          stroke="#ffffff"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                        />{" "}
+                        <path
+                          id="vector_3"
+                          d="M16 22L20 22C21.1046 22 22 21.1046 22 20L22 16"
+                          stroke="#ffffff"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                        />{" "}
+                        <path
+                          id="vector_4"
+                          d="M8 22L4 22C2.89543 22 2 21.1046 2 20V16"
+                          stroke="#ffffff"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                        />{" "}
+                      </g>{" "}
+                    </g>{" "}
+                  </g>
                 </svg>
                 {/* <span>{i18n('exit_full_screen', props.locale)}</span> */}
               </>
             ) : (
               <>
-                <svg viewBox="0 0 20 20">
-                  <path d="M2.93444,1.76899L7.57544,6.40999L6.38918,7.59626L1.76899,2.93444L0,4.70343L0,0L4.70343,0L2.93444,1.76899ZM6.40999,12.4037L1.76899,17.0447L0,15.2758L0,19.9792L4.70343,19.9792L2.93444,18.2102L7.57544,13.5692L6.40999,12.4037ZM15.2758,0L17.0447,1.76899L12.4037,6.40999L13.59,7.59626L18.231,2.95526L20,4.72425L20,0L15.2758,0ZM13.5692,12.4037L12.3829,13.59L17.0239,18.231L15.2549,20L19.9792,20L19.9792,15.2758L18.2102,17.0447L13.5692,12.4037Z" />
+                <svg
+                  width="800px"
+                  height="800px"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  stroke="#ffffff"
+                >
+                  <g id="SVGRepo_bgCarrier" stroke-width="0" />
+
+                  <g
+                    id="SVGRepo_tracerCarrier"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+
+                  <g id="SVGRepo_iconCarrier">
+                    {" "}
+                    <g id="style=linear">
+                      {" "}
+                      <g id="fullscreen">
+                        {" "}
+                        <path
+                          id="vector"
+                          d="M8 2H4C2.89543 2 2 2.89543 2 4V8"
+                          stroke="#ffffff"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                        />{" "}
+                        <path
+                          id="vector_2"
+                          d="M22 8L22 4C22 2.89543 21.1046 2 20 2H16"
+                          stroke="#ffffff"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                        />{" "}
+                        <path
+                          id="vector_3"
+                          d="M16 22L20 22C21.1046 22 22 21.1046 22 20L22 16"
+                          stroke="#ffffff"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                        />{" "}
+                        <path
+                          id="vector_4"
+                          d="M8 22L4 22C2.89543 22 2 21.1046 2 20V16"
+                          stroke="#ffffff"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                        />{" "}
+                      </g>{" "}
+                    </g>{" "}
+                  </g>
                 </svg>
+                {/* <svg viewBox="0 0 20 20">
+                  <path d="M2.93444,1.76899L7.57544,6.40999L6.38918,7.59626L1.76899,2.93444L0,4.70343L0,0L4.70343,0L2.93444,1.76899ZM6.40999,12.4037L1.76899,17.0447L0,15.2758L0,19.9792L4.70343,19.9792L2.93444,18.2102L7.57544,13.5692L6.40999,12.4037ZM15.2758,0L17.0447,1.76899L12.4037,6.40999L13.59,7.59626L18.231,2.95526L20,4.72425L20,0L15.2758,0ZM13.5692,12.4037L12.3829,13.59L17.0239,18.231L15.2549,20L19.9792,20L19.9792,15.2758L18.2102,17.0447L13.5692,12.4037Z" />
+                </svg> */}
                 {/* <span>{i18n('full_screen', props.locale)}</span> */}
               </>
             )}
@@ -1021,7 +1191,11 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
             <div
               class="item tools chart-view-toggle"
               onClick={props.chartViewToggle!.onToggle}
-              title={props.chartViewToggle!.view === "chart" ? "View Depth" : "View Chart"}
+              title={
+                props.chartViewToggle!.view === "chart"
+                  ? "View Depth"
+                  : "View Chart"
+              }
             >
               {props.chartViewToggle!.view === "chart" ? (
                 <svg viewBox="0 0 24 24">
@@ -1075,14 +1249,3 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
 };
 
 export default PeriodBar;
-
-
-
-
-
-
-
-
-
-
-
