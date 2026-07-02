@@ -136,7 +136,7 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
     });
   };
 
-  const handleOrderMenuDocumentClick = (event: MouseEvent) => {
+  const handleOrderMenuDocumentPointerDown = (event: MouseEvent | PointerEvent) => {
     if (!orderMenuVisible()) {
       return;
     }
@@ -178,7 +178,8 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
   onMount(() => {
     window.addEventListener("resize", handleResize);
     document.addEventListener("fullscreenchange", fullScreenChange);
-    document.addEventListener("mousedown", handleOrderMenuDocumentClick);
+    document.addEventListener("pointerdown", handleOrderMenuDocumentPointerDown, true);
+    document.addEventListener("mousedown", handleOrderMenuDocumentPointerDown);
     window.addEventListener("scroll", handleOrderMenuViewportChange, true);
     document.addEventListener("mozfullscreenchange", fullScreenChange);
     document.addEventListener("webkitfullscreenchange", fullScreenChange);
@@ -194,7 +195,8 @@ const PeriodBar: Component<PeriodBarProps> = (props) => {
   onCleanup(() => {
     window.removeEventListener("resize", handleResize);
     document.removeEventListener("fullscreenchange", fullScreenChange);
-    document.removeEventListener("mousedown", handleOrderMenuDocumentClick);
+    document.removeEventListener("pointerdown", handleOrderMenuDocumentPointerDown, true);
+    document.removeEventListener("mousedown", handleOrderMenuDocumentPointerDown);
     window.removeEventListener("scroll", handleOrderMenuViewportChange, true);
     document.removeEventListener("mozfullscreenchange", fullScreenChange);
     document.removeEventListener("webkitfullscreenchange", fullScreenChange);
