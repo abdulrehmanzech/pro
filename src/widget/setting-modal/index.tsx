@@ -484,8 +484,12 @@ const SettingModal: Component<SettingModalProps> = props => {
                   switch (option.component) {
                     case 'select': {
                       const selectWidth = option.key === 'candle.type' ? '170px' : '120px'
+                      const selectClassName = `klinecharts-pro-setting-select klinecharts-pro-setting-select-${option.key.replace(/[^a-zA-Z0-9_-]/g, '-')}`
+                      const dropdownClassName = `klinecharts-pro-setting-dropdown klinecharts-pro-setting-dropdown-${option.key.replace(/[^a-zA-Z0-9_-]/g, '-')}`
                       component = (
                         <Select
+                          class={selectClassName}
+                          dropdownClass={dropdownClassName}
                           style={{ width: isMobile() ? '100%' : selectWidth, 'min-width': isMobile() ? 'auto' : selectWidth }}
                           value={i18n(value as string, props.locale)}
                           dataSource={option.dataSource}

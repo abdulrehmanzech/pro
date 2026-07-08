@@ -56,14 +56,16 @@ const Select: Component<SelectProps> = (props) => {
     const bounds = modalInner?.getBoundingClientRect();
     const boundaryLeft = bounds?.left ?? 0;
     const boundaryRight = bounds?.right ?? window.innerWidth;
-    const boundaryPadding = props.dropdownClass?.includes("klinecharts-pro-timezone-dropdown")
-      ? 16
-      : 12;
+    const isInSettingModal = !!containerRef.closest(".klinecharts-pro-setting-modal");
+    const isSettingDropdown =
+      isInSettingModal ||
+      props.dropdownClass?.includes("klinecharts-pro-timezone-dropdown");
+    const boundaryPadding = isSettingDropdown ? 16 : 12;
     const availableBoundaryWidth = Math.max(
       rect.width,
       boundaryRight - boundaryLeft - boundaryPadding * 2
     );
-    const preferredWidth = props.dropdownClass?.includes("klinecharts-pro-timezone-dropdown")
+    const preferredWidth = isSettingDropdown
       ? Math.max(rect.width, Math.min(280, availableBoundaryWidth))
       : rect.width;
     const left = Math.min(
