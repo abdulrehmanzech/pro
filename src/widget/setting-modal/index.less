@@ -355,8 +355,17 @@
   }
 
   .chart-style-color-popover {
-    left: 0;
-    right: auto;
-    width: min(300px, calc(100vw - 54px));
+    box-sizing: border-box;
+    padding: 14px;
+  }
+
+  .chart-style-color-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .chart-style-palette-color {
+    width: 100%;
+    height: 38px;
   }
 }

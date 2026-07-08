@@ -52,13 +52,23 @@ const Select: Component<SelectProps> = (props) => {
 
     const rect = containerRef.getBoundingClientRect();
     const gap = 4;
-    const viewportPadding = 12;
+    const modalInner = containerRef.closest(".klinecharts-pro-modal .inner");
+    const bounds = modalInner?.getBoundingClientRect();
+    const boundaryLeft = bounds?.left ?? 0;
+    const boundaryRight = bounds?.right ?? window.innerWidth;
+    const boundaryPadding = props.dropdownClass?.includes("klinecharts-pro-timezone-dropdown")
+      ? 16
+      : 12;
+    const availableBoundaryWidth = Math.max(
+      rect.width,
+      boundaryRight - boundaryLeft - boundaryPadding * 2
+    );
     const preferredWidth = props.dropdownClass?.includes("klinecharts-pro-timezone-dropdown")
-      ? Math.max(rect.width, Math.min(280, window.innerWidth - viewportPadding * 2))
+      ? Math.max(rect.width, Math.min(280, availableBoundaryWidth))
       : rect.width;
     const left = Math.min(
-      Math.max(rect.left, viewportPadding),
-      window.innerWidth - preferredWidth - viewportPadding
+      Math.max(rect.left, boundaryLeft + boundaryPadding),
+      boundaryRight - preferredWidth - boundaryPadding
     );
     const maxHeight = Math.min(260, Math.max(140, window.innerHeight - 32));
     const spaceBelow = window.innerHeight - rect.bottom - gap;

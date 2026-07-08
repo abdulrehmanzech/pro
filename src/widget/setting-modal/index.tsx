@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-import { Component, createEffect, For, createSignal, onMount, onCleanup } from 'solid-js'
+import { Component, createEffect, For, createSignal, onMount, onCleanup, JSX } from 'solid-js'
 import { Styles, utils, DeepPartial, LineType } from 'klinecharts'
 
 import lodashSet from 'lodash/set'
@@ -152,6 +152,7 @@ const SettingModal: Component<SettingModalProps> = props => {
   const [activeTab, setActiveTab] = createSignal<ModalTab>('settings')
   const [activeChartStyleTab, setActiveChartStyleTab] = createSignal<ChartStyleTab>('symbol')
   const [activeColorKey, setActiveColorKey] = createSignal<string | null>(null)
+  const [colorPopoverStyle, setColorPopoverStyle] = createSignal<JSX.CSSProperties>({})
   const [activeLineWidthKey, setActiveLineWidthKey] = createSignal<string | null>(null)
 
   // Check if device is mobile
@@ -306,16 +307,40 @@ const SettingModal: Component<SettingModalProps> = props => {
   const renderColorPicker = (key: string, pickerId = key) => {
     const value = formatDraftValue(key, '#ffffff') as string
     return (
-      <div class="chart-style-color-picker">
+      <div class={`chart-style-color-picker chart-style-color-picker-${pickerId}`}>
         <button
           type="button"
-          class="chart-style-color-swatch"
+          class={`chart-style-color-swatch chart-style-color-swatch-${pickerId}`}
           style={{ background: value }}
-          onClick={() => {
-            setActiveColorKey(activeColorKey() === pickerId ? null : pickerId)
+          onClick={(event) => {
+            const nextActive = activeColorKey() === pickerId ? null : pickerId
+            if (nextActive && isMobile()) {
+              const modalInner = event.currentTarget.closest('.klinecharts-pro-modal .inner')
+              const bounds = modalInner?.getBoundingClientRect()
+              if (bounds) {
+                const padding = 16
+                const top = event.currentTarget.getBoundingClientRect().bottom + 10
+                setColorPopoverStyle({
+                  position: 'fixed',
+                  left: `${bounds.left + padding}px`,
+                  right: `${window.innerWidth - bounds.right + padding}px`,
+                  top: `${top}px`,
+                  width: 'auto',
+                  'max-width': `${bounds.width - padding * 2}px`,
+                  'max-height': `${Math.max(150, window.innerHeight - top - 96)}px`,
+                  'overflow-y': 'auto'
+                })
+              }
+            } else {
+              setColorPopoverStyle({})
+            }
+            setActiveColorKey(nextActive)
           }}/>
         {activeColorKey() === pickerId && (
-          <div class="chart-style-color-popover">
+          <div
+            class={`chart-style-color-popover chart-style-color-popover-${pickerId}`}
+            style={colorPopoverStyle()}
+          >
             <div class="chart-style-color-grid">
               <For each={colorPalette}>
                 {color => (
@@ -406,6 +431,12 @@ const SettingModal: Component<SettingModalProps> = props => {
   return (
     <Modal
       title={modalTitle}
+      class="klinecharts-pro-setting-modal"
+      innerClass="klinecharts-pro-setting-modal-inner"
+      contentClass="klinecharts-pro-setting-modal-body"
+      buttonContainerClass={`klinecharts-pro-setting-modal-footer ${
+        activeTab() === 'chartStyle' ? 'chart-style-footer' : 'settings-footer'
+      }`}
       width={activeTab() === 'chartStyle' ? 760 : 690}
       btnParentStyle={{
         'display': 'flex',
@@ -414,7 +445,7 @@ const SettingModal: Component<SettingModalProps> = props => {
           ? { 'padding': '12px 20px 18px 20px' }
           : {})
       }}
-      minButtonWidth={activeTab() === 'chartStyle' ? 170 : 200}
+      minButtonWidth={isMobile() ? undefined : activeTab() === 'chartStyle' ? 170 : 200}
       isMobile={isMobile()}
       buttons={activeTab() === 'settings'
         ? [
@@ -492,6 +523,7 @@ const SettingModal: Component<SettingModalProps> = props => {
                 <span class="setting-label">{i18n('timezone', props.locale)}</span>
                 <div class="setting-control">
                   <Select
+                    class="klinecharts-pro-timezone-select"
                     style={{ width: isMobile() ? '100%' : '170px', 'min-width': isMobile() ? 'auto' : '170px' }}
                     dropdownClass="klinecharts-pro-timezone-dropdown"
                     value={innerTimezone()?.text ?? props.timezone.text}

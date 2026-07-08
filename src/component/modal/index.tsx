@@ -17,6 +17,10 @@ import { ParentComponent, ParentProps, JSX } from "solid-js";
 import Button, { ButtonProps } from "../button";
 
 export interface ModalProps extends ParentProps {
+  class?: string;
+  innerClass?: string;
+  contentClass?: string;
+  buttonContainerClass?: string;
   width?: number;
   title?: JSX.Element;
   buttons?: ButtonProps[];
@@ -29,7 +33,7 @@ export interface ModalProps extends ParentProps {
 const Modal: ParentComponent<ModalProps> = (props) => {
   return (
     <div
-      class="klinecharts-pro-modal"
+      class={`klinecharts-pro-modal ${props.class ?? ""}`}
       classList={{ "mobile-modal": props.isMobile }}
       onClick={(e) => {
         // close when clicking on the backdrop (outside the inner dialog)
@@ -44,7 +48,7 @@ const Modal: ParentComponent<ModalProps> = (props) => {
           height: props.isMobile ? "auto" : "auto",
           "max-height": props.isMobile ? "60vh" : "90vh",
         }}
-        class="inner"
+        class={`inner ${props.innerClass ?? ""}`}
         classList={{ "mobile-inner": props.isMobile }}
       >
         <div
@@ -61,14 +65,14 @@ const Modal: ParentComponent<ModalProps> = (props) => {
           </svg>
         </div>
         <div
-          class="content-container"
+          class={`content-container ${props.contentClass ?? ""}`}
           classList={{ "mobile-content": props.isMobile }}
         >
           {props.children}
         </div>
         {props.buttons && props.buttons.length > 0 && (
           <div
-            class="button-container"
+            class={`button-container ${props.buttonContainerClass ?? ""}`}
           style={props.btnParentStyle}
             classList={{ "mobile-buttons": props.isMobile }}
           >
@@ -81,7 +85,7 @@ const Modal: ParentComponent<ModalProps> = (props) => {
                     ...(props.minButtonWidth
                       ? { "min-width": `${props.minButtonWidth}px` }
                       : {}),
-                    width: props.isMobile ? "100%" : "auto",
+                    width: "auto",
                   }}
                 >
                   {button.children}
