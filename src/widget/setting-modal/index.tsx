@@ -22,7 +22,7 @@ import type { SelectDataSourceItem } from '../../component'
 
 import i18n from '../../i18n'
 import { getOptions } from './data'
-import { createTimezoneSelectOptions } from '../timezone-modal/data'
+import { createTimezoneSelectOptions, translateTimezone } from '../timezone-modal/data'
 
 export interface SettingModalProps {
   locale: string
@@ -154,6 +154,7 @@ const SettingModal: Component<SettingModalProps> = props => {
   const [activeColorKey, setActiveColorKey] = createSignal<string | null>(null)
   const [colorPopoverStyle, setColorPopoverStyle] = createSignal<JSX.CSSProperties>({})
   const [activeLineWidthKey, setActiveLineWidthKey] = createSignal<string | null>(null)
+  const defaultTimezone = () => Intl.DateTimeFormat().resolvedOptions().timeZone
 
   // Check if device is mobile
   const checkMobile = () => {
@@ -453,6 +454,13 @@ const SettingModal: Component<SettingModalProps> = props => {
               children: i18n('restore_default', props.locale),
               onClick: () => {
                 props.onRestoreDefault(options())
+                const timezone = defaultTimezone()
+                const nextTimezone = {
+                  key: timezone,
+                  text: translateTimezone(timezone, props.locale)
+                }
+                setInnerTimezone(nextTimezone)
+                props.onTimezoneChange?.(nextTimezone)
                 props.onClose()
               }
             }
