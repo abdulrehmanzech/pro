@@ -68,6 +68,8 @@ export interface ChartSettings {
   
   // Grid settings
   showGrids?: boolean
+
+  timezone?: string
   
   // Additional settings
   crosshair?: {

@@ -42,49 +42,40 @@
       transition: all .2s;
     }
   }
-  .drop-down-container {
-    background-color: var(--klinecharts-pro-popover-background-color);
-    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.46);
-    position: absolute;
-    left: 0;
-    width: 100%;
-    top: calc(100% + 1px);
-    transition: all .2s;
-    transform: scaleY(0);
-    transform-origin: top;
-    opacity: 0;
-    z-index: 100;
-    border: 1px solid var(--klinecharts-pro-border-color);
-    border-radius: 8px;
-    box-sizing: border-box;
-    max-height: 200px;
-    overflow-y: auto;
-    ul {
+}
+.drop-down-container.@{prefix-cls}-select-dropdown-portal {
+  background-color: var(--klinecharts-pro-popover-background-color);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.46);
+  transition: all .2s;
+  border: 1px solid var(--klinecharts-pro-border-color);
+  border-radius: 8px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  ul {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    list-style: none;
+    margin: 0;
+    padding: 6px;
+    overflow: hidden;
+    li {
       display: flex;
-      flex-direction: column;
-      gap: 4px;
-      list-style: none;
-      margin: 0;
-      padding: 6px;
-      overflow: hidden;
-      li {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        height: 40px;
-        padding: 0 10px;
-        border-radius: 6px;
-        color: var(--klinecharts-pro-text-second-color);
-        white-space: nowrap;
-        &:hover,
-        &.selected {
-          color: var(--klinecharts-pro-text-color);
-          background: color-mix(
-            in srgb,
-            var(--color-primary-default, var(--klinecharts-pro-primary-color)) 18%,
-            transparent
-          );
-        }
+      flex-direction: row;
+      align-items: center;
+      height: 40px;
+      padding: 0 10px;
+      border-radius: 6px;
+      color: var(--klinecharts-pro-text-second-color);
+      white-space: nowrap;
+      &:hover,
+      &.selected {
+        color: var(--klinecharts-pro-text-color);
+        background: color-mix(
+          in srgb,
+          var(--color-primary-default, var(--klinecharts-pro-primary-color)) 18%,
+          transparent
+        );
       }
     }
   }

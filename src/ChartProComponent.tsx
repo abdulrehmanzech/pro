@@ -2229,7 +2229,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     setTimezone: (timezone: string) => {
       setTimezone({
         key: timezone,
-        text: translateTimezone(props.timezone, locale()),
+        text: translateTimezone(timezone, locale()),
       });
     },
     getTimezone: () => timezone().key,
@@ -2428,6 +2428,8 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
 
         // Grid settings
         showGrids: styles.grid?.show,
+
+        timezone: timezone().key,
 
         timestamp: Date.now(),
       };
@@ -4739,9 +4741,11 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
           defaultStyles={widgetDefaultStyles()}
           currentBackgroundColor={getChartBackgroundColor()}
           defaultBackgroundColor={getDefaultChartBackgroundColor()}
+          timezone={timezone()}
           onClose={() => {
             setSettingModalVisible(false);
           }}
+          onTimezoneChange={setTimezone}
           onChange={(style) => {
             const styleUpdate = style as ChartStyleUpdate;
             applyChartBackgroundColor(styleUpdate);

@@ -22,6 +22,7 @@ import type { SelectDataSourceItem } from '../../component'
 
 import i18n from '../../i18n'
 import { getOptions } from './data'
+import { createTimezoneSelectOptions } from '../timezone-modal/data'
 
 export interface SettingModalProps {
   locale: string
@@ -29,8 +30,10 @@ export interface SettingModalProps {
   defaultStyles?: Styles
   currentBackgroundColor?: string
   defaultBackgroundColor?: string
+  timezone?: SelectDataSourceItem
   onClose: () => void
   onChange: (style: DeepPartial<Styles>) => void
+  onTimezoneChange?: (timezone: SelectDataSourceItem) => void
   onSaveChartStyle?: (style: ChartStyleUpdate) => void
   onResetChartStyle?: () => void
   onRestoreDefault: (options: SelectDataSourceItem[]) => void
@@ -144,6 +147,7 @@ const SettingModal: Component<SettingModalProps> = props => {
     createChartStyleDraft(props.currentStyles, props.currentBackgroundColor ?? fallbackBackgroundColor)
   )
   const [options, setOptions] = createSignal(getOptions(props.locale))
+  const [innerTimezone, setInnerTimezone] = createSignal<SelectDataSourceItem | undefined>(props.timezone)
   const [isMobile, setIsMobile] = createSignal(false)
   const [activeTab, setActiveTab] = createSignal<ModalTab>('settings')
   const [activeChartStyleTab, setActiveChartStyleTab] = createSignal<ChartStyleTab>('symbol')
@@ -188,6 +192,12 @@ const SettingModal: Component<SettingModalProps> = props => {
   createEffect(() => {
     setOptions(getOptions(props.locale))
   })
+
+  createEffect(() => {
+    setInnerTimezone(props.timezone)
+  })
+
+  const timezoneOptions = () => createTimezoneSelectOptions(props.locale)
 
   const update = (option: SelectDataSourceItem, newValue: any) => {
     const style = {}
@@ -477,6 +487,24 @@ const SettingModal: Component<SettingModalProps> = props => {
                 }
               }
             </For>
+            {props.timezone && (
+              <div class="setting-item" classList={{ 'mobile-item': isMobile() }}>
+                <span class="setting-label">{i18n('timezone', props.locale)}</span>
+                <div class="setting-control">
+                  <Select
+                    style={{ width: isMobile() ? '100%' : '170px', 'min-width': isMobile() ? 'auto' : '170px' }}
+                    value={innerTimezone()?.text ?? props.timezone.text}
+                    dataSource={timezoneOptions()}
+                    searchable={true}
+                    searchPlaceholder={i18n('Search Timezone', props.locale) || 'Search timezone...'}
+                    onSelected={(data) => {
+                      const nextTimezone = data as SelectDataSourceItem
+                      setInnerTimezone(nextTimezone)
+                      props.onTimezoneChange?.(nextTimezone)
+                    }}/>
+                </div>
+              </div>
+            )}
           </div>
           )
         : (

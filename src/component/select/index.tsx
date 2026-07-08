@@ -12,7 +12,15 @@
  * limitations under the License.
  */
 
-import { createSignal, Component, JSX, createMemo } from "solid-js";
+import {
+  createEffect,
+  createMemo,
+  createSignal,
+  Component,
+  JSX,
+  onCleanup,
+} from "solid-js";
+import { Portal } from "solid-js/web";
 
 export interface SelectDataSourceItem {
   key: string;
@@ -33,8 +41,38 @@ export interface SelectProps {
 const Select: Component<SelectProps> = (props) => {
   const [open, setOpen] = createSignal(false);
   const [searchQuery, setSearchQuery] = createSignal("");
+  const [dropdownStyle, setDropdownStyle] = createSignal<JSX.CSSProperties>({});
   let inputRef: HTMLInputElement | undefined;
   let containerRef: HTMLDivElement | undefined;
+  let dropdownRef: HTMLDivElement | undefined;
+
+  const updateDropdownPosition = () => {
+    if (!containerRef) return;
+
+    const rect = containerRef.getBoundingClientRect();
+    const gap = 4;
+    const maxHeight = Math.min(260, Math.max(140, window.innerHeight - 32));
+    const spaceBelow = window.innerHeight - rect.bottom - gap;
+    const spaceAbove = rect.top - gap;
+    const shouldOpenUp = spaceBelow < 180 && spaceAbove > spaceBelow;
+    const availableHeight = Math.max(
+      140,
+      Math.min(maxHeight, shouldOpenUp ? spaceAbove - gap : spaceBelow - gap)
+    );
+
+    setDropdownStyle({
+      position: "fixed",
+      left: `${rect.left}px`,
+      top: shouldOpenUp ? "auto" : `${rect.bottom + gap}px`,
+      bottom: shouldOpenUp ? `${window.innerHeight - rect.top + gap}px` : "auto",
+      width: `${rect.width}px`,
+      "max-height": `${availableHeight}px`,
+      "transform-origin": shouldOpenUp ? "bottom" : "top",
+      opacity: 1,
+      transform: "scaleY(1)",
+      "z-index": 10000,
+    });
+  };
 
   const filteredDataSource = createMemo(() => {
     if (!props.dataSource || !props.searchable) return props.dataSource;
@@ -71,14 +109,18 @@ const Select: Component<SelectProps> = (props) => {
   const handleBlur = (e: FocusEvent) => {
     // Check if the new focus target is inside the dropdown
     const relatedTarget = e.relatedTarget as Node;
-    if (containerRef && relatedTarget && containerRef.contains(relatedTarget)) {
+    if (
+      relatedTarget &&
+      ((containerRef && containerRef.contains(relatedTarget)) ||
+        (dropdownRef && dropdownRef.contains(relatedTarget)))
+    ) {
       return;
     }
     setTimeout(() => {
       if (
-        containerRef &&
         document.activeElement &&
-        containerRef.contains(document.activeElement)
+        ((containerRef && containerRef.contains(document.activeElement)) ||
+          (dropdownRef && dropdownRef.contains(document.activeElement)))
       ) {
         return;
       }
@@ -86,6 +128,94 @@ const Select: Component<SelectProps> = (props) => {
       setSearchQuery("");
     }, 0);
   };
+
+  createEffect(() => {
+    if (!open()) return;
+
+    updateDropdownPosition();
+
+    const handleDocumentMouseDown = (event: MouseEvent) => {
+      const target = event.target as Node;
+      if (
+        (containerRef && containerRef.contains(target)) ||
+        (dropdownRef && dropdownRef.contains(target))
+      ) {
+        return;
+      }
+      setOpen(false);
+      setSearchQuery("");
+    };
+
+    const handleReposition = () => updateDropdownPosition();
+
+    document.addEventListener("mousedown", handleDocumentMouseDown);
+    window.addEventListener("resize", handleReposition);
+    window.addEventListener("scroll", handleReposition, true);
+
+    onCleanup(() => {
+      document.removeEventListener("mousedown", handleDocumentMouseDown);
+      window.removeEventListener("resize", handleReposition);
+      window.removeEventListener("scroll", handleReposition, true);
+    });
+  });
+
+  const renderDropdown = () => (
+    <div
+      ref={dropdownRef}
+      class="drop-down-container klinecharts-pro-select-dropdown-portal"
+      style={dropdownStyle()}
+      onMouseDown={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+      }}
+      onClick={(e) => e.stopPropagation()}
+    >
+      {props.searchable && (
+        <div style={{ padding: "8px", "border-bottom": "1px solid #333" }}>
+          <input
+            ref={inputRef}
+            type="text"
+            placeholder={props.searchPlaceholder || "Search..."}
+            value={searchQuery()}
+            onInput={(e) => setSearchQuery(e.currentTarget.value)}
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              width: "100%",
+              padding: "6px 10px",
+              border: "1px solid var(--klinecharts-pro-border-color)",
+              "border-radius": "4px",
+              "background-color": "var(--klinecharts-pro-popover-background-color)",
+              color: "#fff",
+              "font-size": "13px",
+              outline: "none",
+            }}
+          />
+        </div>
+      )}
+      <ul>
+        {filteredDataSource()?.map((data) => {
+          const d = data as SelectDataSourceItem;
+          // @ts-expect-error
+          const v = d[props.valueKey ?? "text"] ?? data;
+          return (
+            <li
+              classList={{ selected: props.value === v }}
+              onClick={(e) => {
+                e.stopPropagation();
+                if (props.value !== v) {
+                  props.onSelected?.(data);
+                }
+                setOpen(false);
+                setSearchQuery("");
+              }}
+            >
+              {v}
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
 
   return (
     <div
@@ -108,60 +238,8 @@ const Select: Component<SelectProps> = (props) => {
         <span class="value">{props.value}</span>
         <i class="arrow" />
       </div>
-      {props.dataSource && props.dataSource.length > 0 && (
-        <div
-          class="drop-down-container"
-          onMouseDown={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-          }}
-          onClick={(e) => e.stopPropagation()}
-        >
-          {props.searchable && (
-            <div style={{ padding: "8px", "border-bottom": "1px solid #333" }}>
-              <input
-                ref={inputRef}
-                type="text"
-                placeholder={props.searchPlaceholder || "Search..."}
-                value={searchQuery()}
-                onInput={(e) => setSearchQuery(e.currentTarget.value)}
-                onClick={(e) => e.stopPropagation()}
-                style={{
-                  width: "100%",
-                  padding: "6px 10px",
-                  border: "1px solid var(--klinecharts-pro-border-color)",
-                  "border-radius": "4px",
-                  "background-color": "var(--klinecharts-pro-popover-background-color)",
-                  color: "#fff",
-                  "font-size": "13px",
-                  outline: "none",
-                }}
-              />
-            </div>
-          )}
-          <ul>
-            {filteredDataSource()?.map((data) => {
-              const d = data as SelectDataSourceItem;
-              // @ts-expect-error
-              const v = d[props.valueKey ?? "text"] ?? data;
-              return (
-                <li
-                  classList={{ selected: props.value === v }}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    if (props.value !== v) {
-                      props.onSelected?.(data);
-                    }
-                    setOpen(false);
-                    setSearchQuery("");
-                  }}
-                >
-                  {v}
-                </li>
-              );
-            })}
-          </ul>
-        </div>
+      {props.dataSource && props.dataSource.length > 0 && open() && (
+        <Portal>{renderDropdown()}</Portal>
       )}
     </div>
   );
