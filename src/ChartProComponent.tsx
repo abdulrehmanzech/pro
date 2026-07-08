@@ -33,6 +33,7 @@ import {
   OverlayMode,
   Styles,
   TooltipIconPosition,
+  TooltipShowRule,
   ActionType,
   ActionCallback,
   PaneOptions,
@@ -118,6 +119,19 @@ export interface ChartProComponentProps
 interface PrevSymbolPeriod {
   symbol: SymbolInfo;
   period: Period;
+}
+
+interface MobileCandleTooltipRow {
+  title: string;
+  value: string;
+  titleColor?: string;
+  valueColor?: string;
+}
+
+interface MobileCandleTooltipState {
+  left: number;
+  top: number;
+  rows: MobileCandleTooltipRow[];
 }
 
 type ChartStyleUpdate = DeepPartial<Styles> & {
@@ -495,6 +509,8 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     text: string;
     timestamp: number;
   } | null>(null);
+  const [mobileCandleTooltip, setMobileCandleTooltip] =
+    createSignal<MobileCandleTooltipState | null>(null);
   const [timeAnchorLine, setTimeAnchorLine] = createSignal<{
     left: number;
     top: number;
@@ -2725,6 +2741,10 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
 
   const documentResize = () => {
     widget?.resize();
+    applyCandleTooltipStyles();
+    if (!isMobileViewport()) {
+      hideMobileCandleTooltip();
+    }
     scheduleAutoScaleRange(true);
     updateCountdownPriceMark();
     updateTimeNavigationTooltip();
@@ -2732,6 +2752,8 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
   };
 
   let countdownPriceMarkTimer: number | undefined;
+  let mobileCandleTooltipTimer: number | undefined;
+  let suppressMobileCandleTooltipUntilPointerUp = false;
   let timeNavigationTooltipRetryTimer: number | undefined;
   let timeAnchorSlotCaptureTimer: number | undefined;
   let isRestoringTimeAnchor = false;
@@ -3701,6 +3723,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       }
     });
     widget?.subscribeAction(ActionType.OnCrosshairChange, handleQuickOrderCrosshairChange);
+    widget?.subscribeAction(ActionType.OnCrosshairChange, handleMobileCandleTooltipCrosshairChange);
     countdownPriceMarkActions.forEach((action) => {
       widget?.subscribeAction(action, handleCountdownPriceMarkUpdate);
     });
@@ -3795,6 +3818,8 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
   onCleanup(() => {
     window.removeEventListener("resize", documentResize);
     widget?.unsubscribeAction(ActionType.OnCrosshairChange, handleQuickOrderCrosshairChange);
+    widget?.unsubscribeAction(ActionType.OnCrosshairChange, handleMobileCandleTooltipCrosshairChange);
+    hideMobileCandleTooltip();
     countdownPriceMarkActions.forEach((action) => {
       widget?.unsubscribeAction(action, handleCountdownPriceMarkUpdate);
     });
@@ -3938,10 +3963,95 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     ];
   };
 
+  const isMobileViewport = () =>
+    typeof window !== "undefined" && window.innerWidth < 768;
+
+  const getTooltipText = (value: string | { text: string; color: string }) =>
+    typeof value === "string" ? value : value.text;
+
+  const getTooltipColor = (value: string | { text: string; color: string }) =>
+    typeof value === "string" ? undefined : value.color;
+
+  const toMobileTooltipRows = (values: TooltipData[]): MobileCandleTooltipRow[] =>
+    values.map((item) => ({
+      title: getTooltipText(item.title).replace(/:$/, "").replace(/^\w/, (char) => char.toUpperCase()),
+      value: getTooltipText(item.value),
+      titleColor: getTooltipColor(item.title),
+      valueColor: getTooltipColor(item.value),
+    }));
+
+  const clearMobileCandleTooltipTimer = () => {
+    if (mobileCandleTooltipTimer !== undefined) {
+      window.clearTimeout(mobileCandleTooltipTimer);
+      mobileCandleTooltipTimer = undefined;
+    }
+  };
+
+  const hideMobileCandleTooltip = () => {
+    clearMobileCandleTooltipTimer();
+    setMobileCandleTooltip(null);
+  };
+
+  const handleMobileCandleTooltipPointerDown = () => {
+    if (!isMobileViewport() || !mobileCandleTooltip()) {
+      return;
+    }
+    suppressMobileCandleTooltipUntilPointerUp = true;
+    hideMobileCandleTooltip();
+  };
+
+  const handleMobileCandleTooltipPointerEnd = () => {
+    suppressMobileCandleTooltipUntilPointerUp = false;
+  };
+
+  const readMobileTooltipNumberVar = (name: string, fallback: number) => {
+    if (!widgetRef || typeof window === "undefined") {
+      return fallback;
+    }
+    const rawValue = window.getComputedStyle(widgetRef).getPropertyValue(name).trim();
+    const parsed = Number.parseFloat(rawValue);
+    return Number.isFinite(parsed) ? parsed : fallback;
+  };
+
+  const handleMobileCandleTooltipCrosshairChange = (data?: any) => {
+    if (suppressMobileCandleTooltipUntilPointerUp) {
+      return;
+    }
+    if (!isMobileViewport() || data?.paneId !== CANDLE_PANE_ID || !data?.kLineData || !widgetRef || !widget) {
+      hideMobileCandleTooltip();
+      return;
+    }
+
+    const x = Number(data.x);
+    const y = Number(data.y);
+    const width = widgetRef.clientWidth;
+    const height = widgetRef.clientHeight;
+    if (!Number.isFinite(x) || !Number.isFinite(y) || width <= 0 || height <= 0) {
+      hideMobileCandleTooltip();
+      return;
+    }
+
+    const tooltipWidth = readMobileTooltipNumberVar("--klinecharts-pro-mobile-candle-tooltip-width", 132);
+    const tooltipHeight = readMobileTooltipNumberVar("--klinecharts-pro-mobile-candle-tooltip-height", 124);
+    const offsetX = readMobileTooltipNumberVar("--klinecharts-pro-mobile-candle-tooltip-offset-x", 10);
+    const offsetY = readMobileTooltipNumberVar("--klinecharts-pro-mobile-candle-tooltip-offset-y", 10);
+    const edge = 8;
+    const left = Math.min(Math.max(x + offsetX, edge), Math.max(edge, width - tooltipWidth - edge));
+    const top = Math.min(Math.max(y - tooltipHeight - offsetY, edge), Math.max(edge, height - tooltipHeight - edge));
+    const styles = widget.getStyles().candle;
+    const rows = toMobileTooltipRows(
+      createCandleTooltipData({ current: data.kLineData }, styles)
+    );
+
+    clearMobileCandleTooltipTimer();
+    setMobileCandleTooltip({ left, top, rows });
+  };
+
   const applyCandleTooltipStyles = () => {
     widget?.setStyles({
       candle: {
         tooltip: {
+          showRule: isMobileViewport() ? TooltipShowRule.None : TooltipShowRule.Always,
           custom: createCandleTooltipData,
           rect: {
             offsetLeft: 0,
@@ -4257,11 +4367,23 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
           ref={(el) => (widgetRef = el as HTMLDivElement)}
           class="klinecharts-pro-widget"
           data-drawing-bar-visible={drawingBarVisible()}
-          onPointerDown={beginDragDraw}
+          onPointerDown={(event) => {
+            handleMobileCandleTooltipPointerDown();
+            beginDragDraw(event);
+          }}
           onPointerMove={updateDragDraw}
-          onPointerUp={(event) => finishDragDraw(event)}
-          onPointerCancel={(event) => finishDragDraw(event, true)}
-          onLostPointerCapture={(event) => finishDragDraw(event as PointerEvent)}
+          onPointerUp={(event) => {
+            finishDragDraw(event);
+            handleMobileCandleTooltipPointerEnd();
+          }}
+          onPointerCancel={(event) => {
+            finishDragDraw(event, true);
+            handleMobileCandleTooltipPointerEnd();
+          }}
+          onLostPointerCapture={(event) => {
+            finishDragDraw(event as PointerEvent);
+            handleMobileCandleTooltipPointerEnd();
+          }}
         />
         <Show when={timeAnchorLine()} keyed>
           {(line) => (
@@ -4285,6 +4407,39 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
               }}
             >
               {tooltip.text}
+            </div>
+          )}
+        </Show>
+        <Show when={mobileCandleTooltip()} keyed>
+          {(tooltip) => (
+            <div
+              class="klinecharts-pro-mobile-candle-tooltip"
+              style={{
+                left: `${tooltip.left}px`,
+                top: `${tooltip.top}px`,
+              }}
+            >
+              <For each={tooltip.rows}>
+                {(row) => (
+                  <div
+                    class="klinecharts-pro-mobile-candle-tooltip-row"
+                    classList={{ time: row.title.toLowerCase() === "time" }}
+                  >
+                    <span
+                      class="label"
+                      style={{ color: row.titleColor ?? "var(--klinecharts-pro-text-second-color)" }}
+                    >
+                      {row.title}
+                    </span>
+                    <span
+                      class="value"
+                      style={{ color: row.valueColor ?? "var(--klinecharts-pro-text-color)" }}
+                    >
+                      {row.value}
+                    </span>
+                  </div>
+                )}
+              </For>
             </div>
           )}
         </Show>
