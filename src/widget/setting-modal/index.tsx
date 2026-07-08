@@ -493,6 +493,7 @@ const SettingModal: Component<SettingModalProps> = props => {
                 <div class="setting-control">
                   <Select
                     style={{ width: isMobile() ? '100%' : '170px', 'min-width': isMobile() ? 'auto' : '170px' }}
+                    dropdownClass="klinecharts-pro-timezone-dropdown"
                     value={innerTimezone()?.text ?? props.timezone.text}
                     dataSource={timezoneOptions()}
                     searchable={true}

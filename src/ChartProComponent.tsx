@@ -4900,7 +4900,14 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
           onClose={() => {
             setSettingModalVisible(false);
           }}
-          onTimezoneChange={setTimezone}
+          onTimezoneChange={(nextTimezone) => {
+            setTimezone(nextTimezone);
+            window.dispatchEvent(
+              new CustomEvent("klinecharts-pro-timezone-change", {
+                detail: { timezone: nextTimezone.key },
+              })
+            );
+          }}
           onChange={(style) => {
             const styleUpdate = style as ChartStyleUpdate;
             applyChartBackgroundColor(styleUpdate);

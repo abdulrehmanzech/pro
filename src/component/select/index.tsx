@@ -29,6 +29,7 @@ export interface SelectDataSourceItem {
 
 export interface SelectProps {
   class?: string;
+  dropdownClass?: string;
   style?: JSX.CSSProperties | string;
   value?: JSX.Element;
   valueKey?: string;
@@ -162,7 +163,9 @@ const Select: Component<SelectProps> = (props) => {
   const renderDropdown = () => (
     <div
       ref={dropdownRef}
-      class="drop-down-container klinecharts-pro-select-dropdown-portal"
+      class={`drop-down-container klinecharts-pro-select-dropdown-portal ${
+        props.dropdownClass ?? ""
+      }`}
       style={dropdownStyle()}
       onMouseDown={(e) => {
         e.preventDefault();
