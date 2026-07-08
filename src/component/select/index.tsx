@@ -52,6 +52,14 @@ const Select: Component<SelectProps> = (props) => {
 
     const rect = containerRef.getBoundingClientRect();
     const gap = 4;
+    const viewportPadding = 12;
+    const preferredWidth = props.dropdownClass?.includes("klinecharts-pro-timezone-dropdown")
+      ? Math.max(rect.width, Math.min(280, window.innerWidth - viewportPadding * 2))
+      : rect.width;
+    const left = Math.min(
+      Math.max(rect.left, viewportPadding),
+      window.innerWidth - preferredWidth - viewportPadding
+    );
     const maxHeight = Math.min(260, Math.max(140, window.innerHeight - 32));
     const spaceBelow = window.innerHeight - rect.bottom - gap;
     const spaceAbove = rect.top - gap;
@@ -63,10 +71,10 @@ const Select: Component<SelectProps> = (props) => {
 
     setDropdownStyle({
       position: "fixed",
-      left: `${rect.left}px`,
+      left: `${left}px`,
       top: shouldOpenUp ? "auto" : `${rect.bottom + gap}px`,
       bottom: shouldOpenUp ? `${window.innerHeight - rect.top + gap}px` : "auto",
-      width: `${rect.width}px`,
+      width: `${preferredWidth}px`,
       "max-height": `${availableHeight}px`,
       "transform-origin": shouldOpenUp ? "bottom" : "top",
       opacity: 1,
