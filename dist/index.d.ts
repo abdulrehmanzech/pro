@@ -34,6 +34,7 @@ export interface ChartSettings {
 	priceAxisType?: YAxisType;
 	reverseCoordinate?: boolean;
 	showGrids?: boolean;
+	timezone?: string;
 	crosshair?: {
 		show?: boolean;
 		horizontal?: boolean;
