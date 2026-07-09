@@ -47,11 +47,21 @@ const Select: Component<SelectProps> = (props) => {
   let containerRef: HTMLDivElement | undefined;
   let dropdownRef: HTMLDivElement | undefined;
 
+  const getCssNumber = (
+    style: CSSStyleDeclaration,
+    property: string,
+    fallback: number
+  ) => {
+    const value = parseFloat(style.getPropertyValue(property));
+    return Number.isFinite(value) ? value : fallback;
+  };
+
   const updateDropdownPosition = () => {
     if (!containerRef) return;
 
     const rect = containerRef.getBoundingClientRect();
-    const gap = 4;
+    const computedStyle = window.getComputedStyle(containerRef);
+    const gap = getCssNumber(computedStyle, "--klinecharts-pro-select-dropdown-gap", 4);
     const modalInner = containerRef.closest(".klinecharts-pro-modal .inner");
     const bounds = modalInner?.getBoundingClientRect();
     const boundaryLeft = bounds?.left ?? 0;
@@ -60,24 +70,55 @@ const Select: Component<SelectProps> = (props) => {
     const isSettingDropdown =
       isInSettingModal ||
       props.dropdownClass?.includes("klinecharts-pro-timezone-dropdown");
-    const boundaryPadding = isSettingDropdown ? 16 : 12;
+    const boundaryPadding = getCssNumber(
+      computedStyle,
+      isSettingDropdown
+        ? "--klinecharts-pro-setting-dropdown-boundary-padding"
+        : "--klinecharts-pro-select-dropdown-boundary-padding",
+      isSettingDropdown ? 16 : 12
+    );
+    const mobileBreakpoint = getCssNumber(
+      computedStyle,
+      "--klinecharts-pro-setting-dropdown-mobile-breakpoint",
+      768
+    );
+    const isMobileViewport = window.innerWidth <= mobileBreakpoint;
+    const settingDropdownMobileMode =
+      computedStyle
+        .getPropertyValue("--klinecharts-pro-setting-dropdown-mobile-width-mode")
+        .trim() || "trigger";
     const availableBoundaryWidth = Math.max(
       rect.width,
       boundaryRight - boundaryLeft - boundaryPadding * 2
     );
+    const settingDropdownMaxWidth = getCssNumber(
+      computedStyle,
+      "--klinecharts-pro-setting-dropdown-max-width",
+      280
+    );
     const preferredWidth = isSettingDropdown
-      ? Math.max(rect.width, Math.min(280, availableBoundaryWidth))
+      ? isMobileViewport && settingDropdownMobileMode !== "expanded"
+        ? rect.width
+        : Math.max(rect.width, Math.min(settingDropdownMaxWidth, availableBoundaryWidth))
       : rect.width;
     const left = Math.min(
       Math.max(rect.left, boundaryLeft + boundaryPadding),
       boundaryRight - preferredWidth - boundaryPadding
     );
-    const maxHeight = Math.min(260, Math.max(140, window.innerHeight - 32));
+    const minHeight = getCssNumber(computedStyle, "--klinecharts-pro-select-dropdown-min-height", 140);
+    const maxHeightLimit = getCssNumber(computedStyle, "--klinecharts-pro-select-dropdown-max-height", 260);
+    const viewportPaddingY = getCssNumber(computedStyle, "--klinecharts-pro-select-dropdown-viewport-padding-y", 32);
+    const openUpThreshold = getCssNumber(computedStyle, "--klinecharts-pro-select-dropdown-open-up-threshold", 180);
+    const zIndex = getCssNumber(computedStyle, "--klinecharts-pro-select-dropdown-z-index", 10000);
+    const maxHeight = Math.min(
+      maxHeightLimit,
+      Math.max(minHeight, window.innerHeight - viewportPaddingY)
+    );
     const spaceBelow = window.innerHeight - rect.bottom - gap;
     const spaceAbove = rect.top - gap;
-    const shouldOpenUp = spaceBelow < 180 && spaceAbove > spaceBelow;
+    const shouldOpenUp = spaceBelow < openUpThreshold && spaceAbove > spaceBelow;
     const availableHeight = Math.max(
-      140,
+      minHeight,
       Math.min(maxHeight, shouldOpenUp ? spaceAbove - gap : spaceBelow - gap)
     );
 
@@ -91,7 +132,7 @@ const Select: Component<SelectProps> = (props) => {
       "transform-origin": shouldOpenUp ? "bottom" : "top",
       opacity: 1,
       transform: "scaleY(1)",
-      "z-index": 10000,
+      "z-index": zIndex,
     });
   };
 
