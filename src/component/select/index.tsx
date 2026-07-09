@@ -66,6 +66,8 @@ const Select: Component<SelectProps> = (props) => {
     const bounds = modalInner?.getBoundingClientRect();
     const boundaryLeft = bounds?.left ?? 0;
     const boundaryRight = bounds?.right ?? window.innerWidth;
+    const boundaryTop = bounds?.top ?? 0;
+    const boundaryBottom = bounds?.bottom ?? window.innerHeight;
     const isInSettingModal = !!containerRef.closest(".klinecharts-pro-setting-modal");
     const isSettingDropdown =
       isInSettingModal ||
@@ -96,10 +98,17 @@ const Select: Component<SelectProps> = (props) => {
       "--klinecharts-pro-setting-dropdown-max-width",
       280
     );
+    const explicitDropdownWidth = getCssNumber(
+      computedStyle,
+      "--klinecharts-pro-select-dropdown-width",
+      Number.NaN
+    );
     const preferredWidth = isSettingDropdown
-      ? isMobileViewport && settingDropdownMobileMode !== "expanded"
-        ? rect.width
-        : Math.max(rect.width, Math.min(settingDropdownMaxWidth, availableBoundaryWidth))
+      ? Number.isFinite(explicitDropdownWidth)
+        ? Math.max(rect.width, Math.min(explicitDropdownWidth, availableBoundaryWidth))
+        : isMobileViewport && settingDropdownMobileMode !== "expanded"
+          ? rect.width
+          : Math.max(rect.width, Math.min(settingDropdownMaxWidth, availableBoundaryWidth))
       : rect.width;
     const left = Math.min(
       Math.max(rect.left, boundaryLeft + boundaryPadding),
@@ -112,10 +121,10 @@ const Select: Component<SelectProps> = (props) => {
     const zIndex = getCssNumber(computedStyle, "--klinecharts-pro-select-dropdown-z-index", 10000);
     const maxHeight = Math.min(
       maxHeightLimit,
-      Math.max(minHeight, window.innerHeight - viewportPaddingY)
+      Math.max(minHeight, boundaryBottom - boundaryTop - viewportPaddingY)
     );
-    const spaceBelow = window.innerHeight - rect.bottom - gap;
-    const spaceAbove = rect.top - gap;
+    const spaceBelow = boundaryBottom - rect.bottom - gap;
+    const spaceAbove = rect.top - boundaryTop - gap;
     const shouldOpenUp = spaceBelow < openUpThreshold && spaceAbove > spaceBelow;
     const availableHeight = Math.max(
       minHeight,
