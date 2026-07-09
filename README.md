@@ -39,3 +39,5 @@ KLineChart Pro is available under the Apache License V2.
 npm version patch
 
 git push origin main --tags
+
+npm install @klinecharts/pro@git+https://github.com/abdulrehmanzech/pro.git#v0.1.221
