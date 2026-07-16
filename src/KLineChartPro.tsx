@@ -38,6 +38,7 @@ import {
   ChartProOptions,
   OverlayInfo,
   ChartSettings,
+  ChartConfiguration,
   OrderPreviewLineOptions,
   AutoPriceRange,
 } from "./types";
@@ -355,6 +356,14 @@ export default class KLineChartPro implements ChartPro {
     orderHistory?: boolean;
   }): void {
     this._chartApi?.setOrderToolsState?.(state);
+  }
+
+  getConfiguration(): ChartConfiguration {
+    return this._chartApi!.getConfiguration();
+  }
+
+  downloadConfiguration(fileName?: string): void {
+    this._chartApi?.downloadConfiguration?.(fileName);
   }
 
   setOrderPreviewLine(options: OrderPreviewLineOptions): void {

@@ -192,6 +192,49 @@ export interface OverlayInfo {
 	lock?: boolean;
 	mode?: OverlayMode;
 }
+/**
+ * Serializable snapshot of the chart's current runtime configuration.
+ * This deliberately excludes candle/history data: it is intended to restore
+ * the chart setup (toolbar, indicators, drawings and visual options), not to
+ * duplicate the market-data payload.
+ */
+export interface ChartConfiguration {
+	schemaVersion: 1;
+	exportedAt: string;
+	theme: string;
+	locale: string;
+	symbol: SymbolInfo;
+	period: Period;
+	timezone: string;
+	styles: Styles;
+	settings: ChartSettings;
+	indicators: {
+		main: IndicatorInfo[];
+		sub: IndicatorInfo[];
+	};
+	drawings: OverlayInfo[];
+	orderTools: OrderToolsState;
+	drawingBarVisible: boolean;
+	autoScale: {
+		enabled: boolean;
+		currentPriceRange: AutoPriceRange | null;
+		manualPriceRange: AutoPriceRange | null;
+	};
+	timeTools: {
+		timestamp: number;
+		range: {
+			from: number;
+			to: number;
+		};
+		anchor: {
+			enabled: boolean;
+			timestamp: number;
+			anchorPoint: "date" | "left" | "center" | "right";
+			anchorLine: boolean;
+			acrossTokens: boolean;
+		};
+	};
+}
 export interface ChartPro {
 	setTheme(theme: string): void;
 	getTheme(): string;
@@ -248,6 +291,10 @@ export interface ChartPro {
 	setTimeToolsModalVisible(visible: boolean): void;
 	getOrderToolsState(): OrderToolsState;
 	setOrderToolsState(state: Partial<OrderToolsState>): void;
+	/** Returns a JSON-serializable snapshot of the current chart setup. */
+	getConfiguration(): ChartConfiguration;
+	/** Downloads the current chart setup as a .json file in the browser. */
+	downloadConfiguration(fileName?: string): void;
 	setOrderPreviewLine(options: OrderPreviewLineOptions): void;
 	clearOrderPreviewLine(): void;
 	convertToPixel(points: Partial<Point> | Array<Partial<Point>>, finder: ChartConvertFinder): Partial<Coordinate> | Array<Partial<Coordinate>>;
@@ -347,6 +394,8 @@ export declare class KLineChartPro implements ChartPro {
 		orderPreviewLine?: boolean;
 		orderHistory?: boolean;
 	}): void;
+	getConfiguration(): ChartConfiguration;
+	downloadConfiguration(fileName?: string): void;
 	setOrderPreviewLine(options: OrderPreviewLineOptions): void;
 	clearOrderPreviewLine(): void;
 	convertToPixel(points: Partial<Point> | Array<Partial<Point>>, finder: {

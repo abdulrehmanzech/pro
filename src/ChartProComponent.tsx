@@ -101,6 +101,7 @@ import {
   QuickOrderMenuAction,
   IndicatorTooltipIconStyles,
   ChartViewToggleOptions,
+  ChartConfiguration,
 } from "./types";
 
 registerCandleStyleFigure();
@@ -640,6 +641,77 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       styles: indicator?.styles,
       figures: indicator?.figures,
     };
+  };
+
+  const getConfigurationIndicators = (): ChartConfiguration["indicators"] => {
+    const main = mainIndicators().map((name) =>
+      getIndicatorInfo(name, CANDLE_PANE_ID, "main"),
+    );
+    const sub = Object.entries(subIndicators() as Record<string, string>).map(
+      ([name, paneId]) => getIndicatorInfo(name, paneId, "sub"),
+    );
+    return { main, sub };
+  };
+
+  const getChartSettings = (): ChartSettings => {
+    if (!widget) return {};
+
+    const currentStyles = widget.getStyles();
+    const barStyle = currentStyles.candle?.bar as any;
+
+    return {
+      candleType: currentStyles.candle?.type,
+      candleBarStyle: barStyle?.style as LineType | undefined,
+      showLastPrice: currentStyles.candle?.priceMark?.last?.show,
+      showHighestPrice: currentStyles.candle?.priceMark?.high?.show,
+      showLowestPrice: currentStyles.candle?.priceMark?.low?.show,
+      showIndicatorLastValue: currentStyles.indicator?.lastValueMark?.show,
+      priceAxisType: currentStyles.yAxis?.type,
+      reverseCoordinate: currentStyles.yAxis?.reverse,
+      showGrids: currentStyles.grid?.show,
+      timezone: timezone().key,
+      timestamp: Date.now(),
+    };
+  };
+
+  const getChartConfiguration = (): ChartConfiguration => ({
+    schemaVersion: 1,
+    exportedAt: new Date().toISOString(),
+    theme: theme(),
+    locale: locale(),
+    symbol: symbol(),
+    period: period(),
+    timezone: timezone().key,
+    styles: widget?.getStyles?.() ?? ({} as Styles),
+    settings: getChartSettings(),
+    indicators: getConfigurationIndicators(),
+    drawings: Array.from(overlayTracker.values()),
+    orderTools: orderToolsState(),
+    drawingBarVisible: drawingBarVisible(),
+    autoScale: {
+      enabled: isAutoScaleEnabled(),
+      currentPriceRange: currentPriceRange(),
+      manualPriceRange: manualPriceRange(),
+    },
+    timeTools: {
+      timestamp: timeToolsTimestamp(),
+      range: timeToolsRange(),
+      anchor: timeAnchorSettings(),
+    },
+  });
+
+  const downloadChartConfiguration = (fileName?: string): void => {
+    const configuration = getChartConfiguration();
+    const fallbackName = `chart-configuration-${configuration.symbol.ticker.replace(/[^a-z0-9_-]/gi, "_")}-${Date.now()}.json`;
+    const blob = new Blob([JSON.stringify(configuration, null, 2)], {
+      type: "application/json",
+    });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = fileName || fallbackName;
+    anchor.click();
+    URL.revokeObjectURL(url);
   };
 
   /** Emit indicator change event to callback */
@@ -2401,6 +2473,8 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     setOrderToolsState: (state: Partial<OrderToolsState>) => {
       applyOrderToolsState(state);
     },
+    getConfiguration: getChartConfiguration,
+    downloadConfiguration: downloadChartConfiguration,
     setOrderPreviewLine,
     clearOrderPreviewLine,
 
@@ -2419,37 +2493,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
       }
     },
 
-    getSettings: (): ChartSettings => {
-      if (!widget) return {};
-
-      const styles = widget.getStyles();
-
-      // Get the bar style - need to check what's actually in the bar object
-      const barStyle = styles.candle?.bar as any;
-
-      return {
-        // Candle settings
-        candleType: styles.candle?.type,
-        candleBarStyle: barStyle?.style as LineType | undefined, // bar.style might be LineType
-        showLastPrice: styles.candle?.priceMark?.last?.show,
-        showHighestPrice: styles.candle?.priceMark?.high?.show,
-        showLowestPrice: styles.candle?.priceMark?.low?.show,
-
-        // Indicator settings
-        showIndicatorLastValue: styles.indicator?.lastValueMark?.show,
-
-        // Axis settings - yAxis.reverse is boolean according to YAxisStyle interface
-        priceAxisType: styles.yAxis?.type,
-        reverseCoordinate: styles.yAxis?.reverse,
-
-        // Grid settings
-        showGrids: styles.grid?.show,
-
-        timezone: timezone().key,
-
-        timestamp: Date.now(),
-      };
-    },
+    getSettings: getChartSettings,
 
     setSettings: (settings: Partial<ChartSettings>): void => {
       if (!widget) return;
