@@ -100,6 +100,7 @@ export default class KLineChartPro implements ChartPro {
           onMobileMoreClick={options.onMobileMoreClick}
           screenshotBackgroundColor={options.screenshotBackgroundColor}
           chartViewToggle={options.chartViewToggle}
+          chartToolbarAction={options.chartToolbarAction}
           indicatorTooltipIconStyles={options.indicatorTooltipIconStyles ?? {}}
           orderTools={
             options.orderTools ?? {

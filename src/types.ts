@@ -197,6 +197,16 @@ export interface ChartViewToggleOptions {
   onToggle: () => void;
 }
 
+/** A host-controlled action rendered inside the chart header toolbar. */
+export interface ChartToolbarActionOptions {
+  onClick: () => void;
+  /** SVG markup supplied by the host application. */
+  iconSvg: string;
+  title?: string;
+  ariaLabel?: string;
+  className?: string;
+  style?: Record<string, string | number>;
+}
 
 
 export interface ChartProOptions {
@@ -225,6 +235,8 @@ export interface ChartProOptions {
   indicatorTooltipIconStyles?: IndicatorTooltipIconStyles;
   /** Optional header chart/depth view toggle rendered next to fullscreen */
   chartViewToggle?: ChartViewToggleOptions;
+  /** Optional host-controlled icon rendered in the native header toolbar. */
+  chartToolbarAction?: ChartToolbarActionOptions;
   /** Native header order tools dropdown state */
   orderTools?: OrderToolsOptions;
 }

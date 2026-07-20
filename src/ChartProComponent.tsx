@@ -101,18 +101,20 @@ import {
   QuickOrderMenuAction,
   IndicatorTooltipIconStyles,
   ChartViewToggleOptions,
+  ChartToolbarActionOptions,
   ChartConfiguration,
 } from "./types";
 
 registerCandleStyleFigure();
 
 export interface ChartProComponentProps
-  extends Required<Omit<ChartProOptions, "container" | "onIndicatorChange" | "onMobilePeriodClick" | "onMobileMoreClick" | "screenshotBackgroundColor" | "chartViewToggle">> {
+  extends Required<Omit<ChartProOptions, "container" | "onIndicatorChange" | "onMobilePeriodClick" | "onMobileMoreClick" | "screenshotBackgroundColor" | "chartViewToggle" | "chartToolbarAction">> {
   onIndicatorChange?: IndicatorEventCallback;
   onMobilePeriodClick?: (period: Period) => void;
   onMobileMoreClick?: () => void;
   screenshotBackgroundColor?: string;
   chartViewToggle?: ChartViewToggleOptions;
+  chartToolbarAction?: ChartToolbarActionOptions;
   indicatorTooltipIconStyles: IndicatorTooltipIconStyles;
   ref: (chart: ChartPro) => void;
 }
@@ -4356,6 +4358,7 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
             setScreenshotUrl(url);
           }
         }}
+        chartToolbarAction={props.chartToolbarAction}
         chartViewToggle={props.chartViewToggle}
         showOrderToolsMenu={props.orderTools?.visible ?? false}
         orderToolsState={orderToolsState()}
