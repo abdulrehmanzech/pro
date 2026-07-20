@@ -40,4 +40,4 @@ npm version patch
 
 git push origin main --tags
 
-npm install @klinecharts/pro@git+https://github.com/abdulrehmanzech/pro.git#v0.1.221
+npm install @klinecharts/pro@git+https://github.com/abdulrehmanzech/pro.git#v0.1.235
