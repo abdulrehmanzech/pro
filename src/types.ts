@@ -277,6 +277,12 @@ export interface ChartConfiguration {
     sub: IndicatorInfo[];
   };
   drawings: OverlayInfo[];
+  /** Range of candle data currently loaded in the chart, not only the viewport. */
+  dataRange: {
+    from: number | null;
+    to: number | null;
+    count: number;
+  };
   orderTools: OrderToolsState;
   drawingBarVisible: boolean;
   autoScale: {

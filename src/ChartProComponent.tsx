@@ -674,31 +674,42 @@ const ChartProComponent: Component<ChartProComponentProps> = (props) => {
     };
   };
 
-  const getChartConfiguration = (): ChartConfiguration => ({
-    schemaVersion: 1,
-    exportedAt: new Date().toISOString(),
-    theme: theme(),
-    locale: locale(),
-    symbol: symbol(),
-    period: period(),
-    timezone: timezone().key,
-    styles: widget?.getStyles?.() ?? ({} as Styles),
-    settings: getChartSettings(),
-    indicators: getConfigurationIndicators(),
-    drawings: Array.from(overlayTracker.values()),
-    orderTools: orderToolsState(),
-    drawingBarVisible: drawingBarVisible(),
-    autoScale: {
-      enabled: isAutoScaleEnabled(),
-      currentPriceRange: currentPriceRange(),
-      manualPriceRange: manualPriceRange(),
-    },
-    timeTools: {
-      timestamp: timeToolsTimestamp(),
-      range: timeToolsRange(),
-      anchor: timeAnchorSettings(),
-    },
-  });
+  const getChartConfiguration = (): ChartConfiguration => {
+    const dataList = widget?.getDataList?.() ?? [];
+    const firstCandle = dataList[0];
+    const lastCandle = dataList[dataList.length - 1];
+
+    return {
+      schemaVersion: 1,
+      exportedAt: new Date().toISOString(),
+      theme: theme(),
+      locale: locale(),
+      symbol: symbol(),
+      period: period(),
+      timezone: timezone().key,
+      styles: widget?.getStyles?.() ?? ({} as Styles),
+      settings: getChartSettings(),
+      indicators: getConfigurationIndicators(),
+      drawings: Array.from(overlayTracker.values()),
+      dataRange: {
+        from: firstCandle?.timestamp ?? null,
+        to: lastCandle?.timestamp ?? null,
+        count: dataList.length,
+      },
+      orderTools: orderToolsState(),
+      drawingBarVisible: drawingBarVisible(),
+      autoScale: {
+        enabled: isAutoScaleEnabled(),
+        currentPriceRange: currentPriceRange(),
+        manualPriceRange: manualPriceRange(),
+      },
+      timeTools: {
+        timestamp: timeToolsTimestamp(),
+        range: timeToolsRange(),
+        anchor: timeAnchorSettings(),
+      },
+    };
+  };
 
   const downloadChartConfiguration = (fileName?: string): void => {
     const configuration = getChartConfiguration();
